@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IvanService — ремонт техники в Батуми</title>
+  <meta name="description" content="IvanService — ремонт телефонов, планшетов, ноутбуков, компьютеров, телевизоров, зарядных станций и мелкой бытовой техники в Батуми. Выезд мастера на дом.">
+  <style>
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      color:#17212b;
+      background:#f6f8fb;
+      line-height:1.55;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{max-width:1180px;margin:0 auto;padding:0 20px}
+
+    :root{
+      --bg:#ffffff;
+      --bg-soft:#f6f8fb;
+      --text:#17212b;
+      --muted:#667085;
+      --line:#e7edf4;
+      --brand:#1f8fff;
+      --brand-dark:#1676d8;
+      --accent:#22c55e;
+      --card:#ffffff;
+      --shadow:0 12px 30px rgba(16,24,40,.06);
+      --radius:24px;
+    }
+
+    .header{
+      background:#fff;
+      border-bottom:1px solid var(--line);
+    }
+    .header-inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      padding:14px 0;
+      flex-wrap:wrap;
+    }
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      color:#0f172a;
+      letter-spacing:.2px;
+    }
+    .logo span{color:var(--brand)}
+    .nav{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+      font-size:14px;
+      font-weight:700;
+      color:#243244;
+    }
+    .nav a{transition:.2s ease}
+    .nav a:hover{color:var(--brand)}
+
+    .hero{
+      padding:68px 0 54px;
+      background:
+        radial-gradient(circle at top right, rgba(31,143,255,.12), transparent 32%),
+        linear-gradient(180deg,#ffffff 0%, #f6f9fd 100%);
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:26px;
+      align-items:center;
+    }
+    .hero-copy h1{
+      margin:0 0 16px;
+      font-size:52px;
+      line-height:1.06;
+      color:#0f172a;
+    }
+    .hero-copy p{
+      margin:0 0 24px;
+      font-size:18px;
+      color:var(--muted);
+      max-width:690px;
+    }
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .chip{
+      background:#eef6ff;
+      color:var(--brand-dark);
+      border:1px solid #d6e9ff;
+      border-radius:999px;
+      padding:9px 13px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:52px;
+      padding:0 22px;
+      border-radius:14px;
+      font-weight:800;
+      transition:all .2s ease;
+      border:none;
+      cursor:pointer;
+    }
+    .btn:hover{
+      transform:scale(1.04) translateY(-2px);
+      box-shadow:0 12px 25px rgba(0,0,0,.12);
+    }
+    .btn-primary{
+      background:var(--brand);
+      color:#fff;
+    }
+    .btn-primary:hover{background:var(--brand-dark)}
+    .btn-secondary{
+      background:#fff;
+      color:#142033;
+      border:1px solid var(--line);
+    }
+
+    .hero-panel{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:26px;
+    }
+    .hero-panel h3{
+      margin:0 0 14px;
+      font-size:24px;
+      color:#0f172a;
+    }
+    .hero-list{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .hero-list-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 14px;
+      background:#f8fbff;
+      border:1px solid #e7f1fb;
+      border-radius:18px;
+      font-weight:700;
+      color:#243244;
+    }
+    .hero-icon{
+      width:42px;
+      height:42px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:14px;
+      background:#eaf4ff;
+      font-size:22px;
+      flex:0 0 42px;
+    }
+
+    section{padding:70px 0}
+    .section-head{
+      text-align:center;
+      max-width:820px;
+      margin:0 auto 40px;
+    }
+    .section-head h2{
+      margin:0 0 12px;
+      font-size:40px;
+      line-height:1.12;
+      color:#0f172a;
+    }
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:17px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .about-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:22px;
+      align-items:stretch;
+    }
+    .about-card{padding:30px}
+    .about-card h3{
+      margin:0 0 14px;
+      font-size:30px;
+      color:#0f172a;
+    }
+    .about-card p{
+      margin:0 0 14px;
+      color:var(--muted);
+    }
+    .about-points{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:18px;
+    }
+    .about-point{
+      background:#f8fbff;
+      border:1px solid #e7f1fb;
+      border-radius:18px;
+      padding:15px 16px;
+      font-weight:700;
+      color:#243244;
+    }
+    .about-side{
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    }
+    .about-side-top{
+      display:grid;
+      gap:12px;
+    }
+    .mini-stat{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:16px;
+      background:#f8fbff;
+      border:1px solid #e7f1fb;
+      border-radius:18px;
+    }
+    .mini-stat-icon{
+      width:46px;height:46px;border-radius:15px;
+      background:#eaf4ff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:24px;flex:0 0 46px;
+    }
+    .mini-stat b{
+      display:block;
+      font-size:16px;
+      color:#0f172a;
+      margin-bottom:3px;
+    }
+    .mini-stat span{
+      font-size:14px;
+      color:var(--muted);
+    }
+    .about-note{
+      padding:18px;
+      background:#0f172a;
+      color:#fff;
+      border-radius:20px;
+      font-weight:700;
+    }
+
+    .services-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:22px;
+      align-items:stretch;
+    }
+    .service-card{padding:26px}
+    .service-top{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:12px;
+    }
+    .service-icon{
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      background:#eaf4ff;
+      border:1px solid #d9eaff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      flex:0 0 56px;
+    }
+    .service-meta h3{
+      margin:0;
+      font-size:25px;
+      color:#0f172a;
+      line-height:1.15;
+    }
+    .service-card ul{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+    .service-card li+li{margin-top:8px}
+
+    .features{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+    }
+    .feature-card{padding:26px}
+    .feature-card h3{
+      margin:0 0 10px;
+      font-size:24px;
+      color:#0f172a;
+    }
+    .feature-card p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:22px;
+    }
+    .step-card{
+      text-align:center;
+      padding:28px 22px;
+    }
+    .step-circle{
+      width:66px;height:66px;border-radius:50%;
+      margin:0 auto 16px;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,var(--brand) 0%, var(--brand-dark) 100%);
+      color:#fff;
+      font-size:28px;
+      font-weight:800;
+      box-shadow:0 12px 20px rgba(31,143,255,.22);
+    }
+    .step-card h3{
+      margin:0 0 10px;
+      font-size:22px;
+      color:#0f172a;
+    }
+    .step-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .common-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:18px;
+    }
+    .common-item{
+      padding:18px;
+      border-radius:20px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      font-weight:700;
+      color:#243244;
+      text-align:center;
+    }
+
+    .reviews{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+    }
+    .review-card{padding:26px}
+    .stars{
+      color:#f59e0b;
+      font-size:18px;
+      margin-bottom:12px;
+    }
+    .review-card p{
+      margin:0 0 14px;
+      color:var(--muted);
+    }
+    .review-card strong{
+      color:#0f172a;
+    }
+
+    .faq{
+      display:grid;
+      gap:18px;
+      max-width:920px;
+      margin:0 auto;
+    }
+    .faq-card{padding:24px}
+    .faq-card h3{
+      margin:0 0 10px;
+      font-size:21px;
+      color:#0f172a;
+    }
+    .faq-card p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .contacts-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+      align-items:start;
+    }
+    .contacts-card{padding:30px}
+    .contacts-card h3{
+      margin:0 0 16px;
+      font-size:28px;
+      color:#0f172a;
+    }
+    .contact-list{
+      display:grid;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .contact-line{
+      padding:14px 16px;
+      border-radius:16px;
+      background:#f8fbff;
+      border:1px solid #e7f1fb;
+      font-weight:700;
+      color:#243244;
+    }
+    .contact-note{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    form{display:grid;gap:14px}
+    input,textarea{
+      width:100%;
+      padding:15px 16px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font-size:15px;
+      font-family:inherit;
+      outline:none;
+      background:#fff;
+      transition:.2s ease;
+    }
+    input:focus,textarea:focus{
+      border-color:#cfe5ff;
+      box-shadow:0 0 0 4px rgba(31,143,255,.10);
+    }
+    textarea{
+      min-height:130px;
+      resize:vertical;
+    }
+
+    .footer{
+      background:#0f172a;
+      color:#d8e3ef;
+      padding:14px 0;
+      margin-top:10px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .footer-inner{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:6px;
+      flex-direction:column;
+      text-align:center;
+    }
+    .footer-brand{
+      font-size:18px;
+      font-weight:800;
+      color:#ffffff;
+      margin-bottom:2px;
+    }
+    .footer-powered{
+      font-size:11px;
+      color:#9fb0c3;
+      font-weight:500;
+    }
+
+    @media (max-width:1100px){
+      .hero-grid,
+      .about-grid,
+      .contacts-grid{
+        grid-template-columns:1fr;
+      }
+      .services-grid,
+      .features,
+      .reviews{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .steps{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .common-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .hero-copy h1{font-size:42px}
+      .section-head h2{font-size:34px}
+    }
+
+    @media (max-width:760px){
+      .container{padding:0 16px}
+      .header-inner{padding:13px 0}
+      .nav{gap:14px;font-size:13px}
+      .hero{padding:54px 0 42px}
+      .hero-grid{grid-template-columns:1fr}
+      .hero-copy h1{font-size:34px}
+      .hero-copy p{font-size:16px}
+      .hero-actions{flex-direction:column}
+      .btn{width:100%}
+      .hero-list,
+      .about-points,
+      .services-grid,
+      .features,
+      .steps,
+      .common-grid,
+      .reviews{
+        grid-template-columns:1fr;
+      }
+      .section-head h2{font-size:30px}
+      section{padding:58px 0}
+      .about-card,
+      .about-side,
+      .service-card,
+      .feature-card,
+      .step-card,
+      .review-card,
+      .contacts-card,
+      .faq-card{
+        padding:22px;
+      }
+      .footer-brand{font-size:17px}
+      .footer-powered{font-size:11px}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">Ivan<span>Service</span></a>
+      <nav class="nav">
+        <a href="#about">О нас</a>
+        <a href="#services">Услуги</a>
+        <a href="#steps">Как работаем</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="chips">
+          <div class="chip">Выезд мастера</div>
+          <div class="chip">Честные цены</div>
+          <div class="chip">Батуми</div>
+        </div>
+        <h1>Ремонт техники в Батуми без лишней суеты</h1>
+        <p>
+          Ремонтируем телефоны, планшеты, ноутбуки, компьютеры, телевизоры, зарядные станции
+          и мелкую бытовую технику. Работаем с выездом на дом, проводим диагностику,
+          согласовываем стоимость и только после этого начинаем ремонт.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="tel:+995555639737">Позвонить</a>
+          <a class="btn btn-secondary" href="#contacts">Оставить заявку</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <h3>Что ремонтируем</h3>
+        <div class="hero-list">
+          <div class="hero-list-item"><span class="hero-icon">📱</span>Телефоны</div>
+          <div class="hero-list-item"><span class="hero-icon">📲</span>Планшеты</div>
+          <div class="hero-list-item"><span class="hero-icon">💻</span>Ноутбуки</div>
+          <div class="hero-list-item"><span class="hero-icon">🖥️</span>Компьютеры</div>
+          <div class="hero-list-item"><span class="hero-icon">📺</span>Телевизоры</div>
+          <div class="hero-list-item"><span class="hero-icon">🔋</span>Зарядные станции</div>
+          <div class="hero-list-item"><span class="hero-icon">🔌</span>Мелкая бытовая техника</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="section-head">
+        <h2>О нас</h2>
+        <p>Надежный сервисный центр в Батуми.</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="card about-card">
+          <h3>Честный и понятный сервисный центр в Батуми</h3>
+          <p>
+            Ремонтируем телефоны, планшеты, ноутбуки, компьютеры, телевизоры, зарядные станции
+            и мелкую бытовую технику с выездом на дом.
+          </p>
+          <p>
+            Если техника перестала работать, не включается, не заряжается, перегревается
+            или работает нестабильно — мы поможем определить причину неисправности
+            и предложим подходящее решение.
+          </p>
+          <p>
+            Мы работаем понятно и прозрачно: заявка, выезд и диагностика, согласование стоимости, затем ремонт.
+          </p>
+
+          <div class="about-points">
+            <div class="about-point">Выезд мастера на дом</div>
+            <div class="about-point">Диагностика перед ремонтом</div>
+            <div class="about-point">Согласование цены заранее</div>
+            <div class="about-point">Работаем по Батуми</div>
+          </div>
+        </div>
+
+        <div class="card about-side">
+          <div class="about-side-top">
+            <div class="mini-stat">
+              <div class="mini-stat-icon">🚗</div>
+              <div><b>Выезд по Батуми</b><span>Удобно для дома и офиса</span></div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-icon">🔧</div>
+              <div><b>Полноценная диагностика</b><span>Проверка перед началом ремонта</span></div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-icon">💬</div>
+              <div><b>Приятные цены и качество</b><span>Стоимость согласовывается заранее</span></div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <div class="section-head">
+        <h2>Наши услуги</h2>
+        <p>Порядок категорий сохранён таким, как ты просил.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="card service-card">
+          <div class="service-top">
+            <div class="service-icon">📱</div>
+            <div class="service-meta">
+              <h3>Телефоны</h3>
+            </div>
+          </div>
+          <ul>
+            <li>замена экрана и стекла</li>
+            <li>замена аккумулятора</li>
+            <li>ремонт разъема зарядки</li>
+            <li>ремонт после воды</li>
+            <li>замена динамика, микрофона, камеры</li>
+            <li>программный ремонт и восстановление системы</li>
+          </ul>
+        </div>
+
+        <div class="card service-card">
+          <div class="service-top">
+            <div class="service-icon">📲</div>
+            <div class="service-meta">
+              <h3>Планшеты</h3>
+            </div>
+          </div>
+          <ul>
+            <li>замена дисплея и тачскрина</li>
+            <li>замена батареи</li>
+            <li>ремонт после падения</li>
+            <li>ремонт зарядки</li>
+            <li>восстановление системы</li>
+            <li>устранение проблем с питанием и запуском</li>
+          </ul>
+        </div>
+
+        <div class="card service-card">
+          <div class="service-top">
+            <div class="service-icon">💻</div>
+            <div class="service-meta">
+              <h3>Ноутбуки</h3>
+            </div>
+          </div>
+          <ul>
+            <li>чистка от пыли и замена термопасты</li>
+            <li>замена матрицы и клавиатуры</li>
+            <li>ремонт разъема питания</li>
+            <li>замена SSD и HDD</li>
+            <li>установка Windows и драйверов</li>
+            <li>ремонт после залития</li>
+          </ul>
+        </div>
+
+        <div class="card service-card">
+          <div class="service-top">
+            <div class="service-icon">🖥️</div>
+            <div class="service-meta">
+              <h3>Компьютеры</h3>
+            </div>
+          </div>
+          <ul>
+            <li>компьютер не включается</li>
+            <li>диагностика и замена комплектующих</li>
+            <li>чистка охлаждения</li>
+            <li>установка Windows и программ</li>
+            <li>удаление вирусов</li>
+            <li>сборка и модернизация ПК</li>
+          </ul>
+        </div>
+
+        <div class="card service-card">
+          <div class="service-top">
+            <div class="service-icon">📺</div>
+            <div class="service-meta">
+              <h3>Телевизоры</h3>
+            </div>
+          </div>
+          <ul>
+            <li>нет изображения или звука</li>
+            <li>телевизор не включается</li>
+            <li>полосы на экране</li>
+            <li>ремонт подсветки</li>
+            <li>ремонт блока питания</li>
+            <li>настройка и подключение телевизора</li>
+            <li>ремонт материнских плат</li>
+          </ul>
+        </div>
+
+        <div class="card service-card">
+          <div class="service-top">
+            <div class="service-icon">🔋</div>
+            <div class="service-meta">
+              <h3>Зарядные станции</h3>
+            </div>
+          </div>
+          <ul>
+            <li>не заряжается устройство</li>
+            <li>не держит нагрузку</li>
+            <li>проблемы с выходами питания</li>
+            <li>диагностика плат и контроллеров</li>
+            <li>проверка батарейных модулей</li>
+            <li>восстановление после сбоев и перепадов</li>
+          </ul>
+        </div>
+
+        <div class="card service-card">
+          <div class="service-top">
+            <div class="service-icon">🔌</div>
+            <div class="service-meta">
+              <h3>Мелкая бытовая техника</h3>
+            </div>
+          </div>
+          <ul>
+            <li>ремонт кухонной техники</li>
+            <li>ремонт небольших электроприборов</li>
+            <li>замена поврежденных элементов</li>
+            <li>устранение перегрева</li>
+            <li>восстановление после перепадов напряжения</li>
+            <li>диагностика неисправностей и восстановление работы</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <h2>Почему выбирают IvanService</h2>
+        <p>Работаем аккуратно, понятно и без лишних затрат для клиента.</p>
+      </div>
+
+      <div class="features">
+        <div class="card feature-card">
+          <h3>Честный подход</h3>
+          <p>Сначала диагностика, затем согласование стоимости и только после этого ремонт.</p>
+        </div>
+
+        <div class="card feature-card">
+          <h3>Понятные условия</h3>
+          <p>Объясняем проблему простыми словами и заранее согласовываем стоимость работ.</p>
+        </div>
+
+        <div class="card feature-card">
+          <h3>Удобный сервис</h3>
+          <p>Работаем по Батуми, возможен выезд мастера на дом или в офис.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="steps">
+    <div class="container">
+      <div class="section-head">
+        <h2>Как мы работаем</h2>
+        <p>Понятный порядок работы без скрытых условий и лишних услуг.</p>
+      </div>
+
+      <div class="steps">
+        <div class="card step-card">
+          <div class="step-circle">1</div>
+          <h3>Заявка</h3>
+          <p>Вы звоните или оставляете заявку на сайте.</p>
+        </div>
+
+        <div class="card step-card">
+          <div class="step-circle">2</div>
+          <h3>Выезд и диагностика</h3>
+          <p>Мастер приезжает к вам и проводит полноценную диагностику на месте или в сервисе.</p>
+        </div>
+
+        <div class="card step-card">
+          <div class="step-circle">3</div>
+          <h3>Согласование</h3>
+          <p>После диагностики озвучиваем точную стоимость и сроки ремонта.</p>
+        </div>
+
+        <div class="card step-card">
+          <div class="step-circle">4</div>
+          <h3>Ремонт</h3>
+          <p>Выполняем ремонт только после вашего согласия.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <h2>С чем к нам обращаются чаще всего</h2>
+        <p>Реальные причины обращений без лишних секций.</p>
+      </div>
+
+      <div class="common-grid">
+        <div class="common-item">Разбит экран телефона</div>
+        <div class="common-item">Планшет не заряжается</div>
+        <div class="common-item">Ноутбук греется и шумит</div>
+        <div class="common-item">Компьютер не включается</div>
+        <div class="common-item">Телевизор не показывает</div>
+        <div class="common-item">Проблемы с зарядной станцией</div>
+        <div class="common-item">После воды техника не работает</div>
+        <div class="common-item">После перепада напряжения техника не запускается</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <div class="container">
+      <div class="section-head">
+        <h2>Отзывы клиентов</h2>
+        <p>Позже этот блок можно заменить на реальные отзывы.</p>
+      </div>
+
+      <div class="reviews">
+        <div class="card review-card">
+          <div class="stars">★★★★★</div>
+          <p>Быстро починили телефон после падения. Всё объяснили нормально и без навязывания лишних работ.</p>
+          <strong>Клиент, Батуми</strong>
+        </div>
+
+        <div class="card review-card">
+          <div class="stars">★★★★★</div>
+          <p>Мастер приехал домой, посмотрел компьютер и решил проблему. Очень удобно, что не пришлось никуда везти технику.</p>
+          <strong>Клиент, Батуми</strong>
+        </div>
+
+        <div class="card review-card">
+          <div class="stars">★★★★★</div>
+          <p>Телевизор перестал включаться. После диагностики всё согласовали и сделали ремонт без лишней суеты.</p>
+          <strong>Клиент, Батуми</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <h2>Частые вопросы</h2>
+        <p>Короткие ответы на то, что клиенты спрашивают чаще всего.</p>
+      </div>
+
+      <div class="faq">
+        <div class="card faq-card">
+          <h3>Сколько стоит ремонт?</h3>
+          <p>Точная стоимость называется только после диагностики.</p>
+        </div>
+
+        <div class="card faq-card">
+          <h3>Можно ли вызвать мастера домой?</h3>
+          <p>Да, по Батуми доступен выезд мастера на дом или в офис, если это подходит под вид техники и задачу.</p>
+        </div>
+
+        <div class="card faq-card">
+          <h3>Когда озвучиваете стоимость?</h3>
+          <p>После диагностики, до начала ремонта. Без согласования ничего не делаем.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacts">
+    <div class="container">
+      <div class="section-head">
+        <h2>Контакты и заявка</h2>
+        <p>Связаться можно любым удобным способом.</p>
+      </div>
+
+      <div class="contacts-grid">
+        <div class="card contacts-card">
+          <h3>Контактная информация</h3>
+
+          <div class="contact-list">
+            <div class="contact-line"><strong>Город:</strong> Батуми</div>
+            <div class="contact-line"><strong>Телефон:</strong> <a href="tel:+995555639737">+995 555 63 97 37</a></div>
+            <div class="contact-line"><strong>WhatsApp:</strong> <a href="https://wa.me/995555639737" target="_blank">Написать в WhatsApp</a></div>
+            <div class="contact-line"><strong>Telegram:</strong> <a href="https://t.me/Ivan4ik_2014" target="_blank">@Ivan4ik_2014</a></div>
+            <div class="contact-line"><strong>Email:</strong> <a href="mailto:uzhrepair@gmail.com">uzhrepair@gmail.com</a></div>
+            <div class="contact-line"><strong>График:</strong> Ежедневно, 10:00–22:00</div>
+          </div>
+
+          <div class="contact-note">
+          </div>
+        </div>
+
+        <div class="card contacts-card">
+          <h3>Оставить заявку</h3>
+          <form id="whatsappForm">
+            <input type="text" id="wa-name" placeholder="Ваше имя" required>
+            <input type="tel" id="wa-phone" placeholder="Ваш телефон" required>
+            <input type="text" id="wa-device" placeholder="Какая техника сломалась?" required>
+            <textarea id="wa-problem" placeholder="Кратко опишите проблему"></textarea>
+            <button class="btn btn-primary" type="submit">Отправить заявку</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">1vanService</div>
+      <div class="footer-powered">Powered by 2026</div>
+    </div>
+  </footer>
+
+
+  <script>
+    (function () {
+      var form = document.getElementById('whatsappForm');
+      if (!form) return;
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var name = document.getElementById('wa-name').value.trim();
+        var phone = document.getElementById('wa-phone').value.trim();
+        var device = document.getElementById('wa-device').value.trim();
+        var problem = document.getElementById('wa-problem').value.trim();
+
+        var text =
+          'Здравствуйте! Оставляю заявку на ремонт.%0A%0A' +
+          'Имя: ' + encodeURIComponent(name) + '%0A' +
+          'Телефон: ' + encodeURIComponent(phone) + '%0A' +
+          'Техника: ' + encodeURIComponent(device) + '%0A' +
+          'Проблема: ' + encodeURIComponent(problem || 'Не указана');
+
+        window.open('https://wa.me/995555639737?text=' + text, '_blank');
+      });
+    })();
+  </script>
+
+</body>
+</html>
