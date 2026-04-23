@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Авторизация CRM — 1ONE service</title>
+  <meta name="theme-color" content="#ff7a12">
+  <style>
+    :root{
+      --bg:#f4efe9;
+      --surface:rgba(255,255,255,.96);
+      --text:#1e1a17;
+      --muted:#746d66;
+      --line:rgba(222,209,194,.92);
+      --accent:#ff7a12;
+      --accent-dark:#ef6700;
+      --shadow:0 16px 40px rgba(50,33,14,.10);
+      --radius:28px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Arial,Helvetica,sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,#f6f1eb 0%, #f4efe9 40%, #f7f3ee 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .blob{position:fixed;border-radius:50%;filter:blur(100px);opacity:.55;z-index:0;pointer-events:none}
+    .blob-1{width:340px;height:340px;top:-80px;left:-100px;background:#ffe3cd}
+    .blob-2{width:440px;height:440px;top:28%;right:-180px;background:#fff0df}
+    .blob-3{width:380px;height:380px;bottom:6%;left:8%;background:#ffe8d5}
+    .wrap{position:relative;z-index:1;width:min(100%,460px)}
+    .card{
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+    .brand-mark{
+      width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,#ff8a2a 0%, var(--accent) 100%);color:#fff;font-size:24px;font-weight:900;
+      box-shadow:0 10px 24px rgba(255,122,18,.20)
+    }
+    .brand-text{font-size:28px;font-weight:900;color:#0f172a;letter-spacing:-.02em}
+    h1{margin:0 0 10px;font-size:30px;line-height:1.1;color:#0f172a}
+    p{margin:0 0 18px;color:var(--muted);font-size:15px;line-height:1.6}
+    .hint{font-size:13px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:12px 14px;border-radius:14px;margin-bottom:18px}
+    .field{margin-bottom:14px}
+    .label{display:block;margin-bottom:8px;font-size:13px;font-weight:800;color:#7c746d;text-transform:uppercase;letter-spacing:.04em}
+    input{
+      width:100%;padding:14px 15px;border-radius:14px;border:1px solid #d7e1ec;background:#fff;color:var(--text);
+      font-size:16px;outline:none;transition:.2s ease
+    }
+    input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(255,122,18,.12)}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+    .btn{
+      min-height:50px;border:none;border-radius:16px;font-size:15px;font-weight:800;cursor:pointer;transition:.22s ease;padding:0 18px
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:linear-gradient(180deg,#ff821f 0%, var(--accent) 100%);color:#fff;box-shadow:0 14px 28px rgba(255,122,18,.22)}
+    .btn-secondary{background:#fff;color:#1f1a16;border:1px solid var(--line)}
+    .error{display:none;margin-top:14px;padding:12px 14px;border-radius:14px;background:#fff1f2;border:1px solid #fecdd3;color:#be123c;font-size:14px;font-weight:700}
+    @media (max-width:560px){
+      .card{padding:22px}
+      .brand-text{font-size:24px}
+      h1{font-size:26px}
+      .actions{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="brand">
+        <div class="brand-mark">1</div>
+        <div class="brand-text">ONE service</div>
+      </div>
+      <h1>Авторизация в CRM</h1>
+      <p>Введите логин и пароль, чтобы открыть систему заказов.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label class="label" for="login">Логин</label>
+          <input id="login" type="text" autocomplete="username" placeholder="Введите логин" required>
+        </div>
+        <div class="field">
+          <label class="label" for="password">Пароль</label>
+          <input id="password" type="password" autocomplete="current-password" placeholder="Введите пароль" required>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Войти в CRM</button>
+          <button class="btn btn-secondary" type="button" id="backBtn">Вернуться на сайт</button>
+        </div>
+        <div class="error" id="errorBox">Неверный логин или пароль.</div>
+      </form>
+    </div>
+  </div>
+  <script>
+    const CRM_FILE = '1one_service_crm_with_separate_login.html';
+    const SITE_FILE = 'index.html';
+    const VALID_LOGIN = 'admin';
+    const VALID_PASSWORD = '12345';
+
+    if (localStorage.getItem('crm_auth') === '1') {
+      window.location.href = CRM_FILE;
+    }
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = SITE_FILE;
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const login = document.getElementById('login').value.trim();
+      const password = document.getElementById('password').value;
+      const errorBox = document.getElementById('errorBox');
+
+      if (login === VALID_LOGIN && password === VALID_PASSWORD) {
+        localStorage.setItem('crm_auth', '1');
+        localStorage.removeItem('open_crm_login');
+        window.location.href = CRM_FILE;
+      } else {
+        errorBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
