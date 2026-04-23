@@ -297,6 +297,24 @@
       gap:8px;
       flex-wrap:wrap;
     }
+    .status-select{
+      min-width:150px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid #d7e1ec;
+      background:#fff;
+      font-size:13px;
+      font-weight:800;
+    }
+    .actions-list{
+      margin:0;
+      padding-left:18px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .actions-list li{margin:0;}
+
     .small-btn{
       min-height:38px;
       padding:0 12px;
@@ -354,7 +372,7 @@
       display:flex;
     }
     .modal{
-      width:min(100%, 760px);
+      width:min(100%, 940px);
       max-height:min(92vh, 920px);
       overflow:auto;
       border-radius:28px;
@@ -473,7 +491,7 @@
 
   <header>
     <div class="container topbar">
-      <div class="logo"><span class="logo-one">1</span><span class="logo-text">ONE service CRM</span></div>
+      <div class="logo"><span class="logo-one">M</span><span class="logo-text">1ONE service CRM</span></div>
       <div class="topbar-actions">
         <button class="btn btn-secondary" id="printOrdersBtn" type="button">Печать</button>
         <button class="btn btn-secondary" id="logoutBtn" type="button">Выйти</button>
@@ -485,8 +503,8 @@
     <div class="container">
       <section class="hero">
         <div class="card hero-card">
-          <h1>CRM для сервисного центра</h1>
-          <p>Управляйте заказами, меняйте статусы, редактируйте номера заказов, печатайте документы и храните всё локально прямо в браузере. Стиль и цвета приведены к оформлению вашего сайта.</p>
+          <h1>CRM для сервисного центра 1ONE service</h1>
+          <p>Управляйте заказами, меняйте статусы, редактируйте номера заказов, печатайте документы и храните всё локально прямо в браузере. Стиль, цвета и интерфейс приведены к оформлению вашего сайта.</p>
           <div class="chips">
             <div class="chip">Список заказов</div>
             <div class="chip">Создание и редактирование</div>
@@ -531,11 +549,13 @@
             <thead>
               <tr>
                 <th>№ заказа</th>
+                <th>Статус</th>
                 <th>Техника</th>
+                <th>Модель</th>
                 <th>Клиент</th>
                 <th>Телефон</th>
                 <th>Неисправность</th>
-                <th>Статус</th>
+                <th>Стоимость</th>
                 <th>Дата</th>
                 <th>Действия</th>
               </tr>
@@ -554,10 +574,10 @@
     <div class="modal">
       <button class="modal-close" id="closeOrderModal" type="button" aria-label="Close">×</button>
       <h3 id="orderModalTitle">Новый заказ</h3>
-      <p>Заполните данные клиента и техники. Номер заказа можно менять вручную даже после создания.</p>
+      <p>Заполните данные клиента и техники. Номер заказа создаётся автоматически, если оставить поле пустым, но его можно указать и вручную.</p>
       <form id="orderForm">
         <div class="form-grid">
-          <input type="text" id="orderNumber" placeholder="Номер заказа" required>
+          <input type="text" id="orderNumber" placeholder="Номер заказа (можно не заполнять)">
           <select id="orderStatus" required>
             <option value="new">Новый</option>
             <option value="progress">В работе</option>
@@ -565,27 +585,41 @@
             <option value="done">Выдан</option>
             <option value="cancelled">Отменён</option>
           </select>
-          <input type="text" id="deviceType" placeholder="Техника / категория" required>
-          <input type="text" id="clientName" placeholder="Имя клиента" required>
-          <input type="tel" id="clientPhone" placeholder="Телефон клиента" required>
-          <input type="text" id="orderPrice" placeholder="Стоимость / предоплата">
-          <textarea class="full" id="problemDescription" placeholder="Описание неисправности"></textarea>
+
+          <input type="text" id="clientName" placeholder="ФИО клиента" required>
+          <input type="tel" id="clientPhone" placeholder="Номер телефона" required>
+
+          <input type="text" id="deviceType" placeholder="Название техники" required>
+          <input type="text" id="deviceModel" placeholder="Модель техники">
+
+          <input type="number" step="0.01" min="0" id="totalCost" placeholder="Общая стоимость">
+          <input type="number" step="0.01" min="0" id="partsCost" placeholder="Стоимость деталей">
+
+          <textarea class="full" id="problemDescription" placeholder="Неисправность" required></textarea>
           <textarea class="full" id="masterNotes" placeholder="Заметки мастера / комментарии"></textarea>
         </div>
+
+        <div class="modal-actions" style="justify-content:flex-start;">
+          <button class="btn btn-secondary" id="printAcceptanceBtn" type="button">Печать акта приёма</button>
+          <button class="btn btn-secondary" id="printCompletedBtn" type="button">Печать акта выполненных работ</button>
+          <button class="btn btn-secondary" id="printWarrantyBtn" type="button">Печать гарантии</button>
+        </div>
+
         <div class="modal-actions">
-          <button class="btn btn-secondary" id="printSingleBtn" type="button">Печать заказа</button>
-          <button class="btn btn-primary" type="submit">Сохранить</button>
+          <button class="btn btn-secondary" id="cancelOrderBtn" type="button">Отмена</button>
+          <button class="btn btn-primary" id="saveOrderBtn" type="submit">Сохранить заказ</button>
         </div>
       </form>
     </div>
   </div>
 
+  
   <script>
     if (localStorage.getItem('crm_auth') !== '1') {
       window.location.href = 'site_with_crm_login.html';
     }
 
-    const storageKey = 'one_service_orders';
+    const storageKey = 'masterexpert_orders';
     const tbody = document.getElementById('ordersTableBody');
     const emptyState = document.getElementById('emptyState');
     const orderModalOverlay = document.getElementById('orderModalOverlay');
@@ -594,7 +628,19 @@
     const searchInput = document.getElementById('searchInput');
     const statusFilter = document.getElementById('statusFilter');
     const sortSelect = document.getElementById('sortSelect');
-    const printSingleBtn = document.getElementById('printSingleBtn');
+
+    const formFields = {
+      orderNumber: document.getElementById('orderNumber'),
+      orderStatus: document.getElementById('orderStatus'),
+      clientName: document.getElementById('clientName'),
+      clientPhone: document.getElementById('clientPhone'),
+      deviceType: document.getElementById('deviceType'),
+      deviceModel: document.getElementById('deviceModel'),
+      totalCost: document.getElementById('totalCost'),
+      partsCost: document.getElementById('partsCost'),
+      problemDescription: document.getElementById('problemDescription'),
+      masterNotes: document.getElementById('masterNotes')
+    };
 
     let editingId = null;
 
@@ -610,13 +656,31 @@
       localStorage.setItem(storageKey, JSON.stringify(items));
     }
 
-    function generateOrderNumber() {
-      return String(Date.now()).slice(-6);
-    }
-
     function formatDate(value) {
       const date = new Date(value);
       return date.toLocaleString('ru-RU');
+    }
+
+    function money(value) {
+      const num = Number(value || 0);
+      if (!num) return '—';
+      return new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num) + ' ₽';
+    }
+
+    function nextNumericOrderNumber() {
+      const orders = getOrders();
+      const nums = orders
+        .map(item => String(item.orderNumber || '').match(/\d+/g))
+        .flat()
+        .filter(Boolean)
+        .map(parts => Number(Array.isArray(parts) ? parts.join('') : parts))
+        .filter(num => Number.isFinite(num));
+      const max = nums.length ? Math.max(...nums) : 1000;
+      return String(max + 1);
+    }
+
+    function generateOrderNumber() {
+      return nextNumericOrderNumber();
     }
 
     function getStatusLabel(status) {
@@ -657,10 +721,13 @@
         const haystack = [
           item.orderNumber,
           item.deviceType,
+          item.deviceModel,
           item.clientName,
           item.clientPhone,
           item.problemDescription,
-          item.masterNotes
+          item.masterNotes,
+          item.totalCost,
+          item.partsCost
         ].join(' ').toLowerCase();
 
         const queryOk = !query || haystack.includes(query);
@@ -691,35 +758,70 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><b>${item.orderNumber}</b></td>
+          <td>
+            <select class="status-select" data-action="change-status" data-id="${item.id}">
+              <option value="new" ${item.status === 'new' ? 'selected' : ''}>Новый</option>
+              <option value="progress" ${item.status === 'progress' ? 'selected' : ''}>В работе</option>
+              <option value="ready" ${item.status === 'ready' ? 'selected' : ''}>Готов к выдаче</option>
+              <option value="done" ${item.status === 'done' ? 'selected' : ''}>Выдан</option>
+              <option value="cancelled" ${item.status === 'cancelled' ? 'selected' : ''}>Отменён</option>
+            </select>
+          </td>
           <td>${item.deviceType || ''}</td>
+          <td>${item.deviceModel || '—'}</td>
           <td>${item.clientName || ''}</td>
           <td>${item.clientPhone || ''}</td>
           <td>${item.problemDescription || ''}</td>
-          <td><span class="status ${getStatusClass(item.status)}">${getStatusLabel(item.status)}</span></td>
+          <td>${money(item.totalCost)}</td>
           <td>${formatDate(item.createdAt)}</td>
           <td>
-            <div class="table-actions">
-              <button class="small-btn" data-action="edit" data-id="${item.id}">Изменить</button>
-              <button class="small-btn" data-action="print" data-id="${item.id}">Печать</button>
-              <button class="small-btn" data-action="delete" data-id="${item.id}">Удалить</button>
-            </div>
+            <ul class="actions-list">
+              <li><button class="small-btn" data-action="edit" data-id="${item.id}">Изменить</button></li>
+              <li><button class="small-btn" data-action="acceptance" data-id="${item.id}">Акт приёма</button></li>
+              <li><button class="small-btn" data-action="completed" data-id="${item.id}">Акт работ</button></li>
+              <li><button class="small-btn" data-action="warranty" data-id="${item.id}">Гарантия</button></li>
+              <li><button class="small-btn" data-action="delete" data-id="${item.id}">Удалить</button></li>
+            </ul>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
+    function setFormData(order = null) {
+      formFields.orderNumber.value = order?.orderNumber || '';
+      formFields.orderStatus.value = order?.status || 'new';
+      formFields.clientName.value = order?.clientName || '';
+      formFields.clientPhone.value = order?.clientPhone || '';
+      formFields.deviceType.value = order?.deviceType || '';
+      formFields.deviceModel.value = order?.deviceModel || '';
+      formFields.totalCost.value = order?.totalCost || '';
+      formFields.partsCost.value = order?.partsCost || '';
+      formFields.problemDescription.value = order?.problemDescription || '';
+      formFields.masterNotes.value = order?.masterNotes || '';
+    }
+
+    function collectFormData() {
+      return {
+        id: editingId || String(Date.now()),
+        orderNumber: formFields.orderNumber.value.trim() || generateOrderNumber(),
+        status: formFields.orderStatus.value,
+        clientName: formFields.clientName.value.trim(),
+        clientPhone: formFields.clientPhone.value.trim(),
+        deviceType: formFields.deviceType.value.trim(),
+        deviceModel: formFields.deviceModel.value.trim(),
+        totalCost: formFields.totalCost.value.trim(),
+        partsCost: formFields.partsCost.value.trim(),
+        problemDescription: formFields.problemDescription.value.trim(),
+        masterNotes: formFields.masterNotes.value.trim(),
+        createdAt: editingId ? (findOrderById(editingId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
+      };
+    }
+
     function openModal(order = null) {
       editingId = order ? order.id : null;
       orderModalTitle.textContent = order ? 'Редактирование заказа' : 'Новый заказ';
-      document.getElementById('orderNumber').value = order?.orderNumber || generateOrderNumber();
-      document.getElementById('orderStatus').value = order?.status || 'new';
-      document.getElementById('deviceType').value = order?.deviceType || '';
-      document.getElementById('clientName').value = order?.clientName || '';
-      document.getElementById('clientPhone').value = order?.clientPhone || '';
-      document.getElementById('problemDescription').value = order?.problemDescription || '';
-      document.getElementById('masterNotes').value = order?.masterNotes || '';
-      document.getElementById('orderPrice').value = order?.orderPrice || '';
+      setFormData(order);
       orderModalOverlay.classList.add('open');
     }
 
@@ -733,32 +835,45 @@
       return getOrders().find(item => item.id === id);
     }
 
-    function printOrder(order) {
-      const printWindow = window.open('', '_blank', 'width=900,height=700');
-      if (!printWindow) return;
+    function escapeHtml(value) {
+      return String(value || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
 
+    function printDocument(title, bodyHtml) {
+      const printWindow = window.open('', '_blank', 'width=1000,height=900');
+      if (!printWindow) return;
       printWindow.document.write(`
         <html lang="ru">
           <head>
-            <title>Заказ № ${order.orderNumber}</title>
+            <meta charset="UTF-8">
+            <title>${title}</title>
             <style>
-              body{font-family:Arial,Helvetica,sans-serif;padding:32px;color:#111}
-              h1{margin:0 0 18px;font-size:28px}
-              .row{margin:0 0 14px}
-              .label{font-weight:700;display:block;margin-bottom:4px}
-              .box{padding:12px 14px;border:1px solid #ddd;border-radius:10px}
+              @page{size:A4;margin:14mm}
+              body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0}
+              .doc{max-width:780px;margin:0 auto;padding:10px 0}
+              .head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:18px}
+              .brand{font-size:26px;font-weight:900;color:#ef6700}
+              .sub{font-size:12px;color:#555;line-height:1.5}
+              h1{font-size:22px;text-align:center;margin:18px 0 20px}
+              table{width:100%;border-collapse:collapse;margin-top:8px}
+              th,td{border:1px solid #222;padding:8px 10px;font-size:14px;text-align:left}
+              .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-bottom:14px}
+              .field{border:1px solid #222;border-radius:8px;padding:10px 12px;min-height:42px}
+              .label{font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
+              .value{font-size:14px;line-height:1.5;word-break:break-word}
+              .full{margin-bottom:12px}
+              .signatures{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:34px}
+              .sign-line{margin-top:36px;border-top:1px solid #111;padding-top:6px;font-size:13px}
+              .small{font-size:12px;color:#444;line-height:1.5}
+              .notice{border:1px dashed #555;border-radius:8px;padding:12px;margin-top:16px;font-size:13px;line-height:1.6}
             </style>
           </head>
           <body>
-            <h1>1ONE service — Заказ № ${order.orderNumber}</h1>
-            <div class="row"><span class="label">Статус</span><div class="box">${getStatusLabel(order.status)}</div></div>
-            <div class="row"><span class="label">Техника</span><div class="box">${order.deviceType || ''}</div></div>
-            <div class="row"><span class="label">Клиент</span><div class="box">${order.clientName || ''}</div></div>
-            <div class="row"><span class="label">Телефон</span><div class="box">${order.clientPhone || ''}</div></div>
-            <div class="row"><span class="label">Неисправность</span><div class="box">${order.problemDescription || ''}</div></div>
-            <div class="row"><span class="label">Заметки мастера</span><div class="box">${order.masterNotes || ''}</div></div>
-            <div class="row"><span class="label">Стоимость / предоплата</span><div class="box">${order.orderPrice || ''}</div></div>
-            <div class="row"><span class="label">Дата создания</span><div class="box">${formatDate(order.createdAt)}</div></div>
+            <div class="doc">${bodyHtml}</div>
           </body>
         </html>
       `);
@@ -767,9 +882,133 @@
       printWindow.print();
     }
 
+    function documentHeader(docTitle, order) {
+      return `
+        <div class="head">
+          <div>
+            <div class="brand">1ONE service</div>
+            <div class="sub">
+              Сервисный центр<br>
+              Тел.: +380509906265<br>
+              Адрес: Харьков, ул. Харьковских Дивизий, 14/2
+            </div>
+          </div>
+          <div class="sub" style="text-align:right">
+            Документ № ${escapeHtml(order.orderNumber)}<br>
+            Дата: ${escapeHtml(formatDate(order.createdAt))}
+          </div>
+        </div>
+        <h1>${docTitle}</h1>
+      `;
+    }
+
+    function renderAcceptanceAct(order) {
+      return `
+        ${documentHeader('Акт приёма техники в ремонт', order)}
+        <div class="grid">
+          <div class="field"><div class="label">ФИО клиента</div><div class="value">${escapeHtml(order.clientName)}</div></div>
+          <div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>
+          <div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div>
+          <div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>
+        </div>
+        <div class="field full"><div class="label">Заявленная неисправность</div><div class="value">${escapeHtml(order.problemDescription)}</div></div>
+        <div class="field full"><div class="label">Комментарий / комплектация / внешний вид</div><div class="value">${escapeHtml(order.masterNotes || 'Без дополнительных комментариев')}</div></div>
+        <div class="notice">
+          Клиент передал устройство на диагностику и/или ремонт. Стоимость работ уточняется после диагностики, если не указано иное.
+          Устройство принимается без ответственности за скрытые дефекты, не заявленные клиентом при приёме.
+        </div>
+        <div class="signatures">
+          <div class="sign-line">Подпись клиента</div>
+          <div class="sign-line">Подпись мастера</div>
+        </div>
+      `;
+    }
+
+    function renderCompletedAct(order) {
+      return `
+        ${documentHeader('Акт выполненных работ', order)}
+        <div class="grid">
+          <div class="field"><div class="label">ФИО клиента</div><div class="value">${escapeHtml(order.clientName)}</div></div>
+          <div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>
+          <div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div>
+          <div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>
+        </div>
+        <div class="field full"><div class="label">Неисправность</div><div class="value">${escapeHtml(order.problemDescription)}</div></div>
+        <table>
+          <thead>
+            <tr>
+              <th>Наименование</th>
+              <th>Сумма</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Стоимость деталей</td>
+              <td>${escapeHtml(money(order.partsCost))}</td>
+            </tr>
+            <tr>
+              <td>Общая стоимость заказа</td>
+              <td>${escapeHtml(money(order.totalCost))}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="field full" style="margin-top:12px"><div class="label">Комментарий мастера</div><div class="value">${escapeHtml(order.masterNotes || 'Работы выполнены согласно заказу.')}</div></div>
+        <div class="notice">
+          Клиент подтверждает, что устройство получено, качество выполненных работ проверено, претензий на момент выдачи не имеет.
+        </div>
+        <div class="signatures">
+          <div class="sign-line">Подпись клиента</div>
+          <div class="sign-line">Подпись мастера</div>
+        </div>
+      `;
+    }
+
+    function renderWarranty(order) {
+      return `
+        ${documentHeader('Гарантийный талон', order)}
+        <div class="grid">
+          <div class="field"><div class="label">ФИО клиента</div><div class="value">${escapeHtml(order.clientName)}</div></div>
+          <div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>
+          <div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div>
+          <div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>
+        </div>
+        <div class="field full"><div class="label">Выполненные работы / неисправность</div><div class="value">${escapeHtml(order.problemDescription)}</div></div>
+        <div class="field full"><div class="label">Стоимость заказа</div><div class="value">${escapeHtml(money(order.totalCost))}</div></div>
+        <div class="notice">
+          Гарантия предоставляется на выполненные работы и установленные детали при соблюдении правил эксплуатации.
+          Гарантия не распространяется на механические повреждения, попадание влаги, следы самостоятельного вскрытия,
+          скачки напряжения, программные сбои, возникшие после ремонта по внешним причинам, и иные повреждения,
+          не связанные напрямую с выполненными работами. Срок гарантии мастер вписывает при выдаче устройства.
+        </div>
+        <div class="signatures">
+          <div>
+            <div class="small">Срок гарантии: _______________________</div>
+            <div class="sign-line">Подпись мастера</div>
+          </div>
+          <div>
+            <div class="small">С документом ознакомлен</div>
+            <div class="sign-line">Подпись клиента</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function printAcceptanceAct(order) {
+      printDocument(`Акт приёма № ${order.orderNumber}`, renderAcceptanceAct(order));
+    }
+
+    function printCompletedAct(order) {
+      printDocument(`Акт выполненных работ № ${order.orderNumber}`, renderCompletedAct(order));
+    }
+
+    function printWarranty(order) {
+      printDocument(`Гарантия № ${order.orderNumber}`, renderWarranty(order));
+    }
+
     document.getElementById('createOrderBtn').addEventListener('click', () => openModal());
     document.getElementById('floatingCreateBtn').addEventListener('click', () => openModal());
     document.getElementById('closeOrderModal').addEventListener('click', closeModal);
+    document.getElementById('cancelOrderBtn').addEventListener('click', closeModal);
     document.getElementById('printOrdersBtn').addEventListener('click', () => window.print());
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('crm_auth');
@@ -785,7 +1024,7 @@
     sortSelect.addEventListener('change', renderOrders);
 
     tbody.addEventListener('click', event => {
-      const button = event.target.closest('[data-action]');
+      const button = event.target.closest('button[data-action]');
       if (!button) return;
       const action = button.dataset.action;
       const id = button.dataset.id;
@@ -794,8 +1033,12 @@
 
       if (action === 'edit') {
         openModal(order);
-      } else if (action === 'print') {
-        printOrder(order);
+      } else if (action === 'acceptance') {
+        printAcceptanceAct(order);
+      } else if (action === 'completed') {
+        printCompletedAct(order);
+      } else if (action === 'warranty') {
+        printWarranty(order);
       } else if (action === 'delete') {
         const orders = getOrders().filter(item => item.id !== id);
         saveOrders(orders);
@@ -803,38 +1046,36 @@
       }
     });
 
-    printSingleBtn.addEventListener('click', () => {
-      const tempOrder = {
-        id: editingId || 'temp',
-        orderNumber: document.getElementById('orderNumber').value || generateOrderNumber(),
-        status: document.getElementById('orderStatus').value,
-        deviceType: document.getElementById('deviceType').value,
-        clientName: document.getElementById('clientName').value,
-        clientPhone: document.getElementById('clientPhone').value,
-        problemDescription: document.getElementById('problemDescription').value,
-        masterNotes: document.getElementById('masterNotes').value,
-        orderPrice: document.getElementById('orderPrice').value,
-        createdAt: new Date().toISOString()
-      };
-      printOrder(tempOrder);
+
+    tbody.addEventListener('change', event => {
+      const select = event.target.closest('select[data-action="change-status"]');
+      if (!select) return;
+      const id = select.dataset.id;
+      const orders = getOrders();
+      const index = orders.findIndex(item => item.id === id);
+      if (index === -1) return;
+      orders[index].status = select.value;
+      saveOrders(orders);
+      renderOrders();
+    });
+
+    document.getElementById('printAcceptanceBtn').addEventListener('click', () => {
+      printAcceptanceAct(collectFormData());
+    });
+
+    document.getElementById('printCompletedBtn').addEventListener('click', () => {
+      printCompletedAct(collectFormData());
+    });
+
+    document.getElementById('printWarrantyBtn').addEventListener('click', () => {
+      printWarranty(collectFormData());
     });
 
     orderForm.addEventListener('submit', event => {
       event.preventDefault();
 
       const orders = getOrders();
-      const payload = {
-        id: editingId || String(Date.now()),
-        orderNumber: document.getElementById('orderNumber').value.trim(),
-        status: document.getElementById('orderStatus').value,
-        deviceType: document.getElementById('deviceType').value.trim(),
-        clientName: document.getElementById('clientName').value.trim(),
-        clientPhone: document.getElementById('clientPhone').value.trim(),
-        problemDescription: document.getElementById('problemDescription').value.trim(),
-        masterNotes: document.getElementById('masterNotes').value.trim(),
-        orderPrice: document.getElementById('orderPrice').value.trim(),
-        createdAt: editingId ? (findOrderById(editingId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
-      };
+      const payload = collectFormData();
 
       const index = orders.findIndex(item => item.id === payload.id);
       if (index >= 0) {
@@ -852,26 +1093,30 @@
       saveOrders([
         {
           id: 'seed1',
-          orderNumber: '240101',
+          orderNumber: '1001',
           status: 'progress',
-          deviceType: 'Телевизор Samsung 55"',
-          clientName: 'Виктор',
-          clientPhone: '+995 555 63 97 37',
+          deviceType: 'Телевизор',
+          deviceModel: 'Samsung UE55TU7090',
+          clientName: 'Виктор Петров',
+          clientPhone: '+380501112233',
           problemDescription: 'Нет изображения, звук есть',
           masterNotes: 'Проверить подсветку и блок питания',
-          orderPrice: 'Диагностика',
+          totalCost: '4500',
+          partsCost: '1800',
           createdAt: new Date(Date.now() - 86400000).toISOString()
         },
         {
           id: 'seed2',
-          orderNumber: '240102',
+          orderNumber: '1002',
           status: 'new',
-          deviceType: 'iPhone 13',
-          clientName: 'Максим',
-          clientPhone: '+995 555 00 11 22',
+          deviceType: 'Телефон',
+          deviceModel: 'iPhone 13',
+          clientName: 'Максим Коваленко',
+          clientPhone: '+380509998877',
           problemDescription: 'Разбит экран',
           masterNotes: 'Согласовать стоимость дисплея',
-          orderPrice: '',
+          totalCost: '',
+          partsCost: '',
           createdAt: new Date().toISOString()
         }
       ]);
@@ -879,5 +1124,6 @@
 
     renderOrders();
   </script>
+
 </body>
 </html>
