@@ -1263,7 +1263,7 @@
           <a href="#reviews" data-i18n="nav_reviews">Отзывы</a>
           <a href="#contacts" data-i18n="nav_contacts">Контакты</a>
         </nav>
-        <button class="login-btn" id="openLoginModal" type="button">Вход</button>
+        <button class="login-btn" id="openLoginModal" type="button" data-i18n="login_button">Вход</button>
         <div class="lang-dropdown" id="langDropdown">
           <button class="lang-toggle" id="langToggle" type="button" aria-label="Choose language">
             <span class="lang-icon" id="langIcon">🌐</span>
@@ -1716,15 +1716,15 @@
   <div class="modal-overlay" id="loginOverlay" aria-hidden="true">
     <div class="login-modal">
       <button class="modal-close" id="closeLoginModal" type="button" aria-label="Close">×</button>
-      <h3>Вход в CRM</h3>
-      <p>Введите логин и пароль администратора, чтобы перейти в систему управления заказами.</p>
-      <div class="login-error" id="loginError">Неверный логин или пароль.</div>
+      <h3 data-i18n="login_modal_title">Вход в CRM</h3>
+      <p data-i18n="login_modal_text">Введите логин и пароль администратора, чтобы перейти в систему управления заказами.</p>
+      <div class="login-error" id="loginError" data-i18n="login_error">Неверный логин или пароль.</div>
       <form id="loginForm">
-        <input type="text" id="loginField" placeholder="Логин" autocomplete="username" required>
-        <input type="password" id="passwordField" placeholder="Пароль" autocomplete="current-password" required>
-        <button class="btn btn-primary" type="submit">Войти</button>
+        <input type="text" id="loginField" data-i18n-placeholder="login_placeholder" placeholder="Логин" autocomplete="username" required>
+        <input type="password" id="passwordField" data-i18n-placeholder="password_placeholder" placeholder="Пароль" autocomplete="current-password" required>
+        <button class="btn btn-primary" type="submit" data-i18n="login_submit">Войти</button>
       </form>
-      <div class="login-note">Демо-доступ: login — <b>admin</b>, password — <b>12345</b></div>
+      <div class="login-note" data-i18n="login_note">Демо-доступ: login — admin, password — 12345</div>
     </div>
   </div>
 
@@ -1744,6 +1744,14 @@
         nav_steps: 'Как работаем',
         nav_reviews: 'Отзывы',
         nav_contacts: 'Контакты',
+        login_button: 'Вход',
+        login_modal_title: 'Вход в CRM',
+        login_modal_text: 'Введите логин и пароль администратора, чтобы перейти в систему управления заказами.',
+        login_error: 'Неверный логин или пароль.',
+        login_placeholder: 'Логин',
+        password_placeholder: 'Пароль',
+        login_submit: 'Войти',
+        login_note: 'Демо-доступ: login — admin, password — 12345',
         reviews_title: 'Отзывы клиентов',
         reviews_sub: 'Можно посмотреть отзывы и оставить свой комментарий с оценкой.',
         review_form_title: 'Оставить отзыв',
@@ -1895,6 +1903,14 @@
         nav_steps: 'How we work',
         nav_reviews: 'Reviews',
         nav_contacts: 'Contacts',
+        login_button: 'Login',
+        login_modal_title: 'CRM Login',
+        login_modal_text: 'Enter the administrator login and password to access the order management system.',
+        login_error: 'Incorrect login or password.',
+        login_placeholder: 'Login',
+        password_placeholder: 'Password',
+        login_submit: 'Sign in',
+        login_note: 'Demo access: login — admin, password — 12345',
         reviews_title: 'Customer reviews',
         reviews_sub: 'You can read reviews and leave your own with a rating.',
         review_form_title: 'Leave a review',
@@ -2050,6 +2066,14 @@
         nav_steps: 'როგორ ვმუშაობთ',
         nav_reviews: 'Отзывы',
         nav_contacts: 'კონტაქტი',
+        login_button: 'შესვლა',
+        login_modal_title: 'CRM შესვლა',
+        login_modal_text: 'შეიყვანეთ ადმინისტრატორის ლოგინი და პაროლი, რათა გადახვიდეთ შეკვეთების მართვის სისტემაში.',
+        login_error: 'ლოგინი ან პაროლი არასწორია.',
+        login_placeholder: 'ლოგინი',
+        password_placeholder: 'პაროლი',
+        login_submit: 'შესვლა',
+        login_note: 'დემო წვდომა: login — admin, password — 12345',
         reviews_title: 'კლიენტების შეფასებები',
         reviews_sub: 'შეგიძლიათ ნახოთ შეფასებები და დაამატოთ საკუთარი კომენტარი ქულით.',
         review_form_title: 'დატოვეთ შეფასება',
