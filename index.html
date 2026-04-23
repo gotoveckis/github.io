@@ -336,18 +336,24 @@
       flex-wrap:wrap;
       gap:10px;
       margin-bottom:20px;
+      align-items:flex-start;
     }
     .badge{
       display:inline-flex;
       align-items:center;
+      justify-content:center;
       gap:8px;
       padding:10px 16px;
+      min-height:48px;
       border-radius:999px;
       background:var(--accent-soft);
       border:1px solid #ffd6b8;
       color:var(--accent-dark);
       font-size:14px;
       font-weight:800;
+      line-height:1.25;
+      text-align:center;
+      white-space:normal;
       box-shadow:0 8px 18px rgba(255,122,18,.08);
     }
     .hero h1{
@@ -1169,6 +1175,15 @@
         font-size:16px;
         margin-bottom:22px;
       }
+      .hero-badges{
+        gap:10px;
+      }
+      .badge{
+        width:100%;
+        min-height:50px;
+        padding:12px 14px;
+        border-radius:18px;
+      }
       .hero-actions{
         flex-direction:column;
       }
@@ -1272,6 +1287,7 @@
             <div class="badge" data-i18n="chip_visit">Выезд мастера</div>
             <div class="badge" data-i18n="chip_prices">Честные цены</div>
             <div class="badge" data-i18n="chip_city">Батуми</div>
+            <div class="badge" data-i18n="chip_warranty">Гарантия на выполненные работы</div>
           </div>
           <h1 data-i18n="hero_title">Ремонт техники в Батуми</h1>
           <p data-i18n="hero_text">
@@ -1741,6 +1757,7 @@
         chip_visit: 'Выезд мастера',
         chip_prices: 'Честные цены',
         chip_city: 'Батуми',
+        chip_warranty: 'Гарантия на выполненные работы',
         hero_title: 'Ремонт техники в Батуми',
         hero_text: 'Ремонтируем телевизоры, телефоны, планшеты, ноутбуки, компьютеры, зарядные станции и мелкую бытовую технику. Работаем с выездом на дом, проводим диагностику, согласовываем стоимость и только после этого начинаем ремонт.',
         hero_call: 'Позвонить',
@@ -1892,6 +1909,7 @@
         chip_visit: 'Home visit',
         chip_prices: 'Fair prices',
         chip_city: 'Batumi',
+        chip_warranty: 'Warranty on completed work',
         hero_title: 'Electronics repair in Batumi',
         hero_text: 'We repair TVs, phones, tablets, laptops, computers, power stations and small household appliances. We offer home visits, diagnostics, price approval and only then start the repair.',
         hero_call: 'Call now',
@@ -2045,6 +2063,7 @@
         chip_visit: 'ოსტატის გამოძახება',
         chip_prices: 'სამართლიანი ფასები',
         chip_city: 'ბათუმი',
+        chip_warranty: 'გარანტია შესრულებულ სამუშაოზე',
         hero_title: 'ტექნიკის შეკეთება ბათუმში',
         hero_text: 'ვაკეთებთ ტელევიზორებს, ტელეფონებს, პლანშეტებს, ლეპტოპებს, კომპიუტერებს, დამტენ სადგურებს და მცირე საყოფაცხოვრებო ტექნიკას. ვმუშაობთ ადგილზე გამოძახებით, ვატარებთ დიაგნოსტიკას, ვათანხმებთ ფასს და მხოლოდ ამის შემდეგ ვიწყებთ შეკეთებას.',
         hero_call: 'დარეკვა',
