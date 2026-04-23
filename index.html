@@ -747,6 +747,108 @@
       100%{opacity:0}
     }
 
+
+    .reviews-wrap{
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+      gap:22px;
+      align-items:start;
+    }
+    .reviews-list{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+    }
+    .review-form-card{
+      padding:28px;
+      position:sticky;
+      top:110px;
+    }
+    .review-form-card h3{
+      margin:0 0 8px;
+      font-size:24px;
+      color:#0f172a;
+    }
+    .review-form-card p{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:15px;
+    }
+    .review-form{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .rating-box{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .rating-label{
+      font-size:14px;
+      font-weight:700;
+      color:#243244;
+    }
+    .rating-stars{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .rating-star{
+      appearance:none;
+      -webkit-appearance:none;
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      border:1px solid #f0d7bf;
+      background:#fff;
+      cursor:pointer;
+      position:relative;
+      transition:.2s ease;
+      box-shadow:0 4px 12px rgba(15,23,42,.04);
+    }
+    .rating-star::before{
+      content:"★";
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      color:#f59e0b;
+      opacity:.45;
+    }
+    .rating-star:hover,
+    .rating-star.active,
+    .rating-star:checked{
+      transform:translateY(-2px);
+      border-color:#f4be7b;
+      background:#fff8ef;
+      box-shadow:0 8px 18px rgba(245,158,11,.16);
+    }
+    .rating-star.active::before,
+    .rating-star:checked::before{
+      opacity:1;
+    }
+    .review-submit-note{
+      font-size:13px;
+      color:var(--muted);
+      text-align:center;
+      margin-top:2px;
+    }
+    .review-meta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .review-date{
+      white-space:nowrap;
+    }
+
     footer{
       padding:24px 0;
       text-align:center;
@@ -813,27 +915,36 @@
 
     @media (max-width:768px){
       .container{padding:0 16px}
+      header{padding-top:6px}
       .nav-wrap{
         min-height:auto;
-        padding:14px 0;
-        justify-content:space-between;
+        padding:10px 0 14px;
+        justify-content:flex-start;
+        align-items:flex-start;
+        gap:12px;
       }
       .header-actions{
-        width:auto;
-        justify-content:flex-end;
+        width:100%;
+        margin-left:0;
+        justify-content:flex-start;
+        gap:14px;
       }
       .nav{
-        justify-content:center;
-        gap:14px;
+        width:100%;
+        justify-content:flex-start;
+        gap:18px;
+        row-gap:10px;
         font-size:13px;
+        padding-top:4px;
       }
-      .logo{font-size:26px;gap:7px}
+      .logo{font-size:24px;gap:8px;align-items:center}
       .logo-one{
-        min-width:.94em;
-        height:.94em;
-        padding:0 .16em;
-        border-radius:12px;
-        font-size:.92em;
+        min-width:.9em;
+        height:.9em;
+        padding:0 .14em;
+        border-radius:11px;
+        font-size:.88em;
+        transform:none;
       }
       .lang-toggle{
         min-height:46px;
@@ -862,8 +973,13 @@
       .steps,
       .issues-grid,
       .reviews,
+      .reviews-wrap,
+      .reviews-list,
       .contacts-grid{
         grid-template-columns:1fr;
+      }
+      .review-form-card{
+        position:static;
       }
       .section-head{
         margin-bottom:30px;
@@ -877,7 +993,7 @@
       section{
         padding:56px 0;
       }
-      .hero-panel,.about-main,.about-side,.service-card,.adv-card,.step-card,.review-card,.faq-card,.contacts-wrap{
+      .hero-panel,.about-main,.about-side,.service-card,.adv-card,.step-card,.review-card,.faq-card,.contacts-wrap,.review-form-card{
         padding:22px;
       }
       .contact-form h3,.contact-info h3{
@@ -1201,24 +1317,60 @@
     <section id="reviews">
       <div class="container">
         <div class="section-head">
-          <h2>Отзывы клиентов</h2>
+          <h2 data-i18n="reviews_title">Отзывы клиентов</h2>
+          <p data-i18n="reviews_sub">Можно посмотреть отзывы и оставить свой комментарий с оценкой.</p>
         </div>
 
-        <div class="reviews">
-          <div class="card review-card">
-            <div class="stars">★★★★★</div>
-            <p>Быстро починили телефон после падения. Всё объяснили нормально и без навязывания лишних работ.</p>
-            <strong>Клиент, Батуми</strong>
+        <div class="reviews-wrap">
+          <div class="reviews-list" id="reviewsList">
+            <div class="card review-card">
+              <div class="stars" data-rating="5">★★★★★</div>
+              <p>Быстро починили телефон после падения. Всё объяснили нормально и без навязывания лишних работ.</p>
+              <div class="review-meta">
+                <strong>Клиент, Батуми</strong>
+                <span class="review-date">5/5</span>
+              </div>
+            </div>
+            <div class="card review-card">
+              <div class="stars" data-rating="5">★★★★★</div>
+              <p>Мастер приехал домой, посмотрел компьютер и решил проблему. Очень удобно, что не пришлось никуда везти технику.</p>
+              <div class="review-meta">
+                <strong>Клиент, Батуми</strong>
+                <span class="review-date">5/5</span>
+              </div>
+            </div>
+            <div class="card review-card">
+              <div class="stars" data-rating="5">★★★★★</div>
+              <p>Телевизор перестал включаться. После диагностики всё согласовали и сделали ремонт.</p>
+              <div class="review-meta">
+                <strong>Клиент, Батуми</strong>
+                <span class="review-date">5/5</span>
+              </div>
+            </div>
           </div>
-          <div class="card review-card">
-            <div class="stars">★★★★★</div>
-            <p>Мастер приехал домой, посмотрел компьютер и решил проблему. Очень удобно, что не пришлось никуда везти технику.</p>
-            <strong>Клиент, Батуми</strong>
-          </div>
-          <div class="card review-card">
-            <div class="stars">★★★★★</div>
-            <p>Телевизор перестал включаться. После диагностики всё согласовали и сделали ремонт.</p>
-            <strong>Клиент, Батуми</strong>
+
+          <div class="card review-form-card">
+            <h3 data-i18n="review_form_title">Оставить отзыв</h3>
+            <p data-i18n="review_form_sub">Укажите имя, комментарий и поставьте оценку.</p>
+
+            <form class="review-form" id="reviewForm">
+              <input type="text" id="reviewName" data-i18n-placeholder="review_name_placeholder" placeholder="Ваше имя" required>
+              <textarea id="reviewComment" data-i18n-placeholder="review_comment_placeholder" placeholder="Напишите короткий отзыв" required></textarea>
+
+              <div class="rating-box">
+                <div class="rating-label" data-i18n="review_rating_label">Оценка</div>
+                <div class="rating-stars" id="ratingStars">
+                  <input class="rating-star" type="button" value="1" data-value="1" aria-label="1 star">
+                  <input class="rating-star" type="button" value="2" data-value="2" aria-label="2 stars">
+                  <input class="rating-star" type="button" value="3" data-value="3" aria-label="3 stars">
+                  <input class="rating-star" type="button" value="4" data-value="4" aria-label="4 stars">
+                  <input class="rating-star" type="button" value="5" data-value="5" aria-label="5 stars">
+                </div>
+              </div>
+
+              <button class="btn btn-primary" type="submit" data-i18n="review_submit">Добавить отзыв</button>
+              <div class="review-submit-note" data-i18n="review_note">Отзывы сохраняются на этом устройстве в браузере.</div>
+            </form>
           </div>
         </div>
       </div>
@@ -1325,6 +1477,15 @@
         nav_steps: 'Как работаем',
         nav_reviews: 'Отзывы',
         nav_contacts: 'Контакты',
+        reviews_title: 'Отзывы клиентов',
+        reviews_sub: 'Можно посмотреть отзывы и оставить свой комментарий с оценкой.',
+        review_form_title: 'Оставить отзыв',
+        review_form_sub: 'Укажите имя, комментарий и поставьте оценку.',
+        review_name_placeholder: 'Ваше имя',
+        review_comment_placeholder: 'Напишите короткий отзыв',
+        review_rating_label: 'Оценка',
+        review_submit: 'Добавить отзыв',
+        review_note: 'Отзывы сохраняются на этом устройстве в браузере.',
         chip_visit: 'Выезд мастера',
         chip_prices: 'Честные цены',
         chip_city: 'Батуми',
@@ -1464,6 +1625,15 @@
         nav_steps: 'როგორ ვმუშაობთ',
         nav_reviews: 'Отзывы',
         nav_contacts: 'კონტაქტი',
+        reviews_title: 'კლიენტების შეფასებები',
+        reviews_sub: 'შეგიძლიათ ნახოთ შეფასებები და დაამატოთ საკუთარი კომენტარი ქულით.',
+        review_form_title: 'დატოვეთ შეფასება',
+        review_form_sub: 'მიუთითეთ სახელი, კომენტარი და მონიშნეთ შეფასება.',
+        review_name_placeholder: 'თქვენი სახელი',
+        review_comment_placeholder: 'დაწერეთ მოკლე შეფასება',
+        review_rating_label: 'შეფასება',
+        review_submit: 'შეფასების დამატება',
+        review_note: 'შეფასებები ინახება ამ მოწყობილობის ბრაუზერში.',
         chip_visit: 'ოსტატის გამოძახება',
         chip_prices: 'სამართლიანი ფასები',
         chip_city: 'ბათუმი',
@@ -1613,6 +1783,12 @@
           el.textContent = map[key];
         }
       });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (Object.prototype.hasOwnProperty.call(map, key)) {
+          el.placeholder = map[key];
+        }
+      });
 
       const btnText = document.getElementById('langToggleText');
       const icon = document.getElementById('langIcon');
@@ -1670,6 +1846,90 @@
         btn.addEventListener('click', function () {
           const current = localStorage.getItem('site_lang') || 'ru';
           setLanguage(current === 'ru' ? 'ka' : 'ru');
+        });
+      }
+
+
+      const reviewStorageKey = 'one_service_reviews';
+      const reviewForm = document.getElementById('reviewForm');
+      const reviewsList = document.getElementById('reviewsList');
+      const ratingButtons = Array.from(document.querySelectorAll('.rating-star'));
+      let currentRating = 5;
+
+      function formatStars(value) {
+        return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
+      }
+
+      function updateRatingButtons(value) {
+        ratingButtons.forEach(btn => {
+          const btnValue = Number(btn.dataset.value);
+          btn.classList.toggle('active', btnValue <= value);
+        });
+      }
+
+      function getSavedReviews() {
+        try {
+          return JSON.parse(localStorage.getItem(reviewStorageKey) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveReviews(items) {
+        localStorage.setItem(reviewStorageKey, JSON.stringify(items));
+      }
+
+      function createReviewCard(item) {
+        const card = document.createElement('div');
+        card.className = 'card review-card';
+        card.innerHTML = `
+          <div class="stars" data-rating="${item.rating}">${formatStars(item.rating)}</div>
+          <p></p>
+          <div class="review-meta">
+            <strong></strong>
+            <span class="review-date">${item.rating}/5</span>
+          </div>
+        `;
+        card.querySelector('p').textContent = item.comment;
+        card.querySelector('strong').textContent = item.name;
+        return card;
+      }
+
+      function renderSavedReviews() {
+        const savedReviews = getSavedReviews();
+        savedReviews.forEach(item => {
+          reviewsList.prepend(createReviewCard(item));
+        });
+      }
+
+      updateRatingButtons(currentRating);
+      ratingButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          currentRating = Number(this.dataset.value);
+          updateRatingButtons(currentRating);
+        });
+      });
+
+      renderSavedReviews();
+
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', function (event) {
+          event.preventDefault();
+          const nameField = document.getElementById('reviewName');
+          const commentField = document.getElementById('reviewComment');
+          const name = nameField.value.trim();
+          const comment = commentField.value.trim();
+          if (!name || !comment) return;
+
+          const review = { name, comment, rating: currentRating };
+          const savedReviews = getSavedReviews();
+          savedReviews.unshift(review);
+          saveReviews(savedReviews);
+          reviewsList.prepend(createReviewCard(review));
+
+          reviewForm.reset();
+          currentRating = 5;
+          updateRatingButtons(currentRating);
         });
       }
 
