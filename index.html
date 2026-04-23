@@ -171,6 +171,52 @@
       font-weight:900;
     }
 
+    .lang-dropdown{
+      position:relative;
+    }
+    .lang-menu{
+      position:absolute;
+      top:calc(100% + 10px);
+      right:0;
+      min-width:170px;
+      padding:8px;
+      border-radius:18px;
+      border:1px solid #eadccf;
+      background:rgba(255,255,255,.98);
+      box-shadow:0 16px 32px rgba(50,33,14,.10);
+      display:none;
+      flex-direction:column;
+      gap:4px;
+      z-index:90;
+    }
+    .lang-dropdown.open .lang-menu{
+      display:flex;
+    }
+    .lang-option{
+      display:flex;
+      align-items:center;
+      width:100%;
+      min-height:44px;
+      padding:0 14px;
+      border:none;
+      border-radius:12px;
+      background:#fff;
+      color:#243244;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+      text-align:left;
+    }
+    .lang-option:hover{
+      background:#fff4ea;
+      color:var(--accent-dark);
+    }
+    .lang-option.active{
+      background:#fff0e4;
+      color:var(--accent-dark);
+    }
+
     .hero{
       padding:72px 0 64px;
       position:relative;
@@ -985,10 +1031,20 @@
         font-size:.88em;
         transform:none;
       }
+      .lang-dropdown{
+        width:100%;
+      }
       .lang-toggle{
+        width:100%;
         min-height:46px;
         padding:0 16px;
         border-radius:16px;
+        justify-content:center;
+      }
+      .lang-menu{
+        position:static;
+        margin-top:8px;
+        min-width:100%;
       }
       .hero{
         padding:42px 0 36px;
@@ -1065,10 +1121,17 @@
           <a href="#reviews" data-i18n="nav_reviews">Отзывы</a>
           <a href="#contacts" data-i18n="nav_contacts">Контакты</a>
         </nav>
-        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">
-          <span class="lang-icon" id="langIcon">GE</span>
-          <span id="langToggleText">ქართული</span>
-        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-toggle" id="langToggle" type="button" aria-label="Choose language">
+            <span class="lang-icon" id="langIcon">🌐</span>
+            <span id="langToggleText">Язык</span>
+          </button>
+          <div class="lang-menu" id="langMenu">
+            <button class="lang-option" type="button" data-lang="ru">Русский</button>
+            <button class="lang-option" type="button" data-lang="ka">ქართული</button>
+            <button class="lang-option" type="button" data-lang="en">English</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -1457,7 +1520,7 @@
               <div class="contact-list">
                 <div class="contact-line">
                   <div class="contact-icon">🏙️</div>
-                  <div><strong data-i18n="contact_city_label">Город:</strong><span>Батуми</span></div>
+                  <div><strong data-i18n="contact_city_label">Город:</strong><span data-i18n="contact_city_value">Батуми</span></div>
                 </div>
                 <a href="tel:+995555639737" class="contact-line">
                   <div class="contact-icon">📞</div>
@@ -1650,6 +1713,7 @@
         contacts_sub: 'Связаться можно любым удобным способом.',
         contact_info_title: 'Контактная информация',
         contact_city_label: 'Город:',
+        contact_city_value: 'Батуми',
         contact_phone_label: 'Телефон:',
         contact_wa_label: 'WhatsApp:',
         contact_wa_text: 'Написать в WhatsApp',
@@ -1661,7 +1725,161 @@
         form_submit: 'Отправить заявку',
         form_note: 'После получения сообщения мы свяжемся с вами.',
         footer_powered: 'Powered by 2026',
-        toggle_text: 'ქართული'
+        toggle_text: 'Русский'
+      },
+      en: {
+        title: '1ONE service — electronics repair in Batumi',
+        nav_about: 'About',
+        nav_services: 'Services',
+        nav_steps: 'How we work',
+        nav_reviews: 'Reviews',
+        nav_contacts: 'Contacts',
+        reviews_title: 'Customer reviews',
+        reviews_sub: 'You can read reviews and leave your own with a rating.',
+        review_form_title: 'Leave a review',
+        review_form_sub: 'Enter your name, comment and choose a rating.',
+        review_name_placeholder: 'Your name',
+        review_comment_placeholder: 'Write a short review',
+        review_rating_label: 'Rating',
+        review_submit: 'Add review',
+        review_note: 'Reviews are stored in this browser on this device.',
+        reviews_toggle_show: 'Show all reviews',
+        reviews_toggle_hide: 'Hide reviews',
+        chip_visit: 'Home visit',
+        chip_prices: 'Fair prices',
+        chip_city: 'Batumi',
+        hero_title: 'Electronics repair in Batumi',
+        hero_text: 'We repair TVs, phones, tablets, laptops, computers, power stations and small household appliances. We offer home visits, diagnostics, price approval and only then start the repair.',
+        hero_call: 'Call now',
+        hero_request: 'Leave a request',
+        hero_panel_title: 'What we repair',
+        cat_phones: 'Phones',
+        cat_tablets: 'Tablets',
+        cat_laptops: 'Laptops',
+        cat_pcs: 'Computers',
+        cat_tvs: 'TVs',
+        cat_powerstations: 'Power stations',
+        cat_smallappl: 'Small appliances',
+        about_title: 'About us',
+        about_sub: 'Reliable service center in Batumi.',
+        about_head: 'Honest and clear service center in Batumi',
+        about_p1: 'We repair TVs, phones, tablets, laptops, computers, power stations and small household appliances with a home visit.',
+        about_p2: 'If your device stopped working, does not turn on, does not charge, overheats or works unstably — we will find the cause and offer the right solution.',
+        about_p3: 'We work in a simple and transparent way: request, visit and diagnostics, price approval, then repair.',
+        about_point1: 'Master visit to your home',
+        about_point2: 'Diagnostics before repair',
+        about_point3: 'Price approval in advance',
+        about_point4: 'We work across Batumi',
+        mini_title1: 'Service across Batumi',
+        mini_title2: 'Full diagnostics',
+        mini_title3: 'Fair price and quality',
+        mini1: 'Convenient for home and office',
+        mini2: 'Inspection before repair starts',
+        mini3: 'Price is agreed in advance',
+        services_title: 'Our services',
+        services_sub: '',
+        svc1_title: 'Phones',
+        svc2_title: 'Tablets',
+        svc3_title: 'Laptops',
+        svc4_title: 'Computers',
+        svc5_title: 'TVs',
+        svc6_title: 'Power stations',
+        svc7_title: 'Small household appliances',
+        svc1_li1: 'screen and glass replacement',
+        svc1_li2: 'battery replacement',
+        svc1_li3: 'charging port repair',
+        svc1_li4: 'water damage repair',
+        svc1_li5: 'speaker, microphone and camera replacement',
+        svc1_li6: 'software repair and system recovery',
+        svc2_li1: 'display and touchscreen replacement',
+        svc2_li2: 'battery replacement',
+        svc2_li3: 'drop damage repair',
+        svc2_li4: 'charging repair',
+        svc2_li5: 'system recovery',
+        svc2_li6: 'power and startup issue repair',
+        svc3_li1: 'dust cleaning and thermal paste replacement',
+        svc3_li2: 'screen and keyboard replacement',
+        svc3_li3: 'power connector repair',
+        svc3_li4: 'SSD and HDD replacement',
+        svc3_li5: 'Windows and driver installation',
+        svc3_li6: 'liquid damage repair',
+        svc4_li1: 'computer does not turn on',
+        svc4_li2: 'diagnostics and component replacement',
+        svc4_li3: 'cooling system cleaning',
+        svc4_li4: 'Windows and software installation',
+        svc4_li5: 'virus removal',
+        svc4_li6: 'PC assembly and upgrade',
+        svc5_li1: 'no picture or sound',
+        svc5_li2: 'TV does not turn on',
+        svc5_li3: 'lines on the screen',
+        svc5_li4: 'backlight repair',
+        svc5_li5: 'power supply repair',
+        svc5_li6: 'TV setup and connection',
+        svc5_li7: 'main board repair',
+        svc6_li1: 'device does not charge',
+        svc6_li2: 'cannot handle load',
+        svc6_li3: 'power output issues',
+        svc6_li4: 'board and controller diagnostics',
+        svc6_li5: 'battery module check',
+        svc6_li6: 'recovery after faults and voltage surges',
+        svc7_li1: 'kitchen appliance repair',
+        svc7_li2: 'small electrical appliance repair',
+        svc7_li3: 'replacement of damaged parts',
+        svc7_li4: 'overheating repair',
+        svc7_li5: 'recovery after power surges',
+        svc7_li6: 'fault diagnostics and restore operation',
+        why_title: 'Why choose us',
+        why_sub: '',
+        feature1_title: 'Honest approach',
+        feature1_text: 'First diagnostics, then price approval and only after that repair.',
+        feature2_title: 'Clear terms',
+        feature2_text: 'We explain the problem in simple words and agree on the price in advance.',
+        feature3_title: 'Convenient service',
+        feature3_text: 'We work across Batumi, with home or office visits available.',
+        steps_title: 'How we work',
+        steps_sub: '',
+        step1_title: 'Request',
+        step1_text: 'You call us or leave a request on the website.',
+        step2_title: 'Visit and diagnostics',
+        step2_text: 'The technician comes to you and performs full diagnostics on site or in the workshop.',
+        step3_title: 'Approval',
+        step3_text: 'After diagnostics we tell you the exact price and repair time.',
+        step4_title: 'Repair',
+        step4_text: 'We start the repair only after your approval.',
+        common_title: 'Most common reasons clients contact us',
+        common1: 'Broken phone screen',
+        common2: 'Tablet does not charge',
+        common3: 'Laptop overheats and makes noise',
+        common4: 'Computer does not turn on',
+        common5: 'TV has no picture',
+        common6: 'Power station problems',
+        common7: 'Device stopped working after water damage',
+        common8: 'Device does not start after voltage surge',
+        faq_title: 'Frequently asked questions',
+        faq_sub: 'Short answers to what clients ask most often.',
+        faq1_title: 'How much does the repair cost?',
+        faq1_text: 'The exact cost is given only after diagnostics.',
+        faq2_title: 'Can I call a technician to my home?',
+        faq2_text: 'Yes, in Batumi home or office visits are available if it fits the device type and the task.',
+        faq3_title: 'When do you tell the price?',
+        faq3_text: 'After diagnostics, before the repair starts. We do nothing without approval.',
+        contacts_title: 'Contacts and request',
+        contacts_sub: 'You can contact us in any convenient way.',
+        contact_info_title: 'Contact information',
+        contact_city_label: 'City:',
+        contact_city_value: 'Batumi',
+        contact_phone_label: 'Phone:',
+        contact_wa_label: 'WhatsApp:',
+        contact_wa_text: 'Write on WhatsApp',
+        contact_tg_label: 'Telegram:',
+        contact_email_label: 'Email:',
+        contact_hours_label: 'Hours:',
+        contact_hours_text: 'Every day, 10:00–22:00',
+        form_title: 'Leave a request',
+        form_submit: 'Send request',
+        form_note: 'After receiving your message we will contact you.',
+        footer_powered: 'Powered by 2026',
+        toggle_text: 'English'
       },
       ka: {
         title: '1ONE service — ტექნიკის შეკეთება ბათუმში',
@@ -1800,6 +2018,7 @@
         contacts_sub: 'დაგვიკავშირდით თქვენთვის სასურველი გზით.',
         contact_info_title: 'საკონტაქტო ინფორმაცია',
         contact_city_label: 'ქალაქი:',
+        contact_city_value: 'ბათუმი',
         contact_phone_label: 'ტელეფონი:',
         contact_wa_label: 'WhatsApp:',
         contact_wa_text: 'მიწერა WhatsApp-ში',
@@ -1811,7 +2030,7 @@
         form_submit: 'განაცხადის გაგზავნა',
         form_note: 'შეტყობინების მიღების შემდეგ დაგიკავშირდებით.',
         footer_powered: 'Powered by 2026',
-        toggle_text: 'Русский'
+        toggle_text: 'ქართული'
       }
     };
 
@@ -1835,8 +2054,16 @@
 
       const btnText = document.getElementById('langToggleText');
       const icon = document.getElementById('langIcon');
-      if (btnText) btnText.textContent = map.toggle_text;
-      if (icon) icon.textContent = lang === 'ka' ? 'RU' : 'GE';
+      const currentLangLabels = {
+        ru: 'Русский',
+        ka: 'ქართული',
+        en: 'English'
+      };
+      if (btnText) btnText.textContent = currentLangLabels[lang] || map.toggle_text || 'Language';
+      if (icon) icon.textContent = '🌐';
+      document.querySelectorAll('.lang-option').forEach(option => {
+        option.classList.toggle('active', option.dataset.lang === lang);
+      });
 
       const name = document.getElementById('wa-name');
       const phone = document.getElementById('wa-phone');
@@ -1847,6 +2074,11 @@
         if (phone) phone.placeholder = 'თქვენი ტელეფონი';
         if (device) device.placeholder = 'რომელი ტექნიკაა დაზიანებული?';
         if (problem) problem.placeholder = 'მოკლედ აღწერეთ პრობლემა';
+      } else if (lang === 'en') {
+        if (name) name.placeholder = 'Your name';
+        if (phone) phone.placeholder = 'Your phone';
+        if (device) device.placeholder = 'What device is broken?';
+        if (problem) problem.placeholder = 'Briefly describe the problem';
       } else {
         if (name) name.placeholder = 'Ваше имя';
         if (phone) phone.placeholder = 'Ваш телефон';
@@ -1886,10 +2118,26 @@
       setLanguage(saved);
 
       const btn = document.getElementById('langToggle');
-      if (btn) {
-        btn.addEventListener('click', function () {
-          const current = localStorage.getItem('site_lang') || 'ru';
-          setLanguage(current === 'ru' ? 'ka' : 'ru');
+      const langDropdown = document.getElementById('langDropdown');
+      const langMenu = document.getElementById('langMenu');
+
+      if (btn && langDropdown && langMenu) {
+        btn.addEventListener('click', function (event) {
+          event.stopPropagation();
+          langDropdown.classList.toggle('open');
+        });
+
+        langMenu.querySelectorAll('.lang-option').forEach(option => {
+          option.addEventListener('click', function () {
+            setLanguage(this.dataset.lang);
+            langDropdown.classList.remove('open');
+          });
+        });
+
+        document.addEventListener('click', function (event) {
+          if (!langDropdown.contains(event.target)) {
+            langDropdown.classList.remove('open');
+          }
         });
       }
 
@@ -2033,6 +2281,13 @@
               'ტელეფონი: ' + encodeURIComponent(phone) + '%0A' +
               'ტექნიკა: ' + encodeURIComponent(device) + '%0A' +
               'პრობლემა: ' + encodeURIComponent(problem || 'არ არის მითითებული');
+          } else if (lang === 'en') {
+            text =
+              'Hello! I am leaving a repair request.%0A%0A' +
+              'Name: ' + encodeURIComponent(name) + '%0A' +
+              'Phone: ' + encodeURIComponent(phone) + '%0A' +
+              'Device: ' + encodeURIComponent(device) + '%0A' +
+              'Problem: ' + encodeURIComponent(problem || 'Not specified');
           } else {
             text =
               'Здравствуйте! Оставляю заявку на ремонт.%0A%0A' +
