@@ -962,8 +962,7 @@
   
   <script>
     if (localStorage.getItem('crm_auth') !== '1') {
-      localStorage.setItem('open_crm_login', '1');
-      window.location.href = 'index.html';
+      window.location.href = 'crm_login.html';
     }
 
     const storageKey = 'one_service_orders';
@@ -1371,8 +1370,7 @@
     });
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('crm_auth');
-      localStorage.setItem('open_crm_login', '1');
-      window.location.href = 'index.html';
+      window.location.href = 'crm_login.html';
     });
 
     orderModalOverlay.addEventListener('click', event => {
