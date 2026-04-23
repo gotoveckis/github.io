@@ -1127,9 +1127,9 @@
             <span id="langToggleText">Язык</span>
           </button>
           <div class="lang-menu" id="langMenu">
-            <button class="lang-option" type="button" data-lang="ru">Русский</button>
-            <button class="lang-option" type="button" data-lang="ka">ქართული</button>
-            <button class="lang-option" type="button" data-lang="en">English</button>
+            <button class="lang-option" type="button" data-lang="ru">RU</button>
+            <button class="lang-option" type="button" data-lang="en">EN</button>
+            <button class="lang-option" type="button" data-lang="ka">ქარ</button>
           </div>
         </div>
       </div>
@@ -2055,9 +2055,9 @@
       const btnText = document.getElementById('langToggleText');
       const icon = document.getElementById('langIcon');
       const currentLangLabels = {
-        ru: 'Русский',
-        ka: 'ქართული',
-        en: 'English'
+        ru: 'RU',
+        en: 'EN',
+        ka: 'ქარ'
       };
       if (btnText) btnText.textContent = currentLangLabels[lang] || map.toggle_text || 'Language';
       if (icon) icon.textContent = '🌐';
