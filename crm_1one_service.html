@@ -504,7 +504,7 @@
     <div class="container topbar">
       <div class="logo"><span class="logo-one">1</span><span class="logo-text">ONE service</span></div>
       <div class="topbar-actions">
-        <button class="btn btn-secondary" id="printOrdersBtn" type="button">Печать</button>
+        <button class="btn btn-secondary" id="backToSiteBtn" type="button">Вернуться на сайт</button>
         <button class="btn btn-secondary" id="logoutBtn" type="button">Выйти</button>
       </div>
     </div>
@@ -1026,7 +1026,9 @@
     document.getElementById('floatingCreateBtn').addEventListener('click', () => openModal());
     document.getElementById('closeOrderModal').addEventListener('click', closeModal);
     document.getElementById('cancelOrderBtn').addEventListener('click', closeModal);
-    document.getElementById('printOrdersBtn').addEventListener('click', () => window.print());
+    document.getElementById('backToSiteBtn').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('crm_auth');
       window.location.href = 'site_with_crm_login.html';
