@@ -849,7 +849,46 @@
       white-space:nowrap;
     }
 
-    footer{
+
+    .review-card.is-hidden{
+      display:none;
+    }
+    .reviews-controls{
+      display:flex;
+      justify-content:center;
+      margin-top:20px;
+    }
+    .reviews-toggle-btn{
+      min-height:54px;
+      padding:0 24px;
+      border:none;
+      border-radius:16px;
+      background:#fff;
+      color:#1f1a16;
+      border:2px solid #d8cdc1;
+      box-shadow:0 10px 24px rgba(50,33,14,.06);
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.25s ease;
+    }
+    .reviews-toggle-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 26px rgba(50,33,14,.09);
+      border-color:#f0c49a;
+    }
+
+    @media (max-width:768px){
+      .reviews-controls{
+        margin-top:16px;
+      }
+      .reviews-toggle-btn{
+        width:100%;
+      }
+    }
+
+
+        footer{
       padding:24px 0;
       text-align:center;
       color:var(--muted);
@@ -1322,30 +1361,35 @@
         </div>
 
         <div class="reviews-wrap">
-          <div class="reviews-list" id="reviewsList">
-            <div class="card review-card">
-              <div class="stars" data-rating="5">★★★★★</div>
-              <p>Быстро починили телефон после падения. Всё объяснили нормально и без навязывания лишних работ.</p>
-              <div class="review-meta">
-                <strong>Клиент, Батуми</strong>
-                <span class="review-date">5/5</span>
+          <div>
+            <div class="reviews-list" id="reviewsList">
+              <div class="card review-card">
+                <div class="stars" data-rating="5">★★★★★</div>
+                <p>Быстро починили телефон после падения. Всё объяснили нормально и без навязывания лишних работ.</p>
+                <div class="review-meta">
+                  <strong>Клиент, Батуми</strong>
+                  <span class="review-date">5/5</span>
+                </div>
+              </div>
+              <div class="card review-card">
+                <div class="stars" data-rating="5">★★★★★</div>
+                <p>Мастер приехал домой, посмотрел компьютер и решил проблему. Очень удобно, что не пришлось никуда везти технику.</p>
+                <div class="review-meta">
+                  <strong>Клиент, Батуми</strong>
+                  <span class="review-date">5/5</span>
+                </div>
+              </div>
+              <div class="card review-card">
+                <div class="stars" data-rating="5">★★★★★</div>
+                <p>Телевизор перестал включаться. После диагностики всё согласовали и сделали ремонт.</p>
+                <div class="review-meta">
+                  <strong>Клиент, Батуми</strong>
+                  <span class="review-date">5/5</span>
+                </div>
               </div>
             </div>
-            <div class="card review-card">
-              <div class="stars" data-rating="5">★★★★★</div>
-              <p>Мастер приехал домой, посмотрел компьютер и решил проблему. Очень удобно, что не пришлось никуда везти технику.</p>
-              <div class="review-meta">
-                <strong>Клиент, Батуми</strong>
-                <span class="review-date">5/5</span>
-              </div>
-            </div>
-            <div class="card review-card">
-              <div class="stars" data-rating="5">★★★★★</div>
-              <p>Телевизор перестал включаться. После диагностики всё согласовали и сделали ремонт.</p>
-              <div class="review-meta">
-                <strong>Клиент, Батуми</strong>
-                <span class="review-date">5/5</span>
-              </div>
+            <div class="reviews-controls">
+              <button class="reviews-toggle-btn" id="reviewsToggleBtn" type="button" data-i18n="reviews_toggle_show">Показать все отзывы</button>
             </div>
           </div>
 
@@ -1485,6 +1529,8 @@
         review_comment_placeholder: 'Напишите короткий отзыв',
         review_rating_label: 'Оценка',
         review_submit: 'Добавить отзыв',
+        reviews_toggle_show: 'Показать все отзывы',
+        reviews_toggle_hide: 'Скрыть отзывы',
         chip_visit: 'Выезд мастера',
         chip_prices: 'Честные цены',
         chip_city: 'Батуми',
@@ -1632,6 +1678,8 @@
         review_comment_placeholder: 'დაწერეთ მოკლე შეფასება',
         review_rating_label: 'შეფასება',
         review_submit: 'შეფასების დამატება',
+        reviews_toggle_show: 'ყველა შეფასების ნახვა',
+        reviews_toggle_hide: 'შეფასებების დამალვა',
         review_note: 'შეფასებები ინახება ამ მოწყობილობის ბრაუზერში.',
         chip_visit: 'ოსტატის გამოძახება',
         chip_prices: 'სამართლიანი ფასები',
@@ -1811,6 +1859,7 @@
       }
 
       formatHeroTitle(lang);
+      if (typeof updateReviewsToggleButton === 'function') updateReviewsToggleButton();
       localStorage.setItem('site_lang', lang);
     }
 
@@ -1849,11 +1898,40 @@
       }
 
 
+
       const reviewStorageKey = 'one_service_reviews';
+      const visibleReviewsCount = 3;
       const reviewForm = document.getElementById('reviewForm');
       const reviewsList = document.getElementById('reviewsList');
+      const reviewsToggleBtn = document.getElementById('reviewsToggleBtn');
       const ratingButtons = Array.from(document.querySelectorAll('.rating-star'));
       let currentRating = 5;
+      let reviewsExpanded = false;
+
+      function getCurrentLang() {
+        return localStorage.getItem('site_lang') || 'ru';
+      }
+
+      function updateReviewsToggleButton() {
+        if (!reviewsToggleBtn) return;
+        const lang = getCurrentLang();
+        const map = translations[lang] || translations.ru;
+        const cards = Array.from(reviewsList.querySelectorAll('.review-card'));
+        const hasExtra = cards.length > visibleReviewsCount;
+        reviewsToggleBtn.style.display = hasExtra ? 'inline-flex' : 'none';
+        reviewsToggleBtn.textContent = reviewsExpanded
+          ? (map.reviews_toggle_hide || 'Скрыть отзывы')
+          : (map.reviews_toggle_show || 'Показать все отзывы');
+      }
+
+      function updateReviewsVisibility() {
+        if (!reviewsList) return;
+        const cards = Array.from(reviewsList.querySelectorAll('.review-card'));
+        cards.forEach((card, index) => {
+          card.classList.toggle('is-hidden', !reviewsExpanded && index >= visibleReviewsCount);
+        });
+        updateReviewsToggleButton();
+      }
 
       function formatStars(value) {
         return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
@@ -1899,6 +1977,7 @@
         savedReviews.forEach(item => {
           reviewsList.prepend(createReviewCard(item));
         });
+        updateReviewsVisibility();
       }
 
       updateRatingButtons(currentRating);
@@ -1908,6 +1987,13 @@
           updateRatingButtons(currentRating);
         });
       });
+
+      if (reviewsToggleBtn) {
+        reviewsToggleBtn.addEventListener('click', function () {
+          reviewsExpanded = !reviewsExpanded;
+          updateReviewsVisibility();
+        });
+      }
 
       renderSavedReviews();
 
@@ -1929,6 +2015,7 @@
           reviewForm.reset();
           currentRating = 5;
           updateRatingButtons(currentRating);
+          updateReviewsVisibility();
         });
       }
 
