@@ -561,7 +561,7 @@
         font-size:14px;
         white-space:normal;
       }
-      .stats-card,.panel,.table-card,.modal{
+      .stats-card,.panel,.modal{
         padding:14px;
         border-radius:20px;
       }
@@ -571,7 +571,7 @@
         font-size:13px;
       }
       .page{
-        padding:14px 0 calc(120px + env(safe-area-inset-bottom));
+        padding:14px 0 calc(96px + env(safe-area-inset-bottom));
       }
       .stats-grid,
       .stats-card .stats-grid{
@@ -603,8 +603,9 @@
       textarea{
         min-height:100px;
       }
+
       .table-card{
-        padding:10px;
+        padding:0;
         background:transparent;
         border:none;
         box-shadow:none;
@@ -620,57 +621,81 @@
       table{min-width:0;}
       tbody{
         display:grid;
-        gap:14px;
+        gap:12px;
       }
       tr{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:0;
         background:rgba(255,255,255,.98);
         border:1px solid #eadccf;
-        border-radius:22px;
-        box-shadow:0 10px 28px rgba(50,33,14,.08);
+        border-radius:20px;
+        box-shadow:0 10px 24px rgba(50,33,14,.08);
         overflow:hidden;
       }
       td{
         border-bottom:1px solid #f3e6da;
-        padding:12px 14px;
+        padding:10px 12px 11px;
         display:block;
-        font-size:15px;
-        line-height:1.45;
+        font-size:14px;
+        line-height:1.4;
         word-break:break-word;
+        min-width:0;
+        background:#fff;
       }
       td::before{
         content:attr(data-label);
         display:block;
-        margin-bottom:6px;
+        margin-bottom:5px;
         color:#8b8177;
-        font-size:11px;
+        font-size:10px;
         font-weight:800;
         text-transform:uppercase;
         letter-spacing:.06em;
       }
-      td:first-child{
-        padding-top:16px;
+
+      td[data-label="№ заказа"],
+      td[data-label="Статус"],
+      td[data-label="Техника"],
+      td[data-label="Модель"],
+      td[data-label="Клиент"],
+      td[data-label="Телефон"],
+      td[data-label="Стоимость"],
+      td[data-label="Дата"]{
+        grid-column:span 1;
       }
-      td:last-child{
-        border-bottom:none;
-        padding-bottom:16px;
+      td[data-label="Неисправность"],
+      td[data-label="Действия"]{
+        grid-column:1 / -1;
+      }
+
+      td[data-label="№ заказа"]{
+        background:#fffaf5;
       }
       td[data-label="№ заказа"] b{
-        font-size:30px;
-        line-height:1;
+        font-size:24px;
+        line-height:1.05;
         letter-spacing:-.02em;
         color:#161616;
       }
       td[data-label="Статус"]{
         background:#fffaf5;
       }
+      td[data-label="Действия"]{
+        border-bottom:none;
+        padding-bottom:14px;
+      }
+
       .status-select,
       .actions-select{
         width:100%;
         min-width:0;
-        min-height:46px;
-        font-size:15px;
-        border-radius:14px;
+        min-height:42px;
+        font-size:14px;
+        border-radius:12px;
+        padding:8px 38px 8px 12px;
       }
+
       .empty-state{
         padding:18px 10px 6px;
         font-size:14px;
@@ -709,14 +734,15 @@
       }
       .fab{
         right:12px;
-        left:auto;
-        bottom:calc(12px + env(safe-area-inset-bottom));
-        min-height:52px;
+        left:12px;
+        bottom:calc(10px + env(safe-area-inset-bottom));
+        min-height:50px;
         min-width:0;
         padding:0 18px;
         justify-content:center;
         font-size:14px;
-        border-radius:999px;
+        border-radius:16px;
+        box-shadow:0 12px 26px rgba(255,122,18,.24);
       }
     }
 
@@ -729,7 +755,7 @@
         font-size:.9em;
       }
       .topbar-actions{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(2,minmax(0,1fr));
       }
       .topbar-actions .btn{
         min-height:44px;
@@ -740,10 +766,25 @@
         grid-template-columns:1fr;
       }
       td{
-        padding:11px 12px;
+        padding:10px 11px;
       }
       td[data-label="№ заказа"] b{
-        font-size:28px;
+        font-size:22px;
+      }
+      tr{
+        grid-template-columns:1fr;
+      }
+      td[data-label="№ заказа"],
+      td[data-label="Статус"],
+      td[data-label="Техника"],
+      td[data-label="Модель"],
+      td[data-label="Клиент"],
+      td[data-label="Телефон"],
+      td[data-label="Стоимость"],
+      td[data-label="Дата"],
+      td[data-label="Неисправность"],
+      td[data-label="Действия"]{
+        grid-column:1;
       }
       .status-select,
       .actions-select{
@@ -760,6 +801,7 @@
       }
       .fab{
         right:10px;
+        left:10px;
         bottom:calc(10px + env(safe-area-inset-bottom));
         padding:0 16px;
       }
