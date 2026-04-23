@@ -626,7 +626,7 @@
       window.location.href = 'site_with_crm_login.html';
     }
 
-    const storageKey = 'masterexpert_orders';
+    const storageKey = 'one_service_orders';
     const tbody = document.getElementById('ordersTableBody');
     const emptyState = document.getElementById('emptyState');
     const orderModalOverlay = document.getElementById('orderModalOverlay');
@@ -696,7 +696,7 @@
     function money(value) {
       const num = Number(value || 0);
       if (!num) return '—';
-      return new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num) + ' ₽';
+      return new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num) + ' грн';
     }
 
     function nextNumericOrderNumber() {
