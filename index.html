@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IvanService — ремонт техники в Батуми</title>
+  <title>1ONE service — ремонт техники в Батуми</title>
   <meta name="description" content="IvanService — ремонт телефонов, планшетов, ноутбуков, компьютеров, телевизоров, зарядных станций и мелкой бытовой техники в Батуми. Выезд мастера, ремонт материнских плат, заявка через WhatsApp.">
   <meta name="theme-color" content="#1f8fff">
   <style>
@@ -83,13 +83,42 @@
       flex-wrap:wrap;
     }
     .logo{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
       font-size:30px;
       font-weight:900;
-      letter-spacing:-.8px;
       color:#14110f;
       line-height:1;
+      white-space:nowrap;
     }
-    .logo span{color:var(--accent)}
+    .logo-one{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:.96em;
+      height:.96em;
+      padding:0 .18em;
+      border-radius:14px;
+      background:linear-gradient(180deg,#ff8a2a 0%, var(--accent) 100%);
+      color:#ffffff;
+      font-size:.96em;
+      font-weight:1000;
+      line-height:1;
+      letter-spacing:-.02em;
+      box-shadow:0 7px 16px rgba(255,122,18,.2);
+      transform:translateY(.02em);
+      flex:0 0 auto;
+    }
+    .logo-text{
+      color:var(--accent);
+      font-size:.94em;
+      font-weight:800;
+      letter-spacing:-.012em;
+      display:inline-block;
+      text-transform:none;
+      line-height:1;
+    }
     .header-actions{
       display:flex;
       align-items:center;
@@ -726,10 +755,38 @@
       background:rgba(255,255,255,.5);
     }
     .footer-brand{
+      display:flex;
+      align-items:baseline;
+      justify-content:center;
+      gap:6px;
       font-size:18px;
       font-weight:800;
       color:#0f172a;
       margin-bottom:4px;
+    }
+    .footer-one{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:.96em;
+      height:.96em;
+      padding:0 .16em;
+      border-radius:10px;
+      background:linear-gradient(180deg,#ff8a2a 0%, var(--accent) 100%);
+      color:#ffffff;
+      font-size:.9em;
+      font-weight:1000;
+      line-height:1;
+      letter-spacing:-.02em;
+      box-shadow:0 5px 12px rgba(255,122,18,.16);
+      transform:translateY(.02em);
+    }
+    .footer-text{
+      color:var(--accent);
+      font-size:.96em;
+      font-weight:800;
+      letter-spacing:-.012em;
+      line-height:1;
     }
     .footer-powered{
       font-size:12px;
@@ -770,7 +827,14 @@
         gap:14px;
         font-size:13px;
       }
-      .logo{font-size:26px}
+      .logo{font-size:26px;gap:7px}
+      .logo-one{
+        min-width:.94em;
+        height:.94em;
+        padding:0 .16em;
+        border-radius:12px;
+        font-size:.92em;
+      }
       .lang-toggle{
         min-height:46px;
         padding:0 16px;
@@ -837,7 +901,7 @@
 
   <header>
     <div class="container nav-wrap">
-      <div class="logo">Ivan<span>Service</span></div>
+      <div class="logo"><span class="logo-one">1</span><span class="logo-text">ONE service</span></div>
       <div class="header-actions">
         <nav class="nav">
           <a href="#about" data-i18n="nav_about">О нас</a>
@@ -1059,7 +1123,7 @@
     <section class="reveal">
       <div class="container">
         <div class="section-head">
-          <h2 data-i18n="why_title">Почему выбирают IvanService</h2>
+          <h2 data-i18n="why_title">Почему выбирают нас</h2>
           <p data-i18n="why_sub"></p>
         </div>
 
@@ -1247,7 +1311,7 @@
 
   <footer>
     <div class="container">
-      <div class="footer-brand">IvanService</div>
+      <div class="footer-brand"><span class="logo-one footer-one">1</span><span class="logo-text footer-text">ONE service</span></div>
       <div class="footer-powered" data-i18n="footer_powered">Powered by 2026</div>
     </div>
   </footer>
@@ -1255,7 +1319,7 @@
   <script>
     const translations = {
       ru: {
-        title: 'IvanService — ремонт техники в Батуми',
+        title: '1ONE service — ремонт техники в Батуми',
         nav_about: 'О нас',
         nav_services: 'Услуги',
         nav_steps: 'Как работаем',
@@ -1343,7 +1407,7 @@
         svc7_li4: 'устранение перегрева',
         svc7_li5: 'восстановление после перепадов напряжения',
         svc7_li6: 'диагностика неисправностей и восстановление работы',
-        why_title: 'Почему выбирают IvanService',
+        why_title: 'Почему выбирают 1ONE service',
         feature1_title: 'Честный подход',
         feature1_text: 'Сначала диагностика, затем согласование стоимости и только после этого ремонт.',
         feature2_title: 'Понятные условия',
@@ -1394,7 +1458,7 @@
         toggle_text: 'ქართული'
       },
       ka: {
-        title: 'IvanService — ტექნიკის შეკეთება ბათუმში',
+        title: '1ONE service — ტექნიკის შეკეთება ბათუმში',
         nav_about: 'ჩვენ შესახებ',
         nav_services: 'სერვისები',
         nav_steps: 'როგორ ვმუშაობთ',
@@ -1483,7 +1547,7 @@
         svc7_li4: 'გადახურების აღმოფხვრა',
         svc7_li5: 'აღდგენა ძაბვის ცვლილების შემდეგ',
         svc7_li6: 'გაუმართაობის დიაგნოსტიკა და მუშაობის აღდგენა',
-        why_title: 'რატომ ირჩევენ IvanService-ს',
+        why_title: 'რატომ ირჩევენ 1ONE service-ს',
         why_sub: 'ვმუშაობთ ფრთხილად, გასაგებად და ზედმეტი ხარჯების გარეშე.',
         feature1_title: 'პატიოსანი მიდგომა',
         feature1_text: 'ჯერ დიაგნოსტიკა, შემდეგ ღირებულების შეთანხმება და მხოლოდ ამის შემდეგ შეკეთება.',
