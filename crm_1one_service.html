@@ -314,10 +314,16 @@
     .status-select,
     .actions-select{
       min-width:170px;
-      padding:10px 12px;
+      padding:10px 42px 10px 12px;
       border-radius:12px;
       border:1px solid #d7e1ec;
-      background:#fff;
+      background-color:#fff;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23856a54' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right 12px center;
+      background-size:16px 16px;
+      -webkit-appearance:none;
+      appearance:none;
       font-size:13px;
       font-weight:800;
       transition:.2s ease;
@@ -550,32 +556,35 @@
       }
       .topbar-actions .btn{
         width:100%;
-        min-height:48px;
+        min-height:46px;
         padding:0 12px;
         font-size:14px;
         white-space:normal;
       }
-      .hero-card,.stats-card,.panel,.table-card,.modal{
-        padding:16px;
+      .stats-card,.panel,.table-card,.modal{
+        padding:14px;
         border-radius:20px;
       }
-      .hero-card p,
+      .hero-card{display:none;}
       .stat span,
       .empty-state{
-        font-size:14px;
+        font-size:13px;
       }
       .page{
-        padding:14px 0 calc(96px + env(safe-area-inset-bottom));
+        padding:14px 0 calc(120px + env(safe-area-inset-bottom));
       }
       .stats-grid,
       .stats-card .stats-grid{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:10px;
       }
       .stat{
-        padding:16px;
+        padding:14px 12px;
+        border-radius:16px;
       }
       .stat b{
-        font-size:24px;
+        font-size:22px;
+        margin-bottom:6px;
       }
       .toolbar{
         grid-template-columns:1fr;
@@ -587,7 +596,7 @@
         font-size:16px;
       }
       .btn{
-        min-height:48px;
+        min-height:46px;
         font-size:14px;
         padding:0 14px;
       }
@@ -595,64 +604,72 @@
         min-height:100px;
       }
       .table-card{
-        padding:12px;
+        padding:10px;
+        background:transparent;
+        border:none;
+        box-shadow:none;
       }
       .table-scroll{
         overflow:visible;
       }
-      table,
-      thead,
-      tbody,
-      tr,
-      th,
-      td{
+      table, thead, tbody, tr, th, td{
         display:block;
         width:100%;
       }
-      thead{
-        display:none;
-      }
-      table{
-        min-width:0;
-      }
+      thead{display:none;}
+      table{min-width:0;}
       tbody{
         display:grid;
-        gap:12px;
+        gap:14px;
       }
       tr{
-        background:#fff;
+        background:rgba(255,255,255,.98);
         border:1px solid #eadccf;
-        border-radius:18px;
-        box-shadow:var(--shadow);
-        padding:6px 0;
+        border-radius:22px;
+        box-shadow:0 10px 28px rgba(50,33,14,.08);
         overflow:hidden;
       }
       td{
-        border-bottom:1px solid #f5e7db;
-        padding:10px 12px;
-        display:grid;
-        grid-template-columns:minmax(110px, 38%) 1fr;
-        gap:10px;
-        align-items:center;
-        font-size:14px;
+        border-bottom:1px solid #f3e6da;
+        padding:12px 14px;
+        display:block;
+        font-size:15px;
+        line-height:1.45;
         word-break:break-word;
-      }
-      td:last-child{
-        border-bottom:none;
       }
       td::before{
         content:attr(data-label);
-        color:#7c746d;
-        font-size:12px;
+        display:block;
+        margin-bottom:6px;
+        color:#8b8177;
+        font-size:11px;
         font-weight:800;
         text-transform:uppercase;
-        letter-spacing:.04em;
+        letter-spacing:.06em;
+      }
+      td:first-child{
+        padding-top:16px;
+      }
+      td:last-child{
+        border-bottom:none;
+        padding-bottom:16px;
+      }
+      td[data-label="№ заказа"] b{
+        font-size:30px;
+        line-height:1;
+        letter-spacing:-.02em;
+        color:#161616;
+      }
+      td[data-label="Статус"]{
+        background:#fffaf5;
       }
       .status-select,
       .actions-select{
         width:100%;
         min-width:0;
-        font-size:14px;
+        min-height:46px;
+        font-size:15px;
+        border-radius:14px;
       }
       .empty-state{
         padding:18px 10px 6px;
@@ -692,12 +709,14 @@
       }
       .fab{
         right:12px;
-        left:12px;
+        left:auto;
         bottom:calc(12px + env(safe-area-inset-bottom));
-        min-height:54px;
-        padding:0 16px;
+        min-height:52px;
+        min-width:0;
+        padding:0 18px;
         justify-content:center;
         font-size:14px;
+        border-radius:999px;
       }
     }
 
@@ -713,29 +732,36 @@
         grid-template-columns:1fr;
       }
       .topbar-actions .btn{
-        min-height:46px;
-        font-size:14px;
+        min-height:44px;
+        font-size:13px;
+      }
+      .stats-grid,
+      .stats-card .stats-grid{
+        grid-template-columns:1fr;
       }
       td{
-        grid-template-columns:1fr;
-        gap:6px;
-        padding:10px;
+        padding:11px 12px;
       }
-      td::before{
-        margin-bottom:2px;
+      td[data-label="№ заказа"] b{
+        font-size:28px;
       }
       .status-select,
       .actions-select{
         min-height:44px;
+        font-size:14px;
       }
       .stats-card,
-      .panel,
-      .table-card{
+      .panel{
         padding:12px;
       }
       .btn,
       .small-btn{
         font-size:13px;
+      }
+      .fab{
+        right:10px;
+        bottom:calc(10px + env(safe-area-inset-bottom));
+        padding:0 16px;
       }
     }
   </style>
