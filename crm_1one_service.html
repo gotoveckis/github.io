@@ -962,7 +962,7 @@
   
   <script>
     if (localStorage.getItem('crm_auth') !== '1') {
-      window.location.href = 'crm_login.html';
+      window.location.href = '/crm_login.html';
     }
 
     const storageKey = 'one_service_orders';
@@ -1366,11 +1366,11 @@
     document.getElementById('closeOrderModal').addEventListener('click', closeModal);
     document.getElementById('cancelOrderBtn').addEventListener('click', closeModal);
     document.getElementById('backToSiteBtn').addEventListener('click', () => {
-      window.location.href = 'index.html';
+      window.location.href = '/index.html';
     });
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('crm_auth');
-      window.location.href = 'crm_login.html';
+      window.location.href = '/crm_login.html';
     });
 
     orderModalOverlay.addEventListener('click', event => {
