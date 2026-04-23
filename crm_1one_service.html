@@ -457,40 +457,212 @@
     }
 
     @media (max-width:768px){
-      .container{padding:0 16px}
+      html,body{
+        width:100%;
+        overflow-x:hidden;
+      }
+      body{
+        -webkit-text-size-adjust:100%;
+      }
+      .blob{
+        display:none;
+      }
+      .container{padding:0 12px}
+      header{
+        position:sticky;
+        top:0;
+      }
       .topbar{
         min-height:auto;
-        padding:12px 0;
+        padding:10px 0;
+        align-items:stretch;
+        gap:10px;
       }
       .logo{
+        width:100%;
+        justify-content:center;
         font-size:24px;
       }
+      .logo-one{
+        width:1.95em;
+        height:1.95em;
+        min-width:1.95em;
+        border-radius:999px;
+      }
+      .topbar-actions{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      }
+      .topbar-actions .btn{
+        width:100%;
+        min-height:46px;
+        padding:0 12px;
+        font-size:14px;
+      }
       .hero-card,.stats-card,.panel,.table-card,.modal{
-        padding:22px;
+        padding:16px;
+        border-radius:20px;
       }
-      .hero-card h1{
-        font-size:32px;
+      .page{
+        padding:14px 0 calc(96px + env(safe-area-inset-bottom));
       }
-      .stats-grid{
+      .stats-grid,
+      .stats-card .stats-grid{
         grid-template-columns:1fr;
+      }
+      .stat{
+        padding:16px;
+      }
+      .stat b{
+        font-size:24px;
       }
       .toolbar{
         grid-template-columns:1fr;
+        gap:10px;
+        margin-bottom:0;
+      }
+      input,select,textarea{
+        min-height:48px;
+        font-size:16px;
+      }
+      textarea{
+        min-height:100px;
+      }
+      .table-card{
+        padding:12px;
+      }
+      .table-scroll{
+        overflow:visible;
+      }
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td{
+        display:block;
+        width:100%;
+      }
+      thead{
+        display:none;
+      }
+      table{
+        min-width:0;
+      }
+      tbody{
+        display:grid;
+        gap:12px;
+      }
+      tr{
+        background:#fff;
+        border:1px solid #eadccf;
+        border-radius:18px;
+        box-shadow:var(--shadow);
+        padding:6px 0;
+        overflow:hidden;
+      }
+      td{
+        border-bottom:1px solid #f5e7db;
+        padding:10px 12px;
+        display:grid;
+        grid-template-columns:minmax(110px, 38%) 1fr;
+        gap:12px;
+        align-items:center;
+        font-size:14px;
+        word-break:break-word;
+      }
+      td:last-child{
+        border-bottom:none;
+      }
+      td::before{
+        content:attr(data-label);
+        color:#7c746d;
+        font-size:12px;
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.04em;
+      }
+      .status-select,
+      .actions-select{
+        width:100%;
+        min-width:0;
+        font-size:14px;
+      }
+      .empty-state{
+        padding:18px 10px 6px;
+        font-size:14px;
+      }
+      .modal-overlay{
+        align-items:flex-end;
+        padding:0;
+      }
+      .modal{
+        width:100%;
+        max-height:92vh;
+        border-radius:24px 24px 0 0;
+        padding:18px 14px calc(18px + env(safe-area-inset-bottom));
+      }
+      .modal-close{
+        top:10px;
+        right:10px;
+      }
+      .modal h3{
+        font-size:24px;
+        padding-right:36px;
+      }
+      .modal p{
+        font-size:14px;
       }
       .form-grid{
         grid-template-columns:1fr;
+        gap:10px;
       }
-      .table-actions{
+      .modal-actions{
         flex-direction:column;
+        align-items:stretch;
       }
-      .small-btn{
+      .modal-actions .btn{
         width:100%;
       }
       .fab{
-        right:14px;
-        bottom:14px;
-        min-height:58px;
+        right:12px;
+        left:12px;
+        bottom:calc(12px + env(safe-area-inset-bottom));
+        min-height:56px;
         padding:0 18px;
+        justify-content:center;
+      }
+    }
+
+    @media (max-width:480px){
+      .container{padding:0 10px}
+      .logo{
+        font-size:21px;
+      }
+      .logo-text{
+        font-size:.9em;
+      }
+      .topbar-actions{
+        grid-template-columns:1fr;
+      }
+      td{
+        grid-template-columns:1fr;
+        gap:6px;
+        padding:10px;
+      }
+      td::before{
+        margin-bottom:2px;
+      }
+      .status-select,
+      .actions-select{
+        min-height:44px;
+      }
+      .stats-card,
+      .panel,
+      .table-card{
+        padding:12px;
       }
     }
   </style>
@@ -774,20 +946,20 @@
       filtered.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><b>${item.orderNumber}</b></td>
-          <td>
+          <td data-label="№ заказа"><b>${item.orderNumber}</b></td>
+          <td data-label="Статус">
             <select class="status-select ${getStatusClass(item.status)}" data-action="change-status" data-id="${item.id}" data-status="${item.status}">
               ${getStatusOptionsHtml(item.status)}
             </select>
           </td>
-          <td>${item.deviceType || ''}</td>
-          <td>${item.deviceModel || '—'}</td>
-          <td>${item.clientName || ''}</td>
-          <td>${item.clientPhone || ''}</td>
-          <td>${item.problemDescription || ''}</td>
-          <td>${money(item.totalCost)}</td>
-          <td>${formatDate(item.createdAt)}</td>
-          <td>
+          <td data-label="Техника">${item.deviceType || ''}</td>
+          <td data-label="Модель">${item.deviceModel || '—'}</td>
+          <td data-label="Клиент">${item.clientName || ''}</td>
+          <td data-label="Телефон">${item.clientPhone || ''}</td>
+          <td data-label="Неисправность">${item.problemDescription || ''}</td>
+          <td data-label="Стоимость">${money(item.totalCost)}</td>
+          <td data-label="Дата">${formatDate(item.createdAt)}</td>
+          <td data-label="Действия">
             <select class="actions-select" data-action="order-actions" data-id="${item.id}">
               <option value="">Действия</option>
               <option value="edit">Изменить</option>
