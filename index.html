@@ -624,12 +624,13 @@
         <div class="code-box hidden" id="host-box">
           <div class="small">Код комнаты</div>
           <div class="code"><span id="room-code">-----</span><button class="btn" id="btn-copy-code">Копировать</button></div>
-          <div class="small">Передай этот код второму игроку. После подключения появится выбор стороны.</div>
+          <div class="small">Передай этот код второму игроку. В коде специально нет O, 0, I, 1 и L, чтобы символы не путались.</div>
         </div>
 
         <div class="field hidden" id="join-box">
           <label for="join-code">Код комнаты</label>
-          <input id="join-code" maxlength="16" autocomplete="off" inputmode="text" placeholder="Например: XO1234" />
+          <input id="join-code" maxlength="16" autocomplete="off" inputmode="text" placeholder="Например: MX7K8P" />
+          <div class="small">Код вводится английскими большими буквами. В коде нет символов O, 0, I, 1 и L, чтобы их не путать.</div>
           <button class="btn success" id="btn-join-room">Войти в комнату</button>
         </div>
 
@@ -755,7 +756,12 @@
     }
 
     function makeRoomId() {
-      return "XO" + Math.random().toString(36).slice(2, 7).toUpperCase();
+      const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+      let code = "MX";
+      for (let i = 0; i < 5; i++) {
+        code += alphabet[Math.floor(Math.random() * alphabet.length)];
+      }
+      return code;
     }
 
     function safeCloseConnection() {
@@ -1147,7 +1153,12 @@
     });
 
     document.getElementById("btn-join-room").addEventListener("click", joinRoom);
-    joinCodeEl.addEventListener("input", () => joinCodeEl.value = joinCodeEl.value.toUpperCase().replace(/[^A-Z0-9]/g, ""));
+    joinCodeEl.addEventListener("input", () => {
+      joinCodeEl.value = joinCodeEl.value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "")
+        .replace(/[O0I1L]/g, "");
+    });
     joinCodeEl.addEventListener("keydown", e => {
       if (e.key === "Enter") joinRoom();
     });
