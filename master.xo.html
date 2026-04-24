@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Master X0 — онлайн крестики-нолики</title>
+  <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
+  <style>
+    :root {
+      --bg: #070a12;
+      --card: rgba(18, 24, 38, 0.78);
+      --card-strong: rgba(23, 31, 50, 0.94);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #f6f7fb;
+      --muted: #a7b0c3;
+      --accent: #7c5cff;
+      --accent-2: #00e0ff;
+      --danger: #ff5370;
+      --success: #39e58c;
+      --warning: #ffd166;
+      --shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
+      --radius: 28px;
+      --cell: min(25vw, 126px);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(124, 92, 255, 0.36), transparent 34%),
+        radial-gradient(circle at 85% 25%, rgba(0, 224, 255, 0.23), transparent 30%),
+        radial-gradient(circle at 50% 95%, rgba(57, 229, 140, 0.13), transparent 35%),
+        linear-gradient(135deg, #070a12 0%, #0b1020 55%, #060913 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    .app {
+      width: min(1120px, 100%);
+      min-height: min(760px, calc(100svh - 48px));
+      display: grid;
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+
+    .topbar {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1120px, calc(100% - 28px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 20;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(8, 12, 22, 0.62);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      font-size: clamp(18px, 4vw, 25px);
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #4b8bff 50%, var(--accent-2));
+      color: white;
+      box-shadow: 0 10px 28px rgba(124, 92, 255, 0.38);
+      font-size: 16px;
+      letter-spacing: -0.06em;
+    }
+
+    .top-status {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .panel {
+      width: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding-top: 82px;
+      animation: show 0.36s ease both;
+    }
+
+    .panel.active {
+      display: flex;
+    }
+
+    @keyframes show {
+      from { opacity: 0; transform: translateY(14px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card {
+      width: min(620px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+      padding: clamp(22px, 4vw, 42px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 30%, transparent 70%, rgba(255, 255, 255, 0.06));
+      opacity: 0.62;
+    }
+
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 18px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: 0 10px 30px rgba(124, 92, 255, 0.45);
+      letter-spacing: -0.05em;
+      font-size: 13px;
+    }
+
+    h1, h2 {
+      margin: 0;
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+    }
+
+    h1 {
+      font-size: clamp(48px, 10vw, 96px);
+      max-width: 10ch;
+    }
+
+    h2 {
+      font-size: clamp(34px, 7vw, 62px);
+      margin-bottom: 14px;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: clamp(15px, 2.2vw, 18px);
+      line-height: 1.65;
+      margin: 18px 0 0;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 20px;
+      padding: 16px 18px;
+      min-height: 58px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid var(--line);
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      touch-action: manipulation;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.13);
+      outline: none;
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), #4b8bff 55%, var(--accent-2));
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 18px 42px rgba(67, 102, 255, 0.35);
+    }
+
+    .btn.success {
+      background: linear-gradient(135deg, #17b978, var(--success));
+      color: #04120b;
+    }
+
+    .btn.ghost {
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .choice {
+      min-height: 132px;
+      font-size: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .choice span {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .field {
+      margin-top: 22px;
+      display: grid;
+      gap: 10px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    input {
+      width: 100%;
+      min-height: 58px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font: inherit;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 0 16px;
+      outline: none;
+      text-transform: uppercase;
+    }
+
+    input:focus {
+      border-color: rgba(0, 224, 255, 0.55);
+      box-shadow: 0 0 0 4px rgba(0, 224, 255, 0.11);
+    }
+
+    .code-box {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(0, 224, 255, 0.28);
+      background: rgba(0, 224, 255, 0.08);
+    }
+
+    .code {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: clamp(28px, 8vw, 44px);
+      line-height: 1;
+      letter-spacing: 0.12em;
+      font-weight: 950;
+      color: white;
+      word-break: break-all;
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    .status-line {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-weight: 750;
+    }
+
+    .status-line.ok { color: var(--success); }
+    .status-line.bad { color: var(--danger); }
+    .status-line.warn { color: var(--warning); }
+
+    .game-wrap {
+      width: min(980px, 100%);
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) auto;
+      gap: clamp(18px, 3vw, 30px);
+      align-items: center;
+    }
+
+    .hud {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+      padding: clamp(18px, 3vw, 30px);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      padding: 10px 12px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .badge strong {
+      color: var(--text);
+    }
+
+    .turn {
+      margin-top: 22px;
+      font-size: clamp(22px, 4vw, 34px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 950;
+    }
+
+    .turn .mark-x { color: var(--accent-2); }
+    .turn .mark-o { color: var(--warning); }
+
+    .board-card {
+      padding: clamp(14px, 2vw, 22px);
+      border-radius: calc(var(--radius) + 10px);
+      background: var(--card-strong);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, var(--cell));
+      grid-template-rows: repeat(3, var(--cell));
+      gap: clamp(9px, 1.6vw, 14px);
+    }
+
+    .cell {
+      width: var(--cell);
+      height: var(--cell);
+      border-radius: clamp(18px, 4vw, 30px);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.13), transparent 38%),
+        rgba(255, 255, 255, 0.065);
+      color: var(--text);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: clamp(44px, 13vw, 86px);
+      line-height: 1;
+      font-weight: 950;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 12px 30px rgba(0, 0, 0, 0.22);
+      transition: transform 0.17s ease, background 0.17s ease, border-color 0.17s ease, box-shadow 0.17s ease;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .cell:hover,
+    .cell:focus-visible,
+    .cell.selected {
+      outline: none;
+      transform: translateY(-3px);
+      border-color: rgba(0, 224, 255, 0.55);
+      box-shadow: 0 0 0 4px rgba(0, 224, 255, 0.09), 0 18px 38px rgba(0, 0, 0, 0.3);
+    }
+
+    .cell.x {
+      color: var(--accent-2);
+      text-shadow: 0 0 28px rgba(0, 224, 255, 0.5);
+    }
+
+    .cell.o {
+      color: var(--warning);
+      text-shadow: 0 0 28px rgba(255, 209, 102, 0.42);
+    }
+
+    .cell.win {
+      background: rgba(57, 229, 140, 0.18);
+      border-color: rgba(57, 229, 140, 0.62);
+      transform: scale(1.03);
+    }
+
+    .cell.disabled {
+      cursor: not-allowed;
+      opacity: 0.78;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 12px 16px;
+      max-width: calc(100vw - 30px);
+      border-radius: 16px;
+      background: rgba(10, 14, 25, 0.92);
+      border: 1px solid var(--line);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 30;
+      text-align: center;
+      font-weight: 750;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 860px) {
+      body {
+        padding: 14px;
+        align-items: flex-start;
+      }
+
+      .app {
+        min-height: calc(100svh - 28px);
+      }
+
+      .game-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .hud {
+        order: 2;
+      }
+
+      .board-card {
+        order: 1;
+        justify-self: center;
+      }
+
+      :root {
+        --cell: min(28vw, 116px);
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 10px;
+      }
+
+      .topbar {
+        top: max(8px, env(safe-area-inset-top));
+        width: calc(100% - 20px);
+      }
+
+      .top-status {
+        display: none;
+      }
+
+      .panel {
+        padding-top: 76px;
+      }
+
+      .card, .hud {
+        border-radius: 24px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .choice {
+        min-height: 92px;
+      }
+
+      :root {
+        --cell: min(29vw, 104px);
+      }
+
+      .board-card {
+        padding: 10px;
+      }
+
+      .board {
+        gap: 9px;
+      }
+
+      .btn {
+        min-height: 54px;
+        border-radius: 17px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">X0</span> Master X0</div>
+    <div class="top-status" id="top-status">Онлайн крестики-нолики</div>
+  </header>
+
+  <main class="app">
+    <section class="panel active" id="screen-home">
+      <div class="card">
+        <div class="logo"><span class="logo-mark">X0</span> Онлайн игра</div>
+        <h1>Master X0</h1>
+        <p>Онлайн крестики-нолики для двух игроков. Сначала подключитесь друг к другу, потом создатель комнаты выбирает сторону: крестик или нолик.</p>
+        <div class="buttons">
+          <button class="btn primary" id="btn-play">Играть</button>
+          <button class="btn ghost" id="btn-rules">Управление</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="screen-rules">
+      <div class="card">
+        <h2>Управление</h2>
+        <p>На телефоне нажимай на клетки пальцем. На ПК можно играть мышью или клавиатурой: стрелки/WASD — выбор клетки, Enter/Пробел — поставить знак.</p>
+        <p>Один игрок создает комнату и отправляет код второму. Когда второй игрок подключится, создатель комнаты выбирает, за кого играть: X или O.</p>
+        <div class="buttons">
+          <button class="btn primary" data-go="screen-home">Назад</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="screen-connect">
+      <div class="card">
+        <h2>Онлайн подключение</h2>
+        <p>Создай комнату или подключись к уже созданной. Код комнаты нужен только второму игроку.</p>
+        <div class="buttons grid-2">
+          <button class="btn primary" id="btn-create-room">Создать комнату</button>
+          <button class="btn" id="btn-join-mode">Подключиться</button>
+        </div>
+
+        <div class="code-box hidden" id="host-box">
+          <div class="small">Код комнаты</div>
+          <div class="code"><span id="room-code">-----</span><button class="btn" id="btn-copy-code">Копировать</button></div>
+          <div class="small">Передай этот код второму игроку. После подключения появится выбор стороны.</div>
+        </div>
+
+        <div class="field hidden" id="join-box">
+          <label for="join-code">Код комнаты</label>
+          <input id="join-code" maxlength="16" autocomplete="off" inputmode="text" placeholder="Например: XO1234" />
+          <button class="btn success" id="btn-join-room">Войти в комнату</button>
+        </div>
+
+        <div class="status-line" id="connection-status">Выбери действие для начала игры.</div>
+        <div class="buttons">
+          <button class="btn ghost" data-go="screen-home">Назад</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="screen-mark">
+      <div class="card">
+        <h2>Выбор стороны</h2>
+        <p id="mark-info">Игрок подключился. Выбери, за кого будешь играть. Второй игрок автоматически получит свободный знак.</p>
+        <div class="buttons grid-2" id="host-choice-buttons">
+          <button class="btn choice" data-mark="X">X<span>Играть крестиком</span></button>
+          <button class="btn choice" data-mark="O">O<span>Играть ноликом</span></button>
+        </div>
+        <div class="status-line hidden" id="guest-wait-status">Создатель комнаты выбирает сторону. Игра начнется автоматически.</div>
+        <div class="buttons">
+          <button class="btn ghost" id="btn-cancel-room">В меню</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="screen-game">
+      <div class="game-wrap">
+        <aside class="hud">
+          <div class="logo"><span class="logo-mark">X0</span> Master X0</div>
+          <h2>Игра</h2>
+          <div class="badge-row">
+            <div class="badge">Ты: <strong id="my-mark">X</strong></div>
+            <div class="badge">Соперник: <strong id="opponent-mark">O</strong></div>
+            <div class="badge">Комната: <strong id="game-room">-----</strong></div>
+          </div>
+          <div class="turn" id="turn-text">Ход крестиков</div>
+          <p id="game-message">Дождись своего хода и выбери клетку.</p>
+          <div class="buttons">
+            <button class="btn primary" id="btn-rematch">Новая партия</button>
+            <button class="btn ghost" id="btn-leave">В меню</button>
+          </div>
+        </aside>
+
+        <section class="board-card" aria-label="Игровое поле">
+          <div class="board" id="board">
+            <button class="cell selected" data-i="0" aria-label="Клетка 1"></button>
+            <button class="cell" data-i="1" aria-label="Клетка 2"></button>
+            <button class="cell" data-i="2" aria-label="Клетка 3"></button>
+            <button class="cell" data-i="3" aria-label="Клетка 4"></button>
+            <button class="cell" data-i="4" aria-label="Клетка 5"></button>
+            <button class="cell" data-i="5" aria-label="Клетка 6"></button>
+            <button class="cell" data-i="6" aria-label="Клетка 7"></button>
+            <button class="cell" data-i="7" aria-label="Клетка 8"></button>
+            <button class="cell" data-i="8" aria-label="Клетка 9"></button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const state = {
+      peer: null,
+      conn: null,
+      isHost: false,
+      roomId: "",
+      myMark: "X",
+      opponentMark: "O",
+      board: Array(9).fill(""),
+      turn: "X",
+      gameOver: false,
+      selected: 0,
+      connected: false,
+      sideSelected: false
+    };
+
+    const wins = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+
+    const screens = document.querySelectorAll(".panel");
+    const cells = [...document.querySelectorAll(".cell")];
+    const boardEl = document.getElementById("board");
+    const toastEl = document.getElementById("toast");
+    const statusEl = document.getElementById("connection-status");
+    const hostBox = document.getElementById("host-box");
+    const joinBox = document.getElementById("join-box");
+    const roomCodeEl = document.getElementById("room-code");
+    const joinCodeEl = document.getElementById("join-code");
+    const topStatusEl = document.getElementById("top-status");
+    const hostChoiceButtons = document.getElementById("host-choice-buttons");
+    const guestWaitStatus = document.getElementById("guest-wait-status");
+    const markInfo = document.getElementById("mark-info");
+
+    function showScreen(id) {
+      screens.forEach(screen => screen.classList.toggle("active", screen.id === id));
+      if (id === "screen-game") setTimeout(() => cells[state.selected]?.focus(), 60);
+    }
+
+    function setTopStatus(text) {
+      topStatusEl.textContent = text;
+    }
+
+    function toast(text) {
+      toastEl.textContent = text;
+      toastEl.classList.add("show");
+      clearTimeout(toastEl.timer);
+      toastEl.timer = setTimeout(() => toastEl.classList.remove("show"), 2400);
+    }
+
+    function setStatus(text, type = "") {
+      statusEl.textContent = text;
+      statusEl.className = "status-line" + (type ? " " + type : "");
+    }
+
+    function makeRoomId() {
+      return "XO" + Math.random().toString(36).slice(2, 7).toUpperCase();
+    }
+
+    function safeCloseConnection() {
+      try { state.conn?.close(); } catch (_) {}
+      try { state.peer?.destroy(); } catch (_) {}
+      state.conn = null;
+      state.peer = null;
+      state.connected = false;
+      state.sideSelected = false;
+      setTopStatus("Онлайн крестики-нолики");
+    }
+
+    function initPeer(id) {
+      return new Promise((resolve, reject) => {
+        const peer = new Peer(id, {
+          debug: 0,
+          config: {
+            iceServers: [
+              { urls: "stun:stun.l.google.com:19302" },
+              { urls: "stun:global.stun.twilio.com:3478" }
+            ]
+          }
+        });
+
+        peer.on("open", () => resolve(peer));
+        peer.on("error", err => reject(err));
+      });
+    }
+
+    async function createRoom() {
+      safeCloseConnection();
+      state.isHost = true;
+      state.roomId = makeRoomId();
+      hostBox.classList.remove("hidden");
+      joinBox.classList.add("hidden");
+      roomCodeEl.textContent = state.roomId;
+      setStatus("Создаю комнату...", "warn");
+      setTopStatus("Создание комнаты");
+
+      try {
+        state.peer = await initPeer(state.roomId);
+        setStatus("Комната создана. Жду второго игрока...", "ok");
+        setTopStatus("Комната: " + state.roomId);
+        state.peer.on("connection", conn => {
+          if (state.conn) {
+            conn.close();
+            return;
+          }
+          state.conn = conn;
+          setupConnection();
+        });
+      } catch (error) {
+        setStatus("Не удалось создать комнату. Попробуй еще раз.", "bad");
+        setTopStatus("Ошибка подключения");
+        toast("Ошибка подключения: " + readableError(error));
+      }
+    }
+
+    async function joinRoom() {
+      const roomId = joinCodeEl.value.trim().toUpperCase();
+      if (!roomId) {
+        toast("Введи код комнаты");
+        joinCodeEl.focus();
+        return;
+      }
+
+      safeCloseConnection();
+      state.isHost = false;
+      state.roomId = roomId;
+      setStatus("Подключаюсь к комнате...", "warn");
+      setTopStatus("Подключение к комнате");
+
+      try {
+        state.peer = await initPeer(undefined);
+        state.conn = state.peer.connect(roomId, { reliable: true });
+        setupConnection();
+      } catch (error) {
+        setStatus("Не удалось подключиться. Проверь код комнаты.", "bad");
+        setTopStatus("Ошибка подключения");
+        toast("Ошибка подключения: " + readableError(error));
+      }
+    }
+
+    function setupConnection() {
+      const conn = state.conn;
+
+      conn.on("open", () => {
+        state.connected = true;
+        setStatus("Игрок подключен. Теперь нужно выбрать сторону.", "ok");
+        setTopStatus("Игрок подключен");
+        openSideSelection();
+      });
+
+      conn.on("data", data => handleMessage(data));
+      conn.on("close", () => {
+        state.connected = false;
+        if (!state.gameOver) {
+          const messageEl = document.getElementById("game-message");
+          if (messageEl) messageEl.textContent = "Соперник отключился. Можно вернуться в меню и создать новую комнату.";
+          toast("Соперник отключился");
+          setTopStatus("Соперник отключился");
+        }
+      });
+
+      conn.on("error", () => {
+        toast("Ошибка соединения");
+        setTopStatus("Ошибка соединения");
+      });
+    }
+
+    function openSideSelection() {
+      if (state.isHost) {
+        hostChoiceButtons.classList.remove("hidden");
+        guestWaitStatus.classList.add("hidden");
+        markInfo.textContent = "Второй игрок подключился. Выбери сторону. Соперник автоматически получит второй знак.";
+      } else {
+        hostChoiceButtons.classList.add("hidden");
+        guestWaitStatus.classList.remove("hidden");
+        markInfo.textContent = "Подключение успешно. Дождись, пока создатель комнаты выберет сторону.";
+      }
+      showScreen("screen-mark");
+    }
+
+    function selectHostSide(mark) {
+      if (!state.isHost || !state.connected) return;
+      state.myMark = mark;
+      state.opponentMark = mark === "X" ? "O" : "X";
+      state.sideSelected = true;
+      send({ type: "side", hostMark: state.myMark, guestMark: state.opponentMark, roomId: state.roomId });
+      startGame();
+    }
+
+    function handleMessage(data) {
+      if (!data || typeof data !== "object") return;
+
+      if (data.type === "side") {
+        state.myMark = data.guestMark;
+        state.opponentMark = data.hostMark;
+        state.roomId = data.roomId;
+        state.sideSelected = true;
+        startGame();
+      }
+
+      if (data.type === "move") {
+        placeMark(data.index, data.mark, false);
+      }
+
+      if (data.type === "reset") {
+        resetBoard(false);
+        toast("Соперник начал новую партию");
+      }
+    }
+
+    function send(data) {
+      if (state.conn && state.conn.open) state.conn.send(data);
+    }
+
+    function startGame() {
+      state.board = Array(9).fill("");
+      state.turn = "X";
+      state.gameOver = false;
+      state.selected = 0;
+      document.getElementById("my-mark").textContent = state.myMark;
+      document.getElementById("opponent-mark").textContent = state.opponentMark;
+      document.getElementById("game-room").textContent = state.roomId;
+      setTopStatus("Матч: " + state.roomId);
+      render();
+      showScreen("screen-game");
+    }
+
+    function resetBoard(shouldSend = true) {
+      state.board = Array(9).fill("");
+      state.turn = "X";
+      state.gameOver = false;
+      state.selected = 0;
+      render();
+      if (shouldSend) send({ type: "reset" });
+    }
+
+    function placeMark(index, mark, shouldSend = true) {
+      if (state.gameOver) return;
+      if (state.board[index]) return;
+      if (mark !== state.turn) return;
+
+      state.board[index] = mark;
+      const result = getResult();
+
+      if (result.winner) {
+        state.gameOver = true;
+        render(result.line);
+        document.getElementById("turn-text").innerHTML = result.winner === state.myMark ? "Ты выиграл" : "Победил соперник";
+        document.getElementById("game-message").textContent = "Можно начать новую партию или вернуться в меню.";
+      } else if (result.draw) {
+        state.gameOver = true;
+        render();
+        document.getElementById("turn-text").textContent = "Ничья";
+        document.getElementById("game-message").textContent = "Поле заполнено. Победителя нет.";
+      } else {
+        state.turn = state.turn === "X" ? "O" : "X";
+        render();
+      }
+
+      if (shouldSend) send({ type: "move", index, mark });
+    }
+
+    function getResult() {
+      for (const line of wins) {
+        const [a, b, c] = line;
+        if (state.board[a] && state.board[a] === state.board[b] && state.board[a] === state.board[c]) {
+          return { winner: state.board[a], line };
+        }
+      }
+      return { draw: state.board.every(Boolean) };
+    }
+
+    function render(winLine = []) {
+      cells.forEach((cell, i) => {
+        const mark = state.board[i];
+        cell.textContent = mark;
+        cell.className = "cell";
+        if (mark) cell.classList.add(mark.toLowerCase());
+        if (winLine.includes(i)) cell.classList.add("win");
+        if (state.gameOver || mark || state.turn !== state.myMark) cell.classList.add("disabled");
+        if (i === state.selected) cell.classList.add("selected");
+      });
+
+      if (!state.gameOver) {
+        const turnText = state.turn === "X" ? "Ход крестиков" : "Ход ноликов";
+        const markClass = state.turn === "X" ? "mark-x" : "mark-o";
+        document.getElementById("turn-text").innerHTML = `<span class="${markClass}">${turnText}</span>`;
+        document.getElementById("game-message").textContent = state.turn === state.myMark
+          ? "Твой ход. Выбери свободную клетку."
+          : "Ход соперника. Дождись ответа.";
+      }
+    }
+
+    function readableError(error) {
+      if (!error) return "неизвестная ошибка";
+      if (error.type === "unavailable-id") return "комната с таким кодом уже занята";
+      if (error.type === "peer-unavailable") return "комната не найдена";
+      if (error.type === "network") return "нет соединения с сетью";
+      return error.message || error.type || "неизвестная ошибка";
+    }
+
+    function moveSelection(deltaRow, deltaCol) {
+      const row = Math.floor(state.selected / 3);
+      const col = state.selected % 3;
+      const nextRow = (row + deltaRow + 3) % 3;
+      const nextCol = (col + deltaCol + 3) % 3;
+      state.selected = nextRow * 3 + nextCol;
+      render();
+      cells[state.selected]?.focus();
+    }
+
+    document.getElementById("btn-play").addEventListener("click", () => showScreen("screen-connect"));
+    document.getElementById("btn-rules").addEventListener("click", () => showScreen("screen-rules"));
+    document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.go)));
+
+    document.querySelectorAll("[data-mark]").forEach(btn => {
+      btn.addEventListener("click", () => selectHostSide(btn.dataset.mark));
+    });
+
+    document.getElementById("btn-create-room").addEventListener("click", createRoom);
+    document.getElementById("btn-join-mode").addEventListener("click", () => {
+      joinBox.classList.remove("hidden");
+      hostBox.classList.add("hidden");
+      setStatus("Введи код комнаты второго игрока.", "warn");
+      joinCodeEl.focus();
+    });
+
+    document.getElementById("btn-join-room").addEventListener("click", joinRoom);
+    joinCodeEl.addEventListener("input", () => joinCodeEl.value = joinCodeEl.value.toUpperCase().replace(/[^A-Z0-9]/g, ""));
+    joinCodeEl.addEventListener("keydown", e => {
+      if (e.key === "Enter") joinRoom();
+    });
+
+    document.getElementById("btn-copy-code").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(state.roomId);
+        toast("Код скопирован");
+      } catch (_) {
+        toast("Код комнаты: " + state.roomId);
+      }
+    });
+
+    document.getElementById("btn-cancel-room").addEventListener("click", () => {
+      safeCloseConnection();
+      showScreen("screen-home");
+    });
+
+    boardEl.addEventListener("click", e => {
+      const cell = e.target.closest(".cell");
+      if (!cell) return;
+      const index = Number(cell.dataset.i);
+      state.selected = index;
+      if (state.turn !== state.myMark) {
+        toast("Сейчас ход соперника");
+        render();
+        return;
+      }
+      if (state.board[index]) {
+        toast("Клетка уже занята");
+        render();
+        return;
+      }
+      placeMark(index, state.myMark, true);
+    });
+
+    document.addEventListener("keydown", e => {
+      if (!document.getElementById("screen-game").classList.contains("active")) return;
+      if (["ArrowUp", "w", "W", "ц", "Ц"].includes(e.key)) { e.preventDefault(); moveSelection(-1, 0); }
+      if (["ArrowDown", "s", "S", "ы", "Ы"].includes(e.key)) { e.preventDefault(); moveSelection(1, 0); }
+      if (["ArrowLeft", "a", "A", "ф", "Ф"].includes(e.key)) { e.preventDefault(); moveSelection(0, -1); }
+      if (["ArrowRight", "d", "D", "в", "В"].includes(e.key)) { e.preventDefault(); moveSelection(0, 1); }
+      if (["Enter", " "].includes(e.key)) {
+        e.preventDefault();
+        if (state.turn === state.myMark && !state.board[state.selected]) {
+          placeMark(state.selected, state.myMark, true);
+        }
+      }
+    });
+
+    document.getElementById("btn-rematch").addEventListener("click", () => resetBoard(true));
+    document.getElementById("btn-leave").addEventListener("click", () => {
+      safeCloseConnection();
+      state.board = Array(9).fill("");
+      state.gameOver = false;
+      showScreen("screen-home");
+    });
+
+    window.addEventListener("beforeunload", safeCloseConnection);
+  </script>
+</body>
+</html>
