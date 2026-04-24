@@ -643,12 +643,12 @@
     <section class="panel" id="screen-mark">
       <div class="card">
         <h2>Выбор стороны</h2>
-        <p id="mark-info">Игрок подключился. Выбери, за кого будешь играть. Второй игрок автоматически получит свободный знак.</p>
-        <div class="buttons grid-2" id="host-choice-buttons">
-          <button class="btn choice" data-mark="X">X<span>Играть крестиком</span></button>
-          <button class="btn choice" data-mark="O">O<span>Играть ноликом</span></button>
+        <p id="mark-info">Игрок подключился. Выберите знаки. Игра начнется только после выбора обоих игроков.</p>
+        <div class="buttons grid-2" id="choice-buttons">
+          <button class="btn choice" data-mark="X">X<span id="x-choice-label">Играть крестиком</span></button>
+          <button class="btn choice" data-mark="O">O<span id="o-choice-label">Играть ноликом</span></button>
         </div>
-        <div class="status-line hidden" id="guest-wait-status">Создатель комнаты выбирает сторону. Игра начнется автоматически.</div>
+        <div class="status-line" id="side-status">Ожидание выбора сторон.</div>
         <div class="buttons">
           <button class="btn ghost" id="btn-cancel-room">В меню</button>
         </div>
@@ -705,7 +705,10 @@
       gameOver: false,
       selected: 0,
       connected: false,
-      sideSelected: false
+      sideSelected: false,
+      hostMark: "",
+      guestMark: "",
+      opponentHasChosen: false
     };
 
     const wins = [
@@ -724,9 +727,11 @@
     const roomCodeEl = document.getElementById("room-code");
     const joinCodeEl = document.getElementById("join-code");
     const topStatusEl = document.getElementById("top-status");
-    const hostChoiceButtons = document.getElementById("host-choice-buttons");
-    const guestWaitStatus = document.getElementById("guest-wait-status");
+    const choiceButtons = document.getElementById("choice-buttons");
+    const sideStatus = document.getElementById("side-status");
     const markInfo = document.getElementById("mark-info");
+    const xChoiceLabel = document.getElementById("x-choice-label");
+    const oChoiceLabel = document.getElementById("o-choice-label");
 
     function showScreen(id) {
       screens.forEach(screen => screen.classList.toggle("active", screen.id === id));
@@ -760,6 +765,9 @@
       state.peer = null;
       state.connected = false;
       state.sideSelected = false;
+      state.hostMark = "";
+      state.guestMark = "";
+      state.opponentHasChosen = false;
       setTopStatus("Онлайн крестики-нолики");
     }
 
@@ -862,39 +870,149 @@
     }
 
     function openSideSelection() {
-      if (state.isHost) {
-        hostChoiceButtons.classList.remove("hidden");
-        guestWaitStatus.classList.add("hidden");
-        markInfo.textContent = "Второй игрок подключился. Выбери сторону. Соперник автоматически получит второй знак.";
-      } else {
-        hostChoiceButtons.classList.add("hidden");
-        guestWaitStatus.classList.remove("hidden");
-        markInfo.textContent = "Подключение успешно. Дождись, пока создатель комнаты выберет сторону.";
-      }
+      state.myMark = "";
+      state.opponentMark = "";
+      state.sideSelected = false;
+      state.opponentHasChosen = false;
+      state.hostMark = "";
+      state.guestMark = "";
+      markInfo.textContent = state.isHost
+        ? "Второй игрок подключился. Выбери X или O. Соперник увидит твой выбор и сможет выбрать только свободный знак."
+        : "Подключение успешно. Выберите знак после того, как соперник сделает свой выбор. Одинаковые знаки выбрать нельзя.";
+      updateChoiceUI();
       showScreen("screen-mark");
     }
 
-    function selectHostSide(mark) {
-      if (!state.isHost || !state.connected) return;
+    function selectSide(mark) {
+      if (!state.connected || state.sideSelected) return;
+
+      if (state.isHost) {
+        state.hostMark = mark;
+        state.myMark = mark;
+        state.opponentMark = mark === "X" ? "O" : "X";
+        state.sideSelected = true;
+        send({ type: "host-side", hostMark: state.hostMark, roomId: state.roomId });
+        updateChoiceUI();
+        tryStartAfterChoices();
+        return;
+      }
+
+      if (!state.hostMark) {
+        toast("Сначала соперник должен выбрать знак");
+        return;
+      }
+
+      if (mark === state.hostMark) {
+        toast("Этот знак уже выбрал соперник");
+        return;
+      }
+
+      state.guestMark = mark;
       state.myMark = mark;
-      state.opponentMark = mark === "X" ? "O" : "X";
+      state.opponentMark = state.hostMark;
       state.sideSelected = true;
-      send({ type: "side", hostMark: state.myMark, guestMark: state.opponentMark, roomId: state.roomId });
-      startGame();
+      send({ type: "guest-side", guestMark: state.guestMark, roomId: state.roomId });
+      updateChoiceUI();
+      tryStartAfterChoices();
+    }
+
+    function updateChoiceUI() {
+      const buttons = [...choiceButtons.querySelectorAll("[data-mark]")];
+      buttons.forEach(button => {
+        const mark = button.dataset.mark;
+        button.disabled = false;
+        button.style.opacity = "";
+        button.style.cursor = "pointer";
+        button.classList.remove("success");
+
+        if (state.myMark === mark) button.classList.add("success");
+
+        if (!state.isHost && state.hostMark === mark) {
+          button.disabled = true;
+          button.style.opacity = "0.45";
+          button.style.cursor = "not-allowed";
+        }
+
+        if (state.sideSelected && state.myMark !== mark) {
+          button.disabled = true;
+          button.style.opacity = "0.45";
+          button.style.cursor = "not-allowed";
+        }
+      });
+
+      if (state.hostMark) {
+        const labelFor = mark => {
+          if (state.myMark === mark) return "Твой выбор";
+          if (state.opponentMark === mark || (!state.isHost && state.hostMark === mark)) return "Выбрал соперник";
+          return "Свободный знак";
+        };
+        xChoiceLabel.textContent = labelFor("X");
+        oChoiceLabel.textContent = labelFor("O");
+      } else {
+        xChoiceLabel.textContent = state.myMark === "X" ? "Твой выбор" : "Играть крестиком";
+        oChoiceLabel.textContent = state.myMark === "O" ? "Твой выбор" : "Играть ноликом";
+      }
+
+      if (state.isHost) {
+        if (!state.sideSelected) {
+          sideStatus.textContent = "Выбери свой знак. После этого второй игрок выберет оставшийся.";
+          sideStatus.className = "status-line warn";
+        } else if (!state.guestMark) {
+          sideStatus.textContent = "Ты выбрал " + state.myMark + ". Ждем, пока второй игрок выберет свой знак.";
+          sideStatus.className = "status-line ok";
+        } else {
+          sideStatus.textContent = "Оба игрока выбрали знаки. Запускаем игру.";
+          sideStatus.className = "status-line ok";
+        }
+      } else {
+        if (!state.hostMark) {
+          sideStatus.textContent = "Ждем выбор соперника.";
+          sideStatus.className = "status-line warn";
+        } else if (!state.sideSelected) {
+          sideStatus.textContent = "Соперник выбрал " + state.hostMark + ". Выбери свободный знак.";
+          sideStatus.className = "status-line ok";
+          markInfo.textContent = "Соперник выбрал знак " + state.hostMark + ". Такой же знак выбрать нельзя.";
+        } else {
+          sideStatus.textContent = "Ты выбрал " + state.myMark + ". Ожидаем запуск игры.";
+          sideStatus.className = "status-line ok";
+        }
+      }
+    }
+
+    function tryStartAfterChoices() {
+      const bothReady = state.hostMark && state.guestMark;
+      if (!bothReady) return;
+
+      if (state.isHost) {
+        state.myMark = state.hostMark;
+        state.opponentMark = state.guestMark;
+      } else {
+        state.myMark = state.guestMark;
+        state.opponentMark = state.hostMark;
+      }
+
+      setTimeout(startGame, 650);
     }
 
     function handleMessage(data) {
       if (!data || typeof data !== "object") return;
 
-      if (data.type === "side") {
-        state.myMark = data.guestMark;
+      if (data.type === "host-side") {
+        state.hostMark = data.hostMark;
         state.opponentMark = data.hostMark;
         state.roomId = data.roomId;
-        state.sideSelected = true;
-        startGame();
+        state.opponentHasChosen = true;
+        updateChoiceUI();
       }
 
-      if (data.type === "move") {
+      if (data.type === "guest-side") {
+        state.guestMark = data.guestMark;
+        state.opponentMark = data.guestMark;
+        updateChoiceUI();
+        tryStartAfterChoices();
+      }
+
+      if (data.type === "move" ) {
         placeMark(data.index, data.mark, false);
       }
 
@@ -941,8 +1059,15 @@
       if (result.winner) {
         state.gameOver = true;
         render(result.line);
-        document.getElementById("turn-text").innerHTML = result.winner === state.myMark ? "Ты выиграл" : "Победил соперник";
-        document.getElementById("game-message").textContent = "Можно начать новую партию или вернуться в меню.";
+        if (result.winner === state.myMark) {
+          document.getElementById("turn-text").innerHTML = "Ты выиграл";
+          document.getElementById("game-message").textContent = "Поздравляю, ты собрал победную линию.";
+          toast("Ты выиграл");
+        } else {
+          document.getElementById("turn-text").innerHTML = "Ты проиграл";
+          document.getElementById("game-message").textContent = "Соперник собрал победную линию.";
+          toast("Ты проиграл");
+        }
       } else if (result.draw) {
         state.gameOver = true;
         render();
@@ -1010,7 +1135,7 @@
     document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.go)));
 
     document.querySelectorAll("[data-mark]").forEach(btn => {
-      btn.addEventListener("click", () => selectHostSide(btn.dataset.mark));
+      btn.addEventListener("click", () => selectSide(btn.dataset.mark));
     });
 
     document.getElementById("btn-create-room").addEventListener("click", createRoom);
