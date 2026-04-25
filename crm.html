@@ -844,8 +844,7 @@
       <div class="logo"><span class="logo-one">1</span><span class="logo-text">ONE service</span></div>
       <div class="topbar-actions">
         <button class="btn btn-secondary" id="backToSiteBtn" type="button">Вернуться на сайт</button>
-        <button class="btn btn-secondary" id="logoutBtn" type="button">Выйти</button>
-      </div>
+              </div>
     </div>
   </header>
 
@@ -1367,10 +1366,6 @@
     document.getElementById('cancelOrderBtn').addEventListener('click', closeModal);
     document.getElementById('backToSiteBtn').addEventListener('click', () => {
       window.location.href = '/index.html';
-    });
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('crm_auth');
-      window.location.href = '/login.html';
     });
 
     orderModalOverlay.addEventListener('click', event => {
