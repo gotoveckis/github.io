@@ -217,108 +217,9 @@
       color:var(--accent-dark);
     }
 
-    .login-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:42px;
-      padding:0 18px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:#1f1a16;
-      font-size:14px;
-      font-weight:800;
-      cursor:pointer;
-      transition:.2s ease;
-      box-shadow:0 6px 16px rgba(15,23,42,.05);
-    }
-    .login-btn:hover{
-      transform:translateY(-1px);
-      box-shadow:0 10px 22px rgba(15,23,42,.08);
-      border-color:#f0c49a;
-    }
+    
 
-    .modal-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,.42);
-      backdrop-filter:blur(6px);
-      -webkit-backdrop-filter:blur(6px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      z-index:120;
-    }
-    .modal-overlay.open{
-      display:flex;
-    }
-    .login-modal{
-      width:min(100%, 430px);
-      border-radius:28px;
-      background:rgba(255,255,255,.98);
-      border:1px solid #eadccf;
-      box-shadow:0 24px 60px rgba(50,33,14,.18);
-      padding:28px;
-      position:relative;
-    }
-    .modal-close{
-      position:absolute;
-      top:14px;
-      right:14px;
-      width:40px;
-      height:40px;
-      border:none;
-      border-radius:12px;
-      background:#fff4ea;
-      color:#7c4a1f;
-      font-size:20px;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-    .modal-close:hover{
-      background:#ffe9d7;
-      transform:scale(1.04);
-    }
-    .login-modal h3{
-      margin:0 0 8px;
-      font-size:30px;
-      line-height:1.12;
-      color:#0f172a;
-    }
-    .login-modal p{
-      margin:0 0 18px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.6;
-    }
-    .login-modal form{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-    .login-error{
-      display:none;
-      padding:12px 14px;
-      border-radius:14px;
-      background:#fff1f2;
-      border:1px solid #fecdd3;
-      color:#be123c;
-      font-size:14px;
-      font-weight:700;
-    }
-    .login-error.show{
-      display:block;
-    }
-    .login-note{
-      margin-top:12px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5;
-    }
-
+    
 
     .hero{
       padding:72px 0 64px;
@@ -750,26 +651,7 @@
       border-color:#ffd7bb;
     }
 
-    .reviews{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:22px;
-    }
-    .review-card{padding:28px}
-    .stars{
-      color:#f59e0b;
-      font-size:18px;
-      margin-bottom:12px;
-    }
-    .review-card p{
-      margin:0 0 16px;
-      color:var(--muted);
-      font-size:16px;
-    }
-    .review-card strong{
-      color:#0f172a;
-      font-size:15px;
-    }
+    
 
     .faq{
       display:grid;
@@ -904,136 +786,9 @@
       100%{opacity:0}
     }
 
+    
 
-    .reviews-wrap{
-      display:grid;
-      grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
-      gap:22px;
-      align-items:start;
-    }
-    .reviews-list{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:22px;
-    }
-    .review-form-card{
-      padding:28px;
-      position:sticky;
-      top:110px;
-    }
-    .review-form-card h3{
-      margin:0 0 8px;
-      font-size:24px;
-      color:#0f172a;
-    }
-    .review-form-card p{
-      margin:0 0 18px;
-      color:var(--muted);
-      font-size:15px;
-    }
-    .review-form{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-    .rating-box{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .rating-label{
-      font-size:14px;
-      font-weight:700;
-      color:#243244;
-    }
-    .rating-stars{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .rating-star{
-      appearance:none;
-      -webkit-appearance:none;
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      border:1px solid #f0d7bf;
-      background:#fff;
-      cursor:pointer;
-      position:relative;
-      transition:.2s ease;
-      box-shadow:0 4px 12px rgba(15,23,42,.04);
-    }
-    .rating-star::before{
-      content:"★";
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:22px;
-      color:#f59e0b;
-      opacity:.45;
-    }
-    .rating-star:hover,
-    .rating-star.active,
-    .rating-star:checked{
-      transform:translateY(-2px);
-      border-color:#f4be7b;
-      background:#fff8ef;
-      box-shadow:0 8px 18px rgba(245,158,11,.16);
-    }
-    .rating-star.active::before,
-    .rating-star:checked::before{
-      opacity:1;
-    }
-    .review-submit-note{
-      font-size:13px;
-      color:var(--muted);
-      text-align:center;
-      margin-top:2px;
-    }
-    .review-meta{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-top:12px;
-      font-size:13px;
-      color:var(--muted);
-    }
-    .review-date{
-      white-space:nowrap;
-    }
-
-
-    .review-card.is-hidden{
-      display:none;
-    }
-    .reviews-controls{
-      display:flex;
-      justify-content:center;
-      margin-top:20px;
-    }
-    .reviews-toggle-btn{
-      min-height:54px;
-      padding:0 24px;
-      border:none;
-      border-radius:16px;
-      background:#fff;
-      color:#1f1a16;
-      border:2px solid #d8cdc1;
-      box-shadow:0 10px 24px rgba(50,33,14,.06);
-      font-size:15px;
-      font-weight:800;
-      cursor:pointer;
-      transition:.25s ease;
-    }
-    .reviews-toggle-btn:hover{
-      transform:translateY(-2px);
-      box-shadow:0 14px 26px rgba(50,33,14,.09);
-      border-color:#f0c49a;
-    }
+    
 
     @media (max-width:768px){
       .reviews-controls{
@@ -1043,7 +798,6 @@
         width:100%;
       }
     }
-
 
         footer{
       padding:24px 0;
@@ -1115,7 +869,7 @@
 
     @media (max-width:768px){
       .container{padding:0 16px}
-      header{padding-top:6px}
+      header{position:relative;top:auto;padding-top:6px}
       .nav-wrap{
         min-height:auto;
         padding:10px 0 14px;
@@ -1262,10 +1016,8 @@
           <a href="#about" data-i18n="nav_about">О нас</a>
           <a href="#services" data-i18n="nav_services">Услуги</a>
           <a href="#steps" data-i18n="nav_steps">Как работаем</a>
-          <a href="#reviews" data-i18n="nav_reviews">Отзывы</a>
           <a href="#contacts" data-i18n="nav_contacts">Контакты</a>
         </nav>
-        <button class="login-btn" id="openLoginModal" type="button" data-i18n="login_button">Вход</button>
         <div class="lang-dropdown" id="langDropdown">
           <button class="lang-toggle" id="langToggle" type="button" aria-label="Choose language">
             <span class="lang-icon" id="langIcon">🌐</span>
@@ -1562,72 +1314,7 @@
       </div>
     </section>
 
-    <section id="reviews">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-i18n="reviews_title">Отзывы клиентов</h2>
-          <p data-i18n="reviews_sub">Можно посмотреть отзывы и оставить свой комментарий с оценкой.</p>
-        </div>
-
-        <div class="reviews-wrap">
-          <div>
-            <div class="reviews-list" id="reviewsList">
-              <div class="card review-card">
-                <div class="stars" data-rating="5">★★★★★</div>
-                <p>Быстро починили телефон после падения. Всё объяснили нормально и без навязывания лишних работ.</p>
-                <div class="review-meta">
-                  <strong>Виктор</strong>
-                  <span class="review-date">5/5</span>
-                </div>
-              </div>
-              <div class="card review-card">
-                <div class="stars" data-rating="5">★★★★★</div>
-                <p>Мастер приехал домой, посмотрел компьютер и решил проблему. Очень удобно, что не пришлось никуда везти технику.</p>
-                <div class="review-meta">
-                  <strong>Максим</strong>
-                  <span class="review-date">5/5</span>
-                </div>
-              </div>
-              <div class="card review-card">
-                <div class="stars" data-rating="5">★★★★★</div>
-                <p>Телевизор перестал включаться. После диагностики всё согласовали и сделали ремонт.</p>
-                <div class="review-meta">
-                  <strong>Иван</strong>
-                  <span class="review-date">5/5</span>
-                </div>
-              </div>
-            </div>
-            <div class="reviews-controls">
-              <button class="reviews-toggle-btn" id="reviewsToggleBtn" type="button" data-i18n="reviews_toggle_show">Показать все отзывы</button>
-            </div>
-          </div>
-
-          <div class="card review-form-card">
-            <h3 data-i18n="review_form_title">Оставить отзыв</h3>
-            <p data-i18n="review_form_sub">Укажите имя, комментарий и поставьте оценку.</p>
-
-            <form class="review-form" id="reviewForm">
-              <input type="text" id="reviewName" data-i18n-placeholder="review_name_placeholder" placeholder="Ваше имя" required>
-              <textarea id="reviewComment" data-i18n-placeholder="review_comment_placeholder" placeholder="Напишите короткий отзыв" required></textarea>
-
-              <div class="rating-box">
-                <div class="rating-label" data-i18n="review_rating_label">Оценка</div>
-                <div class="rating-stars" id="ratingStars">
-                  <input class="rating-star" type="button" value="1" data-value="1" aria-label="1 star">
-                  <input class="rating-star" type="button" value="2" data-value="2" aria-label="2 stars">
-                  <input class="rating-star" type="button" value="3" data-value="3" aria-label="3 stars">
-                  <input class="rating-star" type="button" value="4" data-value="4" aria-label="4 stars">
-                  <input class="rating-star" type="button" value="5" data-value="5" aria-label="5 stars">
-                </div>
-              </div>
-
-              <button class="btn btn-primary" type="submit" data-i18n="review_submit">Добавить отзыв</button>
-              <div class="review-submit-note" data-i18n="review_note"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
+    
 
     <section class="reveal">
       <div class="container">
@@ -1672,6 +1359,10 @@
                   <div class="contact-icon">📞</div>
                   <div><strong data-i18n="contact_phone_label">Телефон:</strong><span>+995 555 63 97 37</span></div>
                 </a>
+                <a href="tel:+995555536414" class="contact-line">
+                  <div class="contact-icon">📞</div>
+                  <div><strong data-i18n="contact_phone_label_2">Телефон 2:</strong><span>+995 555 53 64 14</span></div>
+                </a>
                 <a href="https://wa.me/995555639737" target="_blank" class="contact-line">
                   <div class="contact-icon">💬</div>
                   <div><strong data-i18n="contact_wa_label">WhatsApp:</strong><span data-i18n="contact_wa_text">Написать в WhatsApp</span></div>
@@ -1714,25 +1405,10 @@
     </svg>
   </a>
 
-
-  <div class="modal-overlay" id="loginOverlay" aria-hidden="true">
-    <div class="login-modal">
-      <button class="modal-close" id="closeLoginModal" type="button" aria-label="Close">×</button>
-      <h3 data-i18n="login_modal_title">Вход в CRM</h3>
-      <p data-i18n="login_modal_text">Введите логин и пароль администратора, чтобы перейти в систему управления заказами.</p>
-      <div class="login-error" id="loginError" data-i18n="login_error">Неверный логин или пароль.</div>
-      <form id="loginForm">
-        <input type="text" id="loginField" data-i18n-placeholder="login_placeholder" placeholder="Логин" autocomplete="username" required>
-        <input type="password" id="passwordField" data-i18n-placeholder="password_placeholder" placeholder="Пароль" autocomplete="current-password" required>
-        <button class="btn btn-primary" type="submit" data-i18n="login_submit">Войти</button>
-      </form>
-          </div>
-  </div>
-
   <footer>
     <div class="container">
       <div class="footer-brand"><span class="logo-one footer-one">1</span><span class="logo-text footer-text">ONE service</span></div>
-      <div class="footer-powered" data-i18n="footer_powered">Powered by 2026</div>
+      <div class="footer-powered">Powered by 2026</div>
     </div>
   </footer>
 
@@ -1884,6 +1560,7 @@
         contact_city_label: 'Город:',
         contact_city_value: 'Батуми',
         contact_phone_label: 'Телефон:',
+        contact_phone_label_2: 'Телефон 2:',
         contact_wa_label: 'WhatsApp:',
         contact_wa_text: 'Написать в WhatsApp',
         contact_tg_label: 'Telegram:',
@@ -1893,7 +1570,6 @@
         form_title: 'Оставить заявку',
         form_submit: 'Отправить заявку',
         form_note: 'После получения сообщения мы свяжемся с вами.',
-        footer_powered: 'Powered by 2026',
         toggle_text: 'Русский'
       },
       en: {
@@ -2046,6 +1722,7 @@
         contact_city_label: 'City:',
         contact_city_value: 'Batumi',
         contact_phone_label: 'Phone:',
+        contact_phone_label_2: 'Phone 2:',
         contact_wa_label: 'WhatsApp:',
         contact_wa_text: 'Write on WhatsApp',
         contact_tg_label: 'Telegram:',
@@ -2055,7 +1732,6 @@
         form_title: 'Leave a request',
         form_submit: 'Send request',
         form_note: 'After receiving your message we will contact you.',
-        footer_powered: 'Powered by 2026',
         toggle_text: 'English'
       },
       ka: {
@@ -2205,6 +1881,7 @@
         contact_city_label: 'ქალაქი:',
         contact_city_value: 'ბათუმი',
         contact_phone_label: 'ტელეფონი:',
+        contact_phone_label_2: 'ტელეფონი 2:',
         contact_wa_label: 'WhatsApp:',
         contact_wa_text: 'მიწერა WhatsApp-ში',
         contact_tg_label: 'Telegram:',
@@ -2214,7 +1891,6 @@
         form_title: 'განაცხადის დატოვება',
         form_submit: 'განაცხადის გაგზავნა',
         form_note: 'შეტყობინების მიღების შემდეგ დაგიკავშირდებით.',
-        footer_powered: 'Powered by 2026',
         toggle_text: 'ქართული'
       }
     };
@@ -2326,128 +2002,6 @@
         });
       }
 
-
-
-      const reviewStorageKey = 'one_service_reviews';
-      const visibleReviewsCount = 3;
-      const reviewForm = document.getElementById('reviewForm');
-      const reviewsList = document.getElementById('reviewsList');
-      const reviewsToggleBtn = document.getElementById('reviewsToggleBtn');
-      const ratingButtons = Array.from(document.querySelectorAll('.rating-star'));
-      let currentRating = 5;
-      let reviewsExpanded = false;
-
-      function getCurrentLang() {
-        return localStorage.getItem('site_lang') || 'ru';
-      }
-
-      function updateReviewsToggleButton() {
-        if (!reviewsToggleBtn) return;
-        const lang = getCurrentLang();
-        const map = translations[lang] || translations.ru;
-        const cards = Array.from(reviewsList.querySelectorAll('.review-card'));
-        const hasExtra = cards.length > visibleReviewsCount;
-        reviewsToggleBtn.style.display = hasExtra ? 'inline-flex' : 'none';
-        reviewsToggleBtn.textContent = reviewsExpanded
-          ? (map.reviews_toggle_hide || 'Скрыть отзывы')
-          : (map.reviews_toggle_show || 'Показать все отзывы');
-      }
-
-      function updateReviewsVisibility() {
-        if (!reviewsList) return;
-        const cards = Array.from(reviewsList.querySelectorAll('.review-card'));
-        cards.forEach((card, index) => {
-          card.classList.toggle('is-hidden', !reviewsExpanded && index >= visibleReviewsCount);
-        });
-        updateReviewsToggleButton();
-      }
-
-      function formatStars(value) {
-        return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
-      }
-
-      function updateRatingButtons(value) {
-        ratingButtons.forEach(btn => {
-          const btnValue = Number(btn.dataset.value);
-          btn.classList.toggle('active', btnValue <= value);
-        });
-      }
-
-      function getSavedReviews() {
-        try {
-          return JSON.parse(localStorage.getItem(reviewStorageKey) || '[]');
-        } catch (e) {
-          return [];
-        }
-      }
-
-      function saveReviews(items) {
-        localStorage.setItem(reviewStorageKey, JSON.stringify(items));
-      }
-
-      function createReviewCard(item) {
-        const card = document.createElement('div');
-        card.className = 'card review-card';
-        card.innerHTML = `
-          <div class="stars" data-rating="${item.rating}">${formatStars(item.rating)}</div>
-          <p></p>
-          <div class="review-meta">
-            <strong></strong>
-            <span class="review-date">${item.rating}/5</span>
-          </div>
-        `;
-        card.querySelector('p').textContent = item.comment;
-        card.querySelector('strong').textContent = item.name;
-        return card;
-      }
-
-      function renderSavedReviews() {
-        const savedReviews = getSavedReviews();
-        savedReviews.forEach(item => {
-          reviewsList.prepend(createReviewCard(item));
-        });
-        updateReviewsVisibility();
-      }
-
-      updateRatingButtons(currentRating);
-      ratingButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-          currentRating = Number(this.dataset.value);
-          updateRatingButtons(currentRating);
-        });
-      });
-
-      if (reviewsToggleBtn) {
-        reviewsToggleBtn.addEventListener('click', function () {
-          reviewsExpanded = !reviewsExpanded;
-          updateReviewsVisibility();
-        });
-      }
-
-      renderSavedReviews();
-
-      if (reviewForm) {
-        reviewForm.addEventListener('submit', function (event) {
-          event.preventDefault();
-          const nameField = document.getElementById('reviewName');
-          const commentField = document.getElementById('reviewComment');
-          const name = nameField.value.trim();
-          const comment = commentField.value.trim();
-          if (!name || !comment) return;
-
-          const review = { name, comment, rating: currentRating };
-          const savedReviews = getSavedReviews();
-          savedReviews.unshift(review);
-          saveReviews(savedReviews);
-          reviewsList.prepend(createReviewCard(review));
-
-          reviewForm.reset();
-          currentRating = 5;
-          updateRatingButtons(currentRating);
-          updateReviewsVisibility();
-        });
-      }
-
       const form = document.getElementById('whatsappForm');
       if (form) {
         form.addEventListener('submit', function (event) {
@@ -2486,57 +2040,8 @@
       }
     });
 
-      const loginOverlay = document.getElementById('loginOverlay');
-      const openLoginModal = document.getElementById('openLoginModal');
-      const closeLoginModal = document.getElementById('closeLoginModal');
-      const loginForm = document.getElementById('loginForm');
-      const loginError = document.getElementById('loginError');
-
-      function openLogin() {
-        if (!loginOverlay) return;
-        loginOverlay.classList.add('open');
-        loginOverlay.setAttribute('aria-hidden', 'false');
-        const loginField = document.getElementById('loginField');
-        if (loginField) setTimeout(() => loginField.focus(), 60);
-      }
-
-      function closeLogin() {
-        if (!loginOverlay) return;
-        loginOverlay.classList.remove('open');
-        loginOverlay.setAttribute('aria-hidden', 'true');
-        if (loginError) loginError.classList.remove('show');
-      }
-
-      if (openLoginModal) {
-        openLoginModal.addEventListener('click', openLogin);
-      }
-      if (closeLoginModal) {
-        closeLoginModal.addEventListener('click', closeLogin);
-      }
-      if (loginOverlay) {
-        loginOverlay.addEventListener('click', function (event) {
-          if (event.target === loginOverlay) closeLogin();
-        });
-      }
-
-      if (loginForm) {
-        loginForm.addEventListener('submit', function (event) {
-          event.preventDefault();
-          const login = (document.getElementById('loginField')?.value || '').trim();
-          const password = (document.getElementById('passwordField')?.value || '').trim();
-
-          if (login === 'admin' && password === '12345') {
-            localStorage.setItem('crm_auth', '1');
-            window.location.href = 'crm.html';
-            return;
-          }
-
-          if (loginError) loginError.classList.add('show');
-        });
-      }
-
-
   </script>
 
 </body>
 </html>
+
