@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>1ONE service CRM</title>
-  <meta name="theme-color" content="#ff7a12">
+  <meta name="theme-color" content="#2563eb">
   <style>
     :root{
       --bg:#f4efe9;
@@ -21,6 +21,7 @@
       --shadow-hover:0 18px 44px rgba(255,122,18,.16);
       --radius:24px;
       --container:1280px;
+      --sidebar-width:260px;
     }
 
     *{box-sizing:border-box}
@@ -104,6 +105,71 @@
       align-items:center;
       gap:12px;
       flex-wrap:wrap;
+    }
+    .sidebar-toggle{
+      width:48px;
+      min-width:48px;
+      min-height:48px;
+      padding:0;
+      border-radius:14px;
+      font-size:24px;
+      line-height:1;
+    }
+    .app-layout{
+      display:grid;
+      grid-template-columns:var(--sidebar-width) minmax(0,1fr);
+      align-items:start;
+      transition:grid-template-columns .22s ease;
+    }
+    .sidebar{
+      position:sticky;
+      top:80px;
+      height:calc(100vh - 80px);
+      padding:20px 0 20px 20px;
+      overflow:hidden;
+      transition:.22s ease;
+      z-index:60;
+    }
+    .sidebar-card{
+      height:100%;
+      padding:16px;
+      border-radius:22px;
+      background:rgba(255,255,255,.96);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      overflow:auto;
+    }
+    .sidebar-title{
+      margin:0 0 12px;
+      color:#7c746d;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .sidebar-nav{
+      display:grid;
+      gap:10px;
+    }
+    .sidebar-nav .btn{
+      width:100%;
+      justify-content:flex-start;
+      min-height:48px;
+      padding:0 16px;
+      border-radius:14px;
+      box-shadow:none;
+    }
+    .sidebar-nav .btn:hover{
+      box-shadow:0 10px 22px rgba(50,33,14,.08);
+    }
+    .app-shell.sidebar-collapsed .app-layout{
+      grid-template-columns:0 minmax(0,1fr);
+    }
+    .app-shell.sidebar-collapsed .sidebar{
+      padding-left:0;
+      opacity:0;
+      pointer-events:none;
+      transform:translateX(-16px);
     }
     .btn{
       display:inline-flex;
@@ -226,6 +292,11 @@
       gap:14px;
       margin-bottom:22px;
     }
+    .toolbar-extended{
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      margin-top:14px;
+      margin-bottom:0;
+    }
     .toolbar input,
     .toolbar select{
       width:100%;
@@ -269,7 +340,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:980px;
+      min-width:1520px;
     }
     th,td{
       text-align:left;
@@ -469,10 +540,255 @@
       color:var(--muted);
       font-size:15px;
     }
+    .section-title{
+      margin:0 0 12px;
+      font-size:18px;
+      line-height:1.25;
+      color:#0f172a;
+    }
+    .section-note{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+    .inline-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .wide-modal{
+      width:min(100%, 1120px);
+    }
+    .mini-panel{
+      border:1px solid #eadccf;
+      background:#fffaf5;
+      border-radius:16px;
+      padding:14px;
+    }
+    .parts-grid{
+      display:grid;
+      grid-template-columns:1fr 110px auto;
+      gap:10px;
+      align-items:center;
+    }
+    .mini-list{
+      display:grid;
+      gap:8px;
+      margin-top:10px;
+    }
+    .mini-row{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid #f0e1d2;
+      border-radius:12px;
+      background:#fff;
+      font-size:14px;
+    }
+    .mini-row b{
+      color:#0f172a;
+    }
+    .mini-row span{
+      color:var(--muted);
+      font-size:13px;
+    }
+    .data-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .data-card{
+      border:1px solid #eadccf;
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+    .data-card h4{
+      margin:0 0 8px;
+      font-size:16px;
+      color:#0f172a;
+    }
+    .data-card p{
+      margin:0 0 10px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .settings-layout{
+      display:grid;
+      grid-template-columns:220px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+    }
+    .settings-nav{
+      display:grid;
+      gap:8px;
+      position:sticky;
+      top:0;
+      padding:8px;
+      border:1px solid #eadccf;
+      border-radius:16px;
+      background:#fffaf5;
+    }
+    .settings-tab{
+      min-height:42px;
+      border:1px solid transparent;
+      border-radius:12px;
+      background:transparent;
+      color:#4b5563;
+      font-size:14px;
+      font-weight:850;
+      text-align:left;
+      padding:0 12px;
+      cursor:pointer;
+    }
+    .settings-tab.active{
+      background:#fff;
+      color:#0f172a;
+      border-color:#eadccf;
+      box-shadow:0 8px 18px rgba(15,23,42,.06);
+    }
+    .settings-content{
+      min-width:0;
+    }
+    .settings-section{
+      display:none;
+      gap:14px;
+    }
+    .settings-section.active{
+      display:grid;
+    }
+    .settings-section h4{
+      margin:0;
+      font-size:18px;
+      line-height:1.25;
+      color:#0f172a;
+    }
+    .settings-section .section-note{
+      margin-bottom:0;
+    }
+    .field-label{
+      display:grid;
+      gap:7px;
+      color:#526173;
+      font-size:12px;
+      font-weight:850;
+    }
+    .field-label input,
+    .field-label select,
+    .field-label textarea{
+      font-weight:500;
+    }
+    .settings-section textarea{
+      min-height:92px;
+    }
+    .settings-hint{
+      margin:0;
+      color:#64748b;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .settings-actions-card{
+      margin-top:16px;
+    }
+    .simple-table{
+      width:100%;
+      min-width:0;
+      border-collapse:collapse;
+    }
+    .simple-table th,
+    .simple-table td{
+      padding:10px;
+      font-size:13px;
+      border-bottom:1px solid #f0e5d9;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      padding:0 10px;
+      border-radius:999px;
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      color:#c2410c;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+    .badge-good{background:#f0fdf4;border-color:#86efac;color:#166534}
+    .badge-bad{background:#fff1f2;border-color:#fecdd3;color:#be123c}
+    .hidden-input{display:none}
+
+
+    .auth-shell{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      position:relative;
+      z-index:2;
+    }
+    .auth-card{
+      width:min(100%, 420px);
+      padding:28px;
+      border-radius:28px;
+      background:rgba(255,255,255,.98);
+      border:1px solid #eadccf;
+      box-shadow:0 24px 60px rgba(50,33,14,.18);
+    }
+    .auth-logo{
+      display:flex;
+      justify-content:center;
+      margin-bottom:18px;
+    }
+    .auth-title{
+      margin:0 0 18px;
+      text-align:center;
+      font-size:30px;
+      line-height:1.1;
+      color:#0f172a;
+    }
+    .auth-form{
+      display:grid;
+      gap:14px;
+    }
+    .field-label{
+      display:block;
+      margin:0 0 6px;
+      color:#7c746d;
+      font-size:13px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .auth-error{
+      display:none;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#fff1f2;
+      border:1px solid #fecdd3;
+      color:#be123c;
+      font-size:14px;
+      font-weight:700;
+    }
+    .auth-error.show{
+      display:block;
+    }
+    .app-shell{
+      display:none;
+    }
+    .app-shell.is-authenticated{
+      display:block;
+    }
 
     @media print{
       body{background:#fff}
-      header,.hero,.toolbar,.fab,.modal-overlay{display:none !important}
+      header,.hero,.toolbar,.fab,.modal-overlay,.sidebar{display:none !important}
+      .app-layout{display:block}
       .page{padding:0}
       .table-card{box-shadow:none;border:none}
     }
@@ -481,9 +797,6 @@
     @media (min-width:769px){
       .topbar-actions{
         justify-content:flex-end;
-      }
-      .topbar-actions .btn{
-        min-width:180px;
       }
       input,select,textarea{
         font-size:15px;
@@ -503,10 +816,10 @@
 
     @media (max-width:1024px){
       .container{padding:0 16px}
-      .topbar-actions .btn{
-        min-width:160px;
-      }
       .toolbar{
+        grid-template-columns:1fr 1fr;
+      }
+      .toolbar-extended{
         grid-template-columns:1fr 1fr;
       }
       .table-card{
@@ -519,6 +832,9 @@
         grid-template-columns:1fr;
       }
       .toolbar{
+        grid-template-columns:1fr 1fr;
+      }
+      .toolbar-extended{
         grid-template-columns:1fr 1fr;
       }
     }
@@ -542,12 +858,14 @@
       .topbar{
         min-height:auto;
         padding:10px 0;
-        align-items:stretch;
+        align-items:center;
         gap:10px;
+        flex-wrap:nowrap;
       }
       .logo{
-        width:100%;
-        justify-content:center;
+        min-width:0;
+        width:auto;
+        justify-content:flex-start;
         font-size:22px;
         gap:8px;
       }
@@ -558,17 +876,34 @@
         border-radius:999px;
       }
       .topbar-actions{
-        width:100%;
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:10px;
+        flex:0 0 auto;
       }
-      .topbar-actions .btn{
-        width:100%;
-        min-height:46px;
-        padding:0 12px;
-        font-size:14px;
-        white-space:normal;
+      .sidebar-toggle{
+        width:44px;
+        min-width:44px;
+        min-height:44px;
+      }
+      .app-layout{
+        display:block;
+      }
+      .sidebar{
+        position:fixed;
+        top:65px;
+        left:0;
+        bottom:0;
+        width:min(86vw, 300px);
+        height:auto;
+        padding:12px;
+        transform:translateX(0);
+        z-index:90;
+      }
+      .sidebar-card{
+        border-radius:20px;
+      }
+      .app-shell.sidebar-collapsed .sidebar{
+        opacity:0;
+        transform:translateX(-100%);
+        padding:12px;
       }
       .stats-card,.panel,.modal{
         padding:14px;
@@ -599,6 +934,22 @@
         grid-template-columns:1fr;
         gap:10px;
         margin-bottom:0;
+      }
+      .toolbar-extended,
+      .parts-grid,
+      .data-grid{
+        grid-template-columns:1fr;
+      }
+      .settings-layout{
+        grid-template-columns:1fr;
+      }
+      .settings-nav{
+        position:static;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .settings-tab{
+        text-align:center;
+        padding:0 8px;
       }
       input,select,textarea{
         min-height:48px;
@@ -665,12 +1016,14 @@
       }
 
       td[data-label="№ заказа"],
+      td[data-label="Тип"],
       td[data-label="Статус"],
       td[data-label="Техника"],
       td[data-label="Модель"],
       td[data-label="Клиент"],
       td[data-label="Телефон"],
       td[data-label="Стоимость"],
+      td[data-label="Срок"],
       td[data-label="Дата"]{
         grid-column:span 1;
       }
@@ -742,6 +1095,9 @@
       .modal-actions .btn{
         width:100%;
       }
+      .mini-row{
+        grid-template-columns:1fr;
+      }
       .fab{
         right:12px;
         left:auto;
@@ -766,11 +1122,7 @@
         font-size:.9em;
       }
       .topbar-actions{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-      }
-      .topbar-actions .btn{
-        min-height:42px;
-        font-size:12px;
+        width:auto;
       }
       .stats-grid,
       .stats-card .stats-grid{
@@ -805,6 +1157,7 @@
       td[data-label="Клиент"],
       td[data-label="Телефон"],
       td[data-label="Стоимость"],
+      td[data-label="Срок"],
       td[data-label="Дата"]{
         grid-column:span 1;
       }
@@ -832,10 +1185,851 @@
         padding:0 14px;
       }
     }
-  </style>
+
+    /* HelloClient-like compact business UI */
+    :root{
+      --bg:#f6f7fb;
+      --surface:#fff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --accent:#2563eb;
+      --accent-dark:#1d4ed8;
+      --accent-soft:#eff6ff;
+      --shadow:0 8px 24px rgba(15,23,42,.06);
+      --shadow-hover:0 10px 24px rgba(37,99,235,.12);
+      --radius:8px;
+      --sidebar-width:236px;
+    }
+    html{
+      font-size:14px;
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      font-size:14px;
+      line-height:1.45;
+      background:#f6f7fb;
+      letter-spacing:0;
+    }
+    .blob{
+      display:none;
+    }
+    header{
+      border-bottom:1px solid var(--line);
+      box-shadow:0 1px 2px rgba(15,23,42,.04);
+    }
+    .topbar{
+      min-height:60px;
+      padding:8px 0;
+    }
+    .logo{
+      gap:8px;
+      font-size:20px;
+      letter-spacing:0;
+    }
+    .logo-one{
+      border-radius:8px;
+      background:var(--accent);
+      box-shadow:none;
+    }
+    .logo-text{
+      color:#111827;
+      letter-spacing:0;
+      font-weight:750;
+    }
+    .sidebar-toggle{
+      width:38px;
+      min-width:38px;
+      min-height:38px;
+      border-radius:8px;
+      font-size:20px;
+    }
+    .sidebar{
+      top:60px;
+      height:calc(100vh - 60px);
+      padding:14px 0 14px 14px;
+    }
+    .sidebar-card{
+      padding:10px;
+      border-radius:10px;
+      box-shadow:none;
+    }
+    .sidebar-title{
+      margin:4px 8px 10px;
+      font-size:11px;
+      letter-spacing:0;
+    }
+    .sidebar-nav{
+      gap:4px;
+    }
+    .sidebar-nav .btn{
+      min-height:36px;
+      padding:0 10px;
+      border-radius:7px;
+      font-size:13px;
+      font-weight:600;
+      color:#374151;
+      background:transparent;
+      border-color:transparent;
+    }
+    .sidebar-nav .btn:hover{
+      transform:none;
+      background:#f3f6fb;
+      box-shadow:none;
+      color:#111827;
+    }
+    .page{
+      padding:18px 0 28px;
+    }
+    .container{
+      padding:0 16px;
+    }
+    .card{
+      border-radius:8px;
+      box-shadow:none;
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
+    }
+    .stats-card,
+    .panel,
+    .table-card{
+      padding:14px;
+    }
+    .stat{
+      padding:12px;
+      border-radius:8px;
+      border-color:var(--line);
+    }
+    .stat b{
+      font-size:20px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .stat span{
+      font-size:12px;
+      font-weight:600;
+    }
+    .toolbar{
+      grid-template-columns:minmax(220px,1fr) 180px 180px auto;
+      gap:8px;
+      margin-bottom:12px;
+    }
+    .toolbar-extended{
+      grid-template-columns:repeat(5,minmax(120px,1fr));
+      gap:8px;
+      margin-top:8px;
+    }
+    input,
+    select,
+    textarea{
+      min-height:38px;
+      padding:8px 10px;
+      border-radius:7px;
+      border-color:#d8dee8;
+      font-size:13px;
+      line-height:1.35;
+    }
+    textarea{
+      min-height:78px;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(37,99,235,.12);
+    }
+    .btn,
+    .small-btn{
+      min-height:38px;
+      padding:0 12px;
+      border-radius:7px;
+      font-size:13px;
+      font-weight:600;
+    }
+    .btn:hover{
+      transform:none;
+    }
+    .btn-primary{
+      background:var(--accent);
+      box-shadow:none;
+    }
+    .btn-primary:hover{
+      background:var(--accent-dark);
+    }
+    .btn-secondary,
+    .small-btn{
+      background:#fff;
+      border:1px solid #d8dee8;
+      box-shadow:none;
+    }
+    table{
+      min-width:1420px;
+    }
+    th,
+    td{
+      padding:9px 10px;
+      font-size:13px;
+      border-bottom:1px solid var(--line);
+    }
+    th{
+      font-size:11px;
+      letter-spacing:0;
+      background:#f9fafb;
+      color:#6b7280;
+      font-weight:700;
+    }
+    tr:hover td{
+      background:#f8fbff;
+    }
+    .status-select,
+    .actions-select{
+      height:32px;
+      min-height:32px;
+      border-radius:7px;
+      font-size:12px;
+      font-weight:600;
+      padding:5px 28px 5px 8px;
+    }
+    .badge{
+      min-height:24px;
+      padding:0 8px;
+      font-size:11px;
+      font-weight:700;
+    }
+    .fab{
+      min-height:44px;
+      min-width:0;
+      padding:0 16px;
+      border-radius:8px;
+      background:var(--accent);
+      box-shadow:0 10px 24px rgba(37,99,235,.22);
+      font-size:13px;
+      font-weight:700;
+    }
+    .modal-overlay{
+      padding:16px;
+      background:rgba(17,24,39,.38);
+      backdrop-filter:blur(3px);
+      -webkit-backdrop-filter:blur(3px);
+    }
+    .modal{
+      width:min(100%, 860px);
+      max-height:calc(100dvh - 32px);
+      padding:18px;
+      border-radius:10px;
+      border-color:var(--line);
+      box-shadow:0 24px 60px rgba(15,23,42,.20);
+      scrollbar-gutter:stable;
+      overscroll-behavior:contain;
+    }
+    .wide-modal{
+      width:min(100%, 1040px);
+    }
+    .modal-close{
+      top:10px;
+      right:10px;
+      width:32px;
+      height:32px;
+      border-radius:7px;
+      background:#f3f4f6;
+      color:#374151;
+      font-size:18px;
+      z-index:3;
+    }
+    .modal h3{
+      margin:0 40px 6px 0;
+      font-size:20px;
+      font-weight:700;
+      line-height:1.25;
+      letter-spacing:0;
+    }
+    .modal p{
+      margin:0 40px 14px 0;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .form-grid{
+      gap:10px;
+    }
+    .modal-actions{
+      gap:8px;
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px solid var(--line);
+      background:var(--surface);
+    }
+    .section-title{
+      font-size:15px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .section-note,
+    .data-card p{
+      font-size:13px;
+    }
+    .mini-panel,
+    .data-card,
+    .mini-row{
+      border-radius:8px;
+      border-color:var(--line);
+      background:#fff;
+    }
+    .mini-panel{
+      padding:12px;
+    }
+    .mini-row{
+      padding:9px 10px;
+      font-size:13px;
+    }
+    .auth-card{
+      border-radius:12px;
+      box-shadow:0 20px 50px rgba(15,23,42,.12);
+    }
+    .auth-title{
+      font-size:24px;
+      letter-spacing:0;
+    }
+    .field-label{
+      font-size:11px;
+      letter-spacing:0;
+    }
+    @media (max-width:768px){
+      .topbar{
+        min-height:56px;
+      }
+      .logo{
+        font-size:18px;
+      }
+      .logo-one{
+        width:1.7em;
+        min-width:1.7em;
+        height:1.7em;
+      }
+      .sidebar{
+        top:57px;
+        width:min(82vw, 280px);
+      }
+      .page{
+        padding:12px 0 calc(82px + env(safe-area-inset-bottom));
+      }
+      .stats-card,
+      .panel,
+      .modal{
+        padding:12px;
+        border-radius:10px;
+      }
+      .stats-grid,
+      .stats-card .stats-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .stat b{
+        font-size:18px;
+      }
+      .toolbar,
+      .toolbar-extended{
+        grid-template-columns:1fr;
+        gap:8px;
+      }
+      input,
+      select,
+      textarea{
+        min-height:40px;
+        font-size:14px;
+      }
+      .modal-overlay{
+        align-items:center;
+        padding:10px;
+      }
+      .modal{
+        width:100%;
+        max-height:calc(100dvh - 20px);
+        border-radius:10px;
+        padding:14px;
+      }
+      .modal h3{
+        font-size:18px;
+      }
+      .modal p{
+        font-size:13px;
+      }
+      .modal-actions{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .modal-actions .btn{
+        width:100%;
+      }
+      tbody{
+        gap:8px;
+      }
+      tr{
+        border-radius:8px;
+        box-shadow:none;
+        border-color:var(--line);
+      }
+      td{
+        padding:8px;
+        font-size:12px;
+      }
+      td::before{
+        letter-spacing:0;
+      }
+      .fab{
+        min-height:40px;
+        font-size:12px;
+      }
+    }
+  
+  /* ===== Final responsive patch for desktop 1366x768 to 4K and phones ===== */
+  html{
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+  }
+  body{
+    min-width:320px;
+  }
+  img,svg,canvas,video{
+    max-width:100%;
+    height:auto;
+  }
+  .container,
+  .app-layout,
+  .page,
+  .table-scroll,
+  .toolbar,
+  .toolbar-extended,
+  .form-grid,
+  .parts-grid,
+  .data-grid,
+  .settings-layout,
+  .settings-content,
+  .settings-section,
+  .mini-list,
+  .mini-row,
+  .auth-card,
+  .modal,
+  .stats-grid,
+  .topbar,
+  .topbar-actions,
+  .sidebar-card{
+    min-width:0;
+  }
+  .table-scroll{
+    width:100%;
+    overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .table-scroll table{
+    width:max-content;
+    min-width:100%;
+  }
+  .btn,
+  .small-btn,
+  .status-select,
+  .actions-select,
+  input,
+  select,
+  textarea{
+    max-width:100%;
+  }
+  .auth-shell{
+    padding:max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  .fab{
+    bottom:calc(12px + env(safe-area-inset-bottom));
+    right:calc(12px + env(safe-area-inset-right));
+  }
+
+  /* Desktop and laptop */
+  @media (min-width: 1366px){
+    html{font-size:14px;}
+    :root{
+      --container: min(96vw, 1680px);
+      --sidebar-width: 248px;
+    }
+    .container{
+      max-width:var(--container);
+      padding-inline:20px;
+    }
+    .app-layout{
+      grid-template-columns:var(--sidebar-width) minmax(0,1fr);
+    }
+    .topbar{
+      min-height:64px;
+      gap:14px;
+    }
+    .toolbar{
+      grid-template-columns:minmax(340px,1.65fr) minmax(180px,.8fr) minmax(180px,.8fr) auto;
+      align-items:center;
+    }
+    .toolbar-extended{
+      grid-template-columns:repeat(7, minmax(120px, 1fr));
+    }
+    .table-scroll table{
+      min-width:1450px;
+    }
+    .stats-grid{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    .modal{
+      width:min(96vw, 1100px);
+      max-height:min(92vh, 940px);
+    }
+    .wide-modal{
+      width:min(96vw, 1280px);
+    }
+  }
+
+  @media (min-width: 1600px){
+    html{font-size:15px;}
+    :root{
+      --container: min(95vw, 1880px);
+      --sidebar-width: 264px;
+    }
+    .container{padding-inline:24px;}
+    .toolbar{
+      grid-template-columns:minmax(420px,1.8fr) minmax(200px,.85fr) minmax(200px,.85fr) auto;
+    }
+    .toolbar-extended{
+      grid-template-columns:repeat(7, minmax(140px, 1fr));
+    }
+    .table-scroll table{
+      min-width:1560px;
+    }
+    .stats-card,.panel,.table-card{padding:18px;}
+  }
+
+  @media (min-width: 1920px){
+    html{font-size:16px;}
+    :root{
+      --container: min(94vw, 2200px);
+      --sidebar-width: 280px;
+    }
+    .topbar{min-height:70px;}
+    .logo{font-size:1.4rem;}
+    .btn,.small-btn{min-height:42px;font-size:.9rem;}
+    input,select,textarea{min-height:42px;font-size:.92rem;}
+    .status-select,.actions-select{min-height:34px;height:34px;font-size:.82rem;}
+    .table-scroll table{min-width:1700px;}
+    th,td{padding:10px 12px;font-size:.9rem;}
+    th{font-size:.75rem;}
+    .modal{width:min(92vw, 1320px);}
+    .wide-modal{width:min(94vw, 1500px);}
+  }
+
+  @media (min-width: 2560px){
+    html{font-size:17px;}
+    :root{
+      --container: min(92vw, 2600px);
+      --sidebar-width: 320px;
+    }
+    .container{padding-inline:28px;}
+    .table-scroll table{min-width:1900px;}
+    .card{border-radius:10px;}
+    .stats-card,.panel,.table-card{padding:20px;}
+    .modal{width:min(90vw, 1500px);}
+    .wide-modal{width:min(92vw, 1740px);}
+  }
+
+  @media (min-width: 3840px){
+    html{font-size:18px;}
+    :root{
+      --container: min(90vw, 3200px);
+      --sidebar-width: 360px;
+    }
+    .table-scroll table{min-width:2200px;}
+    .modal{width:min(88vw, 1800px);}
+    .wide-modal{width:min(90vw, 2100px);}
+  }
+
+  /* Mid-size laptops/tablets landscape */
+  @media (max-width: 1365px){
+    :root{
+      --sidebar-width: 220px;
+    }
+    .container{padding-inline:14px;}
+    .toolbar{
+      grid-template-columns:minmax(240px,1fr) 170px 170px auto;
+    }
+    .toolbar-extended{
+      grid-template-columns:repeat(4,minmax(120px,1fr));
+    }
+  }
+
+  @media (max-width: 1180px){
+    .toolbar{
+      grid-template-columns:1fr 1fr;
+    }
+    .toolbar-extended{
+      grid-template-columns:repeat(3,minmax(120px,1fr));
+    }
+    .settings-layout{
+      grid-template-columns:1fr;
+    }
+    .settings-nav{
+      position:static;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+  }
+
+  /* Phones and small tablets */
+  @media (max-width: 767px){
+    body{font-size:13px;}
+    .container{
+      padding-inline:max(10px, env(safe-area-inset-left));
+      padding-right:max(10px, env(safe-area-inset-right));
+    }
+    .auth-card{
+      width:min(100%, 420px);
+      padding:18px 16px;
+      border-radius:12px;
+    }
+    .auth-title{
+      margin-bottom:14px;
+      font-size:22px;
+    }
+    .auth-form{
+      gap:12px;
+    }
+    .field-label{
+      margin-bottom:6px;
+      font-size:11px;
+    }
+    .topbar{
+      padding:8px 0;
+    }
+    .logo{
+      font-size:18px;
+      line-height:1;
+    }
+    .sidebar{
+      width:min(84vw, 290px);
+      padding:10px;
+    }
+    .sidebar-card{
+      padding:10px;
+    }
+    .sidebar-nav .btn{
+      min-height:38px;
+      font-size:13px;
+    }
+    .page{
+      padding:12px 0 calc(76px + env(safe-area-inset-bottom));
+    }
+    .stats-card,.panel,.table-card{
+      padding:10px;
+    }
+    .stats-grid,
+    .stats-card .stats-grid{
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+    .stat{
+      padding:10px;
+    }
+    .stat b{
+      font-size:18px;
+    }
+    .toolbar,
+    .toolbar-extended{
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+    input,select,textarea{
+      min-height:40px;
+      padding:8px 10px;
+      font-size:14px;
+      border-radius:8px;
+    }
+    .btn,.small-btn{
+      min-height:40px;
+      padding:0 12px;
+      font-size:13px;
+      border-radius:8px;
+    }
+    .table-card{
+      padding:0;
+    }
+    tbody{
+      gap:8px;
+    }
+    tr{
+      grid-template-columns:1fr 1fr;
+      border-radius:8px;
+    }
+    td{
+      padding:7px 8px;
+      font-size:12px;
+      line-height:1.3;
+    }
+    td::before{
+      font-size:8px;
+      margin-bottom:2px;
+    }
+    td[data-label="№ заказа"],
+    td[data-label="Тип"],
+    td[data-label="Статус"],
+    td[data-label="Неисправность"],
+    td[data-label="Действия"]{
+      grid-column:1 / -1;
+    }
+    td[data-label="Техника"],
+    td[data-label="Модель"],
+    td[data-label="Клиент"],
+    td[data-label="Телефон"],
+    td[data-label="Мастер"],
+    td[data-label="Стоимость"],
+    td[data-label="Оплата"],
+    td[data-label="Срок"],
+    td[data-label="Гарантия"],
+    td[data-label="Дата"],
+    td[data-label="Обновлен"]{
+      grid-column:span 1;
+    }
+    .status-select,
+    .actions-select{
+      min-height:34px;
+      height:34px;
+      padding:5px 30px 5px 9px;
+      font-size:12px;
+      border-radius:8px;
+    }
+    .modal-overlay{
+      align-items:flex-end;
+      padding:0;
+    }
+    .modal,
+    .wide-modal{
+      width:100%;
+      max-width:none;
+      max-height:92dvh;
+      padding:14px 12px calc(14px + env(safe-area-inset-bottom));
+      border-radius:14px 14px 0 0;
+    }
+    .modal h3{
+      margin-right:34px;
+      font-size:18px;
+    }
+    .modal p{
+      margin-right:0;
+      font-size:13px;
+    }
+    .modal-actions{
+      gap:8px;
+      padding-top:10px;
+    }
+    .mini-panel,
+    .data-card{
+      padding:10px;
+    }
+    .parts-grid,
+    .data-grid,
+    .settings-layout{
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+    .settings-nav{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .settings-tab{
+      min-height:38px;
+      font-size:12px;
+    }
+    .mini-row{
+      grid-template-columns:1fr;
+      gap:4px;
+      padding:8px 9px;
+      font-size:12px;
+    }
+    .fab{
+      min-height:40px;
+      max-width:190px;
+      padding:0 14px;
+      font-size:12px;
+      border-radius:8px;
+    }
+  }
+
+  /* Very old/small phones */
+  @media (max-width: 374px){
+    .container{
+      padding-inline:max(8px, env(safe-area-inset-left));
+      padding-right:max(8px, env(safe-area-inset-right));
+    }
+    .logo{font-size:16px;}
+    .sidebar{width:min(88vw, 270px);}
+    input,select,textarea,
+    .btn,.small-btn{
+      font-size:12px;
+    }
+    tr{
+      grid-template-columns:1fr;
+    }
+    td{
+      grid-column:1 / -1 !important;
+    }
+    .fab{
+      max-width:168px;
+      min-height:38px;
+      padding:0 12px;
+      font-size:11px;
+    }
+  }
+
+  /* Short screens such as 1366x768 and older phones */
+  @media (max-height: 820px){
+    .sidebar{
+      height:calc(100vh - 60px);
+    }
+    .sidebar-card{
+      padding:8px;
+    }
+    .sidebar-nav{
+      gap:3px;
+    }
+    .sidebar-nav .btn{
+      min-height:34px;
+    }
+    .page{
+      padding-top:14px;
+      padding-bottom:20px;
+    }
+    .stats-card,.panel,.table-card{
+      padding:12px;
+    }
+    .modal,
+    .wide-modal{
+      max-height:90vh;
+    }
+  }
+
+</style>
 </head>
 <body>
   <div class="blob blob-1"></div>
+  <section class="auth-shell" id="authShell">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo"><span class="logo-one">1</span><span class="logo-text">ONE service</span></div>
+      </div>
+      <h1 class="auth-title">CRM</h1>
+      <div class="auth-error" id="authError"></div>
+      <form class="auth-form" id="authForm" autocomplete="off">
+        <div>
+          <label class="field-label" for="authLogin">Логин</label>
+          <input type="text" id="authLogin" autocomplete="username" required>
+        </div>
+        <div>
+          <label class="field-label" for="authPassword">Пароль</label>
+          <input type="password" id="authPassword" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Войти</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="app-shell" id="appShell">
+
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
 
@@ -843,21 +2037,34 @@
     <div class="container topbar">
       <div class="logo"><span class="logo-one">1</span><span class="logo-text">ONE service</span></div>
       <div class="topbar-actions">
-        <button class="btn btn-secondary" id="backToSiteBtn" type="button">Вернуться на сайт</button>
-              </div>
+        <button class="btn btn-secondary sidebar-toggle" id="sidebarToggleBtn" type="button" aria-label="Скрыть меню" aria-expanded="true" title="Скрыть меню">☰</button>
+      </div>
     </div>
   </header>
 
-  <main class="page">
-    <div class="container">
-      <section class="card stats-card" style="margin-bottom:22px;">
-        <div class="stats-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));">
-          <div class="stat"><b id="statTotal">0</b><span>Общее количество заказов</span></div>
-          <div class="stat"><b id="statInProgress">0</b><span>В работе</span></div>
-          <div class="stat"><b id="statIssued">0</b><span>Выполненные заказы</span></div>
-        </div>
-      </section>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebarPanel" aria-label="Меню CRM">
+      <div class="sidebar-card">
+        <div class="sidebar-title">Меню</div>
+        <nav class="sidebar-nav">
+          <button class="btn btn-secondary" id="clientsBtn" type="button">Клиенты</button>
+          <button class="btn btn-secondary" id="inventoryBtn" type="button">Склад</button>
+          <button class="btn btn-secondary" id="servicesBtn" type="button">Услуги</button>
+          <button class="btn btn-secondary" id="tasksBtn" type="button">Задачи</button>
+          <button class="btn btn-secondary" id="financeBtn" type="button">Финансы</button>
+          <button class="btn btn-secondary" id="reportsBtn" type="button">Отчеты</button>
+          <button class="btn btn-secondary" id="suppliersBtn" type="button">Поставщики</button>
+          <button class="btn btn-secondary" id="activityBtn" type="button">Журнал</button>
+          <button class="btn btn-secondary" id="settingsBtn" type="button">Настройки</button>
+          <button class="btn btn-secondary" id="exportJsonBtn" type="button">Экспорт</button>
+          <button class="btn btn-secondary" id="importDataBtn" type="button">Импорт</button>
+        </nav>
+        <input class="hidden-input" id="importFileInput" type="file" accept="application/json,.json">
+      </div>
+    </aside>
 
+    <main class="page">
+    <div class="container">
       <section class="card panel">
         <div class="toolbar">
           <input type="search" id="searchInput" placeholder="Поиск по номеру, устройству, имени или телефону">
@@ -878,8 +2085,32 @@
             <option value="newest">Сначала новые</option>
             <option value="oldest">Сначала старые</option>
             <option value="status">По статусу</option>
+            <option value="cost">По сумме</option>
           </select>
           <button class="btn btn-primary" id="createOrderBtn" type="button">Новый заказ</button>
+        </div>
+        <div class="toolbar toolbar-extended">
+          <select id="orderTypeFilter">
+            <option value="">Все типы заказов</option>
+          </select>
+          <select id="masterFilter">
+            <option value="">Все мастера</option>
+          </select>
+          <select id="paymentFilter">
+            <option value="">Любая оплата</option>
+            <option value="paid">Оплачено</option>
+            <option value="debt">Есть долг</option>
+            <option value="unpaid">Не оплачено</option>
+          </select>
+          <input type="date" id="dateFromFilter" title="Дата с">
+          <input type="date" id="dateToFilter" title="Дата по">
+          <input type="number" min="0" step="0.01" id="minCostFilter" placeholder="Сумма от">
+          <select id="deadlineFilter">
+            <option value="">Любые сроки</option>
+            <option value="overdue">Просрочено</option>
+            <option value="today">Сегодня</option>
+            <option value="week">7 дней</option>
+          </select>
         </div>
       </section>
 
@@ -889,14 +2120,19 @@
             <thead>
               <tr>
                 <th>№ заказа</th>
+                <th>Тип</th>
                 <th>Статус</th>
                 <th>Техника</th>
                 <th>Модель</th>
                 <th>Клиент</th>
                 <th>Телефон</th>
-                <th>Неисправность</th>
+                <th>Мастер</th>
                 <th>Стоимость</th>
+                <th>Оплата</th>
+                <th>Срок</th>
+                <th>Гарантия</th>
                 <th>Дата</th>
+                <th>Обновлен</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -906,7 +2142,8 @@
         <div class="empty-state" id="emptyState">Пока нет заказов. Создайте первый заказ через кнопку внизу или сверху.</div>
       </section>
     </div>
-  </main>
+    </main>
+  </div>
 
   <button class="fab" id="floatingCreateBtn" type="button">Создать заказ</button>
 
@@ -930,6 +2167,10 @@
             <option value="issued_without_repair">Выдан без ремонта</option>
             <option value="donor">Переведен в донор</option>
           </select>
+          <select id="orderType">
+            <option value="">Тип заказа</option>
+          </select>
+          <input type="date" id="deadlineAt" title="Срок выполнения">
 
           <input type="text" id="clientName" placeholder="ФИО клиента" required>
           <input type="tel" id="clientPhone" placeholder="Номер телефона" required>
@@ -937,17 +2178,65 @@
           <input type="text" id="deviceType" placeholder="Название техники" required>
           <input type="text" id="deviceModel" placeholder="Модель техники">
 
+          <select id="masterName">
+            <option value="">Мастер не выбран</option>
+          </select>
+          <input type="number" step="1" min="0" id="warrantyDays" placeholder="Гарантия, дней">
+
           <input type="number" step="0.01" min="0" id="totalCost" placeholder="Общая стоимость">
           <input type="number" step="0.01" min="0" id="partsCost" placeholder="Стоимость деталей">
+          <input type="number" step="0.01" min="0" id="paidAmount" placeholder="Оплачено">
+          <input type="number" step="0.01" min="0" id="discountAmount" placeholder="Скидка">
+          <select id="paymentMethod">
+            <option value="">Способ оплаты</option>
+            <option value="cash">Наличные</option>
+            <option value="card">Карта</option>
+            <option value="transfer">Перевод</option>
+            <option value="mixed">Смешанная</option>
+          </select>
+          <input type="date" id="warrantyUntil" placeholder="Гарантия до">
+          <input type="text" id="clientSource" placeholder="Источник клиента">
 
           <textarea class="full" id="problemDescription" placeholder="Неисправность" required></textarea>
+          <textarea class="full" id="completedWorks" placeholder="Выполненные работы"></textarea>
           <textarea class="full" id="masterNotes" placeholder="Заметки мастера / комментарии"></textarea>
+          <textarea class="full" id="taskNote" placeholder="Задача / напоминание по заказу"></textarea>
+
+          <div class="full mini-panel" id="customFieldsPanel">
+            <h4 class="section-title">Дополнительные поля</h4>
+            <div class="form-grid" id="customFieldsContainer"></div>
+          </div>
+
+          <div class="full mini-panel">
+            <h4 class="section-title">Услуги из прайса</h4>
+            <div class="parts-grid">
+              <select id="serviceSelect">
+                <option value="">Выберите услугу</option>
+              </select>
+              <input type="number" id="serviceQty" min="1" step="1" value="1">
+              <button class="btn btn-secondary" id="addServiceBtn" type="button">Добавить</button>
+            </div>
+            <div class="mini-list" id="usedServicesList"></div>
+          </div>
+
+          <div class="full mini-panel">
+            <h4 class="section-title">Списание запчастей</h4>
+            <div class="parts-grid">
+              <select id="partSelect">
+                <option value="">Выберите деталь со склада</option>
+              </select>
+              <input type="number" id="partQty" min="1" step="1" value="1">
+              <button class="btn btn-secondary" id="addPartBtn" type="button">Добавить</button>
+            </div>
+            <div class="mini-list" id="usedPartsList"></div>
+          </div>
         </div>
 
         <div class="modal-actions" style="justify-content:flex-start;">
           <button class="btn btn-secondary" id="printAcceptanceBtn" type="button">Печать акта приёма</button>
           <button class="btn btn-secondary" id="printCompletedBtn" type="button">Печать акта выполненных работ</button>
           <button class="btn btn-secondary" id="printWarrantyBtn" type="button">Печать гарантии</button>
+          <button class="btn btn-secondary" id="printLabelBtn" type="button">Печать наклейки</button>
         </div>
 
         <div class="modal-actions">
@@ -958,36 +2247,410 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="clientsModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeClientsModal" type="button" aria-label="Close">×</button>
+      <h3>Клиенты</h3>
+      <p>База собирается автоматически по телефонам из заказов. В карточке видно всю историю ремонтов клиента.</p>
+      <input type="search" id="clientSearchInput" placeholder="Поиск клиента по имени или телефону">
+      <div class="mini-list" id="clientsList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="inventoryModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeInventoryModal" type="button" aria-label="Close">×</button>
+      <h3>Склад запчастей</h3>
+      <p>Добавляйте детали и остатки. При сохранении заказа выбранные детали списываются со склада.</p>
+      <form id="inventoryForm">
+        <div class="form-grid">
+          <input type="text" id="partNameInput" placeholder="Название детали" required>
+          <select id="partCategoryInput">
+            <option value="">Категория</option>
+          </select>
+          <input type="text" id="partSkuInput" placeholder="Артикул / заметка">
+          <input type="number" id="partStockInput" min="0" step="1" placeholder="Остаток" required>
+          <input type="number" id="partCostInput" min="0" step="0.01" placeholder="Себестоимость">
+          <input type="number" id="partMinInput" min="0" step="1" placeholder="Минимальный остаток">
+          <button class="btn btn-primary" id="savePartBtn" type="submit">Сохранить деталь</button>
+        </div>
+      </form>
+      <div class="table-scroll" style="margin-top:16px;">
+        <table class="simple-table">
+          <thead>
+            <tr>
+              <th>Деталь</th>
+              <th>Категория</th>
+              <th>Остаток</th>
+              <th>Себестоимость</th>
+              <th>Минимум</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="settingsModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeSettingsModal" type="button" aria-label="Close">×</button>
+      <h3>Настройки</h3>
+      <p>Центр управления CRM: компания, валюта, заказы, кассы, склады, доступ, документы и резервные копии.</p>
+      <form id="settingsForm">
+        <div class="settings-layout">
+          <nav class="settings-nav" aria-label="Разделы настроек">
+            <button class="settings-tab active" type="button" data-settings-target="company">Компания</button>
+            <button class="settings-tab" type="button" data-settings-target="localization">Локализация</button>
+            <button class="settings-tab" type="button" data-settings-target="orders">Заказы</button>
+            <button class="settings-tab" type="button" data-settings-target="finance">Финансы</button>
+            <button class="settings-tab" type="button" data-settings-target="warehouse">Склад</button>
+            <button class="settings-tab" type="button" data-settings-target="access">Доступ</button>
+            <button class="settings-tab" type="button" data-settings-target="documents">Документы</button>
+          </nav>
+
+          <div class="settings-content">
+            <section class="settings-section active" data-settings-section="company">
+              <h4>Компания</h4>
+              <p class="section-note">Реквизиты попадают в акты, гарантийные талоны, наклейки и сообщения клиентам.</p>
+              <div class="form-grid">
+                <label class="field-label">Название сервиса
+                  <input type="text" id="settingsServiceNameInput" placeholder="1ONE service">
+                </label>
+                <label class="field-label">Телефон сервиса
+                  <input type="tel" id="settingsServicePhoneInput" placeholder="+380...">
+                </label>
+                <label class="field-label full">Адрес сервиса
+                  <input type="text" id="settingsServiceAddressInput" placeholder="Город, улица, офис">
+                </label>
+                <label class="field-label">Email
+                  <input type="email" id="companyEmailInput" placeholder="service@example.com">
+                </label>
+                <label class="field-label">Юр. название / ИП
+                  <input type="text" id="companyLegalNameInput" placeholder="Для документов">
+                </label>
+                <label class="field-label">ИНН / налоговый номер
+                  <input type="text" id="companyTaxIdInput" placeholder="Необязательно">
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-section" data-settings-section="localization">
+              <h4>Локализация и валюта</h4>
+              <p class="section-note">Валюта применяется к заказам, складу, финансам, отчетам и печатным документам.</p>
+              <div class="form-grid">
+                <label class="field-label">Основная валюта
+                  <select id="currencySelect">
+                    <option value="USD">USD — Доллар</option>
+                    <option value="EUR">EUR — Евро</option>
+                    <option value="UAH">UAH — Гривна</option>
+                    <option value="GEL">GEL — Лари</option>
+                    <option value="TRY">TRY — Лира</option>
+                  </select>
+                </label>
+                <label class="field-label">Язык интерфейса
+                  <select id="interfaceLanguageInput">
+                    <option value="ru">Русский</option>
+                    <option value="uk">Українська</option>
+                    <option value="en">English</option>
+                  </select>
+                </label>
+                <label class="field-label">Часовой пояс
+                  <input type="text" id="timezoneInput" placeholder="Asia/Tbilisi">
+                </label>
+                <label class="field-label">Формат даты
+                  <select id="dateFormatInput">
+                    <option value="dd.mm.yyyy">31.12.2026</option>
+                    <option value="yyyy-mm-dd">2026-12-31</option>
+                    <option value="dd/mm/yyyy">31/12/2026</option>
+                  </select>
+                </label>
+                <label class="field-label">Формат времени
+                  <select id="timeFormatInput">
+                    <option value="24">24 часа</option>
+                    <option value="12">12 часов</option>
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-section" data-settings-section="orders">
+              <h4>Заказы</h4>
+              <p class="section-note">Базовые правила создания заказа: номера, сроки, гарантия, типы ремонта и дополнительные поля.</p>
+              <div class="form-grid">
+                <label class="field-label">Префикс номера
+                  <input type="text" id="orderPrefixInput" placeholder="SR-">
+                </label>
+                <label class="field-label">Стартовый номер
+                  <input type="number" id="orderStartNumberInput" min="1" step="1" placeholder="1000">
+                </label>
+                <label class="field-label">Гарантия по умолчанию, дней
+                  <input type="number" id="defaultWarrantyDaysInput" min="0" step="1">
+                </label>
+                <label class="field-label">Срок выполнения, дней
+                  <input type="number" id="defaultDeadlineDaysInput" min="0" step="1">
+                </label>
+                <label class="field-label">Процент мастеру
+                  <input type="number" id="defaultSalaryPercentInput" min="0" step="0.01">
+                </label>
+                <label class="field-label full">Типы заказов
+                  <textarea id="orderTypesInput" placeholder="Платный ремонт|new|30|3"></textarea>
+                </label>
+                <p class="settings-hint full">Формат: название|статус|гарантия дней|срок дней. Статусы: new, diagnostics, in_progress, awaiting_parts, issued.</p>
+                <label class="field-label full">Дополнительные поля заказа
+                  <textarea id="customOrderFieldsInput" placeholder="serialNumber|Серийный номер / IMEI|text|нет|"></textarea>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-section" data-settings-section="finance">
+              <h4>Финансы и кассы</h4>
+              <p class="section-note">По примеру Gincore: отдельные кассы, статьи расходов, способы оплаты и правила зарплаты.</p>
+              <div class="form-grid">
+                <label class="field-label full">Кассы
+                  <textarea id="cashRegistersInput" placeholder="Основная касса|UAH|активна"></textarea>
+                </label>
+                <label class="field-label full">Способы оплаты
+                  <textarea id="paymentMethodsInput" placeholder="Наличные"></textarea>
+                </label>
+                <label class="field-label full">Статьи расходов
+                  <textarea id="expenseCategoriesInput" placeholder="Аренда"></textarea>
+                </label>
+                <label class="field-label">Модель зарплаты
+                  <select id="salaryModeInput">
+                    <option value="percent">Процент от услуг</option>
+                    <option value="fixed">Фиксированная</option>
+                    <option value="mixed">Смешанная</option>
+                  </select>
+                </label>
+                <label class="field-label">Лимит долга клиента
+                  <input type="number" id="clientDebtLimitInput" min="0" step="0.01" placeholder="0">
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-section" data-settings-section="warehouse">
+              <h4>Склад</h4>
+              <p class="section-note">Склады и категории помогают разделять детали, расходники, точки приема и выдачи.</p>
+              <div class="form-grid">
+                <label class="field-label full">Склады
+                  <textarea id="warehousesInput" placeholder="Основной склад|service_center|активен"></textarea>
+                </label>
+                <label class="field-label full">Типы складов
+                  <textarea id="warehouseTypesInput" placeholder="service_center — сервисный центр"></textarea>
+                </label>
+                <label class="field-label full">Категории склада
+                  <textarea id="inventoryCategoriesInput" placeholder="Дисплеи"></textarea>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-section" data-settings-section="access">
+              <h4>Сотрудники и доступ</h4>
+              <p class="section-note">Роли и доступы пока сохраняются как справочник; дальше их можно подключить к ограничениям интерфейса.</p>
+              <div class="form-grid">
+                <label class="field-label full">Мастера
+                  <textarea id="mastersInput" placeholder="Алексей"></textarea>
+                </label>
+                <label class="field-label full">Роли
+                  <textarea id="rolesInput" placeholder="Администратор|все разделы"></textarea>
+                </label>
+                <label class="field-label full">Доступ к кассам
+                  <textarea id="cashRegisterAccessInput" placeholder="Приемщик|Основная касса|принимать оплату"></textarea>
+                </label>
+                <label class="field-label full">Доступ к складам
+                  <textarea id="warehouseAccessInput" placeholder="Мастер|Основной склад|просмотр, списание"></textarea>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-section" data-settings-section="documents">
+              <h4>Документы и резервные копии</h4>
+              <p class="section-note">Шаблоны печати, уведомления и бэкапы собраны в одном месте.</p>
+              <div class="form-grid">
+                <label class="field-label">Автобэкап
+                  <select id="autoBackupInput">
+                    <option value="on">Включен</option>
+                    <option value="off">Выключен</option>
+                  </select>
+                </label>
+                <label class="field-label">Нумерация документов
+                  <input type="text" id="documentNumberingInput" placeholder="По номеру заказа">
+                </label>
+                <label class="field-label full">Подвал печатных документов
+                  <textarea id="printFooterInput" placeholder="Спасибо за обращение."></textarea>
+                </label>
+                <label class="field-label full">Шаблон уведомления клиенту
+                  <textarea id="notificationTemplateInput" placeholder="Здравствуйте, {client}! Заказ № {order}: {status}."></textarea>
+                </label>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" type="submit">Сохранить настройки</button>
+        </div>
+      </form>
+      <div class="data-grid settings-actions-card">
+        <div class="data-card">
+          <h4>Данные</h4>
+          <p>Экспортируйте CRM или импортируйте ранее сохранённый JSON.</p>
+          <div class="inline-actions">
+            <button class="btn btn-secondary" id="exportCsvBtn" type="button">CSV заказов</button>
+            <button class="btn btn-secondary" id="downloadBackupBtn" type="button">Бэкап сейчас</button>
+          </div>
+        </div>
+        <div class="data-card">
+          <h4>Автобэкапы</h4>
+          <p id="backupInfo">Пока нет автоматических бэкапов.</p>
+          <div class="inline-actions">
+            <button class="btn btn-secondary" id="downloadLastBackupBtn" type="button">Скачать последний</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="historyModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeHistoryModal" type="button" aria-label="Close">×</button>
+      <h3 id="historyModalTitle">История</h3>
+      <div class="mini-list" id="historyContent"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="reportsModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeReportsModal" type="button" aria-label="Close">×</button>
+      <h3>Отчеты</h3>
+      <p>Ключевые показатели по заказам, оплатам, задачам, срокам и зарплате мастеров.</p>
+      <section class="card stats-card">
+        <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
+          <div class="stat"><b id="statTotal">0</b><span>Общее количество заказов</span></div>
+          <div class="stat"><b id="statInProgress">0</b><span>В работе</span></div>
+          <div class="stat"><b id="statIssued">0</b><span>Выполненные заказы</span></div>
+          <div class="stat"><b id="statRevenue">0</b><span>Выручка</span></div>
+          <div class="stat"><b id="statDebt">0</b><span>Долг клиентов</span></div>
+          <div class="stat"><b id="statProfit">0</b><span>Прибыль</span></div>
+          <div class="stat"><b id="statOverdue">0</b><span>Просроченные сроки</span></div>
+          <div class="stat"><b id="statTasks">0</b><span>Открытые задачи</span></div>
+          <div class="stat"><b id="statSalary">0</b><span>Зарплата мастеров</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="servicesModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeServicesModal" type="button" aria-label="Close">×</button>
+      <h3>Прайс услуг</h3>
+      <p>Услуги можно добавлять в заказ. Цена, гарантия и процент мастеру подтягиваются автоматически.</p>
+      <form id="serviceForm">
+        <div class="form-grid">
+          <input type="text" id="serviceNameInput" placeholder="Название услуги" required>
+          <input type="number" id="servicePriceInput" min="0" step="0.01" placeholder="Цена" required>
+          <input type="number" id="serviceCostInput" min="0" step="0.01" placeholder="Себестоимость">
+          <input type="number" id="serviceWarrantyInput" min="0" step="1" placeholder="Гарантия, дней">
+          <input type="number" id="serviceRewardInput" min="0" step="0.01" placeholder="% мастеру">
+          <button class="btn btn-primary" id="saveServiceBtn" type="submit">Сохранить услугу</button>
+        </div>
+      </form>
+      <div class="mini-list" id="servicesList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="tasksModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeTasksModal" type="button" aria-label="Close">×</button>
+      <h3>Задачи и сроки</h3>
+      <p>Контролируйте дедлайны заказов, закупки, звонки клиентам и внутренние задачи.</p>
+      <form id="taskForm">
+        <div class="form-grid">
+          <input type="text" id="taskTitleInput" placeholder="Задача" required>
+          <input type="date" id="taskDueInput" required>
+          <select id="taskResponsibleInput"></select>
+          <select id="taskOrderInput"></select>
+          <textarea class="full" id="taskNoteInput" placeholder="Комментарий"></textarea>
+          <button class="btn btn-primary" id="saveTaskBtn" type="submit">Сохранить задачу</button>
+        </div>
+      </form>
+      <div class="mini-list" id="tasksList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="financeModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeFinanceModal" type="button" aria-label="Close">×</button>
+      <h3>Финансы и зарплата</h3>
+      <p>Доходы берутся из оплаченных заказов, расходы вводятся вручную, зарплата рассчитывается по услугам и процентам мастеров.</p>
+      <div class="data-grid" id="financeSummary"></div>
+      <form id="expenseForm" style="margin-top:16px;">
+        <div class="form-grid">
+          <input type="text" id="expenseTitleInput" placeholder="Расход" required>
+          <select id="expenseCategoryInput"></select>
+          <input type="number" id="expenseAmountInput" min="0" step="0.01" placeholder="Сумма" required>
+          <input type="date" id="expenseDateInput" required>
+          <textarea class="full" id="expenseNoteInput" placeholder="Комментарий"></textarea>
+          <button class="btn btn-primary" type="submit">Добавить расход</button>
+        </div>
+      </form>
+      <div class="mini-list" id="expensesList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="suppliersModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeSuppliersModal" type="button" aria-label="Close">×</button>
+      <h3>Поставщики и приход</h3>
+      <p>Ведите базу поставщиков и быстро добавляйте поступления деталей на склад.</p>
+      <form id="supplierForm">
+        <div class="form-grid">
+          <input type="text" id="supplierNameInput" placeholder="Поставщик" required>
+          <input type="tel" id="supplierPhoneInput" placeholder="Телефон">
+          <input class="full" type="text" id="supplierNoteInput" placeholder="Комментарий">
+          <button class="btn btn-primary" id="saveSupplierBtn" type="submit">Сохранить поставщика</button>
+        </div>
+      </form>
+      <form id="receiptForm" style="margin-top:16px;">
+        <div class="form-grid">
+          <select id="receiptSupplierInput"></select>
+          <select id="receiptPartInput"></select>
+          <input type="number" id="receiptQtyInput" min="1" step="1" placeholder="Количество" required>
+          <input type="number" id="receiptCostInput" min="0" step="0.01" placeholder="Цена закупки">
+          <button class="btn btn-secondary" type="submit">Оприходовать</button>
+        </div>
+      </form>
+      <div class="mini-list" id="suppliersList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="activityModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeActivityModal" type="button" aria-label="Close">×</button>
+      <h3>Журнал действий</h3>
+      <p>Здесь фиксируются изменения заказов, статусов, склада, настроек, расходов и справочников.</p>
+      <div class="mini-list" id="activityList"></div>
+    </div>
+  </div>
+
   
+  </div>
+
   <script>
-    if (localStorage.getItem('crm_auth') !== '1') {
-      window.location.href = '/login.html';
-    }
-
-    const storageKey = 'one_service_orders';
-    const tbody = document.getElementById('ordersTableBody');
-    const emptyState = document.getElementById('emptyState');
-    const orderModalOverlay = document.getElementById('orderModalOverlay');
-    const orderModalTitle = document.getElementById('orderModalTitle');
-    const orderForm = document.getElementById('orderForm');
-    const searchInput = document.getElementById('searchInput');
-    const statusFilter = document.getElementById('statusFilter');
-    const sortSelect = document.getElementById('sortSelect');
-
-    const formFields = {
-      orderNumber: document.getElementById('orderNumber'),
-      orderStatus: document.getElementById('orderStatus'),
-      clientName: document.getElementById('clientName'),
-      clientPhone: document.getElementById('clientPhone'),
-      deviceType: document.getElementById('deviceType'),
-      deviceModel: document.getElementById('deviceModel'),
-      totalCost: document.getElementById('totalCost'),
-      partsCost: document.getElementById('partsCost'),
-      problemDescription: document.getElementById('problemDescription'),
-      masterNotes: document.getElementById('masterNotes')
-    };
-
-    let editingId = null;
+    const AUTH_LOGIN = 'gotoveckis';
+    const AUTH_PASSWORD = '18101997';
+    const AUTH_STORAGE_KEY = 'crm_auth';
+    const ORDERS_KEY = 'one_service_orders';
+    const SETTINGS_KEY = 'one_service_settings';
+    const INVENTORY_KEY = 'one_service_inventory';
+    const BACKUPS_KEY = 'one_service_backups';
+    const SIDEBAR_STORAGE_KEY = 'one_service_sidebar_collapsed';
+    const SERVICES_KEY = 'one_service_services';
+    const EXPENSES_KEY = 'one_service_expenses';
+    const TASKS_KEY = 'one_service_tasks';
+    const SUPPLIERS_KEY = 'one_service_suppliers';
+    const ACTIVITY_KEY = 'one_service_activity';
 
     const STATUS_CONFIG = {
       new: { label: 'Новый', className: 'status-new' },
@@ -1002,6 +2665,352 @@
       donor: { label: 'Переведен в донор', className: 'status-donor' }
     };
 
+    const CURRENCIES = {
+      UAH: { label: 'Гривна', code: 'UAH', fallback: 'грн' },
+      USD: { label: 'Доллар', code: 'USD', fallback: '$' },
+      EUR: { label: 'Евро', code: 'EUR', fallback: '€' },
+      GEL: { label: 'Лари', code: 'GEL', fallback: '₾' },
+      TRY: { label: 'Лира', code: 'TRY', fallback: '₺' }
+    };
+
+    const DEFAULT_SETTINGS = {
+      serviceName: '1ONE service',
+      servicePhone: '+380509906265',
+      serviceAddress: 'Харьков, ул. Харьковских Дивизий, 14/2',
+      companyEmail: '',
+      companyLegalName: '',
+      companyTaxId: '',
+      currency: 'UAH',
+      interfaceLanguage: 'ru',
+      timezone: 'Asia/Tbilisi',
+      dateFormat: 'dd.mm.yyyy',
+      timeFormat: '24',
+      defaultWarrantyDays: '30',
+      defaultDeadlineDays: '3',
+      defaultSalaryPercent: '20',
+      orderPrefix: '',
+      orderStartNumber: '1000',
+      masters: ['Алексей', 'Дмитрий'],
+      orderTypes: [
+        { name: 'Платный ремонт', initialStatus: 'new', warrantyDays: '30', deadlineDays: '3' },
+        { name: 'Гарантийный ремонт', initialStatus: 'diagnostics', warrantyDays: '0', deadlineDays: '5' },
+        { name: 'Диагностика', initialStatus: 'diagnostics', warrantyDays: '0', deadlineDays: '2' }
+      ],
+      paymentMethods: ['Наличные', 'Карта', 'Перевод', 'Смешанная'],
+      expenseCategories: ['Аренда', 'Закупка', 'Зарплата', 'Реклама', 'Прочее'],
+      inventoryCategories: ['Дисплеи', 'Подсветка', 'Платы', 'Расходники', 'Прочее'],
+      cashRegisters: ['Основная касса|UAH|активна', 'Безналичный счет|UAH|активна'],
+      salaryMode: 'percent',
+      clientDebtLimit: '',
+      warehouses: ['Основной склад|service_center|активен', 'Клиентская зона|client|активен'],
+      warehouseTypes: ['service_center — сервисный центр', 'pickup — точка приема/выдачи', 'courier — курьерский склад', 'client — клиентский склад'],
+      roles: ['Администратор|все разделы', 'Приемщик|заказы, клиенты, касса', 'Мастер|заказы, задачи, склад'],
+      cashRegisterAccess: ['Администратор|все кассы|полный доступ', 'Приемщик|Основная касса|принимать оплату'],
+      warehouseAccess: ['Администратор|все склады|полный доступ', 'Мастер|Основной склад|просмотр, списание'],
+      documentNumbering: 'По номеру заказа',
+      printFooter: 'Спасибо за обращение. Сохраняйте документы до окончания гарантии.',
+      autoBackupEnabled: 'on',
+      customOrderFields: [
+        { key: 'serialNumber', label: 'Серийный номер / IMEI', type: 'text', required: false, options: [] },
+        { key: 'urgency', label: 'Срочность', type: 'list', required: false, options: ['Обычная', 'Срочно', 'Очень срочно'] }
+      ],
+      notificationTemplate: 'Здравствуйте, {client}! Заказ № {order}: {status}. Устройство: {device}. Сумма: {cost}. {service}, {phone}'
+    };
+
+    const authShell = document.getElementById('authShell');
+    const appShell = document.getElementById('appShell');
+    const authForm = document.getElementById('authForm');
+    const authLogin = document.getElementById('authLogin');
+    const authPassword = document.getElementById('authPassword');
+    const authError = document.getElementById('authError');
+    const tbody = document.getElementById('ordersTableBody');
+    const emptyState = document.getElementById('emptyState');
+    const orderModalOverlay = document.getElementById('orderModalOverlay');
+    const orderModalTitle = document.getElementById('orderModalTitle');
+    const orderForm = document.getElementById('orderForm');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const sortSelect = document.getElementById('sortSelect');
+    const orderTypeFilter = document.getElementById('orderTypeFilter');
+    const masterFilter = document.getElementById('masterFilter');
+    const paymentFilter = document.getElementById('paymentFilter');
+    const dateFromFilter = document.getElementById('dateFromFilter');
+    const dateToFilter = document.getElementById('dateToFilter');
+    const minCostFilter = document.getElementById('minCostFilter');
+    const deadlineFilter = document.getElementById('deadlineFilter');
+    const clientsModalOverlay = document.getElementById('clientsModalOverlay');
+    const inventoryModalOverlay = document.getElementById('inventoryModalOverlay');
+    const settingsModalOverlay = document.getElementById('settingsModalOverlay');
+    const historyModalOverlay = document.getElementById('historyModalOverlay');
+    const reportsModalOverlay = document.getElementById('reportsModalOverlay');
+    const servicesModalOverlay = document.getElementById('servicesModalOverlay');
+    const tasksModalOverlay = document.getElementById('tasksModalOverlay');
+    const financeModalOverlay = document.getElementById('financeModalOverlay');
+    const suppliersModalOverlay = document.getElementById('suppliersModalOverlay');
+    const activityModalOverlay = document.getElementById('activityModalOverlay');
+    const importFileInput = document.getElementById('importFileInput');
+    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+
+    const formFields = {
+      orderNumber: document.getElementById('orderNumber'),
+      orderStatus: document.getElementById('orderStatus'),
+      orderType: document.getElementById('orderType'),
+      deadlineAt: document.getElementById('deadlineAt'),
+      clientName: document.getElementById('clientName'),
+      clientPhone: document.getElementById('clientPhone'),
+      deviceType: document.getElementById('deviceType'),
+      deviceModel: document.getElementById('deviceModel'),
+      masterName: document.getElementById('masterName'),
+      warrantyDays: document.getElementById('warrantyDays'),
+      totalCost: document.getElementById('totalCost'),
+      partsCost: document.getElementById('partsCost'),
+      paidAmount: document.getElementById('paidAmount'),
+      discountAmount: document.getElementById('discountAmount'),
+      paymentMethod: document.getElementById('paymentMethod'),
+      warrantyUntil: document.getElementById('warrantyUntil'),
+      clientSource: document.getElementById('clientSource'),
+      problemDescription: document.getElementById('problemDescription'),
+      completedWorks: document.getElementById('completedWorks'),
+      masterNotes: document.getElementById('masterNotes'),
+      taskNote: document.getElementById('taskNote')
+    };
+
+    let editingId = null;
+    let editingPartId = null;
+    let editingServiceId = null;
+    let editingTaskId = null;
+    let editingSupplierId = null;
+    let partsDraft = [];
+    let servicesDraft = [];
+
+    function showAuthError(message) {
+      authError.textContent = message;
+      authError.classList.add('show');
+    }
+
+    function clearAuthError() {
+      authError.textContent = '';
+      authError.classList.remove('show');
+    }
+
+    function getStorageItem(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function setStorageItem(key, value) {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function getJson(key, fallback) {
+      const raw = getStorageItem(key);
+      if (!raw) return fallback;
+
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function setJson(key, value) {
+      return setStorageItem(key, JSON.stringify(value));
+    }
+
+    function makeOrderId() {
+      if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+      return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function parseAmount(value) {
+      if (value === null || value === undefined || value === '') return 0;
+      const num = Number(String(value).replace(',', '.'));
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function roundMoney(value) {
+      return Math.round((Number(value) || 0) * 100) / 100;
+    }
+
+    function normalizePhone(phone) {
+      return String(phone || '').replace(/\D/g, '');
+    }
+
+    function toDateInput(value) {
+      const timestamp = Date.parse(value);
+      if (!Number.isFinite(timestamp)) return '';
+      return new Date(timestamp).toISOString().slice(0, 10);
+    }
+
+    function addDays(value, days) {
+      const timestamp = Date.parse(value);
+      if (!Number.isFinite(timestamp) || !Number(days)) return '';
+      const date = new Date(timestamp);
+      date.setDate(date.getDate() + Number(days));
+      return toDateInput(date.toISOString());
+    }
+
+    function formatDate(value) {
+      const timestamp = Date.parse(value);
+      if (!Number.isFinite(timestamp)) return '—';
+      return new Date(timestamp).toLocaleString('ru-RU');
+    }
+
+    function formatDateOnly(value) {
+      const timestamp = Date.parse(value);
+      if (!Number.isFinite(timestamp)) return '—';
+      return new Date(timestamp).toLocaleDateString('ru-RU');
+    }
+
+    function getSettings() {
+      const saved = getJson(SETTINGS_KEY, {});
+      const settings = { ...DEFAULT_SETTINGS, ...(saved && typeof saved === 'object' ? saved : {}) };
+      settings.currency = CURRENCIES[settings.currency] ? settings.currency : DEFAULT_SETTINGS.currency;
+      settings.interfaceLanguage = ['ru', 'uk', 'en'].includes(settings.interfaceLanguage) ? settings.interfaceLanguage : DEFAULT_SETTINGS.interfaceLanguage;
+      settings.dateFormat = ['dd.mm.yyyy', 'yyyy-mm-dd', 'dd/mm/yyyy'].includes(settings.dateFormat) ? settings.dateFormat : DEFAULT_SETTINGS.dateFormat;
+      settings.timeFormat = ['24', '12'].includes(String(settings.timeFormat)) ? String(settings.timeFormat) : DEFAULT_SETTINGS.timeFormat;
+      settings.salaryMode = ['percent', 'fixed', 'mixed'].includes(settings.salaryMode) ? settings.salaryMode : DEFAULT_SETTINGS.salaryMode;
+      settings.autoBackupEnabled = settings.autoBackupEnabled === 'off' ? 'off' : 'on';
+      settings.orderStartNumber = String(settings.orderStartNumber || DEFAULT_SETTINGS.orderStartNumber);
+      settings.masters = Array.isArray(settings.masters) ? settings.masters.filter(Boolean) : DEFAULT_SETTINGS.masters;
+      settings.orderTypes = Array.isArray(settings.orderTypes) && settings.orderTypes.length ? settings.orderTypes : DEFAULT_SETTINGS.orderTypes;
+      settings.paymentMethods = Array.isArray(settings.paymentMethods) && settings.paymentMethods.length ? settings.paymentMethods : DEFAULT_SETTINGS.paymentMethods;
+      settings.expenseCategories = Array.isArray(settings.expenseCategories) && settings.expenseCategories.length ? settings.expenseCategories : DEFAULT_SETTINGS.expenseCategories;
+      settings.inventoryCategories = Array.isArray(settings.inventoryCategories) && settings.inventoryCategories.length ? settings.inventoryCategories : DEFAULT_SETTINGS.inventoryCategories;
+      settings.cashRegisters = Array.isArray(settings.cashRegisters) && settings.cashRegisters.length ? settings.cashRegisters.filter(Boolean) : DEFAULT_SETTINGS.cashRegisters;
+      settings.warehouses = Array.isArray(settings.warehouses) && settings.warehouses.length ? settings.warehouses.filter(Boolean) : DEFAULT_SETTINGS.warehouses;
+      settings.warehouseTypes = Array.isArray(settings.warehouseTypes) && settings.warehouseTypes.length ? settings.warehouseTypes.filter(Boolean) : DEFAULT_SETTINGS.warehouseTypes;
+      settings.roles = Array.isArray(settings.roles) && settings.roles.length ? settings.roles.filter(Boolean) : DEFAULT_SETTINGS.roles;
+      settings.cashRegisterAccess = Array.isArray(settings.cashRegisterAccess) && settings.cashRegisterAccess.length ? settings.cashRegisterAccess.filter(Boolean) : DEFAULT_SETTINGS.cashRegisterAccess;
+      settings.warehouseAccess = Array.isArray(settings.warehouseAccess) && settings.warehouseAccess.length ? settings.warehouseAccess.filter(Boolean) : DEFAULT_SETTINGS.warehouseAccess;
+      settings.customOrderFields = Array.isArray(settings.customOrderFields) ? settings.customOrderFields.filter(field => field && field.key && field.label) : DEFAULT_SETTINGS.customOrderFields;
+      return settings;
+    }
+
+    function saveSettings(settings) {
+      const payload = { ...getSettings(), ...settings };
+      const saved = setJson(SETTINGS_KEY, payload);
+      if (!saved) window.alert('Не удалось сохранить настройки.');
+      if (saved) createAutoBackup();
+      return saved;
+    }
+
+    function parseListTextarea(value) {
+      return String(value || '')
+        .split('\n')
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
+
+    function parseOrderTypes(value) {
+      const items = parseListTextarea(value).map(line => {
+        const [name, initialStatus = 'new', warrantyDays = '', deadlineDays = ''] = line.split('|').map(part => part.trim());
+        return { name, initialStatus: STATUS_CONFIG[initialStatus] ? initialStatus : 'new', warrantyDays, deadlineDays };
+      }).filter(item => item.name);
+
+      return items.length ? items : DEFAULT_SETTINGS.orderTypes;
+    }
+
+    function parseCustomOrderFields(value) {
+      const fields = parseListTextarea(value).map(line => {
+        const [key, label, type = 'text', required = '', options = ''] = line.split('|').map(part => part.trim());
+        return {
+          key: key || '',
+          label: label || key || '',
+          type: ['text', 'number', 'date', 'list', 'checkbox'].includes(type) ? type : 'text',
+          required: ['да', 'yes', 'true', '1'].includes(required.toLowerCase()),
+          options: options ? options.split(',').map(item => item.trim()).filter(Boolean) : []
+        };
+      }).filter(item => item.key && item.label);
+
+      return fields.length ? fields : DEFAULT_SETTINGS.customOrderFields;
+    }
+
+    function formatOrderTypes(value) {
+      return value.map(item => `${item.name}|${item.initialStatus || 'new'}|${item.warrantyDays || ''}|${item.deadlineDays || ''}`).join('\n');
+    }
+
+    function formatCustomOrderFields(value) {
+      return value.map(item => `${item.key}|${item.label}|${item.type || 'text'}|${item.required ? 'да' : 'нет'}|${(item.options || []).join(', ')}`).join('\n');
+    }
+
+    function logActivity(action, detail = '') {
+      const records = [{
+        id: makeOrderId(),
+        at: new Date().toISOString(),
+        action,
+        detail
+      }, ...getActivity()].slice(0, 300);
+      setJson(ACTIVITY_KEY, records);
+    }
+
+    function money(value) {
+      if (value === null || value === undefined || value === '') return '—';
+      const num = Number(String(value).replace(',', '.'));
+      if (!Number.isFinite(num)) return '—';
+
+      const settings = getSettings();
+      const currency = CURRENCIES[settings.currency] || CURRENCIES.UAH;
+      try {
+        return new Intl.NumberFormat('ru-RU', {
+          style: 'currency',
+          currency: currency.code,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }).format(num);
+      } catch (error) {
+        return `${new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(num)} ${currency.fallback}`;
+      }
+    }
+
+    function showApp() {
+      authShell.style.display = 'none';
+      appShell.classList.add('is-authenticated');
+    }
+
+    function showAuth() {
+      authShell.style.display = 'flex';
+      appShell.classList.remove('is-authenticated');
+      clearAuthError();
+      setTimeout(() => authLogin.focus(), 0);
+    }
+
+    function setSidebarCollapsed(collapsed, persist = true) {
+      appShell.classList.toggle('sidebar-collapsed', collapsed);
+      sidebarToggleBtn.setAttribute('aria-expanded', String(!collapsed));
+      sidebarToggleBtn.setAttribute('aria-label', collapsed ? 'Показать меню' : 'Скрыть меню');
+      sidebarToggleBtn.title = collapsed ? 'Показать меню' : 'Скрыть меню';
+
+      if (persist) {
+        setStorageItem(SIDEBAR_STORAGE_KEY, collapsed ? '1' : '0');
+      }
+    }
+
+    function getStatusLabel(status) {
+      return STATUS_CONFIG[status]?.label || status || '—';
+    }
+
+    function getStatusClass(status) {
+      return STATUS_CONFIG[status]?.className || 'status-new';
+    }
+
     function getStatusOptionsHtml(currentValue) {
       return Object.entries(STATUS_CONFIG)
         .map(([value, cfg]) => `<option value="${value}" ${currentValue === value ? 'selected' : ''}>${cfg.label}</option>`)
@@ -1013,89 +3022,415 @@
       select.dataset.status = select.value;
     }
 
+    function migratePartUsage(part) {
+      return {
+        id: part.id || makeOrderId(),
+        name: String(part.name || part.partName || 'Деталь'),
+        qty: Math.max(1, Number(part.qty || 1)),
+        unitCost: parseAmount(part.unitCost)
+      };
+    }
+
+    function migrateServiceUsage(service) {
+      return {
+        id: service.id || makeOrderId(),
+        name: String(service.name || 'Услуга'),
+        qty: Math.max(1, Number(service.qty || 1)),
+        price: parseAmount(service.price),
+        cost: parseAmount(service.cost),
+        warrantyDays: String(service.warrantyDays || ''),
+        rewardPercent: String(service.rewardPercent || '')
+      };
+    }
+
+    function migrateOrder(item) {
+      const settings = getSettings();
+      const createdAt = Date.parse(item.createdAt) ? item.createdAt : new Date().toISOString();
+      const status = STATUS_CONFIG[item.status] ? item.status : 'new';
+      const firstType = settings.orderTypes[0]?.name || '';
+      const orderType = item.orderType || firstType;
+      const typeConfig = settings.orderTypes.find(type => type.name === orderType) || settings.orderTypes[0] || {};
+      const warrantyDays = item.warrantyDays ?? settings.defaultWarrantyDays ?? '';
+      const warrantyUntil = item.warrantyUntil || (warrantyDays ? addDays(createdAt, warrantyDays) : '');
+      const deadlineAt = item.deadlineAt || (typeConfig.deadlineDays || settings.defaultDeadlineDays ? addDays(createdAt, typeConfig.deadlineDays || settings.defaultDeadlineDays) : '');
+      const statusHistory = Array.isArray(item.statusHistory) && item.statusHistory.length
+        ? item.statusHistory
+        : [{ status, at: createdAt, note: 'Создан' }];
+
+      return {
+        ...item,
+        id: item.id || makeOrderId(),
+        orderNumber: String(item.orderNumber || ''),
+        orderType,
+        status,
+        clientName: String(item.clientName || ''),
+        clientPhone: String(item.clientPhone || ''),
+        clientSource: String(item.clientSource || ''),
+        deviceType: String(item.deviceType || ''),
+        deviceModel: String(item.deviceModel || ''),
+        masterName: String(item.masterName || ''),
+        totalCost: String(item.totalCost ?? ''),
+        partsCost: String(item.partsCost ?? ''),
+        paidAmount: String(item.paidAmount ?? ''),
+        discountAmount: String(item.discountAmount ?? ''),
+        paymentMethod: String(item.paymentMethod || ''),
+        warrantyDays: String(warrantyDays ?? ''),
+        warrantyUntil,
+        deadlineAt,
+        problemDescription: String(item.problemDescription || ''),
+        completedWorks: String(item.completedWorks || ''),
+        masterNotes: String(item.masterNotes || ''),
+        taskNote: String(item.taskNote || ''),
+        partsUsed: Array.isArray(item.partsUsed) ? item.partsUsed.map(migratePartUsage) : [],
+        servicesUsed: Array.isArray(item.servicesUsed) ? item.servicesUsed.map(migrateServiceUsage) : [],
+        customFields: item.customFields && typeof item.customFields === 'object' ? item.customFields : {},
+        statusHistory,
+        createdAt,
+        updatedAt: item.updatedAt || createdAt
+      };
+    }
 
     function getOrders() {
-      try {
-        return JSON.parse(localStorage.getItem(storageKey) || '[]');
-      } catch (error) {
-        return [];
+      const parsed = getJson(ORDERS_KEY, []);
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateOrder) : [];
+    }
+
+    function saveOrders(items, options = {}) {
+      const saved = setJson(ORDERS_KEY, Array.isArray(items) ? items.map(migrateOrder) : []);
+      if (!saved) {
+        window.alert('Не удалось сохранить заказы. Проверьте, разрешено ли браузеру использовать localStorage.');
       }
+      if (saved && options.backup !== false) {
+        logActivity('Заказы', 'Обновлены заказы');
+        createAutoBackup();
+      }
+      return saved;
     }
 
-    function saveOrders(items) {
-      localStorage.setItem(storageKey, JSON.stringify(items));
+    function migrateInventoryItem(item) {
+      return {
+        id: item.id || makeOrderId(),
+        name: String(item.name || ''),
+        category: String(item.category || ''),
+        sku: String(item.sku || ''),
+        stock: Math.max(0, Number(item.stock || 0)),
+        unitCost: parseAmount(item.unitCost),
+        minStock: Math.max(0, Number(item.minStock || 0)),
+        updatedAt: item.updatedAt || new Date().toISOString()
+      };
     }
 
-    function formatDate(value) {
-      const date = new Date(value);
-      return date.toLocaleString('ru-RU');
+    function getInventory() {
+      const parsed = getJson(INVENTORY_KEY, []);
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateInventoryItem) : [];
     }
 
-    function money(value) {
-      const num = Number(value || 0);
-      if (!num) return '—';
-      return new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num) + ' грн';
+    function saveInventory(items, options = {}) {
+      const saved = setJson(INVENTORY_KEY, Array.isArray(items) ? items.map(migrateInventoryItem) : []);
+      if (!saved) window.alert('Не удалось сохранить склад.');
+      if (saved && options.backup !== false) {
+        logActivity('Склад', 'Обновлен склад');
+        createAutoBackup();
+      }
+      return saved;
+    }
+
+    function migrateService(item) {
+      return {
+        id: item.id || makeOrderId(),
+        name: String(item.name || ''),
+        price: parseAmount(item.price),
+        cost: parseAmount(item.cost),
+        warrantyDays: String(item.warrantyDays || ''),
+        rewardPercent: String(item.rewardPercent || ''),
+        updatedAt: item.updatedAt || new Date().toISOString()
+      };
+    }
+
+    function getServices() {
+      const parsed = getJson(SERVICES_KEY, []);
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateService) : [];
+    }
+
+    function saveServices(items, options = {}) {
+      const saved = setJson(SERVICES_KEY, Array.isArray(items) ? items.map(migrateService) : []);
+      if (!saved) window.alert('Не удалось сохранить услуги.');
+      if (saved && options.backup !== false) {
+        logActivity('Услуги', 'Обновлен прайс услуг');
+        createAutoBackup();
+      }
+      return saved;
+    }
+
+    function migrateExpense(item) {
+      return {
+        id: item.id || makeOrderId(),
+        title: String(item.title || ''),
+        category: String(item.category || ''),
+        amount: parseAmount(item.amount),
+        date: item.date || toDateInput(new Date().toISOString()),
+        note: String(item.note || ''),
+        createdAt: item.createdAt || new Date().toISOString()
+      };
+    }
+
+    function getExpenses() {
+      const parsed = getJson(EXPENSES_KEY, []);
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateExpense) : [];
+    }
+
+    function saveExpenses(items, options = {}) {
+      const saved = setJson(EXPENSES_KEY, Array.isArray(items) ? items.map(migrateExpense) : []);
+      if (!saved) window.alert('Не удалось сохранить расходы.');
+      if (saved && options.backup !== false) {
+        logActivity('Финансы', 'Обновлены расходы');
+        createAutoBackup();
+      }
+      return saved;
+    }
+
+    function migrateTask(item) {
+      return {
+        id: item.id || makeOrderId(),
+        title: String(item.title || ''),
+        dueDate: item.dueDate || '',
+        responsible: String(item.responsible || ''),
+        orderId: String(item.orderId || ''),
+        note: String(item.note || ''),
+        done: Boolean(item.done),
+        createdAt: item.createdAt || new Date().toISOString(),
+        updatedAt: item.updatedAt || new Date().toISOString()
+      };
+    }
+
+    function getTasks() {
+      const parsed = getJson(TASKS_KEY, []);
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateTask) : [];
+    }
+
+    function saveTasks(items, options = {}) {
+      const saved = setJson(TASKS_KEY, Array.isArray(items) ? items.map(migrateTask) : []);
+      if (!saved) window.alert('Не удалось сохранить задачи.');
+      if (saved && options.backup !== false) {
+        logActivity('Задачи', 'Обновлен список задач');
+        createAutoBackup();
+      }
+      return saved;
+    }
+
+    function migrateSupplier(item) {
+      return {
+        id: item.id || makeOrderId(),
+        name: String(item.name || ''),
+        phone: String(item.phone || ''),
+        note: String(item.note || ''),
+        createdAt: item.createdAt || new Date().toISOString()
+      };
+    }
+
+    function getSuppliers() {
+      const parsed = getJson(SUPPLIERS_KEY, []);
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateSupplier) : [];
+    }
+
+    function saveSuppliers(items, options = {}) {
+      const saved = setJson(SUPPLIERS_KEY, Array.isArray(items) ? items.map(migrateSupplier) : []);
+      if (!saved) window.alert('Не удалось сохранить поставщиков.');
+      if (saved && options.backup !== false) {
+        logActivity('Поставщики', 'Обновлена база поставщиков');
+        createAutoBackup();
+      }
+      return saved;
+    }
+
+    function getActivity() {
+      const parsed = getJson(ACTIVITY_KEY, []);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+
+    function getBackups() {
+      const parsed = getJson(BACKUPS_KEY, []);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+
+    function createBackup(type = 'manual') {
+      const backup = {
+        id: makeOrderId(),
+        type,
+        createdAt: new Date().toISOString(),
+        version: 2,
+        settings: getSettings(),
+        orders: getOrders(),
+        inventory: getInventory(),
+        services: getServices(),
+        expenses: getExpenses(),
+        tasks: getTasks(),
+        suppliers: getSuppliers(),
+        activity: getActivity()
+      };
+      const backups = [backup, ...getBackups()].slice(0, 12);
+      setJson(BACKUPS_KEY, backups);
+      renderBackupInfo();
+      return backup;
+    }
+
+    function createAutoBackup() {
+      return getSettings().autoBackupEnabled === 'off' ? null : createBackup('auto');
     }
 
     function nextNumericOrderNumber() {
-      const orders = getOrders();
-      const nums = orders
-        .map(item => String(item.orderNumber || '').match(/\d+/g))
-        .flat()
-        .filter(Boolean)
-        .map(parts => Number(Array.isArray(parts) ? parts.join('') : parts))
+      const nums = getOrders()
+        .flatMap(item => String(item.orderNumber || '').match(/\d+/g) || [])
+        .map(part => Number(part))
         .filter(num => Number.isFinite(num));
-      const max = nums.length ? Math.max(...nums) : 1000;
+      const start = Number(getSettings().orderStartNumber) || 1000;
+      const max = nums.length ? Math.max(...nums) : start;
       return String(max + 1);
     }
 
     function generateOrderNumber() {
-      return nextNumericOrderNumber();
+      const prefix = String(getSettings().orderPrefix || '').trim();
+      return `${prefix}${nextNumericOrderNumber()}`;
     }
 
-    function getStatusLabel(status) {
-      return STATUS_CONFIG[status]?.label || status;
+    function getDebt(order) {
+      return Math.max(0, roundMoney(parseAmount(order.totalCost) - parseAmount(order.paidAmount)));
     }
 
-    function getStatusClass(status) {
-      return STATUS_CONFIG[status]?.className || 'status-new';
+    function getPaymentState(order) {
+      const total = parseAmount(order.totalCost);
+      const paid = parseAmount(order.paidAmount);
+      if (!total && !paid) return 'unpaid';
+      if (paid >= total) return 'paid';
+      if (paid > 0) return 'debt';
+      return 'unpaid';
+    }
+
+    function paymentBadge(order) {
+      const state = getPaymentState(order);
+      if (state === 'paid') return '<span class="badge badge-good">Оплачено</span>';
+      if (state === 'debt') return `<span class="badge badge-bad">Долг ${escapeHtml(money(getDebt(order)))}</span>`;
+      return '<span class="badge">Не оплачено</span>';
+    }
+
+    function warrantyBadge(order) {
+      if (!order.warrantyUntil) return '—';
+      const expired = Date.parse(order.warrantyUntil) < Date.parse(new Date().toISOString().slice(0, 10));
+      const cls = expired ? 'badge-bad' : 'badge-good';
+      return `<span class="badge ${cls}">${escapeHtml(formatDateOnly(order.warrantyUntil))}</span>`;
+    }
+
+    function isClosedStatus(status) {
+      return ['issued', 'issued_without_repair', 'client_declined', 'repair_declined', 'donor'].includes(status);
+    }
+
+    function getDeadlineState(order) {
+      if (!order.deadlineAt || isClosedStatus(order.status)) return '';
+      const today = toDateInput(new Date().toISOString());
+      if (order.deadlineAt < today) return 'overdue';
+      if (order.deadlineAt === today) return 'today';
+      const week = addDays(new Date().toISOString(), 7);
+      if (order.deadlineAt <= week) return 'week';
+      return 'future';
+    }
+
+    function deadlineBadge(order) {
+      if (!order.deadlineAt) return '—';
+      const state = getDeadlineState(order);
+      const cls = state === 'overdue' ? 'badge-bad' : state === 'today' || state === 'week' ? '' : 'badge-good';
+      return `<span class="badge ${cls}">${escapeHtml(formatDateOnly(order.deadlineAt))}</span>`;
+    }
+
+    function calculateOrderSalary(order) {
+      const settings = getSettings();
+      const defaultPercent = parseAmount(settings.defaultSalaryPercent);
+      return (order.servicesUsed || []).reduce((sum, service) => {
+        const percent = parseAmount(service.rewardPercent || defaultPercent);
+        return sum + (parseAmount(service.price) * Number(service.qty || 1) * percent / 100);
+      }, 0);
+    }
+
+    function calculateSalaryByMaster() {
+      const totals = new Map();
+      getOrders().forEach(order => {
+        if (!order.masterName || !isClosedStatus(order.status)) return;
+        totals.set(order.masterName, (totals.get(order.masterName) || 0) + calculateOrderSalary(order));
+      });
+      return totals;
     }
 
     function updateStats(items) {
+      const revenue = items.reduce((sum, item) => sum + parseAmount(item.paidAmount), 0);
+      const debt = items.reduce((sum, item) => sum + getDebt(item), 0);
+      const expenses = getExpenses().reduce((sum, item) => sum + parseAmount(item.amount), 0);
+      const salary = [...calculateSalaryByMaster().values()].reduce((sum, value) => sum + value, 0);
+      const profit = items.reduce((sum, item) => sum + parseAmount(item.paidAmount) - parseAmount(item.partsCost), 0) - expenses - salary;
+      const overdue = items.filter(item => getDeadlineState(item) === 'overdue').length;
+      const openTasks = getTasks().filter(item => !item.done).length;
+
       document.getElementById('statTotal').textContent = items.length;
       document.getElementById('statInProgress').textContent = items.filter(x => x.status === 'in_progress').length;
-      document.getElementById('statIssued').textContent = items.filter(x => ['issued','issued_without_repair'].includes(x.status)).length;
+      document.getElementById('statIssued').textContent = items.filter(x => ['issued', 'issued_without_repair'].includes(x.status)).length;
+      document.getElementById('statRevenue').textContent = money(revenue);
+      document.getElementById('statDebt').textContent = money(debt);
+      document.getElementById('statProfit').textContent = money(profit);
+      document.getElementById('statOverdue').textContent = overdue;
+      document.getElementById('statTasks').textContent = openTasks;
+      document.getElementById('statSalary').textContent = money(salary);
     }
 
     function applyFilters(items) {
       const query = (searchInput.value || '').trim().toLowerCase();
       const status = statusFilter.value;
+      const orderType = orderTypeFilter.value;
+      const master = masterFilter.value;
+      const payment = paymentFilter.value;
+      const dateFrom = dateFromFilter.value;
+      const dateTo = dateToFilter.value;
+      const minCost = parseAmount(minCostFilter.value);
+      const deadline = deadlineFilter.value;
       const sort = sortSelect.value;
 
       let result = items.filter(item => {
+        const day = toDateInput(item.createdAt);
         const haystack = [
           item.orderNumber,
+          item.orderType,
           item.deviceType,
           item.deviceModel,
           item.clientName,
           item.clientPhone,
           item.problemDescription,
+          item.completedWorks,
           item.masterNotes,
+          item.masterName,
+          item.clientSource,
+          item.taskNote,
+          ...(item.servicesUsed || []).map(service => service.name),
           item.totalCost,
-          item.partsCost
+          item.partsCost,
+          item.paidAmount
         ].join(' ').toLowerCase();
 
-        const queryOk = !query || haystack.includes(query);
-        const statusOk = !status || item.status === status;
-        return queryOk && statusOk;
+        return (!query || haystack.includes(query))
+          && (!status || item.status === status)
+          && (!orderType || item.orderType === orderType)
+          && (!master || item.masterName === master)
+          && (!payment || getPaymentState(item) === payment)
+          && (!dateFrom || day >= dateFrom)
+          && (!dateTo || day <= dateTo)
+          && (!minCost || parseAmount(item.totalCost) >= minCost)
+          && (!deadline || getDeadlineState(item) === deadline);
       });
 
       if (sort === 'oldest') {
-        result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        result.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
       } else if (sort === 'status') {
         result.sort((a, b) => getStatusLabel(a.status).localeCompare(getStatusLabel(b.status), 'ru'));
+      } else if (sort === 'cost') {
+        result.sort((a, b) => parseAmount(b.totalCost) - parseAmount(a.totalCost));
       } else {
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        result.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
       }
 
       return result;
@@ -1106,32 +3441,44 @@
       const filtered = applyFilters(items);
       updateStats(items);
       tbody.innerHTML = '';
-
       emptyState.style.display = filtered.length ? 'none' : 'block';
 
       filtered.forEach(item => {
         const tr = document.createElement('tr');
+        const safeId = escapeHtml(item.id);
+        const safeStatus = STATUS_CONFIG[item.status] ? item.status : 'new';
+
         tr.innerHTML = `
-          <td data-label="№ заказа"><b>${item.orderNumber}</b></td>
+          <td data-label="№ заказа"><b>${escapeHtml(item.orderNumber)}</b></td>
+          <td data-label="Тип">${escapeHtml(item.orderType || '—')}</td>
           <td data-label="Статус">
-            <select class="status-select ${getStatusClass(item.status)}" data-action="change-status" data-id="${item.id}" data-status="${item.status}">
-              ${getStatusOptionsHtml(item.status)}
+            <select class="status-select ${getStatusClass(safeStatus)}" data-action="change-status" data-id="${safeId}" data-status="${safeStatus}">
+              ${getStatusOptionsHtml(safeStatus)}
             </select>
           </td>
-          <td data-label="Техника">${item.deviceType || ''}</td>
-          <td data-label="Модель">${item.deviceModel || '—'}</td>
-          <td data-label="Клиент">${item.clientName || ''}</td>
-          <td data-label="Телефон">${item.clientPhone || ''}</td>
-          <td data-label="Неисправность">${item.problemDescription || ''}</td>
-          <td data-label="Стоимость">${money(item.totalCost)}</td>
-          <td data-label="Дата">${formatDate(item.createdAt)}</td>
+          <td data-label="Техника">${escapeHtml(item.deviceType)}</td>
+          <td data-label="Модель">${escapeHtml(item.deviceModel || '—')}</td>
+          <td data-label="Клиент">${escapeHtml(item.clientName)}</td>
+          <td data-label="Телефон">${escapeHtml(item.clientPhone)}</td>
+          <td data-label="Мастер">${escapeHtml(item.masterName || '—')}</td>
+          <td data-label="Стоимость">${escapeHtml(money(item.totalCost))}</td>
+          <td data-label="Оплата">${paymentBadge(item)}</td>
+          <td data-label="Срок">${deadlineBadge(item)}</td>
+          <td data-label="Гарантия">${warrantyBadge(item)}</td>
+          <td data-label="Дата">${escapeHtml(formatDate(item.createdAt))}</td>
+          <td data-label="Обновлен">${escapeHtml(formatDate(item.updatedAt))}</td>
           <td data-label="Действия">
-            <select class="actions-select" data-action="order-actions" data-id="${item.id}">
+            <select class="actions-select" data-action="order-actions" data-id="${safeId}">
               <option value="">Действия</option>
               <option value="edit">Изменить</option>
+              <option value="history">История статусов</option>
               <option value="acceptance">Печать акта приема</option>
               <option value="completed">Печать акта выполненных работ</option>
               <option value="warranty">Печать гарантии</option>
+              <option value="label">Печать наклейки / QR</option>
+              <option value="whatsapp">WhatsApp клиенту</option>
+              <option value="sms">SMS клиенту</option>
+              <option value="telegram">Telegram текст</option>
               <option value="delete">Удалить</option>
             </select>
           </td>
@@ -1142,39 +3489,207 @@
       tbody.querySelectorAll('.status-select').forEach(applyStatusSelectStyle);
     }
 
-    function setFormData(order = null) {
-      formFields.orderNumber.value = order?.orderNumber || '';
-      formFields.orderStatus.value = order?.status || 'new';
-      formFields.clientName.value = order?.clientName || '';
-      formFields.clientPhone.value = order?.clientPhone || '';
-      formFields.deviceType.value = order?.deviceType || '';
-      formFields.deviceModel.value = order?.deviceModel || '';
-      formFields.totalCost.value = order?.totalCost || '';
-      formFields.partsCost.value = order?.partsCost || '';
-      formFields.problemDescription.value = order?.problemDescription || '';
-      formFields.masterNotes.value = order?.masterNotes || '';
-      applyStatusSelectStyle(formFields.orderStatus);
+    function renderMasterOptions() {
+      const settings = getSettings();
+      const currentFilter = masterFilter.value;
+      const currentForm = formFields.masterName.value;
+      const currentTypeFilter = orderTypeFilter.value;
+      const currentTypeForm = formFields.orderType.value;
+      const currentPaymentForm = formFields.paymentMethod.value;
+      const options = settings.masters.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      const typeOptions = settings.orderTypes.map(type => `<option value="${escapeHtml(type.name)}">${escapeHtml(type.name)}</option>`).join('');
+      const paymentOptions = settings.paymentMethods.map(method => `<option value="${escapeHtml(method)}">${escapeHtml(method)}</option>`).join('');
+
+      masterFilter.innerHTML = `<option value="">Все мастера</option>${options}`;
+      formFields.masterName.innerHTML = `<option value="">Мастер не выбран</option>${options}`;
+      orderTypeFilter.innerHTML = `<option value="">Все типы заказов</option>${typeOptions}`;
+      formFields.orderType.innerHTML = `<option value="">Тип заказа</option>${typeOptions}`;
+      formFields.paymentMethod.innerHTML = `<option value="">Способ оплаты</option>${paymentOptions}`;
+      masterFilter.value = settings.masters.includes(currentFilter) ? currentFilter : '';
+      formFields.masterName.value = settings.masters.includes(currentForm) ? currentForm : '';
+      orderTypeFilter.value = settings.orderTypes.some(type => type.name === currentTypeFilter) ? currentTypeFilter : '';
+      formFields.orderType.value = settings.orderTypes.some(type => type.name === currentTypeForm) ? currentTypeForm : '';
+      formFields.paymentMethod.value = settings.paymentMethods.includes(currentPaymentForm) ? currentPaymentForm : '';
     }
 
-    function collectFormData() {
+    function renderPartOptions() {
+      const settings = getSettings();
+      const inventory = getInventory();
+      const partSelect = document.getElementById('partSelect');
+      const partCategoryInput = document.getElementById('partCategoryInput');
+      partSelect.innerHTML = '<option value="">Выберите деталь со склада</option>' + inventory
+        .map(part => `<option value="${escapeHtml(part.id)}">${escapeHtml(part.name)} · ${escapeHtml(part.category || 'Без категории')} · ${part.stock} шт. · ${escapeHtml(money(part.unitCost))}</option>`)
+        .join('');
+      if (partCategoryInput) {
+        const current = partCategoryInput.value;
+        partCategoryInput.innerHTML = '<option value="">Категория</option>' + settings.inventoryCategories.map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join('');
+        partCategoryInput.value = settings.inventoryCategories.includes(current) ? current : '';
+      }
+    }
+
+    function renderServiceOptions() {
+      const services = getServices();
+      const serviceSelect = document.getElementById('serviceSelect');
+      serviceSelect.innerHTML = '<option value="">Выберите услугу</option>' + services
+        .map(service => `<option value="${escapeHtml(service.id)}">${escapeHtml(service.name)} · ${escapeHtml(money(service.price))}</option>`)
+        .join('');
+    }
+
+    function renderPartsDraft() {
+      const list = document.getElementById('usedPartsList');
+      if (!partsDraft.length) {
+        list.innerHTML = '<div class="section-note">Запчасти не выбраны.</div>';
+        return;
+      }
+
+      list.innerHTML = partsDraft.map((part, index) => `
+        <div class="mini-row">
+          <div><b>${escapeHtml(part.name)}</b><br><span>${part.qty} шт. · ${escapeHtml(money(part.unitCost))}</span></div>
+          <span>${escapeHtml(money(part.qty * part.unitCost))}</span>
+          <button class="small-btn" type="button" data-remove-part="${index}">Убрать</button>
+        </div>
+      `).join('');
+    }
+
+    function syncPartsCostFromDraft() {
+      const sum = partsDraft.reduce((total, part) => total + Number(part.qty || 0) * Number(part.unitCost || 0), 0);
+      formFields.partsCost.value = sum ? String(roundMoney(sum)) : formFields.partsCost.value;
+    }
+
+    function renderServicesDraft() {
+      const list = document.getElementById('usedServicesList');
+      if (!servicesDraft.length) {
+        list.innerHTML = '<div class="section-note">Услуги не выбраны.</div>';
+        return;
+      }
+
+      list.innerHTML = servicesDraft.map((service, index) => `
+        <div class="mini-row">
+          <div><b>${escapeHtml(service.name)}</b><br><span>${service.qty} шт. · ${escapeHtml(money(service.price))}</span></div>
+          <span>${escapeHtml(money(service.qty * service.price))}</span>
+          <button class="small-btn" type="button" data-remove-service="${index}">Убрать</button>
+        </div>
+      `).join('');
+    }
+
+    function syncTotalsFromDrafts() {
+      const servicesTotal = servicesDraft.reduce((total, service) => total + Number(service.qty || 0) * Number(service.price || 0), 0);
+      const partsTotal = partsDraft.reduce((total, part) => total + Number(part.qty || 0) * Number(part.unitCost || 0), 0);
+      const discount = parseAmount(formFields.discountAmount.value);
+      formFields.partsCost.value = partsTotal ? String(roundMoney(partsTotal)) : formFields.partsCost.value;
+      if (servicesTotal || partsTotal || discount) {
+        formFields.totalCost.value = String(Math.max(0, roundMoney(servicesTotal + partsTotal - discount)));
+      }
+    }
+
+    function renderCustomFields(order = null) {
+      const container = document.getElementById('customFieldsContainer');
+      const panel = document.getElementById('customFieldsPanel');
+      const fields = getSettings().customOrderFields;
+      panel.style.display = fields.length ? 'block' : 'none';
+      container.innerHTML = fields.map(field => {
+        const value = order?.customFields?.[field.key] ?? '';
+        const required = field.required ? 'required' : '';
+        if (field.type === 'list') {
+          return `<select data-custom-field="${escapeHtml(field.key)}" ${required}><option value="">${escapeHtml(field.label)}</option>${(field.options || []).map(option => `<option value="${escapeHtml(option)}" ${value === option ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}</select>`;
+        }
+        if (field.type === 'checkbox') {
+          return `<label class="mini-panel"><input type="checkbox" data-custom-field="${escapeHtml(field.key)}" ${value ? 'checked' : ''}> ${escapeHtml(field.label)}</label>`;
+        }
+        return `<input type="${escapeHtml(field.type || 'text')}" data-custom-field="${escapeHtml(field.key)}" placeholder="${escapeHtml(field.label)}" value="${escapeHtml(value)}" ${required}>`;
+      }).join('');
+    }
+
+    function collectCustomFields() {
+      const values = {};
+      document.querySelectorAll('[data-custom-field]').forEach(field => {
+        values[field.dataset.customField] = field.type === 'checkbox' ? field.checked : field.value;
+      });
+      return values;
+    }
+
+    function setFormData(order = null) {
+      const settings = getSettings();
+      formFields.orderNumber.value = order?.orderNumber || '';
+      formFields.orderStatus.value = order?.status || 'new';
+      formFields.orderType.value = order?.orderType || settings.orderTypes[0]?.name || '';
+      formFields.deadlineAt.value = order?.deadlineAt || '';
+      formFields.clientName.value = order?.clientName || '';
+      formFields.clientPhone.value = order?.clientPhone || '';
+      formFields.clientSource.value = order?.clientSource || '';
+      formFields.deviceType.value = order?.deviceType || '';
+      formFields.deviceModel.value = order?.deviceModel || '';
+      formFields.masterName.value = order?.masterName || '';
+      formFields.warrantyDays.value = order?.warrantyDays || settings.defaultWarrantyDays || '';
+      formFields.totalCost.value = order?.totalCost || '';
+      formFields.partsCost.value = order?.partsCost || '';
+      formFields.paidAmount.value = order?.paidAmount || '';
+      formFields.discountAmount.value = order?.discountAmount || '';
+      formFields.paymentMethod.value = order?.paymentMethod || '';
+      formFields.warrantyUntil.value = order?.warrantyUntil || '';
+      formFields.problemDescription.value = order?.problemDescription || '';
+      formFields.completedWorks.value = order?.completedWorks || '';
+      formFields.masterNotes.value = order?.masterNotes || '';
+      formFields.taskNote.value = order?.taskNote || '';
+      partsDraft = Array.isArray(order?.partsUsed) ? order.partsUsed.map(migratePartUsage) : [];
+      servicesDraft = Array.isArray(order?.servicesUsed) ? order.servicesUsed.map(migrateServiceUsage) : [];
+      applyStatusSelectStyle(formFields.orderStatus);
+      renderCustomFields(order);
+      renderPartsDraft();
+      renderServicesDraft();
+    }
+
+    function collectFormData(oldOrder = null) {
+      const now = new Date().toISOString();
+      const createdAt = oldOrder?.createdAt || now;
+      const status = formFields.orderStatus.value;
+      const warrantyDays = formFields.warrantyDays.value.trim();
+      const warrantyUntil = formFields.warrantyUntil.value || (warrantyDays ? addDays(createdAt, warrantyDays) : '');
+      const statusHistory = Array.isArray(oldOrder?.statusHistory) ? [...oldOrder.statusHistory] : [];
+
+      if (!statusHistory.length) {
+        statusHistory.push({ status, at: createdAt, note: 'Создан' });
+      } else if (oldOrder && oldOrder.status !== status) {
+        statusHistory.push({ status, at: now, note: `Статус изменен на "${getStatusLabel(status)}"` });
+      }
+
       return {
-        id: editingId || String(Date.now()),
+        id: oldOrder?.id || editingId || makeOrderId(),
         orderNumber: formFields.orderNumber.value.trim() || generateOrderNumber(),
-        status: formFields.orderStatus.value,
+        orderType: formFields.orderType.value,
+        status,
+        deadlineAt: formFields.deadlineAt.value,
         clientName: formFields.clientName.value.trim(),
         clientPhone: formFields.clientPhone.value.trim(),
+        clientSource: formFields.clientSource.value.trim(),
         deviceType: formFields.deviceType.value.trim(),
         deviceModel: formFields.deviceModel.value.trim(),
+        masterName: formFields.masterName.value,
+        warrantyDays,
+        warrantyUntil,
         totalCost: formFields.totalCost.value.trim(),
         partsCost: formFields.partsCost.value.trim(),
+        paidAmount: formFields.paidAmount.value.trim(),
+        discountAmount: formFields.discountAmount.value.trim(),
+        paymentMethod: formFields.paymentMethod.value,
         problemDescription: formFields.problemDescription.value.trim(),
+        completedWorks: formFields.completedWorks.value.trim(),
         masterNotes: formFields.masterNotes.value.trim(),
-        createdAt: editingId ? (findOrderById(editingId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
+        taskNote: formFields.taskNote.value.trim(),
+        partsUsed: partsDraft.map(migratePartUsage),
+        servicesUsed: servicesDraft.map(migrateServiceUsage),
+        customFields: collectCustomFields(),
+        statusHistory,
+        createdAt,
+        updatedAt: now
       };
     }
 
     function openModal(order = null) {
       editingId = order ? order.id : null;
+      renderMasterOptions();
+      renderPartOptions();
+      renderServiceOptions();
       orderModalTitle.textContent = order ? 'Редактирование заказа' : 'Новый заказ';
       setFormData(order);
       orderModalOverlay.classList.add('open');
@@ -1184,28 +3699,398 @@
       orderModalOverlay.classList.remove('open');
       orderForm.reset();
       editingId = null;
+      partsDraft = [];
+      servicesDraft = [];
+      renderPartsDraft();
+      renderServicesDraft();
     }
 
     function findOrderById(id) {
       return getOrders().find(item => item.id === id);
     }
 
-    function escapeHtml(value) {
-      return String(value || '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;');
+    function summarizeParts(parts) {
+      if (!Array.isArray(parts) || !parts.length) return '—';
+      return parts.map(part => `${escapeHtml(part.name)} · ${escapeHtml(part.qty)} шт.`).join('<br>');
     }
 
-    function printDocument(title, bodyHtml) {
+    function summarizeServices(services) {
+      if (!Array.isArray(services) || !services.length) return '—';
+      return services.map(service => `${escapeHtml(service.name)} · ${escapeHtml(service.qty)} шт. · ${escapeHtml(money(service.price * service.qty))}`).join('<br>');
+    }
+
+    function partUsageMap(parts) {
+      const map = new Map();
+      (parts || []).forEach(part => {
+        const id = part.id;
+        if (!id) return;
+        map.set(id, (map.get(id) || 0) + Number(part.qty || 0));
+      });
+      return map;
+    }
+
+    function buildInventoryAfterUsage(oldParts, newParts) {
+      const inventory = getInventory();
+      const oldMap = partUsageMap(oldParts);
+      const newMap = partUsageMap(newParts);
+      const ids = new Set([...oldMap.keys(), ...newMap.keys()]);
+      const updated = inventory.map(part => ({ ...part }));
+
+      for (const id of ids) {
+        const part = updated.find(item => item.id === id);
+        if (!part) continue;
+        const oldQty = oldMap.get(id) || 0;
+        const newQty = newMap.get(id) || 0;
+        const available = part.stock + oldQty;
+
+        if (newQty > available) {
+          window.alert(`На складе недостаточно "${part.name}". Доступно: ${available} шт.`);
+          return null;
+        }
+
+        part.stock = Math.max(0, part.stock + oldQty - newQty);
+        part.updatedAt = new Date().toISOString();
+      }
+
+      return updated;
+    }
+
+    function renderInventory() {
+      const tbodyInventory = document.getElementById('inventoryTableBody');
+      const items = getInventory();
+
+      tbodyInventory.innerHTML = items.map(item => {
+        const low = item.minStock && item.stock <= item.minStock;
+        return `
+          <tr>
+            <td><b>${escapeHtml(item.name)}</b><br><span>${escapeHtml(item.sku || 'Без артикула')}</span></td>
+            <td>${escapeHtml(item.category || '—')}</td>
+            <td>${low ? '<span class="badge badge-bad">' : '<span class="badge badge-good">'}${item.stock} шт.</span></td>
+            <td>${escapeHtml(money(item.unitCost))}</td>
+            <td>${item.minStock || 0}</td>
+            <td>
+              <div class="inline-actions">
+                <button class="small-btn" type="button" data-edit-part="${escapeHtml(item.id)}">Изменить</button>
+                <button class="small-btn" type="button" data-delete-part="${escapeHtml(item.id)}">Удалить</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('') || '<tr><td colspan="6">Склад пока пуст.</td></tr>';
+    }
+
+    function setInventoryForm(part = null) {
+      editingPartId = part?.id || null;
+      document.getElementById('partNameInput').value = part?.name || '';
+      document.getElementById('partCategoryInput').value = part?.category || '';
+      document.getElementById('partSkuInput').value = part?.sku || '';
+      document.getElementById('partStockInput').value = part?.stock ?? '';
+      document.getElementById('partCostInput').value = part?.unitCost ?? '';
+      document.getElementById('partMinInput').value = part?.minStock ?? '';
+      document.getElementById('savePartBtn').textContent = part ? 'Обновить деталь' : 'Сохранить деталь';
+    }
+
+    function buildClients() {
+      const groups = new Map();
+      getOrders().forEach(order => {
+        const key = normalizePhone(order.clientPhone) || order.clientName || 'Без телефона';
+        if (!groups.has(key)) {
+          groups.set(key, {
+            key,
+            clientName: order.clientName,
+            clientPhone: order.clientPhone,
+            orders: [],
+            total: 0,
+            paid: 0,
+            debt: 0
+          });
+        }
+
+        const client = groups.get(key);
+        client.clientName = order.clientName || client.clientName;
+        client.clientPhone = order.clientPhone || client.clientPhone;
+        client.orders.push(order);
+        client.total += parseAmount(order.totalCost);
+        client.paid += parseAmount(order.paidAmount);
+        client.debt += getDebt(order);
+      });
+
+      return [...groups.values()].sort((a, b) => {
+        const lastA = Math.max(...a.orders.map(order => Date.parse(order.createdAt) || 0));
+        const lastB = Math.max(...b.orders.map(order => Date.parse(order.createdAt) || 0));
+        return lastB - lastA;
+      });
+    }
+
+    function renderClients() {
+      const list = document.getElementById('clientsList');
+      const query = (document.getElementById('clientSearchInput').value || '').trim().toLowerCase();
+      const clients = buildClients().filter(client => {
+        const haystack = `${client.clientName} ${client.clientPhone}`.toLowerCase();
+        return !query || haystack.includes(query);
+      });
+
+      list.innerHTML = clients.map(client => `
+        <div class="data-card">
+          <h4>${escapeHtml(client.clientName || 'Без имени')}</h4>
+          <p>${escapeHtml(client.clientPhone || 'Телефон не указан')} · заказов: ${client.orders.length} · сумма: ${escapeHtml(money(client.total))} · долг: ${escapeHtml(money(client.debt))}</p>
+          <div class="inline-actions" style="margin-bottom:10px;">
+            <button class="small-btn" type="button" data-new-order-client="${escapeHtml(client.key)}">Новый заказ этому клиенту</button>
+          </div>
+          <table class="simple-table">
+            <tbody>
+              ${client.orders.map(order => `
+                <tr>
+                  <td>№ ${escapeHtml(order.orderNumber)}</td>
+                  <td>${escapeHtml(order.deviceType)} ${escapeHtml(order.deviceModel)}</td>
+                  <td>${escapeHtml(getStatusLabel(order.status))}</td>
+                  <td>${escapeHtml(formatDate(order.createdAt))}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `).join('') || '<div class="section-note">Клиенты не найдены.</div>';
+    }
+
+    function renderHistory(order) {
+      document.getElementById('historyModalTitle').textContent = `История заказа № ${order.orderNumber}`;
+      document.getElementById('historyContent').innerHTML = (order.statusHistory || []).map(item => `
+        <div class="mini-row">
+          <div><b>${escapeHtml(getStatusLabel(item.status))}</b><br><span>${escapeHtml(item.note || '')}</span></div>
+          <span>${escapeHtml(formatDate(item.at))}</span>
+        </div>
+      `).join('') || '<div class="section-note">История пока пустая.</div>';
+      historyModalOverlay.classList.add('open');
+    }
+
+    function renderBackupInfo() {
+      const backups = getBackups();
+      const info = document.getElementById('backupInfo');
+      if (!info) return;
+      info.textContent = backups.length
+        ? `Последний автобэкап: ${formatDate(backups[0].createdAt)}. Хранится: ${backups.length}.`
+        : 'Пока нет автоматических бэкапов.';
+    }
+
+    function setFormValue(id, value = '') {
+      const element = document.getElementById(id);
+      if (element) element.value = value ?? '';
+    }
+
+    function getFormValue(id) {
+      return document.getElementById(id)?.value.trim() || '';
+    }
+
+    function fillSettingsForm() {
+      const settings = getSettings();
+      setFormValue('settingsServiceNameInput', settings.serviceName);
+      setFormValue('settingsServicePhoneInput', settings.servicePhone);
+      setFormValue('settingsServiceAddressInput', settings.serviceAddress);
+      setFormValue('companyEmailInput', settings.companyEmail);
+      setFormValue('companyLegalNameInput', settings.companyLegalName);
+      setFormValue('companyTaxIdInput', settings.companyTaxId);
+      setFormValue('currencySelect', settings.currency);
+      setFormValue('interfaceLanguageInput', settings.interfaceLanguage);
+      setFormValue('timezoneInput', settings.timezone);
+      setFormValue('dateFormatInput', settings.dateFormat);
+      setFormValue('timeFormatInput', settings.timeFormat);
+      setFormValue('orderPrefixInput', settings.orderPrefix);
+      setFormValue('orderStartNumberInput', settings.orderStartNumber);
+      setFormValue('defaultWarrantyDaysInput', settings.defaultWarrantyDays);
+      setFormValue('defaultDeadlineDaysInput', settings.defaultDeadlineDays);
+      setFormValue('defaultSalaryPercentInput', settings.defaultSalaryPercent);
+      setFormValue('orderTypesInput', formatOrderTypes(settings.orderTypes));
+      setFormValue('customOrderFieldsInput', formatCustomOrderFields(settings.customOrderFields));
+      setFormValue('cashRegistersInput', settings.cashRegisters.join('\n'));
+      setFormValue('paymentMethodsInput', settings.paymentMethods.join('\n'));
+      setFormValue('expenseCategoriesInput', settings.expenseCategories.join('\n'));
+      setFormValue('salaryModeInput', settings.salaryMode);
+      setFormValue('clientDebtLimitInput', settings.clientDebtLimit);
+      setFormValue('warehousesInput', settings.warehouses.join('\n'));
+      setFormValue('warehouseTypesInput', settings.warehouseTypes.join('\n'));
+      setFormValue('inventoryCategoriesInput', settings.inventoryCategories.join('\n'));
+      setFormValue('mastersInput', settings.masters.join('\n'));
+      setFormValue('rolesInput', settings.roles.join('\n'));
+      setFormValue('cashRegisterAccessInput', settings.cashRegisterAccess.join('\n'));
+      setFormValue('warehouseAccessInput', settings.warehouseAccess.join('\n'));
+      setFormValue('autoBackupInput', settings.autoBackupEnabled);
+      setFormValue('documentNumberingInput', settings.documentNumbering);
+      setFormValue('printFooterInput', settings.printFooter);
+      setFormValue('notificationTemplateInput', settings.notificationTemplate);
+      renderBackupInfo();
+    }
+
+    function openSettingsSection(sectionName = 'company') {
+      document.querySelectorAll('[data-settings-target]').forEach(button => {
+        button.classList.toggle('active', button.dataset.settingsTarget === sectionName);
+      });
+      document.querySelectorAll('[data-settings-section]').forEach(section => {
+        section.classList.toggle('active', section.dataset.settingsSection === sectionName);
+      });
+    }
+
+    function setServiceForm(service = null) {
+      editingServiceId = service?.id || null;
+      document.getElementById('serviceNameInput').value = service?.name || '';
+      document.getElementById('servicePriceInput').value = service?.price ?? '';
+      document.getElementById('serviceCostInput').value = service?.cost ?? '';
+      document.getElementById('serviceWarrantyInput').value = service?.warrantyDays ?? '';
+      document.getElementById('serviceRewardInput').value = service?.rewardPercent ?? '';
+      document.getElementById('saveServiceBtn').textContent = service ? 'Обновить услугу' : 'Сохранить услугу';
+    }
+
+    function renderServices() {
+      const list = document.getElementById('servicesList');
+      if (!list) return;
+      const services = getServices();
+      list.innerHTML = services.map(service => `
+        <div class="mini-row">
+          <div><b>${escapeHtml(service.name)}</b><br><span>Себестоимость: ${escapeHtml(money(service.cost))} · гарантия: ${escapeHtml(service.warrantyDays || '—')} дней · мастеру: ${escapeHtml(service.rewardPercent || getSettings().defaultSalaryPercent)}%</span></div>
+          <span>${escapeHtml(money(service.price))}</span>
+          <div class="inline-actions">
+            <button class="small-btn" type="button" data-edit-service="${escapeHtml(service.id)}">Изменить</button>
+            <button class="small-btn" type="button" data-delete-service="${escapeHtml(service.id)}">Удалить</button>
+          </div>
+        </div>
+      `).join('') || '<div class="section-note">Прайс услуг пока пуст.</div>';
+    }
+
+    function setTaskForm(task = null) {
+      editingTaskId = task?.id || null;
+      const settings = getSettings();
+      const orders = getOrders();
+      document.getElementById('taskTitleInput').value = task?.title || '';
+      document.getElementById('taskDueInput').value = task?.dueDate || '';
+      document.getElementById('taskNoteInput').value = task?.note || '';
+      document.getElementById('taskResponsibleInput').innerHTML = '<option value="">Ответственный</option>' + settings.masters.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      document.getElementById('taskOrderInput').innerHTML = '<option value="">Без заказа</option>' + orders.map(order => `<option value="${escapeHtml(order.id)}">№ ${escapeHtml(order.orderNumber)} · ${escapeHtml(order.clientName)}</option>`).join('');
+      document.getElementById('taskResponsibleInput').value = task?.responsible || '';
+      document.getElementById('taskOrderInput').value = task?.orderId || '';
+      document.getElementById('saveTaskBtn').textContent = task ? 'Обновить задачу' : 'Сохранить задачу';
+    }
+
+    function renderTasks() {
+      const list = document.getElementById('tasksList');
+      if (!list) return;
+      const orders = getOrders();
+      const orderDeadlines = orders
+        .filter(order => order.deadlineAt && !isClosedStatus(order.status))
+        .map(order => ({
+          title: `Заказ № ${order.orderNumber}: ${order.deviceType} ${order.deviceModel}`.trim(),
+          dueDate: order.deadlineAt,
+          responsible: order.masterName,
+          orderId: order.id,
+          note: order.taskNote || 'Контроль срока выполнения',
+          done: false,
+          virtual: true
+        }));
+      const tasks = [...getTasks(), ...orderDeadlines].sort((a, b) => String(a.done).localeCompare(String(b.done)) || String(a.dueDate).localeCompare(String(b.dueDate)));
+      list.innerHTML = tasks.map(task => {
+        const order = orders.find(item => item.id === task.orderId);
+        const overdue = task.dueDate && !task.done && task.dueDate < toDateInput(new Date().toISOString());
+        return `
+          <div class="mini-row">
+            <div><b>${escapeHtml(task.title)}</b><br><span>${escapeHtml(task.note || '')}${order ? ` · заказ № ${escapeHtml(order.orderNumber)}` : ''}</span></div>
+            <span class="badge ${task.done ? 'badge-good' : overdue ? 'badge-bad' : ''}">${task.done ? 'Готово' : escapeHtml(formatDateOnly(task.dueDate))}</span>
+            <div class="inline-actions">
+              ${task.virtual ? '' : `<button class="small-btn" type="button" data-toggle-task="${escapeHtml(task.id)}">${task.done ? 'Открыть' : 'Готово'}</button><button class="small-btn" type="button" data-edit-task="${escapeHtml(task.id)}">Изменить</button><button class="small-btn" type="button" data-delete-task="${escapeHtml(task.id)}">Удалить</button>`}
+            </div>
+          </div>
+        `;
+      }).join('') || '<div class="section-note">Задач пока нет.</div>';
+    }
+
+    function renderFinance() {
+      const summary = document.getElementById('financeSummary');
+      const expensesList = document.getElementById('expensesList');
+      if (!summary || !expensesList) return;
+      const orders = getOrders();
+      const expenses = getExpenses();
+      const revenue = orders.reduce((sum, order) => sum + parseAmount(order.paidAmount), 0);
+      const expenseTotal = expenses.reduce((sum, expense) => sum + parseAmount(expense.amount), 0);
+      const salaryMap = calculateSalaryByMaster();
+      const salaryTotal = [...salaryMap.values()].reduce((sum, value) => sum + value, 0);
+      const partsCost = orders.reduce((sum, order) => sum + parseAmount(order.partsCost), 0);
+      summary.innerHTML = `
+        <div class="data-card"><h4>Выручка</h4><p>${escapeHtml(money(revenue))}</p></div>
+        <div class="data-card"><h4>Расходы</h4><p>${escapeHtml(money(expenseTotal))}</p></div>
+        <div class="data-card"><h4>Себестоимость деталей</h4><p>${escapeHtml(money(partsCost))}</p></div>
+        <div class="data-card"><h4>Зарплата</h4><p>${escapeHtml(money(salaryTotal))}</p></div>
+      `;
+      expensesList.innerHTML = expenses.map(expense => `
+        <div class="mini-row">
+          <div><b>${escapeHtml(expense.title)}</b><br><span>${escapeHtml(expense.category || 'Без категории')} · ${escapeHtml(formatDateOnly(expense.date))} · ${escapeHtml(expense.note)}</span></div>
+          <span>${escapeHtml(money(expense.amount))}</span>
+          <button class="small-btn" type="button" data-delete-expense="${escapeHtml(expense.id)}">Удалить</button>
+        </div>
+      `).join('') || '<div class="section-note">Расходов пока нет.</div>';
+      const categorySelect = document.getElementById('expenseCategoryInput');
+      if (categorySelect) categorySelect.innerHTML = getSettings().expenseCategories.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
+    }
+
+    function setSupplierForm(supplier = null) {
+      editingSupplierId = supplier?.id || null;
+      document.getElementById('supplierNameInput').value = supplier?.name || '';
+      document.getElementById('supplierPhoneInput').value = supplier?.phone || '';
+      document.getElementById('supplierNoteInput').value = supplier?.note || '';
+      document.getElementById('saveSupplierBtn').textContent = supplier ? 'Обновить поставщика' : 'Сохранить поставщика';
+    }
+
+    function renderSuppliers() {
+      const list = document.getElementById('suppliersList');
+      if (!list) return;
+      const suppliers = getSuppliers();
+      const inventory = getInventory();
+      document.getElementById('receiptSupplierInput').innerHTML = '<option value="">Поставщик</option>' + suppliers.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join('');
+      document.getElementById('receiptPartInput').innerHTML = '<option value="">Деталь</option>' + inventory.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)} · ${item.stock} шт.</option>`).join('');
+      list.innerHTML = suppliers.map(supplier => `
+        <div class="mini-row">
+          <div><b>${escapeHtml(supplier.name)}</b><br><span>${escapeHtml(supplier.phone || 'Телефон не указан')} · ${escapeHtml(supplier.note)}</span></div>
+          <span>${escapeHtml(formatDateOnly(supplier.createdAt))}</span>
+          <div class="inline-actions">
+            <button class="small-btn" type="button" data-edit-supplier="${escapeHtml(supplier.id)}">Изменить</button>
+            <button class="small-btn" type="button" data-delete-supplier="${escapeHtml(supplier.id)}">Удалить</button>
+          </div>
+        </div>
+      `).join('') || '<div class="section-note">Поставщиков пока нет.</div>';
+    }
+
+    function renderActivity() {
+      const list = document.getElementById('activityList');
+      if (!list) return;
+      list.innerHTML = getActivity().map(item => `
+        <div class="mini-row">
+          <div><b>${escapeHtml(item.action)}</b><br><span>${escapeHtml(item.detail || '')}</span></div>
+          <span>${escapeHtml(formatDate(item.at))}</span>
+        </div>
+      `).join('') || '<div class="section-note">Журнал пока пуст.</div>';
+    }
+
+    function renderAll() {
+      renderMasterOptions();
+      renderPartOptions();
+      renderServiceOptions();
+      renderOrders();
+      renderInventory();
+      renderServices();
+      renderTasks();
+      renderFinance();
+      renderSuppliers();
+      renderActivity();
+      renderBackupInfo();
+    }
+
+    function printDocument(title, bodyHtml, extraCss = '') {
       const printWindow = window.open('', '_blank', 'width=1000,height=900');
       if (!printWindow) return;
+      const settings = getSettings();
+      const footerHtml = settings.printFooter ? `<div class="doc-footer">${escapeHtml(settings.printFooter)}</div>` : '';
       printWindow.document.write(`
         <html lang="ru">
           <head>
             <meta charset="UTF-8">
-            <title>${title}</title>
+            <title>${escapeHtml(title)}</title>
             <style>
               @page{size:A4;margin:14mm}
               body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0}
@@ -1225,10 +4110,14 @@
               .sign-line{margin-top:36px;border-top:1px solid #111;padding-top:6px;font-size:13px}
               .small{font-size:12px;color:#444;line-height:1.5}
               .notice{border:1px dashed #555;border-radius:8px;padding:12px;margin-top:16px;font-size:13px;line-height:1.6}
+              .doc-footer{margin-top:20px;padding-top:10px;border-top:1px solid #ddd;font-size:12px;color:#555;line-height:1.5}
+              .label-card{width:92mm;min-height:48mm;border:1px solid #111;padding:8mm;display:grid;grid-template-columns:1fr 34mm;gap:6mm;align-items:center}
+              .qr{width:34mm;height:34mm}
+              ${extraCss}
             </style>
           </head>
           <body>
-            <div class="doc">${bodyHtml}</div>
+            <div class="doc">${bodyHtml}${footerHtml}</div>
           </body>
         </html>
       `);
@@ -1238,14 +4127,21 @@
     }
 
     function documentHeader(docTitle, order) {
+      const settings = getSettings();
+      const legalRows = [
+        settings.companyLegalName ? `Юр.: ${escapeHtml(settings.companyLegalName)}` : '',
+        settings.companyTaxId ? `ИНН: ${escapeHtml(settings.companyTaxId)}` : '',
+        settings.companyEmail ? `Email: ${escapeHtml(settings.companyEmail)}` : ''
+      ].filter(Boolean).join('<br>');
       return `
         <div class="head">
           <div>
-            <div class="brand">1ONE service</div>
+            <div class="brand">${escapeHtml(settings.serviceName)}</div>
             <div class="sub">
               Сервисный центр<br>
-              Тел.: +380509906265<br>
-              Адрес: Харьков, ул. Харьковских Дивизий, 14/2
+              Тел.: ${escapeHtml(settings.servicePhone)}<br>
+              Адрес: ${escapeHtml(settings.serviceAddress)}
+              ${legalRows ? `<br>${legalRows}` : ''}
             </div>
           </div>
           <div class="sub" style="text-align:right">
@@ -1253,7 +4149,7 @@
             Дата: ${escapeHtml(formatDate(order.createdAt))}
           </div>
         </div>
-        <h1>${docTitle}</h1>
+        <h1>${escapeHtml(docTitle)}</h1>
       `;
     }
 
@@ -1265,6 +4161,8 @@
           <div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>
           <div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div>
           <div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>
+          <div class="field"><div class="label">Мастер</div><div class="value">${escapeHtml(order.masterName || '—')}</div></div>
+          <div class="field"><div class="label">Тип / срок</div><div class="value">${escapeHtml(order.orderType || '—')} · ${escapeHtml(formatDateOnly(order.deadlineAt))}</div></div>
         </div>
         <div class="field full"><div class="label">Заявленная неисправность</div><div class="value">${escapeHtml(order.problemDescription)}</div></div>
         <div class="field full"><div class="label">Комментарий / комплектация / внешний вид</div><div class="value">${escapeHtml(order.masterNotes || 'Без дополнительных комментариев')}</div></div>
@@ -1289,25 +4187,18 @@
           <div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>
         </div>
         <div class="field full"><div class="label">Неисправность</div><div class="value">${escapeHtml(order.problemDescription)}</div></div>
+        <div class="field full"><div class="label">Выполненные работы</div><div class="value">${escapeHtml(order.completedWorks || order.masterNotes || 'Работы выполнены согласно заказу.')}</div></div>
         <table>
-          <thead>
-            <tr>
-              <th>Наименование</th>
-              <th>Сумма</th>
-            </tr>
-          </thead>
           <tbody>
-            <tr>
-              <td>Стоимость деталей</td>
-              <td>${escapeHtml(money(order.partsCost))}</td>
-            </tr>
-            <tr>
-              <td>Общая стоимость заказа</td>
-              <td>${escapeHtml(money(order.totalCost))}</td>
-            </tr>
+            <tr><td>Услуги</td><td>${summarizeServices(order.servicesUsed)}</td></tr>
+            <tr><td>Использованные детали</td><td>${summarizeParts(order.partsUsed)}</td></tr>
+            <tr><td>Стоимость деталей</td><td>${escapeHtml(money(order.partsCost))}</td></tr>
+            <tr><td>Скидка</td><td>${escapeHtml(money(order.discountAmount))}</td></tr>
+            <tr><td>Общая стоимость заказа</td><td>${escapeHtml(money(order.totalCost))}</td></tr>
+            <tr><td>Оплачено</td><td>${escapeHtml(money(order.paidAmount))}</td></tr>
+            <tr><td>Долг</td><td>${escapeHtml(money(getDebt(order)))}</td></tr>
           </tbody>
         </table>
-        <div class="field full" style="margin-top:12px"><div class="label">Комментарий мастера</div><div class="value">${escapeHtml(order.masterNotes || 'Работы выполнены согласно заказу.')}</div></div>
         <div class="notice">
           Клиент подтверждает, что устройство получено, качество выполненных работ проверено, претензий на момент выдачи не имеет.
         </div>
@@ -1326,24 +4217,41 @@
           <div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>
           <div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div>
           <div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>
+          <div class="field"><div class="label">Срок гарантии</div><div class="value">${escapeHtml(order.warrantyDays || '—')} дней</div></div>
+          <div class="field"><div class="label">Гарантия до</div><div class="value">${escapeHtml(formatDateOnly(order.warrantyUntil))}</div></div>
         </div>
-        <div class="field full"><div class="label">Выполненные работы / неисправность</div><div class="value">${escapeHtml(order.problemDescription)}</div></div>
+        <div class="field full"><div class="label">Выполненные работы / неисправность</div><div class="value">${escapeHtml(order.completedWorks || order.problemDescription)}</div></div>
         <div class="field full"><div class="label">Стоимость заказа</div><div class="value">${escapeHtml(money(order.totalCost))}</div></div>
         <div class="notice">
           Гарантия предоставляется на выполненные работы и установленные детали при соблюдении правил эксплуатации.
           Гарантия не распространяется на механические повреждения, попадание влаги, следы самостоятельного вскрытия,
           скачки напряжения, программные сбои, возникшие после ремонта по внешним причинам, и иные повреждения,
-          не связанные напрямую с выполненными работами. Срок гарантии мастер вписывает при выдаче устройства.
+          не связанные напрямую с выполненными работами.
         </div>
         <div class="signatures">
+          <div class="sign-line">Подпись мастера</div>
+          <div class="sign-line">Подпись клиента</div>
+        </div>
+      `;
+    }
+
+    function renderLabel(order) {
+      const settings = getSettings();
+      const qrText = `${settings.serviceName}; заказ ${order.orderNumber}; ${order.clientName}; ${order.clientPhone}; ${order.deviceType} ${order.deviceModel}`;
+      const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(qrText)}`;
+      return `
+        <div class="label-card">
           <div>
-            <div class="small">Срок гарантии: _______________________</div>
-            <div class="sign-line">Подпись мастера</div>
+            <div class="brand">${escapeHtml(settings.serviceName)}</div>
+            <h1 style="text-align:left;margin:8px 0;">№ ${escapeHtml(order.orderNumber)}</h1>
+            <div class="small">
+              ${escapeHtml(order.clientName)}<br>
+              ${escapeHtml(order.clientPhone)}<br>
+              ${escapeHtml(order.deviceType)} ${escapeHtml(order.deviceModel)}<br>
+              ${escapeHtml(getStatusLabel(order.status))}
+            </div>
           </div>
-          <div>
-            <div class="small">С документом ознакомлен</div>
-            <div class="sign-line">Подпись клиента</div>
-          </div>
+          <img class="qr" src="${escapeHtml(qrSrc)}" alt="QR">
         </div>
       `;
     }
@@ -1360,22 +4268,376 @@
       printDocument(`Гарантия № ${order.orderNumber}`, renderWarranty(order));
     }
 
+    function printLabel(order) {
+      printDocument(`Наклейка № ${order.orderNumber}`, renderLabel(order), '@page{size:100mm 60mm;margin:4mm}.doc{max-width:none}');
+    }
+
+    function buildNotificationText(order) {
+      const settings = getSettings();
+      return settings.notificationTemplate
+        .replaceAll('{client}', order.clientName || 'клиент')
+        .replaceAll('{order}', order.orderNumber || '')
+        .replaceAll('{status}', getStatusLabel(order.status))
+        .replaceAll('{device}', `${order.deviceType || ''} ${order.deviceModel || ''}`.trim())
+        .replaceAll('{cost}', money(order.totalCost))
+        .replaceAll('{service}', settings.serviceName)
+        .replaceAll('{phone}', settings.servicePhone);
+    }
+
+    function openNotification(order, channel) {
+      const text = buildNotificationText(order);
+      const phone = normalizePhone(order.clientPhone);
+
+      if (channel === 'whatsapp') {
+        if (!phone) return window.alert('У клиента не указан телефон.');
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+      } else if (channel === 'sms') {
+        if (!phone) return window.alert('У клиента не указан телефон.');
+        window.location.href = `sms:+${phone}?body=${encodeURIComponent(text)}`;
+      } else {
+        window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+      }
+    }
+
+    function downloadText(filename, text, type = 'application/json') {
+      const blob = new Blob([text], { type });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+    }
+
+    function exportJson() {
+      const data = {
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        settings: getSettings(),
+        orders: getOrders(),
+        inventory: getInventory(),
+        services: getServices(),
+        expenses: getExpenses(),
+        tasks: getTasks(),
+        suppliers: getSuppliers(),
+        activity: getActivity(),
+        backups: getBackups()
+      };
+      downloadText(`one-service-crm-${toDateInput(new Date().toISOString())}.json`, JSON.stringify(data, null, 2));
+    }
+
+    function csvCell(value) {
+      return `"${String(value ?? '').replaceAll('"', '""')}"`;
+    }
+
+    function exportCsv() {
+      const rows = [
+        ['Номер', 'Тип', 'Статус', 'Клиент', 'Телефон', 'Техника', 'Модель', 'Мастер', 'Сумма', 'Оплачено', 'Долг', 'Срок', 'Дата']
+      ];
+      getOrders().forEach(order => {
+        rows.push([
+          order.orderNumber,
+          order.orderType,
+          getStatusLabel(order.status),
+          order.clientName,
+          order.clientPhone,
+          order.deviceType,
+          order.deviceModel,
+          order.masterName,
+          parseAmount(order.totalCost),
+          parseAmount(order.paidAmount),
+          getDebt(order),
+          formatDateOnly(order.deadlineAt),
+          formatDate(order.createdAt)
+        ]);
+      });
+      downloadText(`one-service-orders-${toDateInput(new Date().toISOString())}.csv`, rows.map(row => row.map(csvCell).join(';')).join('\n'), 'text/csv;charset=utf-8');
+    }
+
+    function downloadBackup(backup = createBackup('manual')) {
+      downloadText(`one-service-backup-${toDateInput(backup.createdAt)}.json`, JSON.stringify(backup, null, 2));
+    }
+
+    function importData(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!window.confirm('Импорт заменит текущие заказы, склад и настройки. Продолжить?')) return;
+
+          const orders = Array.isArray(data) ? data : data.orders;
+          const inventory = Array.isArray(data.inventory) ? data.inventory : getInventory();
+          const settings = data.settings && typeof data.settings === 'object' ? data.settings : getSettings();
+
+          if (!Array.isArray(orders)) throw new Error('orders missing');
+
+          setJson(SETTINGS_KEY, { ...getSettings(), ...settings });
+          setJson(INVENTORY_KEY, inventory.map(migrateInventoryItem));
+          setJson(SERVICES_KEY, Array.isArray(data.services) ? data.services.map(migrateService) : getServices());
+          setJson(EXPENSES_KEY, Array.isArray(data.expenses) ? data.expenses.map(migrateExpense) : getExpenses());
+          setJson(TASKS_KEY, Array.isArray(data.tasks) ? data.tasks.map(migrateTask) : getTasks());
+          setJson(SUPPLIERS_KEY, Array.isArray(data.suppliers) ? data.suppliers.map(migrateSupplier) : getSuppliers());
+          setJson(ACTIVITY_KEY, Array.isArray(data.activity) ? data.activity : getActivity());
+          saveOrders(orders.map(migrateOrder), { backup: false });
+          logActivity('Импорт', 'Импортированы данные CRM');
+          createBackup('manual');
+          renderAll();
+          window.alert('Импорт завершен.');
+        } catch (error) {
+          window.alert('Не удалось импортировать JSON. Проверьте файл.');
+        } finally {
+          importFileInput.value = '';
+        }
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
+    function seedInitialData() {
+      if (!getInventory().length) {
+        saveInventory([
+          { id: 'part1', name: 'LED подсветка TV', category: 'Подсветка', sku: 'TV-BL-55', stock: 4, unitCost: 1800, minStock: 1 },
+          { id: 'part2', name: 'Дисплей iPhone 13', category: 'Дисплеи', sku: 'IP13-DISP', stock: 2, unitCost: 0, minStock: 1 }
+        ], { backup: false });
+      }
+
+      if (!getServices().length) {
+        saveServices([
+          { id: 'srv1', name: 'Диагностика', price: 300, cost: 0, warrantyDays: '0', rewardPercent: '30' },
+          { id: 'srv2', name: 'Замена подсветки телевизора', price: 2700, cost: 0, warrantyDays: '30', rewardPercent: '20' },
+          { id: 'srv3', name: 'Замена дисплея телефона', price: 1200, cost: 0, warrantyDays: '30', rewardPercent: '20' }
+        ], { backup: false });
+      }
+
+      if (!getSuppliers().length) {
+        saveSuppliers([
+          { id: 'sup1', name: 'Основной поставщик', phone: '', note: 'Поставщик по умолчанию' }
+        ], { backup: false });
+      }
+
+      if (!getOrders().length) {
+        saveOrders([
+          {
+            id: 'seed1',
+            orderNumber: '1001',
+            orderType: 'Платный ремонт',
+            status: 'in_progress',
+            deadlineAt: addDays(new Date(Date.now() - 86400000).toISOString(), 3),
+            deviceType: 'Телевизор',
+            deviceModel: 'Samsung UE55TU7090',
+            clientName: 'Виктор Петров',
+            clientPhone: '+380501112233',
+            masterName: 'Алексей',
+            problemDescription: 'Нет изображения, звук есть',
+            completedWorks: '',
+            masterNotes: 'Проверить подсветку и блок питания',
+            totalCost: '4500',
+            partsCost: '1800',
+            paidAmount: '1000',
+            discountAmount: '',
+            warrantyDays: '30',
+            warrantyUntil: addDays(new Date(Date.now() - 86400000).toISOString(), 30),
+            createdAt: new Date(Date.now() - 86400000).toISOString()
+          },
+          {
+            id: 'seed2',
+            orderNumber: '1002',
+            orderType: 'Платный ремонт',
+            status: 'new',
+            deadlineAt: addDays(new Date().toISOString(), 3),
+            deviceType: 'Телефон',
+            deviceModel: 'iPhone 13',
+            clientName: 'Максим Коваленко',
+            clientPhone: '+380509998877',
+            masterName: 'Дмитрий',
+            problemDescription: 'Разбит экран',
+            masterNotes: 'Согласовать стоимость дисплея',
+            totalCost: '',
+            partsCost: '',
+            paidAmount: '',
+            discountAmount: '',
+            warrantyDays: '30',
+            createdAt: new Date().toISOString()
+          }
+        ], { backup: false });
+      }
+    }
+
+    authForm.addEventListener('submit', event => {
+      event.preventDefault();
+      clearAuthError();
+
+      if (authLogin.value.trim() !== AUTH_LOGIN) {
+        showAuthError('Неверный логин');
+        authLogin.focus();
+        return;
+      }
+
+      if (authPassword.value !== AUTH_PASSWORD) {
+        showAuthError('Неверный пароль');
+        authPassword.focus();
+        authPassword.select();
+        return;
+      }
+
+      setStorageItem(AUTH_STORAGE_KEY, '1');
+      authPassword.value = '';
+      showApp();
+    });
+
+    authLogin.addEventListener('input', clearAuthError);
+    authPassword.addEventListener('input', clearAuthError);
+    sidebarToggleBtn.addEventListener('click', () => {
+      setSidebarCollapsed(!appShell.classList.contains('sidebar-collapsed'));
+    });
     document.getElementById('createOrderBtn').addEventListener('click', () => openModal());
     document.getElementById('floatingCreateBtn').addEventListener('click', () => openModal());
     document.getElementById('closeOrderModal').addEventListener('click', closeModal);
     document.getElementById('cancelOrderBtn').addEventListener('click', closeModal);
-    document.getElementById('backToSiteBtn').addEventListener('click', () => {
-      window.location.href = '/index.html';
+    document.getElementById('clientsBtn').addEventListener('click', () => {
+      renderClients();
+      clientsModalOverlay.classList.add('open');
+    });
+    document.getElementById('inventoryBtn').addEventListener('click', () => {
+      setInventoryForm();
+      renderInventory();
+      inventoryModalOverlay.classList.add('open');
+    });
+    document.getElementById('servicesBtn').addEventListener('click', () => {
+      setServiceForm();
+      renderServices();
+      servicesModalOverlay.classList.add('open');
+    });
+    document.getElementById('tasksBtn').addEventListener('click', () => {
+      setTaskForm();
+      renderTasks();
+      tasksModalOverlay.classList.add('open');
+    });
+    document.getElementById('financeBtn').addEventListener('click', () => {
+      document.getElementById('expenseDateInput').value = toDateInput(new Date().toISOString());
+      renderFinance();
+      financeModalOverlay.classList.add('open');
+    });
+    document.getElementById('reportsBtn').addEventListener('click', () => {
+      updateStats(getOrders());
+      reportsModalOverlay.classList.add('open');
+    });
+    document.getElementById('suppliersBtn').addEventListener('click', () => {
+      setSupplierForm();
+      renderSuppliers();
+      suppliersModalOverlay.classList.add('open');
+    });
+    document.getElementById('activityBtn').addEventListener('click', () => {
+      renderActivity();
+      activityModalOverlay.classList.add('open');
+    });
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+      fillSettingsForm();
+      openSettingsSection('company');
+      settingsModalOverlay.classList.add('open');
+    });
+    document.querySelectorAll('[data-settings-target]').forEach(button => {
+      button.addEventListener('click', () => openSettingsSection(button.dataset.settingsTarget));
+    });
+    document.getElementById('exportJsonBtn').addEventListener('click', exportJson);
+    document.getElementById('importDataBtn').addEventListener('click', () => importFileInput.click());
+    document.getElementById('exportCsvBtn').addEventListener('click', exportCsv);
+    document.getElementById('downloadBackupBtn').addEventListener('click', () => downloadBackup(createBackup('manual')));
+    document.getElementById('downloadLastBackupBtn').addEventListener('click', () => {
+      const backup = getBackups()[0];
+      if (!backup) return window.alert('Бэкапов пока нет.');
+      downloadBackup(backup);
+    });
+    document.getElementById('closeClientsModal').addEventListener('click', () => clientsModalOverlay.classList.remove('open'));
+    document.getElementById('closeInventoryModal').addEventListener('click', () => inventoryModalOverlay.classList.remove('open'));
+    document.getElementById('closeSettingsModal').addEventListener('click', () => settingsModalOverlay.classList.remove('open'));
+    document.getElementById('closeHistoryModal').addEventListener('click', () => historyModalOverlay.classList.remove('open'));
+    document.getElementById('closeReportsModal').addEventListener('click', () => reportsModalOverlay.classList.remove('open'));
+    document.getElementById('closeServicesModal').addEventListener('click', () => servicesModalOverlay.classList.remove('open'));
+    document.getElementById('closeTasksModal').addEventListener('click', () => tasksModalOverlay.classList.remove('open'));
+    document.getElementById('closeFinanceModal').addEventListener('click', () => financeModalOverlay.classList.remove('open'));
+    document.getElementById('closeSuppliersModal').addEventListener('click', () => suppliersModalOverlay.classList.remove('open'));
+    document.getElementById('closeActivityModal').addEventListener('click', () => activityModalOverlay.classList.remove('open'));
+
+    [orderModalOverlay, clientsModalOverlay, inventoryModalOverlay, settingsModalOverlay, historyModalOverlay, reportsModalOverlay, servicesModalOverlay, tasksModalOverlay, financeModalOverlay, suppliersModalOverlay, activityModalOverlay].forEach(overlay => {
+      overlay.addEventListener('click', event => {
+        if (event.target === overlay) overlay.classList.remove('open');
+      });
     });
 
-    orderModalOverlay.addEventListener('click', event => {
-      if (event.target === orderModalOverlay) closeModal();
+    [searchInput, statusFilter, sortSelect, orderTypeFilter, masterFilter, paymentFilter, dateFromFilter, dateToFilter, minCostFilter, deadlineFilter].forEach(control => {
+      control.addEventListener('input', renderOrders);
+      control.addEventListener('change', renderOrders);
     });
 
-    searchInput.addEventListener('input', renderOrders);
-    statusFilter.addEventListener('change', renderOrders);
-    sortSelect.addEventListener('change', renderOrders);
     formFields.orderStatus.addEventListener('change', () => applyStatusSelectStyle(formFields.orderStatus));
+    formFields.orderType.addEventListener('change', () => {
+      const type = getSettings().orderTypes.find(item => item.name === formFields.orderType.value);
+      if (!type) return;
+      if (type.initialStatus && !editingId) {
+        formFields.orderStatus.value = type.initialStatus;
+        applyStatusSelectStyle(formFields.orderStatus);
+      }
+      if (type.warrantyDays && !formFields.warrantyDays.value) formFields.warrantyDays.value = type.warrantyDays;
+      if (type.deadlineDays && !formFields.deadlineAt.value) formFields.deadlineAt.value = addDays(new Date().toISOString(), type.deadlineDays);
+    });
+    formFields.warrantyDays.addEventListener('input', () => {
+      if (!formFields.warrantyUntil.value && formFields.warrantyDays.value) {
+        formFields.warrantyUntil.value = addDays(new Date().toISOString(), formFields.warrantyDays.value);
+      }
+    });
+    formFields.discountAmount.addEventListener('input', syncTotalsFromDrafts);
+
+    document.getElementById('addServiceBtn').addEventListener('click', () => {
+      const serviceId = document.getElementById('serviceSelect').value;
+      const qty = Math.max(1, Number(document.getElementById('serviceQty').value || 1));
+      const service = getServices().find(item => item.id === serviceId);
+      if (!service) return;
+
+      const existing = servicesDraft.find(item => item.id === service.id);
+      if (existing) existing.qty += qty;
+      else servicesDraft.push({ id: service.id, name: service.name, qty, price: service.price, cost: service.cost, warrantyDays: service.warrantyDays, rewardPercent: service.rewardPercent });
+
+      if (service.warrantyDays && !formFields.warrantyDays.value) {
+        formFields.warrantyDays.value = service.warrantyDays;
+        formFields.warrantyUntil.value = addDays(new Date().toISOString(), service.warrantyDays);
+      }
+      syncTotalsFromDrafts();
+      renderServicesDraft();
+    });
+
+    document.getElementById('usedServicesList').addEventListener('click', event => {
+      const button = event.target.closest('[data-remove-service]');
+      if (!button) return;
+      servicesDraft.splice(Number(button.dataset.removeService), 1);
+      syncTotalsFromDrafts();
+      renderServicesDraft();
+    });
+
+    document.getElementById('addPartBtn').addEventListener('click', () => {
+      const partId = document.getElementById('partSelect').value;
+      const qty = Math.max(1, Number(document.getElementById('partQty').value || 1));
+      const part = getInventory().find(item => item.id === partId);
+      if (!part) return;
+
+      const existing = partsDraft.find(item => item.id === part.id);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        partsDraft.push({ id: part.id, name: part.name, qty, unitCost: part.unitCost });
+      }
+      syncTotalsFromDrafts();
+      renderPartsDraft();
+    });
+
+    document.getElementById('usedPartsList').addEventListener('click', event => {
+      const button = event.target.closest('[data-remove-part]');
+      if (!button) return;
+      partsDraft.splice(Number(button.dataset.removePart), 1);
+      syncTotalsFromDrafts();
+      renderPartsDraft();
+    });
 
     tbody.addEventListener('change', event => {
       const statusSelect = event.target.closest('select[data-action="change-status"]');
@@ -1384,10 +4646,18 @@
         const orders = getOrders();
         const index = orders.findIndex(item => item.id === id);
         if (index === -1) return;
-        orders[index].status = statusSelect.value;
-        saveOrders(orders);
-        applyStatusSelectStyle(statusSelect);
-        renderOrders();
+        const newStatus = statusSelect.value;
+        if (orders[index].status !== newStatus) {
+          orders[index].status = newStatus;
+          orders[index].statusHistory = [...(orders[index].statusHistory || []), {
+            status: newStatus,
+            at: new Date().toISOString(),
+            note: `Статус изменен на "${getStatusLabel(newStatus)}"`
+          }];
+          orders[index].updatedAt = new Date().toISOString();
+          logActivity('Статус заказа', `№ ${orders[index].orderNumber}: ${getStatusLabel(newStatus)}`);
+        }
+        if (saveOrders(orders)) renderAll();
         return;
       }
 
@@ -1397,46 +4667,35 @@
       const action = actionSelect.value;
       const id = actionSelect.dataset.id;
       const order = findOrderById(id);
-
-      if (!action || !order) {
-        actionSelect.value = '';
-        return;
-      }
-
-      if (action === 'edit') {
-        openModal(order);
-      } else if (action === 'acceptance') {
-        printAcceptanceAct(order);
-      } else if (action === 'completed') {
-        printCompletedAct(order);
-      } else if (action === 'warranty') {
-        printWarranty(order);
-      } else if (action === 'delete') {
-        const orders = getOrders().filter(item => item.id !== id);
-        saveOrders(orders);
-        renderOrders();
-      }
-
       actionSelect.value = '';
+      if (!action || !order) return;
+
+      if (action === 'edit') openModal(order);
+      if (action === 'history') renderHistory(order);
+      if (action === 'acceptance') printAcceptanceAct(order);
+      if (action === 'completed') printCompletedAct(order);
+      if (action === 'warranty') printWarranty(order);
+      if (action === 'label') printLabel(order);
+      if (['whatsapp', 'sms', 'telegram'].includes(action)) openNotification(order, action);
+      if (action === 'delete') {
+        if (!window.confirm(`Удалить заказ № ${order.orderNumber || ''}?`)) return;
+        const orders = getOrders().filter(item => item.id !== id);
+        if (saveOrders(orders)) renderAll();
+      }
     });
 
-    document.getElementById('printAcceptanceBtn').addEventListener('click', () => {
-      printAcceptanceAct(collectFormData());
-    });
-
-    document.getElementById('printCompletedBtn').addEventListener('click', () => {
-      printCompletedAct(collectFormData());
-    });
-
-    document.getElementById('printWarrantyBtn').addEventListener('click', () => {
-      printWarranty(collectFormData());
-    });
+    document.getElementById('printAcceptanceBtn').addEventListener('click', () => printAcceptanceAct(collectFormData(findOrderById(editingId))));
+    document.getElementById('printCompletedBtn').addEventListener('click', () => printCompletedAct(collectFormData(findOrderById(editingId))));
+    document.getElementById('printWarrantyBtn').addEventListener('click', () => printWarranty(collectFormData(findOrderById(editingId))));
+    document.getElementById('printLabelBtn').addEventListener('click', () => printLabel(collectFormData(findOrderById(editingId))));
 
     orderForm.addEventListener('submit', event => {
       event.preventDefault();
-
       const orders = getOrders();
-      const payload = collectFormData();
+      const oldOrder = editingId ? orders.find(item => item.id === editingId) : null;
+      const payload = collectFormData(oldOrder);
+      const updatedInventory = buildInventoryAfterUsage(oldOrder?.partsUsed || [], payload.partsUsed);
+      if (!updatedInventory) return;
 
       const index = orders.findIndex(item => item.id === payload.id);
       if (index >= 0) {
@@ -1445,47 +4704,315 @@
         orders.unshift(payload);
       }
 
-      saveOrders(orders);
-      closeModal();
-      renderOrders();
+      if (saveOrders(orders, { backup: false }) && saveInventory(updatedInventory, { backup: false })) {
+        logActivity('Заказ', `${oldOrder ? 'Обновлен' : 'Создан'} заказ № ${payload.orderNumber}`);
+        if (payload.taskNote && payload.deadlineAt) {
+          const tasks = getTasks();
+          const existingTask = tasks.find(task => task.orderId === payload.id && task.title === `Заказ № ${payload.orderNumber}`);
+          const taskPayload = migrateTask({
+            ...(existingTask || {}),
+            id: existingTask?.id || makeOrderId(),
+            title: `Заказ № ${payload.orderNumber}`,
+            dueDate: payload.deadlineAt,
+            responsible: payload.masterName,
+            orderId: payload.id,
+            note: payload.taskNote,
+            done: existingTask?.done || false,
+            updatedAt: new Date().toISOString()
+          });
+          const taskIndex = tasks.findIndex(task => task.id === taskPayload.id);
+          if (taskIndex >= 0) tasks[taskIndex] = taskPayload;
+          else tasks.unshift(taskPayload);
+          saveTasks(tasks, { backup: false });
+        }
+        createAutoBackup();
+        closeModal();
+        renderAll();
+      }
     });
 
-    applyStatusSelectStyle(formFields.orderStatus);
+    document.getElementById('inventoryForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const items = getInventory();
+      const payload = migrateInventoryItem({
+        id: editingPartId || makeOrderId(),
+        name: document.getElementById('partNameInput').value.trim(),
+        category: document.getElementById('partCategoryInput').value,
+        sku: document.getElementById('partSkuInput').value.trim(),
+        stock: document.getElementById('partStockInput').value,
+        unitCost: document.getElementById('partCostInput').value,
+        minStock: document.getElementById('partMinInput').value,
+        updatedAt: new Date().toISOString()
+      });
 
-    if (!getOrders().length) {
-      saveOrders([
-        {
-          id: 'seed1',
-          orderNumber: '1001',
-          status: 'in_progress',
-          deviceType: 'Телевизор',
-          deviceModel: 'Samsung UE55TU7090',
-          clientName: 'Виктор Петров',
-          clientPhone: '+380501112233',
-          problemDescription: 'Нет изображения, звук есть',
-          masterNotes: 'Проверить подсветку и блок питания',
-          totalCost: '4500',
-          partsCost: '1800',
-          createdAt: new Date(Date.now() - 86400000).toISOString()
-        },
-        {
-          id: 'seed2',
-          orderNumber: '1002',
-          status: 'new',
-          deviceType: 'Телефон',
-          deviceModel: 'iPhone 13',
-          clientName: 'Максим Коваленко',
-          clientPhone: '+380509998877',
-          problemDescription: 'Разбит экран',
-          masterNotes: 'Согласовать стоимость дисплея',
-          totalCost: '',
-          partsCost: '',
-          createdAt: new Date().toISOString()
+      const index = items.findIndex(item => item.id === payload.id);
+      if (index >= 0) items[index] = payload;
+      else items.unshift(payload);
+
+      if (saveInventory(items)) {
+        setInventoryForm();
+        document.getElementById('inventoryForm').reset();
+        renderAll();
+      }
+    });
+
+    document.getElementById('inventoryTableBody').addEventListener('click', event => {
+      const editButton = event.target.closest('[data-edit-part]');
+      const deleteButton = event.target.closest('[data-delete-part]');
+      const items = getInventory();
+
+      if (editButton) {
+        setInventoryForm(items.find(item => item.id === editButton.dataset.editPart));
+      }
+
+      if (deleteButton) {
+        const part = items.find(item => item.id === deleteButton.dataset.deletePart);
+        if (!part || !window.confirm(`Удалить деталь "${part.name}"?`)) return;
+        saveInventory(items.filter(item => item.id !== part.id));
+        renderAll();
+      }
+    });
+
+    document.getElementById('serviceForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const items = getServices();
+      const payload = migrateService({
+        id: editingServiceId || makeOrderId(),
+        name: document.getElementById('serviceNameInput').value.trim(),
+        price: document.getElementById('servicePriceInput').value,
+        cost: document.getElementById('serviceCostInput').value,
+        warrantyDays: document.getElementById('serviceWarrantyInput').value,
+        rewardPercent: document.getElementById('serviceRewardInput').value,
+        updatedAt: new Date().toISOString()
+      });
+      const index = items.findIndex(item => item.id === payload.id);
+      if (index >= 0) items[index] = payload;
+      else items.unshift(payload);
+      if (saveServices(items)) {
+        document.getElementById('serviceForm').reset();
+        setServiceForm();
+        renderAll();
+      }
+    });
+
+    document.getElementById('servicesList').addEventListener('click', event => {
+      const editButton = event.target.closest('[data-edit-service]');
+      const deleteButton = event.target.closest('[data-delete-service]');
+      const items = getServices();
+      if (editButton) setServiceForm(items.find(item => item.id === editButton.dataset.editService));
+      if (deleteButton) {
+        const service = items.find(item => item.id === deleteButton.dataset.deleteService);
+        if (!service || !window.confirm(`Удалить услугу "${service.name}"?`)) return;
+        saveServices(items.filter(item => item.id !== service.id));
+        renderAll();
+      }
+    });
+
+    document.getElementById('taskForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const items = getTasks();
+      const payload = migrateTask({
+        id: editingTaskId || makeOrderId(),
+        title: document.getElementById('taskTitleInput').value.trim(),
+        dueDate: document.getElementById('taskDueInput').value,
+        responsible: document.getElementById('taskResponsibleInput').value,
+        orderId: document.getElementById('taskOrderInput').value,
+        note: document.getElementById('taskNoteInput').value.trim(),
+        done: editingTaskId ? items.find(item => item.id === editingTaskId)?.done : false,
+        updatedAt: new Date().toISOString()
+      });
+      const index = items.findIndex(item => item.id === payload.id);
+      if (index >= 0) items[index] = payload;
+      else items.unshift(payload);
+      if (saveTasks(items)) {
+        document.getElementById('taskForm').reset();
+        setTaskForm();
+        renderAll();
+      }
+    });
+
+    document.getElementById('tasksList').addEventListener('click', event => {
+      const editButton = event.target.closest('[data-edit-task]');
+      const deleteButton = event.target.closest('[data-delete-task]');
+      const toggleButton = event.target.closest('[data-toggle-task]');
+      const items = getTasks();
+      if (editButton) setTaskForm(items.find(item => item.id === editButton.dataset.editTask));
+      if (toggleButton) {
+        const index = items.findIndex(item => item.id === toggleButton.dataset.toggleTask);
+        if (index >= 0) {
+          items[index].done = !items[index].done;
+          items[index].updatedAt = new Date().toISOString();
+          saveTasks(items);
+          renderAll();
         }
-      ]);
-    }
+      }
+      if (deleteButton) {
+        const task = items.find(item => item.id === deleteButton.dataset.deleteTask);
+        if (!task || !window.confirm(`Удалить задачу "${task.title}"?`)) return;
+        saveTasks(items.filter(item => item.id !== task.id));
+        renderAll();
+      }
+    });
 
-    renderOrders();
+    document.getElementById('expenseForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const items = getExpenses();
+      items.unshift(migrateExpense({
+        title: document.getElementById('expenseTitleInput').value.trim(),
+        category: document.getElementById('expenseCategoryInput').value,
+        amount: document.getElementById('expenseAmountInput').value,
+        date: document.getElementById('expenseDateInput').value,
+        note: document.getElementById('expenseNoteInput').value.trim()
+      }));
+      if (saveExpenses(items)) {
+        document.getElementById('expenseForm').reset();
+        document.getElementById('expenseDateInput').value = toDateInput(new Date().toISOString());
+        renderAll();
+      }
+    });
+
+    document.getElementById('expensesList').addEventListener('click', event => {
+      const button = event.target.closest('[data-delete-expense]');
+      if (!button) return;
+      const items = getExpenses();
+      saveExpenses(items.filter(item => item.id !== button.dataset.deleteExpense));
+      renderAll();
+    });
+
+    document.getElementById('supplierForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const items = getSuppliers();
+      const payload = migrateSupplier({
+        id: editingSupplierId || makeOrderId(),
+        name: document.getElementById('supplierNameInput').value.trim(),
+        phone: document.getElementById('supplierPhoneInput').value.trim(),
+        note: document.getElementById('supplierNoteInput').value.trim()
+      });
+      const index = items.findIndex(item => item.id === payload.id);
+      if (index >= 0) items[index] = payload;
+      else items.unshift(payload);
+      if (saveSuppliers(items)) {
+        document.getElementById('supplierForm').reset();
+        setSupplierForm();
+        renderAll();
+      }
+    });
+
+    document.getElementById('receiptForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const partId = document.getElementById('receiptPartInput').value;
+      const supplierId = document.getElementById('receiptSupplierInput').value;
+      const qty = Math.max(1, Number(document.getElementById('receiptQtyInput').value || 1));
+      const cost = parseAmount(document.getElementById('receiptCostInput').value);
+      const inventory = getInventory();
+      const part = inventory.find(item => item.id === partId);
+      const supplier = getSuppliers().find(item => item.id === supplierId);
+      if (!part) return window.alert('Выберите деталь.');
+      part.stock += qty;
+      if (cost) part.unitCost = cost;
+      part.updatedAt = new Date().toISOString();
+      if (saveInventory(inventory)) {
+        logActivity('Приход', `${part.name}: +${qty} шт.${supplier ? ` от ${supplier.name}` : ''}`);
+        document.getElementById('receiptForm').reset();
+        renderAll();
+      }
+    });
+
+    document.getElementById('suppliersList').addEventListener('click', event => {
+      const editButton = event.target.closest('[data-edit-supplier]');
+      const deleteButton = event.target.closest('[data-delete-supplier]');
+      const items = getSuppliers();
+      if (editButton) setSupplierForm(items.find(item => item.id === editButton.dataset.editSupplier));
+      if (deleteButton) {
+        const supplier = items.find(item => item.id === deleteButton.dataset.deleteSupplier);
+        if (!supplier || !window.confirm(`Удалить поставщика "${supplier.name}"?`)) return;
+        saveSuppliers(items.filter(item => item.id !== supplier.id));
+        renderAll();
+      }
+    });
+
+    document.getElementById('settingsForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const masters = parseListTextarea(getFormValue('mastersInput'));
+      const paymentMethods = parseListTextarea(getFormValue('paymentMethodsInput'));
+      const expenseCategories = parseListTextarea(getFormValue('expenseCategoriesInput'));
+      const inventoryCategories = parseListTextarea(getFormValue('inventoryCategoriesInput'));
+      const cashRegisters = parseListTextarea(getFormValue('cashRegistersInput'));
+      const warehouses = parseListTextarea(getFormValue('warehousesInput'));
+      const warehouseTypes = parseListTextarea(getFormValue('warehouseTypesInput'));
+      const roles = parseListTextarea(getFormValue('rolesInput'));
+      const cashRegisterAccess = parseListTextarea(getFormValue('cashRegisterAccessInput'));
+      const warehouseAccess = parseListTextarea(getFormValue('warehouseAccessInput'));
+
+      const saved = saveSettings({
+        serviceName: getFormValue('settingsServiceNameInput') || DEFAULT_SETTINGS.serviceName,
+        servicePhone: getFormValue('settingsServicePhoneInput') || DEFAULT_SETTINGS.servicePhone,
+        serviceAddress: getFormValue('settingsServiceAddressInput') || DEFAULT_SETTINGS.serviceAddress,
+        companyEmail: getFormValue('companyEmailInput'),
+        companyLegalName: getFormValue('companyLegalNameInput'),
+        companyTaxId: getFormValue('companyTaxIdInput'),
+        currency: getFormValue('currencySelect') || DEFAULT_SETTINGS.currency,
+        interfaceLanguage: getFormValue('interfaceLanguageInput') || DEFAULT_SETTINGS.interfaceLanguage,
+        timezone: getFormValue('timezoneInput') || DEFAULT_SETTINGS.timezone,
+        dateFormat: getFormValue('dateFormatInput') || DEFAULT_SETTINGS.dateFormat,
+        timeFormat: getFormValue('timeFormatInput') || DEFAULT_SETTINGS.timeFormat,
+        orderPrefix: getFormValue('orderPrefixInput'),
+        orderStartNumber: getFormValue('orderStartNumberInput') || DEFAULT_SETTINGS.orderStartNumber,
+        defaultWarrantyDays: getFormValue('defaultWarrantyDaysInput'),
+        defaultDeadlineDays: getFormValue('defaultDeadlineDaysInput'),
+        defaultSalaryPercent: getFormValue('defaultSalaryPercentInput'),
+        orderTypes: parseOrderTypes(getFormValue('orderTypesInput')),
+        paymentMethods: paymentMethods.length ? paymentMethods : DEFAULT_SETTINGS.paymentMethods,
+        expenseCategories: expenseCategories.length ? expenseCategories : DEFAULT_SETTINGS.expenseCategories,
+        inventoryCategories: inventoryCategories.length ? inventoryCategories : DEFAULT_SETTINGS.inventoryCategories,
+        cashRegisters: cashRegisters.length ? cashRegisters : DEFAULT_SETTINGS.cashRegisters,
+        salaryMode: getFormValue('salaryModeInput') || DEFAULT_SETTINGS.salaryMode,
+        clientDebtLimit: getFormValue('clientDebtLimitInput'),
+        warehouses: warehouses.length ? warehouses : DEFAULT_SETTINGS.warehouses,
+        warehouseTypes: warehouseTypes.length ? warehouseTypes : DEFAULT_SETTINGS.warehouseTypes,
+        roles: roles.length ? roles : DEFAULT_SETTINGS.roles,
+        cashRegisterAccess: cashRegisterAccess.length ? cashRegisterAccess : DEFAULT_SETTINGS.cashRegisterAccess,
+        warehouseAccess: warehouseAccess.length ? warehouseAccess : DEFAULT_SETTINGS.warehouseAccess,
+        customOrderFields: parseCustomOrderFields(getFormValue('customOrderFieldsInput')),
+        masters: masters.length ? masters : DEFAULT_SETTINGS.masters,
+        autoBackupEnabled: getFormValue('autoBackupInput') === 'off' ? 'off' : 'on',
+        documentNumbering: getFormValue('documentNumberingInput') || DEFAULT_SETTINGS.documentNumbering,
+        printFooter: getFormValue('printFooterInput'),
+        notificationTemplate: getFormValue('notificationTemplateInput') || DEFAULT_SETTINGS.notificationTemplate
+      });
+
+      if (saved) {
+        logActivity('Настройки', 'Обновлены настройки CRM');
+        renderAll();
+        window.alert('Настройки сохранены.');
+      }
+    });
+
+    document.getElementById('clientSearchInput').addEventListener('input', renderClients);
+    document.getElementById('clientsList').addEventListener('click', event => {
+      const button = event.target.closest('[data-new-order-client]');
+      if (!button) return;
+      const client = buildClients().find(item => item.key === button.dataset.newOrderClient);
+      if (!client) return;
+      clientsModalOverlay.classList.remove('open');
+      openModal();
+      formFields.clientName.value = client.clientName || '';
+      formFields.clientPhone.value = client.clientPhone || '';
+    });
+
+    importFileInput.addEventListener('change', () => importData(importFileInput.files[0]));
+
+    const savedSidebarState = getStorageItem(SIDEBAR_STORAGE_KEY);
+    setSidebarCollapsed(
+      savedSidebarState === null ? window.matchMedia('(max-width: 768px)').matches : savedSidebarState === '1',
+      false
+    );
+
+    if (getStorageItem(AUTH_STORAGE_KEY) === '1') showApp();
+    else showAuth();
+
+    seedInitialData();
+    renderAll();
   </script>
 
 </body>
