@@ -414,6 +414,215 @@
       .print-doc{display:block !important}
     }
     .print-doc{display:none}
+    .sidebar{
+      background:#162033;
+      color:#f8fafc;
+      border-right:none;
+      box-shadow:8px 0 30px rgba(15,23,42,.14);
+    }
+    .sidebar .brand,.sidebar .current-user b{color:#f8fafc}
+    .sidebar .current-user,.sidebar .sync-chip{
+      background:rgba(255,255,255,.08);
+      border-color:rgba(255,255,255,.14);
+      color:#dbeafe;
+    }
+    .sidebar .current-user span{color:#b6c6dc}
+    .sidebar .nav .btn{
+      background:transparent;
+      border-color:transparent;
+      color:#c8d3e2;
+      box-shadow:none;
+    }
+    .sidebar .nav .btn.active{
+      background:linear-gradient(90deg,rgba(249,115,22,.24),rgba(37,99,235,.16));
+      color:#fff;
+      border-color:rgba(249,115,22,.32);
+    }
+    .sidebar .nav .btn:hover{
+      background:rgba(255,255,255,.08);
+      color:#fff;
+    }
+    .sidebar-footer .btn-secondary{
+      background:rgba(255,255,255,.08);
+      border-color:rgba(255,255,255,.14);
+      color:#f8fafc;
+      box-shadow:none;
+    }
+    .topbar{
+      box-shadow:0 8px 24px rgba(15,23,42,.04);
+    }
+    .content{
+      background:
+        linear-gradient(180deg,rgba(37,99,235,.04),transparent 220px),
+        var(--bg);
+    }
+    th,td{padding:10px 11px}
+    .panel,.stat,.item-card{
+      border-color:color-mix(in srgb,var(--line) 84%,var(--accent) 16%);
+    }
+    .stat b{font-size:22px}
+    .modal{
+      border-top:4px solid var(--accent);
+    }
+    .app,.panel,.stat,.item-card,.modal{
+      animation:riseIn .22s ease both;
+    }
+    @keyframes riseIn{
+      from{opacity:0;transform:translateY(8px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .segmented{
+      display:inline-flex;
+      gap:4px;
+      padding:4px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--surface-2);
+    }
+    .segmented button{
+      min-height:32px;
+      border-radius:8px;
+      border:none;
+      padding:0 10px;
+      background:transparent;
+      color:var(--muted);
+      font-weight:900;
+    }
+    .segmented button.active{
+      background:var(--surface);
+      color:var(--accent);
+      box-shadow:0 8px 18px rgba(15,23,42,.08);
+    }
+    .kanban{
+      display:grid;
+      grid-template-columns:repeat(6,minmax(220px,1fr));
+      gap:12px;
+      overflow:auto;
+      padding-bottom:4px;
+    }
+    .kanban-col{
+      min-width:220px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--surface-2);
+      padding:10px;
+    }
+    .kanban-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+      font-weight:950;
+    }
+    .kanban-card{
+      display:grid;
+      gap:8px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--surface);
+      padding:12px;
+      margin-bottom:10px;
+      box-shadow:0 10px 24px rgba(15,23,42,.06);
+      transition:transform .18s,box-shadow .18s,border-color .18s;
+    }
+    .kanban-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(249,115,22,.42);
+      box-shadow:0 16px 34px rgba(15,23,42,.12);
+    }
+    .badge-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:24px;
+      padding:0 8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:var(--surface-2);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+    }
+    .badge.danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+    .badge.success{background:#dcfce7;color:#15803d;border-color:#bbf7d0}
+    .settings-layout{
+      display:grid;
+      grid-template-columns:220px minmax(0,1fr);
+      gap:16px;
+    }
+    .settings-tabs{
+      display:grid;
+      gap:8px;
+      align-self:start;
+      position:sticky;
+      top:88px;
+    }
+    .settings-tabs button{
+      justify-content:flex-start;
+      color:var(--muted);
+    }
+    .settings-tabs button.active{
+      background:var(--accent-soft);
+      color:var(--accent);
+      border-color:rgba(249,115,22,.25);
+    }
+    .report-list{display:grid;gap:10px}
+    .report-row{
+      display:grid;
+      grid-template-columns:180px minmax(0,1fr) 100px;
+      gap:12px;
+      align-items:center;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background:var(--surface-2);
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+    .bar span{
+      display:block;
+      height:100%;
+      width:var(--w,0%);
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    }
+    .timeline{display:grid;gap:8px;margin-top:10px}
+    .timeline-item{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      border-left:3px solid var(--accent);
+      padding:8px 10px;
+      background:var(--surface-2);
+      border-radius:0 10px 10px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .quick-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+    .quick-card{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--surface);
+      padding:14px;
+      transition:transform .18s,border-color .18s;
+    }
+    .quick-card:hover{transform:translateY(-2px);border-color:rgba(37,99,235,.35)}
+    @media (max-width:1100px){
+      .kanban{grid-template-columns:repeat(3,minmax(220px,1fr))}
+      .settings-layout{grid-template-columns:1fr}
+      .settings-tabs{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}
+      .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media (max-width:720px){
+      .kanban{grid-template-columns:1fr}
+      .report-row{grid-template-columns:1fr}
+      .settings-tabs,.quick-grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -446,10 +655,12 @@
       <div class="brand"><span class="brand-mark">1</span><span>ONE Service</span></div>
       <div class="sync-chip"><span class="dot" id="syncDot"></span><span id="syncText">Подключение...</span></div>
       <nav class="nav" id="nav">
-        <button class="btn active" data-view="orders">Заказы</button>
+        <button class="btn active" data-view="dashboard">Рабочий стол</button>
+        <button class="btn" data-view="orders">Заказы</button>
+        <button class="btn" data-view="clients">Клиенты</button>
         <button class="btn" data-view="inventory">Склад</button>
         <button class="btn" data-view="finance">Финансы</button>
-        <button class="btn admin-only" data-view="masters">Мастера</button>
+        <button class="btn" data-view="reports">Отчеты</button>
         <button class="btn admin-only" data-view="settings">Настройки</button>
       </nav>
       <div class="sidebar-footer">
@@ -471,10 +682,12 @@
         <div class="topbar-actions" id="topbarActions"></div>
       </header>
       <div class="content">
+        <section id="dashboardView"></section>
         <section id="ordersView"></section>
+        <section id="clientsView" class="hidden"></section>
         <section id="inventoryView" class="hidden"></section>
         <section id="financeView" class="hidden"></section>
-        <section id="mastersView" class="hidden"></section>
+        <section id="reportsView" class="hidden"></section>
         <section id="settingsView" class="hidden"></section>
       </div>
     </main>
@@ -544,23 +757,22 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const root = (...parts) => ['workspaces', WORKSPACE_ID, ...parts];
+    const dataDocId = (type, id) => `${type}_${String(id || '').replace(/[^a-zа-я0-9_-]+/gi, '_')}`;
     const refs = {
-      settings: () => doc(db, ...root('settings', 'main')),
-      orders: () => collection(db, ...root('orders')),
-      order: id => doc(db, ...root('orders', id)),
-      masters: () => collection(db, ...root('masters')),
-      master: id => doc(db, ...root('masters', id)),
-      inventory: () => collection(db, ...root('inventory')),
-      inventoryItem: id => doc(db, ...root('inventory', id)),
-      finance: () => collection(db, ...root('finance')),
-      financeItem: id => doc(db, ...root('finance', id))
+      data: () => collection(db, 'crmWorkspaces', WORKSPACE_ID, 'data'),
+      settings: () => doc(db, 'crmWorkspaces', WORKSPACE_ID, 'data', 'settings_current'),
+      order: id => doc(db, 'crmWorkspaces', WORKSPACE_ID, 'data', dataDocId('order', id)),
+      master: id => doc(db, 'crmWorkspaces', WORKSPACE_ID, 'data', dataDocId('master', id)),
+      inventoryItem: id => doc(db, 'crmWorkspaces', WORKSPACE_ID, 'data', dataDocId('inventory', id)),
+      financeItem: id => doc(db, 'crmWorkspaces', WORKSPACE_ID, 'data', dataDocId('finance', id))
     };
 
     const state = {
       firebaseReady:false,
       dataReady:false,
-      view:'orders',
+      view:'dashboard',
+      orderMode:'table',
+      settingsTab:'company',
       user:null,
       settings:{
         serviceName:'1ONE Service',
@@ -569,23 +781,31 @@
         currency:'UAH',
         orderPrefix:'',
         nextOrderNumber:1000,
-        theme:'light'
+        theme:'light',
+        orderTypes:['Платный ремонт','Гарантийный ремонт','Диагностика'],
+        financeCategories:['Оплата заказа','Закупка деталей','Аренда','Зарплата','Реклама','Прочее'],
+        warehouses:['Основной склад','Клиентская зона'],
+        paymentMethods:['Наличные','Карта','Перевод','Смешанная'],
+        warrantyDays:30,
+        salaryPercent:20
       },
       orders:[],
       masters:[],
       inventory:[],
       finance:[],
-      filters:{ search:'', status:'', master:'', payment:'' }
+      filters:{ search:'', status:'', master:'', payment:'', source:'' }
     };
 
     const $ = id => document.getElementById(id);
     const authPage = $('authPage');
     const appPage = $('appPage');
     const views = {
+      dashboard:$('dashboardView'),
       orders:$('ordersView'),
+      clients:$('clientsView'),
       inventory:$('inventoryView'),
       finance:$('financeView'),
-      masters:$('mastersView'),
+      reports:$('reportsView'),
       settings:$('settingsView')
     };
 
@@ -632,6 +852,49 @@
     const statusOptions = selected => Object.entries(STATUSES)
       .map(([key,label]) => `<option value="${key}" ${selected === key ? 'selected' : ''}>${label}</option>`)
       .join('');
+    const listOptions = (items = [], selected = '') => {
+      const source = selected && !items.includes(selected) ? [selected, ...items] : items;
+      return source.map(item => `<option value="${safe(item)}" ${selected === item ? 'selected' : ''}>${safe(item)}</option>`).join('');
+    };
+    const lines = value => String(value || '')
+      .split('\n')
+      .map(item => item.trim())
+      .filter(Boolean);
+    const uniq = items => [...new Set(items.filter(Boolean))];
+    const orderSources = () => uniq(state.orders.map(order => order.source || 'Без источника')).sort((a,b) => a.localeCompare(b,'ru'));
+    const sourceOptions = selected => orderSources()
+      .map(item => `<option value="${safe(item)}" ${selected === item ? 'selected' : ''}>${safe(item)}</option>`)
+      .join('');
+    const isOverdue = order => order.deadline && order.status !== 'issued' && new Date(order.deadline) < new Date(today());
+    const calcOrderProfit = order => amount(order.total) - amount(order.partsCost) - amount(order.discount);
+    const masterSalary = order => {
+      const profile = state.masters.find(item => item.name === order.master);
+      const percent = amount(profile?.salaryPercent ?? state.settings.salaryPercent ?? 0);
+      return calcOrderProfit(order) * percent / 100;
+    };
+    const clientRows = () => {
+      const map = new Map();
+      state.orders.forEach(order => {
+        const key = (order.phone || order.client || 'unknown').toLowerCase();
+        const item = map.get(key) || { name:order.client || 'Без имени', phone:order.phone || '', orders:0, total:0, debt:0, last:'' };
+        item.name = order.client || item.name;
+        item.phone = order.phone || item.phone;
+        item.orders += 1;
+        item.total += amount(order.total);
+        item.debt += Math.max(0, amount(order.total) - amount(order.paid));
+        if (!item.last || Date.parse(order.createdAtIso || '') > Date.parse(item.last || '')) item.last = order.createdAtIso;
+        map.set(key, item);
+      });
+      return [...map.values()].sort((a,b) => Date.parse(b.last || '') - Date.parse(a.last || ''));
+    };
+    const groupSum = (items, keyFn, valueFn) => {
+      const map = new Map();
+      items.forEach(item => {
+        const key = keyFn(item) || '—';
+        map.set(key, (map.get(key) || 0) + valueFn(item));
+      });
+      return [...map.entries()].sort((a,b) => b[1] - a[1]);
+    };
 
     function toast(message){
       const node = $('toast');
@@ -656,7 +919,7 @@
       $('currentUserName').textContent = state.user?.name || 'Пользователь';
       $('currentUserRole').textContent = isAdmin() ? 'Администратор' : 'Участник';
       document.querySelectorAll('.admin-only').forEach(node => node.classList.toggle('hidden', !isAdmin()));
-      if (!isAdmin() && ['masters','settings'].includes(state.view)) state.view = 'orders';
+      if (!isAdmin() && state.view === 'settings') state.view = 'dashboard';
       render();
     }
     function showAuth(){
@@ -704,13 +967,35 @@
       state.user = { ...master, password:'' };
       $('currentUserName').textContent = state.user.name;
     }
+    function showFirebaseError(action, error){
+      const message = error?.message || error?.code || 'неизвестная ошибка';
+      setSync('offline', 'Ошибка Firebase');
+      toast(`${action}: ${message}`);
+    }
+    function upsertLocal(key, payload){
+      const list = state[key];
+      if (!Array.isArray(list) || !payload?.id) return;
+      const index = list.findIndex(item => item.id === payload.id);
+      if (index >= 0) list[index] = { ...list[index], ...payload };
+      else list.unshift(payload);
+      render();
+    }
+    function removeLocal(key, id){
+      if (!Array.isArray(state[key])) return;
+      state[key] = state[key].filter(item => item.id !== id);
+      render();
+    }
 
     async function bootstrap(){
-      const settingsSnap = await getDoc(refs.settings());
-      if (!settingsSnap.exists()) {
-        await setDoc(refs.settings(), { ...state.settings, updatedAt:serverTimestamp(), updatedAtIso:nowIso() }, { merge:true });
+      try {
+        const settingsSnap = await getDoc(refs.settings());
+        if (!settingsSnap.exists()) {
+          await setDoc(refs.settings(), { ...state.settings, type:'settings', updatedAt:serverTimestamp(), updatedAtIso:nowIso() }, { merge:true });
+        }
+        setSync('online','Firebase подключен');
+      } catch (error) {
+        showFirebaseError('Firebase не подключен', error);
       }
-      setSync('online','Firebase подключен');
     }
     function bindRealtime(){
       onSnapshot(refs.settings(), snap => {
@@ -719,29 +1004,31 @@
         render();
       }, () => setSync('offline','Ошибка настроек'));
 
-      onSnapshot(query(refs.orders(), orderBy('updatedAtIso','desc')), snap => {
-        state.orders = snap.docs.map(item => ({ ...item.data(), id:item.id }));
+      onSnapshot(refs.data(), snap => {
+        const orders = [];
+        const masters = [];
+        const inventory = [];
+        const finance = [];
+        snap.docs.forEach(item => {
+          const data = item.data() || {};
+          if (data.type === 'order') orders.push({ ...data, id:data.id || item.id.replace(/^order_/, '') });
+          if (data.type === 'master') masters.push({ ...data, id:data.id || item.id.replace(/^master_/, '') });
+          if (data.type === 'inventory') inventory.push({ ...data, id:data.id || item.id.replace(/^inventory_/, '') });
+          if (data.type === 'finance') finance.push({ ...data, id:data.id || item.id.replace(/^finance_/, '') });
+        });
+        state.orders = orders.sort((a,b) => Date.parse(b.updatedAtIso || b.createdAtIso || '') - Date.parse(a.updatedAtIso || a.createdAtIso || ''));
+        state.masters = masters.sort((a,b) => String(a.name || '').localeCompare(String(b.name || ''),'ru'));
+        state.inventory = inventory.sort((a,b) => String(a.name || '').localeCompare(String(b.name || ''),'ru'));
+        state.finance = finance.sort((a,b) => String(b.date || '').localeCompare(String(a.date || '')));
         state.dataReady = true;
-        setSync('online','Realtime включен');
-        render();
-      }, () => setSync('offline','Ошибка заказов'));
-
-      onSnapshot(query(refs.masters(), orderBy('name','asc')), snap => {
-        state.masters = snap.docs.map(item => ({ ...item.data(), id:item.id }));
         validateAccess();
         restoreSession();
+        setSync('online','Realtime включен');
         render();
-      }, () => setSync('offline','Ошибка мастеров'));
-
-      onSnapshot(query(refs.inventory(), orderBy('name','asc')), snap => {
-        state.inventory = snap.docs.map(item => ({ ...item.data(), id:item.id }));
-        render();
-      }, () => setSync('offline','Ошибка склада'));
-
-      onSnapshot(query(refs.finance(), orderBy('date','desc')), snap => {
-        state.finance = snap.docs.map(item => ({ ...item.data(), id:item.id }));
-        render();
-      }, () => setSync('offline','Ошибка финансов'));
+      }, error => {
+        setSync('offline','Ошибка realtime');
+        toast(`Firebase: ${error.message || error.code || 'нет доступа к данным'}`);
+      });
     }
     async function startFirebase(){
       setSync('', 'Подключение...');
@@ -767,108 +1054,180 @@
     }
     async function saveOrder(data){
       if (!isLogged()) return toast('Нужно войти в систему.');
-      const id = data.id || uid('order');
-      const old = state.orders.find(item => item.id === id);
-      const statusHistory = Array.isArray(old?.statusHistory) ? [...old.statusHistory] : [];
-      if (!old) statusHistory.push({ status:data.status, at:nowIso(), user:state.user.name });
-      if (old && old.status !== data.status) statusHistory.push({ status:data.status, at:nowIso(), user:state.user.name });
-      await setDoc(refs.order(id), {
-        ...data,
-        id,
-        number:data.number || `${state.settings.orderPrefix || ''}${nextOrderNumber()}`,
-        statusHistory,
-        createdAtIso:old?.createdAtIso || nowIso(),
-        updatedAtIso:nowIso(),
-        updatedAt:serverTimestamp(),
-        updatedBy:state.user.name
-      }, { merge:true });
-      toast('Заказ сохранен.');
+      try {
+        const id = data.id || uid('order');
+        const old = state.orders.find(item => item.id === id);
+        const statusHistory = Array.isArray(old?.statusHistory) ? [...old.statusHistory] : [];
+        if (!old) statusHistory.push({ status:data.status, at:nowIso(), user:state.user.name });
+        if (old && old.status !== data.status) statusHistory.push({ status:data.status, at:nowIso(), user:state.user.name });
+        const payload = {
+          ...data,
+          type:'order',
+          id,
+          number:data.number || `${state.settings.orderPrefix || ''}${nextOrderNumber()}`,
+          total:amount(data.total),
+          paid:amount(data.paid),
+          partsCost:amount(data.partsCost),
+          discount:amount(data.discount),
+          statusHistory,
+          createdAtIso:old?.createdAtIso || nowIso(),
+          updatedAtIso:nowIso(),
+          updatedAt:serverTimestamp(),
+          updatedBy:state.user.name
+        };
+        await setDoc(refs.order(id), payload, { merge:true });
+        upsertLocal('orders', payload);
+        toast('Заказ сохранен.');
+      } catch (error) {
+        showFirebaseError('Заказ не сохранен', error);
+        throw error;
+      }
     }
     async function deleteOrder(id){
       if (!isAdmin()) return toast('Удалять заказы может только администратор.');
-      await deleteDoc(refs.order(id));
-      toast('Заказ удален у всех устройств.');
+      try {
+        await deleteDoc(refs.order(id));
+        removeLocal('orders', id);
+        toast('Заказ удален у всех устройств.');
+      } catch (error) {
+        showFirebaseError('Заказ не удален', error);
+      }
     }
     async function saveInventoryItem(data){
-      const id = data.id || uid('part');
-      await setDoc(refs.inventoryItem(id), {
-        ...data,
-        id,
-        qty:amount(data.qty),
-        price:amount(data.price),
-        updatedAtIso:nowIso(),
-        updatedAt:serverTimestamp()
-      }, { merge:true });
-      toast('Склад обновлен.');
+      try {
+        const id = data.id || uid('part');
+        const payload = {
+          ...data,
+          type:'inventory',
+          id,
+          qty:amount(data.qty),
+          minQty:amount(data.minQty || 1),
+          price:amount(data.price),
+          updatedAtIso:nowIso(),
+          updatedAt:serverTimestamp()
+        };
+        await setDoc(refs.inventoryItem(id), payload, { merge:true });
+        upsertLocal('inventory', payload);
+        toast('Склад обновлен.');
+      } catch (error) {
+        showFirebaseError('Склад не сохранен', error);
+        throw error;
+      }
     }
     async function deleteInventoryItem(id){
-      await deleteDoc(refs.inventoryItem(id));
-      toast('Позиция удалена.');
+      try {
+        await deleteDoc(refs.inventoryItem(id));
+        removeLocal('inventory', id);
+        toast('Позиция удалена.');
+      } catch (error) {
+        showFirebaseError('Позиция не удалена', error);
+      }
     }
     async function saveFinanceItem(data){
-      const id = data.id || uid('finance');
-      await setDoc(refs.financeItem(id), {
-        ...data,
-        id,
-        amount:amount(data.amount),
-        date:data.date || today(),
-        updatedAtIso:nowIso(),
-        updatedAt:serverTimestamp()
-      }, { merge:true });
-      toast('Финансы обновлены.');
+      try {
+        const id = data.id || uid('finance');
+        const payload = {
+          ...data,
+          type:'finance',
+          id,
+          amount:amount(data.amount),
+          date:data.date || today(),
+          updatedAtIso:nowIso(),
+          updatedAt:serverTimestamp()
+        };
+        await setDoc(refs.financeItem(id), payload, { merge:true });
+        upsertLocal('finance', payload);
+        toast('Финансы обновлены.');
+      } catch (error) {
+        showFirebaseError('Финансы не сохранены', error);
+        throw error;
+      }
     }
     async function deleteFinanceItem(id){
-      await deleteDoc(refs.financeItem(id));
-      toast('Операция удалена.');
+      try {
+        await deleteDoc(refs.financeItem(id));
+        removeLocal('finance', id);
+        toast('Операция удалена.');
+      } catch (error) {
+        showFirebaseError('Операция не удалена', error);
+      }
     }
     async function saveMaster(data){
       if (!isAdmin()) return toast('Мастеров может изменять только администратор.');
-      const id = data.id || uid('master');
-      const duplicate = state.masters.find(item => item.login?.toLowerCase() === data.login.toLowerCase() && item.id !== id);
-      if (duplicate || data.login.toLowerCase() === ADMIN.login.toLowerCase()) return toast('Такой логин уже используется.');
-      await setDoc(refs.master(id), {
-        ...data,
-        id,
-        active:true,
-        updatedAtIso:nowIso(),
-        updatedAt:serverTimestamp()
-      }, { merge:true });
-      toast('Мастер сохранен.');
+      try {
+        const id = data.id || uid('master');
+        const duplicate = state.masters.find(item => item.login?.toLowerCase() === data.login.toLowerCase() && item.id !== id);
+        if (duplicate || data.login.toLowerCase() === ADMIN.login.toLowerCase()) return toast('Такой логин уже используется.');
+        const payload = {
+          ...data,
+          type:'master',
+          id,
+          active:true,
+          updatedAtIso:nowIso(),
+          updatedAt:serverTimestamp()
+        };
+        await setDoc(refs.master(id), payload, { merge:true });
+        upsertLocal('masters', payload);
+        toast('Мастер сохранен.');
+      } catch (error) {
+        showFirebaseError('Мастер не сохранен', error);
+        throw error;
+      }
     }
     async function deleteMaster(id){
       if (!isAdmin()) return toast('Удалять участников может только администратор.');
-      await deleteDoc(refs.master(id));
-      toast('Мастер удален, доступ закрыт.');
+      try {
+        await deleteDoc(refs.master(id));
+        removeLocal('masters', id);
+        toast('Мастер удален, доступ закрыт.');
+      } catch (error) {
+        showFirebaseError('Мастер не удален', error);
+      }
     }
     async function saveSettings(data){
       if (!isAdmin()) return toast('Настройки может менять только администратор.');
-      await setDoc(refs.settings(), {
-        ...state.settings,
-        ...data,
-        updatedAtIso:nowIso(),
-        updatedAt:serverTimestamp()
-      }, { merge:true });
-      toast('Настройки сохранены.');
+      try {
+        const payload = {
+          ...state.settings,
+          ...data,
+          type:'settings',
+          updatedAtIso:nowIso(),
+          updatedAt:serverTimestamp()
+        };
+        await setDoc(refs.settings(), payload, { merge:true });
+        state.settings = { ...state.settings, ...payload };
+        render();
+        toast('Настройки сохранены.');
+      } catch (error) {
+        showFirebaseError('Настройки не сохранены', error);
+        throw error;
+      }
     }
 
     function filteredOrders(){
       const search = state.filters.search.trim().toLowerCase();
       return state.orders.filter(order => {
-        const text = [order.number, order.client, order.phone, order.device, order.model, order.problem, order.master].join(' ').toLowerCase();
+        const text = [order.number, order.client, order.phone, order.device, order.model, order.serial, order.problem, order.master, order.source, order.storagePlace].join(' ').toLowerCase();
         if (search && !text.includes(search)) return false;
         if (state.filters.status && order.status !== state.filters.status) return false;
         if (state.filters.master && order.master !== state.filters.master) return false;
+        if (state.filters.source && (order.source || 'Без источника') !== state.filters.source) return false;
         if (state.filters.payment === 'debt' && amount(order.total) <= amount(order.paid)) return false;
         if (state.filters.payment === 'paid' && amount(order.total) > amount(order.paid)) return false;
         return true;
-      });
+      }).sort((a,b) => Date.parse(b.updatedAtIso || b.createdAtIso || '') - Date.parse(a.updatedAtIso || a.createdAtIso || ''));
     }
     function orderStats(){
       const active = state.orders.filter(item => item.status !== 'issued');
       const debt = state.orders.reduce((sum,item) => sum + Math.max(0, amount(item.total) - amount(item.paid)), 0);
       const revenue = state.orders.reduce((sum,item) => sum + amount(item.paid), 0);
       const ready = state.orders.filter(item => item.status === 'ready').length;
-      return { active:active.length, debt, revenue, ready };
+      const expense = state.finance.filter(item => item.type === 'expense').reduce((sum,item) => sum + amount(item.amount), 0);
+      const income = state.finance.filter(item => item.type === 'income').reduce((sum,item) => sum + amount(item.amount), 0);
+      const overdue = state.orders.filter(isOverdue).length;
+      const profit = revenue + income - expense - state.orders.reduce((sum,item) => sum + amount(item.partsCost) + amount(item.discount), 0);
+      const avg = state.orders.length ? state.orders.reduce((sum,item) => sum + amount(item.total), 0) / state.orders.length : 0;
+      return { active:active.length, debt, revenue, ready, overdue, expense, income, profit, avg };
     }
     function renderStats(){
       const stats = orderStats();
@@ -876,13 +1235,122 @@
         <div class="stats">
           <div class="stat"><span>Активные заказы</span><b>${stats.active}</b></div>
           <div class="stat"><span>Готовы к выдаче</span><b>${stats.ready}</b></div>
-          <div class="stat"><span>Оплачено</span><b>${money(stats.revenue)}</b></div>
-          <div class="stat"><span>Долги</span><b>${money(stats.debt)}</b></div>
+          <div class="stat"><span>Просрочены</span><b>${stats.overdue}</b></div>
+          <div class="stat"><span>Долги клиентов</span><b>${money(stats.debt)}</b></div>
+        </div>
+      `;
+    }
+    function renderDashboard(){
+      const stats = orderStats();
+      const recent = [...state.orders].slice(0, 8);
+      const overdue = state.orders.filter(isOverdue).slice(0, 6);
+      const lowStock = state.inventory.filter(item => amount(item.qty) <= amount(item.minQty || 1)).slice(0, 6);
+      views.dashboard.innerHTML = `
+        <div class="stats">
+          <div class="stat"><span>Выручка</span><b>${money(stats.revenue + stats.income)}</b></div>
+          <div class="stat"><span>Чистая прибыль</span><b>${money(stats.profit)}</b></div>
+          <div class="stat"><span>Средний чек</span><b>${money(stats.avg)}</b></div>
+          <div class="stat"><span>Клиентов</span><b>${clientRows().length}</b></div>
+        </div>
+        <div class="quick-grid">
+          <button class="quick-card" id="dashNewOrderBtn" type="button"><b>Новый заказ</b><br><span class="muted">Быстрый прием устройства</span></button>
+          <button class="quick-card" id="dashInventoryBtn" type="button"><b>Склад</b><br><span class="muted">Остатки и минимумы</span></button>
+          <button class="quick-card" id="dashFinanceBtn" type="button"><b>Финансы</b><br><span class="muted">Доходы и расходы</span></button>
+          <button class="quick-card" id="dashReportsBtn" type="button"><b>Отчеты</b><br><span class="muted">Прибыль, мастера, источники</span></button>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="panel">
+            <div class="panel-head"><h3>Последние заказы</h3><button class="btn btn-small btn-secondary" data-view="orders">Все заказы</button></div>
+            ${recent.length ? recent.map(order => `
+              <div class="timeline-item">
+                <span><b>${safe(order.number)}</b> ${safe(order.client || '')} · ${safe(order.device || '')}</span>
+                <span>${safe(STATUSES[order.status] || order.status)}</span>
+              </div>
+            `).join('') : '<div class="empty">Заказов пока нет.</div>'}
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Контроль сроков</h3><span class="badge danger">${overdue.length} просрочено</span></div>
+            ${overdue.length ? overdue.map(order => `
+              <div class="timeline-item">
+                <span><b>${safe(order.number)}</b> ${safe(order.client || '')}</span>
+                <span>${formatDate(order.deadline)}</span>
+              </div>
+            `).join('') : '<div class="empty">Просроченных заказов нет.</div>'}
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Минимальные остатки</h3><button class="btn btn-small btn-secondary" data-view="inventory">Открыть склад</button></div>
+          ${lowStock.length ? lowStock.map(item => `
+            <div class="timeline-item">
+              <span><b>${safe(item.name)}</b> · ${safe(item.warehouse || item.category || '')}</span>
+              <span>${amount(item.qty)} / минимум ${amount(item.minQty || 1)}</span>
+            </div>
+          `).join('') : '<div class="empty">Критичных остатков нет.</div>'}
         </div>
       `;
     }
     function renderOrders(){
       const orders = filteredOrders();
+      const tableHtml = orders.length ? `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Номер</th><th>Клиент</th><th>Устройство</th><th>Мастер</th><th>Статус</th><th>Срок</th><th>Сумма</th><th>Долг</th><th></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${orders.map(order => `
+                <tr>
+                  <td><b>${safe(order.number)}</b><br><span class="muted">${safe(order.type || 'Ремонт')}</span></td>
+                  <td>${safe(order.client)}<br><span class="muted">${safe(order.phone)}</span></td>
+                  <td>${safe(order.device)} ${safe(order.model || '')}<br><span class="muted">${safe(order.serial || order.storagePlace || '—')}</span></td>
+                  <td>${safe(order.master || '—')}</td>
+                  <td><select data-status-order="${safe(order.id)}">${statusOptions(order.status)}</select></td>
+                  <td>${formatDate(order.deadline)} ${isOverdue(order) ? '<span class="badge danger">срок</span>' : ''}</td>
+                  <td class="money">${money(order.total)}</td>
+                  <td class="money">${money(Math.max(0, amount(order.total) - amount(order.paid)))}</td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="btn btn-small btn-secondary" data-edit-order="${safe(order.id)}">Открыть</button>
+                      <button class="btn btn-small btn-secondary" data-print-order="${safe(order.id)}">Печать</button>
+                      ${isAdmin() ? `<button class="btn btn-small btn-danger" data-delete-order="${safe(order.id)}">Удалить</button>` : ''}
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : `<div class="empty">Заказов пока нет.</div>`;
+      const kanbanHtml = `
+        <div class="kanban">
+          ${Object.entries(STATUSES).map(([status,label]) => {
+            const column = orders.filter(order => order.status === status);
+            return `
+              <div class="kanban-col">
+                <div class="kanban-head"><span>${label}</span><span class="badge">${column.length}</span></div>
+                ${column.length ? column.map(order => `
+                  <div class="kanban-card">
+                    <div><b>${safe(order.number)}</b> · ${safe(order.client || '')}</div>
+                    <div class="muted">${safe(order.device || '')} ${safe(order.model || '')}</div>
+                    <div class="badge-row">
+                      <span class="badge">${safe(order.master || 'Без мастера')}</span>
+                      ${isOverdue(order) ? '<span class="badge danger">Просрочен</span>' : ''}
+                      ${amount(order.total) > amount(order.paid) ? '<span class="badge">Долг</span>' : '<span class="badge success">Оплачен</span>'}
+                    </div>
+                    <select data-status-order="${safe(order.id)}">${statusOptions(order.status)}</select>
+                    <div class="row-actions">
+                      <button class="btn btn-small btn-secondary" data-edit-order="${safe(order.id)}">Открыть</button>
+                      <button class="btn btn-small btn-secondary" data-print-order="${safe(order.id)}">Печать</button>
+                    </div>
+                  </div>
+                `).join('') : '<div class="empty">Пусто</div>'}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
       views.orders.innerHTML = `
         ${renderStats()}
         <div class="panel">
@@ -890,6 +1358,7 @@
             <input id="orderSearch" placeholder="Поиск: клиент, номер, телефон, устройство" value="${safe(state.filters.search)}">
             <select id="statusFilter"><option value="">Все статусы</option>${statusOptions(state.filters.status)}</select>
             <select id="masterFilter"><option value="">Все мастера</option>${masterOptions(state.filters.master)}</select>
+            <select id="sourceFilter"><option value="">Все источники</option>${sourceOptions(state.filters.source)}</select>
             <select id="paymentFilter">
               <option value="" ${state.filters.payment === '' ? 'selected' : ''}>Любая оплата</option>
               <option value="paid" ${state.filters.payment === 'paid' ? 'selected' : ''}>Оплачено</option>
@@ -901,42 +1370,48 @@
         <div class="panel">
           <div class="panel-head">
             <h3>Заказы</h3>
-            <span class="muted">${orders.length} из ${state.orders.length}</span>
+            <div class="row-actions">
+              <span class="muted">${orders.length} из ${state.orders.length}</span>
+              <div class="segmented">
+                <button type="button" data-order-mode="table" class="${state.orderMode === 'table' ? 'active' : ''}">Таблица</button>
+                <button type="button" data-order-mode="kanban" class="${state.orderMode === 'kanban' ? 'active' : ''}">Канбан</button>
+              </div>
+            </div>
           </div>
-          ${orders.length ? `
+          ${state.orderMode === 'kanban' ? kanbanHtml : tableHtml}
+        </div>
+      `;
+    }
+    function renderClients(){
+      const clients = clientRows();
+      views.clients.innerHTML = `
+        <div class="stats">
+          <div class="stat"><span>Клиентов</span><b>${clients.length}</b></div>
+          <div class="stat"><span>Повторных</span><b>${clients.filter(item => item.orders > 1).length}</b></div>
+          <div class="stat"><span>Оборот клиентов</span><b>${money(clients.reduce((sum,item) => sum + item.total, 0))}</b></div>
+          <div class="stat"><span>Долги</span><b>${money(clients.reduce((sum,item) => sum + item.debt, 0))}</b></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Клиентская база</h3><span class="muted">Формируется автоматически из заказов</span></div>
+          ${clients.length ? `
             <div class="table-wrap">
               <table>
-                <thead>
-                  <tr>
-                    <th>Номер</th><th>Клиент</th><th>Устройство</th><th>Мастер</th><th>Статус</th><th>Сумма</th><th>Долг</th><th>Дата</th><th></th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Клиент</th><th>Телефон</th><th>Заказов</th><th>Оборот</th><th>Долг</th><th>Последний визит</th></tr></thead>
                 <tbody>
-                  ${orders.map(order => `
+                  ${clients.map(client => `
                     <tr>
-                      <td><b>${safe(order.number)}</b></td>
-                      <td>${safe(order.client)}<br><span class="muted">${safe(order.phone)}</span></td>
-                      <td>${safe(order.device)}<br><span class="muted">${safe(order.model)}</span></td>
-                      <td>${safe(order.master || '—')}</td>
-                      <td>
-                        <select data-status-order="${safe(order.id)}">${statusOptions(order.status)}</select>
-                      </td>
-                      <td class="money">${money(order.total)}</td>
-                      <td class="money">${money(Math.max(0, amount(order.total) - amount(order.paid)))}</td>
-                      <td>${formatDate(order.createdAtIso)}</td>
-                      <td>
-                        <div class="row-actions">
-                          <button class="btn btn-small btn-secondary" data-edit-order="${safe(order.id)}">Открыть</button>
-                          <button class="btn btn-small btn-secondary" data-print-order="${safe(order.id)}">Печать</button>
-                          ${isAdmin() ? `<button class="btn btn-small btn-danger" data-delete-order="${safe(order.id)}">Удалить</button>` : ''}
-                        </div>
-                      </td>
+                      <td><b>${safe(client.name)}</b></td>
+                      <td>${safe(client.phone || '—')}</td>
+                      <td>${client.orders}</td>
+                      <td class="money">${money(client.total)}</td>
+                      <td class="money">${money(client.debt)}</td>
+                      <td>${formatDate(client.last)}</td>
                     </tr>
                   `).join('')}
                 </tbody>
               </table>
             </div>
-          ` : `<div class="empty">Заказов пока нет.</div>`}
+          ` : '<div class="empty">Клиенты появятся после создания заказов.</div>'}
         </div>
       `;
     }
@@ -950,8 +1425,10 @@
               ${state.inventory.map(item => `
                 <div class="item-card">
                   <h4>${safe(item.name)}</h4>
+                  <p>SKU: ${safe(item.sku || '—')} · Ячейка: ${safe(item.cell || '—')}</p>
+                  <p>Склад: ${safe(item.warehouse || 'Основной склад')}</p>
                   <p>Категория: ${safe(item.category || '—')}</p>
-                  <p>Остаток: <b>${amount(item.qty)}</b></p>
+                  <p>Остаток: <b>${amount(item.qty)}</b> ${amount(item.qty) <= amount(item.minQty || 1) ? '<span class="badge danger">минимум</span>' : ''}</p>
                   <p>Цена: <b>${money(item.price)}</b></p>
                   <div class="row-actions">
                     <button class="btn btn-small btn-secondary" data-edit-inventory="${safe(item.id)}">Изменить</button>
@@ -998,6 +1475,54 @@
         </div>
       `;
     }
+    function renderReportBars(title, rows, valueFormatter = money){
+      const max = Math.max(1, ...rows.map(row => row[1]));
+      return `
+        <div class="panel">
+          <div class="panel-head"><h3>${title}</h3></div>
+          <div class="report-list">
+            ${rows.length ? rows.map(([label,value]) => `
+              <div class="report-row">
+                <b>${safe(label)}</b>
+                <div class="bar"><span style="--w:${Math.round(value / max * 100)}%"></span></div>
+                <span class="money">${valueFormatter(value)}</span>
+              </div>
+            `).join('') : '<div class="empty">Нет данных для отчета.</div>'}
+          </div>
+        </div>
+      `;
+    }
+    function renderReports(){
+      const stats = orderStats();
+      const byStatus = groupSum(state.orders, order => STATUSES[order.status] || order.status, () => 1);
+      const byMaster = groupSum(state.orders, order => order.master || 'Без мастера', order => calcOrderProfit(order));
+      const bySource = groupSum(state.orders, order => order.source || 'Без источника', order => amount(order.total));
+      const salaryRows = groupSum(state.orders, order => order.master || 'Без мастера', order => masterSalary(order));
+      const lowStock = state.inventory.filter(item => amount(item.qty) <= amount(item.minQty || 1));
+      views.reports.innerHTML = `
+        <div class="stats">
+          <div class="stat"><span>Выручка</span><b>${money(stats.revenue + stats.income)}</b></div>
+          <div class="stat"><span>Расходы</span><b>${money(stats.expense)}</b></div>
+          <div class="stat"><span>Чистая прибыль</span><b>${money(stats.profit)}</b></div>
+          <div class="stat"><span>Средний чек</span><b>${money(stats.avg)}</b></div>
+        </div>
+        <div class="grid-2">
+          ${renderReportBars('Заказы по статусам', byStatus, value => `${value}`)}
+          ${renderReportBars('Прибыль по мастерам', byMaster)}
+          ${renderReportBars('Источники клиентов', bySource)}
+          ${renderReportBars('Расчет зарплаты мастеров', salaryRows)}
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Контроль склада</h3><span class="badge danger">${lowStock.length} позиций ниже минимума</span></div>
+          ${lowStock.length ? lowStock.map(item => `
+            <div class="timeline-item">
+              <span><b>${safe(item.name)}</b> · ${safe(item.warehouse || 'Основной склад')} · ${safe(item.cell || '—')}</span>
+              <span>${amount(item.qty)} / ${amount(item.minQty || 1)}</span>
+            </div>
+          `).join('') : '<div class="empty">Склад в норме.</div>'}
+        </div>
+      `;
+    }
     function renderMasters(){
       views.masters.innerHTML = `
         <div class="panel">
@@ -1022,43 +1547,137 @@
       `;
     }
     function renderSettings(){
+      const s = state.settings;
+      const tab = state.settingsTab;
+      const active = key => tab === key ? 'active' : '';
+      const content = {
+        company: `
+          <div class="panel">
+            <div class="panel-head"><h3>Компания</h3></div>
+            <form id="settingsForm" class="grid-2">
+              <input type="hidden" name="settingsScope" value="company">
+              <label class="field"><span>Название</span><input name="serviceName" value="${safe(s.serviceName)}"></label>
+              <label class="field"><span>Телефон</span><input name="phone" value="${safe(s.phone)}"></label>
+              <label class="field"><span>Адрес</span><input name="address" value="${safe(s.address)}"></label>
+              <label class="field"><span>Валюта</span><select name="currency">${Object.entries(CURRENCIES).map(([key,item]) => `<option value="${key}" ${s.currency === key ? 'selected' : ''}>${item.name}</option>`).join('')}</select></label>
+              <label class="field"><span>Тема</span><select name="theme"><option value="light" ${s.theme !== 'dark' ? 'selected' : ''}>Светлая</option><option value="dark" ${s.theme === 'dark' ? 'selected' : ''}>Темная</option></select></label>
+              <div class="modal-actions" style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Сохранить</button></div>
+            </form>
+          </div>
+        `,
+        orders: `
+          <div class="panel">
+            <div class="panel-head"><h3>Заказы</h3></div>
+            <form id="settingsForm" class="grid-2">
+              <input type="hidden" name="settingsScope" value="orders">
+              <label class="field"><span>Префикс заказа</span><input name="orderPrefix" value="${safe(s.orderPrefix || '')}"></label>
+              <label class="field"><span>Следующий номер</span><input name="nextOrderNumber" type="number" value="${safe(s.nextOrderNumber || 1000)}"></label>
+              <label class="field"><span>Гарантия по умолчанию, дней</span><input name="warrantyDays" type="number" value="${safe(s.warrantyDays || 30)}"></label>
+              <label class="field full" style="grid-column:1/-1"><span>Типы заказов</span><textarea name="orderTypes">${safe((s.orderTypes || []).join('\n'))}</textarea></label>
+              <label class="field full" style="grid-column:1/-1"><span>Способы оплаты</span><textarea name="paymentMethods">${safe((s.paymentMethods || []).join('\n'))}</textarea></label>
+              <div class="modal-actions" style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Сохранить</button></div>
+            </form>
+          </div>
+        `,
+        finance: `
+          <div class="panel">
+            <div class="panel-head"><h3>Финансы</h3></div>
+            <form id="settingsForm" class="grid-2">
+              <input type="hidden" name="settingsScope" value="finance">
+              <label class="field"><span>Процент зарплаты по умолчанию</span><input name="salaryPercent" type="number" step="0.01" value="${safe(s.salaryPercent || 20)}"></label>
+              <label class="field"><span>Валюта учета</span><select name="currency">${Object.entries(CURRENCIES).map(([key,item]) => `<option value="${key}" ${s.currency === key ? 'selected' : ''}>${item.name}</option>`).join('')}</select></label>
+              <label class="field full" style="grid-column:1/-1"><span>Статьи доходов и расходов</span><textarea name="financeCategories">${safe((s.financeCategories || []).join('\n'))}</textarea></label>
+              <div class="modal-actions" style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Сохранить</button></div>
+            </form>
+          </div>
+        `,
+        warehouse: `
+          <div class="panel">
+            <div class="panel-head"><h3>Склад</h3></div>
+            <form id="settingsForm" class="grid-2">
+              <input type="hidden" name="settingsScope" value="warehouse">
+              <label class="field full" style="grid-column:1/-1"><span>Склады и зоны хранения</span><textarea name="warehouses">${safe((s.warehouses || []).join('\n'))}</textarea></label>
+              <div class="modal-actions" style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Сохранить</button></div>
+            </form>
+          </div>
+        `,
+        access: `
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Мастера и доступ</h3>
+              <button class="btn btn-primary" id="newMasterBtn" type="button">Добавить мастера</button>
+            </div>
+            ${state.masters.length ? `
+              <div class="cards-grid">
+                ${state.masters.map(master => `
+                  <div class="item-card">
+                    <h4>${safe(master.name)}</h4>
+                    <p>Логин: <b>${safe(master.login)}</b></p>
+                    <p>Зарплата: ${safe(master.salaryPercent || s.salaryPercent || '0')}%</p>
+                    <p>Доступ: ${safe((master.roles || []).join(', ') || 'orders')}</p>
+                    <div class="row-actions">
+                      <button class="btn btn-small btn-secondary" data-edit-master="${safe(master.id)}">Изменить</button>
+                      <button class="btn btn-small btn-danger" data-delete-master="${safe(master.id)}">Удалить</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : '<div class="empty">Мастеров пока нет.</div>'}
+          </div>
+        `,
+        documents: `
+          <div class="panel">
+            <div class="panel-head"><h3>Документы</h3></div>
+            <p class="muted">Печать заказа, акта приема, выполненных работ и гарантийного блока формируется из карточки заказа. Реквизиты берутся из настроек компании.</p>
+            <div class="grid-3">
+              <div class="item-card"><h4>Акт приема</h4><p>Клиент, устройство, неисправность, комплектация.</p></div>
+              <div class="item-card"><h4>Акт работ</h4><p>Статус, работы, сумма, оплата и долг.</p></div>
+              <div class="item-card"><h4>Гарантия</h4><p>Срок гарантии, мастер и подписи.</p></div>
+            </div>
+          </div>
+        `,
+        sync: `
+          <div class="panel">
+            <h3>Firebase и GitHub</h3>
+            <p class="muted">Основная база: Firebase Firestore. Проект: one-service-crm.</p>
+            <p class="muted">Realtime-данные: crmWorkspaces/${WORKSPACE_ID}/data с документами order, master, inventory, finance и settings.</p>
+            <p class="muted">Статус: ${state.firebaseReady ? 'подключен' : 'подключение'}. Слушатели работают через onSnapshot.</p>
+          </div>
+        `
+      };
       views.settings.innerHTML = `
-        <div class="panel">
-          <div class="panel-head"><h3>Настройки сервиса</h3></div>
-          <form id="settingsForm" class="grid-2">
-            <label class="field"><span>Название</span><input name="serviceName" value="${safe(state.settings.serviceName)}"></label>
-            <label class="field"><span>Телефон</span><input name="phone" value="${safe(state.settings.phone)}"></label>
-            <label class="field"><span>Адрес</span><input name="address" value="${safe(state.settings.address)}"></label>
-            <label class="field"><span>Валюта</span><select name="currency">${Object.entries(CURRENCIES).map(([key,item]) => `<option value="${key}" ${state.settings.currency === key ? 'selected' : ''}>${item.name}</option>`).join('')}</select></label>
-            <label class="field"><span>Префикс заказа</span><input name="orderPrefix" value="${safe(state.settings.orderPrefix || '')}"></label>
-            <label class="field"><span>Следующий номер</span><input name="nextOrderNumber" type="number" value="${safe(state.settings.nextOrderNumber || 1000)}"></label>
-            <label class="field"><span>Тема</span><select name="theme"><option value="light" ${state.settings.theme !== 'dark' ? 'selected' : ''}>Светлая</option><option value="dark" ${state.settings.theme === 'dark' ? 'selected' : ''}>Темная</option></select></label>
-            <div class="modal-actions" style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Сохранить настройки</button></div>
-          </form>
-        </div>
-        <div class="panel">
-          <h3>Firebase</h3>
-          <p class="muted">Проект: one-service-crm. Данные: workspaces/${WORKSPACE_ID}/orders, masters, inventory, finance, settings.</p>
-          <p class="muted">Статус: ${state.firebaseReady ? 'подключен' : 'подключение'}. Realtime работает через onSnapshot.</p>
+        <div class="settings-layout">
+          <div class="settings-tabs">
+            <button class="btn ${active('company')}" data-settings-tab="company">Компания</button>
+            <button class="btn ${active('orders')}" data-settings-tab="orders">Заказы</button>
+            <button class="btn ${active('finance')}" data-settings-tab="finance">Финансы</button>
+            <button class="btn ${active('warehouse')}" data-settings-tab="warehouse">Склад</button>
+            <button class="btn ${active('access')}" data-settings-tab="access">Доступ</button>
+            <button class="btn ${active('documents')}" data-settings-tab="documents">Документы</button>
+            <button class="btn ${active('sync')}" data-settings-tab="sync">Firebase</button>
+          </div>
+          <div>${content[tab] || content.company}</div>
         </div>
       `;
     }
     function renderTopbar(){
       const map = {
+        dashboard:['Рабочий стол','Ключевые показатели, сроки и быстрые действия'],
         orders:['Заказы','Создание, статусы, печать и оплата'],
+        clients:['Клиенты','История обращений и долги'],
         inventory:['Склад','Остатки и цены деталей'],
         finance:['Финансы','Доходы, расходы и баланс'],
-        masters:['Мастера','Логины, пароли и доступ'],
+        reports:['Отчеты','Прибыль, мастера, источники и склад'],
         settings:['Настройки','Компания, валюта и Firebase']
       };
       $('viewTitle').textContent = map[state.view][0];
       $('viewSubtitle').textContent = map[state.view][1];
       const actions = $('topbarActions');
       actions.innerHTML = '';
+      if (state.view === 'dashboard') actions.innerHTML = `<button class="btn btn-primary" id="newOrderBtn">Новый заказ</button>`;
       if (state.view === 'orders') actions.innerHTML = `<button class="btn btn-primary" id="newOrderBtn">Новый заказ</button>`;
       if (state.view === 'inventory') actions.innerHTML = `<button class="btn btn-primary" id="newInventoryBtn">Добавить на склад</button>`;
       if (state.view === 'finance') actions.innerHTML = `<button class="btn btn-primary" id="newFinanceBtn">Новая операция</button>`;
-      if (state.view === 'masters' && isAdmin()) actions.innerHTML = `<button class="btn btn-primary" id="newMasterBtn">Добавить мастера</button>`;
     }
     function render(){
       if (!appPage || appPage.classList.contains('hidden')) return;
@@ -1066,10 +1685,12 @@
       Object.entries(views).forEach(([key,node]) => node.classList.toggle('hidden', key !== state.view));
       document.querySelectorAll('.admin-only').forEach(node => node.classList.toggle('hidden', !isAdmin()));
       renderTopbar();
+      if (state.view === 'dashboard') renderDashboard();
       if (state.view === 'orders') renderOrders();
+      if (state.view === 'clients') renderClients();
       if (state.view === 'inventory') renderInventory();
       if (state.view === 'finance') renderFinance();
-      if (state.view === 'masters') renderMasters();
+      if (state.view === 'reports') renderReports();
       if (state.view === 'settings') renderSettings();
     }
 
@@ -1087,19 +1708,36 @@
         <form id="orderForm" class="grid-3">
           <input type="hidden" name="id" value="${safe(order.id || '')}">
           <label class="field"><span>Номер</span><input name="number" value="${safe(order.number || '')}" placeholder="Авто"></label>
+          <label class="field"><span>Тип заказа</span><select name="type">${listOptions(state.settings.orderTypes || [], order.type || (state.settings.orderTypes || [])[0] || '')}</select></label>
           <label class="field"><span>Статус</span><select name="status">${statusOptions(order.status || 'new')}</select></label>
           <label class="field"><span>Мастер</span><select name="master"><option value="">Не выбран</option>${masterOptions(order.master)}</select></label>
+          <label class="field"><span>Приоритет</span><select name="priority"><option value="normal" ${order.priority !== 'urgent' ? 'selected' : ''}>Обычный</option><option value="urgent" ${order.priority === 'urgent' ? 'selected' : ''}>Срочный</option></select></label>
           <label class="field"><span>Клиент</span><input name="client" value="${safe(order.client || '')}" required></label>
           <label class="field"><span>Телефон</span><input name="phone" value="${safe(order.phone || '')}"></label>
           <label class="field"><span>Источник</span><input name="source" value="${safe(order.source || '')}"></label>
           <label class="field"><span>Устройство</span><input name="device" value="${safe(order.device || '')}" required></label>
           <label class="field"><span>Модель</span><input name="model" value="${safe(order.model || '')}"></label>
+          <label class="field"><span>Серийный / IMEI</span><input name="serial" value="${safe(order.serial || '')}"></label>
+          <label class="field"><span>Склад / ячейка заказа</span><input name="storagePlace" value="${safe(order.storagePlace || '')}" placeholder="A-01"></label>
           <label class="field"><span>Срок</span><input name="deadline" type="date" value="${safe(order.deadline || '')}"></label>
           <label class="field"><span>Сумма</span><input name="total" type="number" step="0.01" value="${safe(order.total || '')}"></label>
           <label class="field"><span>Оплачено</span><input name="paid" type="number" step="0.01" value="${safe(order.paid || '')}"></label>
+          <label class="field"><span>Себестоимость деталей</span><input name="partsCost" type="number" step="0.01" value="${safe(order.partsCost || '')}"></label>
+          <label class="field"><span>Скидка</span><input name="discount" type="number" step="0.01" value="${safe(order.discount || '')}"></label>
+          <label class="field"><span>Оплата</span><select name="paymentMethod">${listOptions(state.settings.paymentMethods || [], order.paymentMethod || '')}</select></label>
           <label class="field"><span>Гарантия, дней</span><input name="warranty" type="number" value="${safe(order.warranty || '')}"></label>
           <label class="field" style="grid-column:1/-1"><span>Неисправность</span><textarea name="problem">${safe(order.problem || '')}</textarea></label>
+          <label class="field" style="grid-column:1/-1"><span>Комплектация / внешний вид</span><textarea name="equipment">${safe(order.equipment || '')}</textarea></label>
+          <label class="field" style="grid-column:1/-1"><span>Использованные детали</span><textarea name="partsText" placeholder="Подсветка x1, блок питания x1">${safe(order.partsText || '')}</textarea></label>
           <label class="field" style="grid-column:1/-1"><span>Выполненные работы / заметки</span><textarea name="notes">${safe(order.notes || '')}</textarea></label>
+          ${Array.isArray(order.statusHistory) && order.statusHistory.length ? `
+            <div style="grid-column:1/-1">
+              <span class="muted">История статусов</span>
+              <div class="timeline">
+                ${order.statusHistory.slice().reverse().map(item => `<div class="timeline-item"><span>${safe(STATUSES[item.status] || item.status)}</span><span>${formatDate(item.at)} · ${safe(item.user || '')}</span></div>`).join('')}
+              </div>
+            </div>
+          ` : ''}
           <div class="modal-actions" style="grid-column:1/-1">
             ${order.id ? `<button class="btn btn-secondary" data-print-order="${safe(order.id)}" type="button">Печать</button>` : ''}
             <button class="btn btn-primary" type="submit">Сохранить</button>
@@ -1113,8 +1751,12 @@
         <form id="inventoryForm" class="grid-2">
           <input type="hidden" name="id" value="${safe(item.id || '')}">
           <label class="field"><span>Название</span><input name="name" value="${safe(item.name || '')}" required></label>
+          <label class="field"><span>SKU / штрихкод</span><input name="sku" value="${safe(item.sku || '')}"></label>
           <label class="field"><span>Категория</span><input name="category" value="${safe(item.category || '')}"></label>
+          <label class="field"><span>Склад</span><select name="warehouse">${listOptions(state.settings.warehouses || [], item.warehouse || (state.settings.warehouses || [])[0] || '')}</select></label>
+          <label class="field"><span>Ячейка</span><input name="cell" value="${safe(item.cell || '')}" placeholder="A-01"></label>
           <label class="field"><span>Количество</span><input name="qty" type="number" step="0.01" value="${safe(item.qty || '')}"></label>
+          <label class="field"><span>Минимум</span><input name="minQty" type="number" step="0.01" value="${safe(item.minQty || '1')}"></label>
           <label class="field"><span>Цена</span><input name="price" type="number" step="0.01" value="${safe(item.price || '')}"></label>
           <div class="modal-actions" style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Сохранить</button></div>
         </form>
@@ -1127,7 +1769,8 @@
           <input type="hidden" name="id" value="${safe(item.id || '')}">
           <label class="field"><span>Тип</span><select name="type"><option value="income" ${item.type !== 'expense' ? 'selected' : ''}>Доход</option><option value="expense" ${item.type === 'expense' ? 'selected' : ''}>Расход</option></select></label>
           <label class="field"><span>Дата</span><input name="date" type="date" value="${safe(item.date || today())}"></label>
-          <label class="field"><span>Категория</span><input name="category" value="${safe(item.category || '')}"></label>
+          <label class="field"><span>Категория</span><select name="category">${listOptions(state.settings.financeCategories || [], item.category || '')}</select></label>
+          <label class="field"><span>Касса / способ оплаты</span><select name="paymentMethod">${listOptions(state.settings.paymentMethods || [], item.paymentMethod || '')}</select></label>
           <label class="field"><span>Сумма</span><input name="amount" type="number" step="0.01" value="${safe(item.amount || '')}" required></label>
           <label class="field" style="grid-column:1/-1"><span>Описание</span><textarea name="note">${safe(item.note || '')}</textarea></label>
           <div class="modal-actions" style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Сохранить</button></div>
@@ -1168,11 +1811,12 @@
           <div class="head"><div><h1>${safe(state.settings.serviceName)}</h1><div class="muted">${safe(state.settings.phone)}<br>${safe(state.settings.address)}</div></div><div><b>Заказ № ${safe(order.number)}</b><br>${formatDate(order.createdAtIso)}</div></div>
           <div class="grid">
             <div class="box"><b>Клиент</b><br>${safe(order.client)}<br>${safe(order.phone)}</div>
-            <div class="box"><b>Устройство</b><br>${safe(order.device)} ${safe(order.model)}</div>
+            <div class="box"><b>Устройство</b><br>${safe(order.device)} ${safe(order.model)}<br>${safe(order.serial || '')}</div>
           </div>
           <div class="box"><b>Неисправность</b><br>${safe(order.problem || '—')}</div>
+          <div class="box"><b>Комплектация / внешний вид</b><br>${safe(order.equipment || '—')}</div>
           <div class="box"><b>Работы / заметки</b><br>${safe(order.notes || '—')}</div>
-          <table><tr><td>Статус</td><td>${safe(STATUSES[order.status] || order.status)}</td></tr><tr><td>Мастер</td><td>${safe(order.master || '—')}</td></tr><tr><td>Сумма</td><td>${money(order.total)}</td></tr><tr><td>Оплачено</td><td>${money(order.paid)}</td></tr><tr><td>Долг</td><td>${money(Math.max(0, amount(order.total) - amount(order.paid)))}</td></tr></table>
+          <table><tr><td>Тип</td><td>${safe(order.type || 'Ремонт')}</td></tr><tr><td>Статус</td><td>${safe(STATUSES[order.status] || order.status)}</td></tr><tr><td>Мастер</td><td>${safe(order.master || '—')}</td></tr><tr><td>Срок</td><td>${formatDate(order.deadline)}</td></tr><tr><td>Гарантия</td><td>${safe(order.warranty || state.settings.warrantyDays || '—')} дней</td></tr><tr><td>Детали</td><td>${safe(order.partsText || '—')}</td></tr><tr><td>Сумма</td><td>${money(order.total)}</td></tr><tr><td>Оплачено</td><td>${money(order.paid)}</td></tr><tr><td>Долг</td><td>${money(Math.max(0, amount(order.total) - amount(order.paid)))}</td></tr></table>
           <div class="sign"><div class="line">Подпись клиента</div><div class="line">Подпись мастера</div></div>
         </div><script>window.addEventListener('load',()=>setTimeout(()=>{window.print()},150))<\/script></body></html>
       `;
@@ -1191,6 +1835,20 @@
         state.view = nav.dataset.view;
         render();
       }
+      const settingsTab = event.target.closest('[data-settings-tab]');
+      if (settingsTab) {
+        state.settingsTab = settingsTab.dataset.settingsTab;
+        renderSettings();
+      }
+      const mode = event.target.closest('[data-order-mode]');
+      if (mode) {
+        state.orderMode = mode.dataset.orderMode;
+        renderOrders();
+      }
+      if (event.target.closest('#dashNewOrderBtn')) orderModal();
+      if (event.target.closest('#dashInventoryBtn')) { state.view = 'inventory'; render(); }
+      if (event.target.closest('#dashFinanceBtn')) { state.view = 'finance'; render(); }
+      if (event.target.closest('#dashReportsBtn')) { state.view = 'reports'; render(); }
       if (event.target.closest('#newOrderBtn')) orderModal();
       if (event.target.closest('#newInventoryBtn')) inventoryModal();
       if (event.target.closest('#newFinanceBtn')) financeModal();
@@ -1217,7 +1875,7 @@
       const deleteMasterBtn = event.target.closest('[data-delete-master]');
       if (deleteMasterBtn && confirm('Удалить мастера и закрыть ему доступ?')) await deleteMaster(deleteMasterBtn.dataset.deleteMaster);
       if (event.target.closest('#resetFiltersBtn')) {
-        state.filters = { search:'', status:'', master:'', payment:'' };
+        state.filters = { search:'', status:'', master:'', payment:'', source:'' };
         renderOrders();
       }
     });
@@ -1230,6 +1888,7 @@
       }
       if (event.target.id === 'statusFilter') { state.filters.status = event.target.value; renderOrders(); }
       if (event.target.id === 'masterFilter') { state.filters.master = event.target.value; renderOrders(); }
+      if (event.target.id === 'sourceFilter') { state.filters.source = event.target.value; renderOrders(); }
       if (event.target.id === 'paymentFilter') { state.filters.payment = event.target.value; renderOrders(); }
     });
     document.addEventListener('input', event => {
@@ -1278,10 +1937,23 @@
         closeModal();
       }
       if (form.id === 'settingsForm') {
-        await saveSettings({
-          ...data,
-          nextOrderNumber:Number(data.nextOrderNumber || 1000)
-        });
+        const scope = data.settingsScope;
+        const payload = { ...data };
+        delete payload.settingsScope;
+        if (scope === 'orders') {
+          payload.nextOrderNumber = Number(data.nextOrderNumber || 1000);
+          payload.warrantyDays = Number(data.warrantyDays || 30);
+          payload.orderTypes = lines(data.orderTypes);
+          payload.paymentMethods = lines(data.paymentMethods);
+        }
+        if (scope === 'finance') {
+          payload.salaryPercent = Number(data.salaryPercent || 0);
+          payload.financeCategories = lines(data.financeCategories);
+        }
+        if (scope === 'warehouse') {
+          payload.warehouses = lines(data.warehouses);
+        }
+        await saveSettings(payload);
       }
     });
 
@@ -1299,11 +1971,20 @@
       firebaseReady:state.firebaseReady,
       dataReady:state.dataReady,
       workspace:WORKSPACE_ID,
+      path:`crmWorkspaces/${WORKSPACE_ID}/data`,
       orders:state.orders.length,
       masters:state.masters.length,
       inventory:state.inventory.length,
       finance:state.finance.length
     });
+    window.crmTestFirebaseWrite = async () => {
+      const id = uid('probe');
+      const ref = doc(db, 'crmWorkspaces', WORKSPACE_ID, 'data', dataDocId('probe', id));
+      await setDoc(ref, { type:'probe', id, createdAtIso:nowIso(), updatedAt:serverTimestamp() });
+      await deleteDoc(ref);
+      toast('Firebase запись/удаление работает.');
+      return true;
+    };
 
     setTheme(localStorage.getItem(THEME_KEY) || 'light');
     $('rememberInput').checked = localStorage.getItem(REMEMBER_KEY) === '1';
