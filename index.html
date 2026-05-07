@@ -262,10 +262,111 @@
       grid-template-columns:minmax(180px,1.5fr) repeat(4,minmax(130px,1fr));
       gap:10px;
     }
+    .orders-workbar{
+      display:grid;
+      grid-template-columns:auto auto auto minmax(220px,1fr) auto;
+      gap:10px;
+      align-items:center;
+      padding:10px;
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:10px;
+      box-shadow:var(--shadow);
+      margin-bottom:12px;
+    }
+    .pager{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      color:var(--muted);
+      font-weight:900;
+    }
+    .icon-btn{
+      width:34px;
+      height:34px;
+      display:inline-grid;
+      place-items:center;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:var(--surface);
+      color:var(--muted);
+      font-weight:950;
+    }
+    .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .columns-control{position:relative}
+    .columns-popover{
+      position:absolute;
+      top:42px;
+      left:0;
+      z-index:12;
+      width:220px;
+      display:grid;
+      gap:8px;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:var(--surface);
+      box-shadow:var(--shadow);
+    }
+    .columns-popover label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:850;
+    }
+    .columns-popover input,.order-check{width:auto}
+    .filter-button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:34px;
+      padding:0 12px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:var(--surface);
+      color:var(--muted);
+      font-weight:900;
+    }
+    .filter-button.active{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+    .search-group{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+    }
+    .search-group input{
+      border-radius:6px 0 0 6px;
+      min-height:34px;
+      padding:7px 10px;
+    }
+    .search-group .btn{
+      border-radius:0 6px 6px 0;
+      min-height:34px;
+    }
+    .orders-filter-panel{
+      padding:12px;
+      margin-bottom:12px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:var(--surface);
+    }
+    .bulkbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      margin-bottom:12px;
+      border:1px solid rgba(37,99,235,.25);
+      border-radius:10px;
+      background:color-mix(in srgb,var(--surface) 78%,#dbeafe 22%);
+    }
     .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
     .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
     .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
     table{width:100%;border-collapse:collapse;min-width:960px;background:var(--surface)}
+    .orders-table{min-width:1080px}
     th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
     th{
       position:sticky;
@@ -275,7 +376,54 @@
       color:var(--muted);
       font-size:12px;
       text-transform:uppercase;
-      letter-spacing:.02em;
+      letter-spacing:0;
+    }
+    .orders-table th{height:42px;background:var(--surface);text-transform:none;font-size:13px}
+    .orders-table td{height:70px;background:var(--surface)}
+    .orders-table tr:nth-child(even) td{background:color-mix(in srgb,var(--surface) 94%,var(--surface-2) 6%)}
+    .orders-table tr:hover td{background:color-mix(in srgb,var(--surface) 84%,#eff6ff 16%)}
+    .order-number{font-weight:900;color:var(--text)}
+    .order-date{display:block;margin-top:3px;font-size:11px;color:var(--muted)}
+    .order-icons{display:flex;align-items:center;gap:4px;color:#d9f99d}
+    .star-btn{
+      width:26px;
+      height:26px;
+      border:0;
+      background:transparent;
+      color:#cbd5e1;
+      font-size:20px;
+      line-height:1;
+    }
+    .star-btn.active{color:#f59e0b}
+    .order-device b,.order-client b{display:block}
+    .order-device span,.order-client span{display:block;margin-top:2px;font-size:12px;color:var(--muted)}
+    .order-status-select{
+      width:128px;
+      min-height:26px;
+      padding:3px 8px;
+      border-radius:4px;
+      border:0;
+      color:#fff;
+      font-size:12px;
+      font-weight:950;
+      text-align:center;
+      box-shadow:none;
+    }
+    .order-status-select.new{background:#3b82f6}
+    .order-status-select.diagnostics{background:#d97706}
+    .order-status-select.in_progress{background:#f97316}
+    .order-status-select.waiting{background:#7c3aed}
+    .order-status-select.ready{background:#16a34a}
+    .order-status-select.issued{background:#14b8a6}
+    .table-footer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 2px 0;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
     }
     tr:last-child td{border-bottom:none}
     .empty{
@@ -451,6 +599,9 @@
     .topbar{
       box-shadow:0 8px 24px rgba(15,23,42,.04);
     }
+    .topbar h2,.brand span:last-child{color:var(--text)}
+    .sidebar .brand span:last-child{color:#f8fafc}
+    [data-theme="dark"] .topbar h2{color:#f8fafc}
     .content{
       background:
         linear-gradient(180deg,rgba(37,99,235,.04),transparent 220px),
@@ -617,11 +768,17 @@
       .settings-layout{grid-template-columns:1fr}
       .settings-tabs{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}
       .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .orders-workbar{grid-template-columns:auto auto 1fr auto}
+      .orders-workbar .filter-button{grid-column:auto}
+      .search-group{grid-column:1/-1}
     }
     @media (max-width:720px){
       .kanban{grid-template-columns:1fr}
       .report-row{grid-template-columns:1fr}
       .settings-tabs,.quick-grid{grid-template-columns:1fr}
+      .orders-workbar{grid-template-columns:1fr 1fr}
+      .orders-workbar .search-group,.orders-workbar .btn-primary{grid-column:1/-1}
+      .bulkbar,.table-footer{align-items:flex-start;flex-direction:column}
     }
   </style>
 </head>
@@ -730,6 +887,9 @@
     const SESSION_KEY = 'one_service_clean_crm_session';
     const REMEMBER_KEY = 'one_service_clean_crm_remember';
     const THEME_KEY = 'one_service_clean_crm_theme';
+    const GITHUB_KEY = 'one_service_clean_crm_github';
+    const ORDER_COLUMNS_KEY = 'one_service_clean_crm_order_columns';
+    const FIRESTORE_TIMEOUT_MS = 15000;
     const CURRENCIES = {
       UAH:{ name:'Гривна', code:'UAH', symbol:'грн' },
       RUB:{ name:'Рубли', code:'RUB', symbol:'₽' },
@@ -753,6 +913,40 @@
       ready:'ready',
       issued:'issued'
     };
+    const DEFAULT_ORDER_COLUMNS = {
+      icons:true,
+      number:true,
+      receiver:true,
+      manager:true,
+      master:true,
+      status:true,
+      device:true,
+      total:true,
+      paid:true,
+      client:true,
+      actions:true
+    };
+    const ORDER_COLUMN_LABELS = {
+      icons:'Метки',
+      number:'№ заказа',
+      receiver:'Приемщик',
+      manager:'Менеджер',
+      master:'Мастер',
+      status:'Статус',
+      device:'Устройство',
+      total:'Стоимость',
+      paid:'Оплачено',
+      client:'Клиент',
+      actions:'Действия'
+    };
+    const readLocalJson = (key, fallback = {}) => {
+      try {
+        const value = JSON.parse(localStorage.getItem(key) || 'null');
+        return value && typeof value === 'object' ? { ...fallback, ...value } : { ...fallback };
+      } catch {
+        return { ...fallback };
+      }
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -770,9 +964,23 @@
     const state = {
       firebaseReady:false,
       dataReady:false,
+      realtimeBound:false,
       view:'dashboard',
       orderMode:'table',
       settingsTab:'company',
+      filtersOpen:false,
+      columnsMenuOpen:false,
+      ordersPage:1,
+      ordersPerPage:25,
+      selectedOrders:[],
+      visibleColumns:readLocalJson(ORDER_COLUMNS_KEY, DEFAULT_ORDER_COLUMNS),
+      githubConfig:readLocalJson(GITHUB_KEY, {
+        owner:'',
+        repo:'',
+        branch:'main',
+        path:'crm-data/one-service.json',
+        token:''
+      }),
       user:null,
       settings:{
         serviceName:'1ONE Service',
@@ -865,6 +1073,25 @@
     const sourceOptions = selected => orderSources()
       .map(item => `<option value="${safe(item)}" ${selected === item ? 'selected' : ''}>${safe(item)}</option>`)
       .join('');
+    const columnEnabled = key => state.visibleColumns[key] !== false;
+    const orderPerson = (order, field) => order[field] || order.createdBy || state.settings.serviceName || '—';
+    const orderDate = order => formatDate(order.receivedAt || order.createdAtIso || order.updatedAtIso);
+    const orderDeviceTitle = order => [order.device, order.model].filter(Boolean).join(' ') || '—';
+    const orderDebt = order => Math.max(0, amount(order.total) - amount(order.paid));
+    const pageOrders = orders => {
+      const totalPages = Math.max(1, Math.ceil(orders.length / state.ordersPerPage));
+      state.ordersPage = Math.min(Math.max(1, state.ordersPage), totalPages);
+      const start = (state.ordersPage - 1) * state.ordersPerPage;
+      return {
+        totalPages,
+        start,
+        items:orders.slice(start, start + state.ordersPerPage)
+      };
+    };
+    const resetOrdersPage = () => {
+      state.ordersPage = 1;
+      state.selectedOrders = state.selectedOrders.filter(id => state.orders.some(order => order.id === id));
+    };
     const isOverdue = order => order.deadline && order.status !== 'issued' && new Date(order.deadline) < new Date(today());
     const calcOrderProfit = order => amount(order.total) - amount(order.partsCost) - amount(order.discount);
     const masterSalary = order => {
@@ -895,6 +1122,84 @@
       });
       return [...map.entries()].sort((a,b) => b[1] - a[1]);
     };
+    const withTimeout = (promise, ms, label) => Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error(label)), ms))
+    ]);
+    let githubPushTimer = null;
+    const githubConfigured = () => Boolean(
+      state.githubConfig.owner &&
+      state.githubConfig.repo &&
+      state.githubConfig.path &&
+      state.githubConfig.token
+    );
+    const snapshotData = () => ({
+      workspace:WORKSPACE_ID,
+      updatedAtIso:nowIso(),
+      settings:{ ...state.settings, updatedAt:null },
+      orders:state.orders.map(item => ({ ...item, updatedAt:null })),
+      masters:state.masters.map(item => ({ ...item, password:item.password || '' })),
+      inventory:state.inventory.map(item => ({ ...item, updatedAt:null })),
+      finance:state.finance.map(item => ({ ...item, updatedAt:null }))
+    });
+    const toBase64 = text => {
+      const bytes = new TextEncoder().encode(text);
+      let binary = '';
+      bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+      return btoa(binary);
+    };
+    function saveGithubConfig(data){
+      state.githubConfig = {
+        owner:String(data.owner || '').trim(),
+        repo:String(data.repo || '').trim(),
+        branch:String(data.branch || 'main').trim() || 'main',
+        path:String(data.path || 'crm-data/one-service.json').trim() || 'crm-data/one-service.json',
+        token:String(data.token || '').trim()
+      };
+      localStorage.setItem(GITHUB_KEY, JSON.stringify(state.githubConfig));
+    }
+    async function pushGithubSnapshot(showToast = false){
+      if (!githubConfigured()) {
+        if (showToast) toast('GitHub не настроен.');
+        return false;
+      }
+      const cfg = state.githubConfig;
+      const cleanPath = cfg.path.replace(/^\/+/, '');
+      const url = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cleanPath}`;
+      const headers = {
+        Authorization:`Bearer ${cfg.token}`,
+        Accept:'application/vnd.github+json',
+        'Content-Type':'application/json'
+      };
+      let sha = null;
+      const current = await fetch(`${url}?ref=${encodeURIComponent(cfg.branch || 'main')}`, { headers });
+      if (current.ok) {
+        const currentJson = await current.json();
+        sha = currentJson.sha || null;
+      } else if (current.status !== 404) {
+        throw new Error(`GitHub чтение: ${current.status}`);
+      }
+      const body = {
+        message:`CRM snapshot ${new Date().toLocaleString('ru-RU')}`,
+        content:toBase64(JSON.stringify(snapshotData(), null, 2)),
+        branch:cfg.branch || 'main'
+      };
+      if (sha) body.sha = sha;
+      const response = await fetch(url, { method:'PUT', headers, body:JSON.stringify(body) });
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`GitHub запись: ${response.status} ${text.slice(0, 160)}`);
+      }
+      if (showToast) toast('GitHub-снимок сохранен.');
+      return true;
+    }
+    function scheduleGithubSnapshot(){
+      if (!githubConfigured()) return;
+      clearTimeout(githubPushTimer);
+      githubPushTimer = setTimeout(() => {
+        pushGithubSnapshot(false).catch(error => toast(error.message || 'GitHub-снимок не сохранен'));
+      }, 900);
+    }
 
     function toast(message){
       const node = $('toast');
@@ -988,13 +1293,16 @@
 
     async function bootstrap(){
       try {
-        const settingsSnap = await getDoc(refs.settings());
-        if (!settingsSnap.exists()) {
-          await setDoc(refs.settings(), { ...state.settings, type:'settings', updatedAt:serverTimestamp(), updatedAtIso:nowIso() }, { merge:true });
-        }
+        const settingsSnap = await withTimeout(getDoc(refs.settings()), 7000, 'Firestore настройки не ответили за 7 секунд');
+        if (settingsSnap.exists()) state.settings = { ...state.settings, ...settingsSnap.data() };
         setSync('online','Firebase подключен');
       } catch (error) {
-        showFirebaseError('Firebase не подключен', error);
+        if (state.realtimeBound) {
+          toast(`Настройки Firebase: ${error.message || error.code || 'не ответили'}`);
+          setSync(state.dataReady ? 'online' : '', state.dataReady ? 'Realtime включен' : 'Realtime подключается');
+        } else {
+          showFirebaseError('Firebase не подключен', error);
+        }
       }
     }
     function bindRealtime(){
@@ -1041,8 +1349,12 @@
       onAuthStateChanged(auth, async user => {
         if (!user || state.firebaseReady) return;
         state.firebaseReady = true;
-        await bootstrap();
-        bindRealtime();
+        setSync('online','Firebase Auth подключен');
+        if (!state.realtimeBound) {
+          state.realtimeBound = true;
+          bindRealtime();
+        }
+        bootstrap();
       });
     }
 
@@ -1065,6 +1377,9 @@
           type:'order',
           id,
           number:data.number || `${state.settings.orderPrefix || ''}${nextOrderNumber()}`,
+          receiver:data.receiver || old?.receiver || state.user.name,
+          manager:data.manager || old?.manager || state.user.name,
+          favorite:Boolean(data.favorite ?? old?.favorite),
           total:amount(data.total),
           paid:amount(data.paid),
           partsCost:amount(data.partsCost),
@@ -1075,8 +1390,9 @@
           updatedAt:serverTimestamp(),
           updatedBy:state.user.name
         };
-        await setDoc(refs.order(id), payload, { merge:true });
+        await withTimeout(setDoc(refs.order(id), payload, { merge:true }), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил сохранение заказа');
         upsertLocal('orders', payload);
+        scheduleGithubSnapshot();
         toast('Заказ сохранен.');
       } catch (error) {
         showFirebaseError('Заказ не сохранен', error);
@@ -1086,8 +1402,10 @@
     async function deleteOrder(id){
       if (!isAdmin()) return toast('Удалять заказы может только администратор.');
       try {
-        await deleteDoc(refs.order(id));
+        await withTimeout(deleteDoc(refs.order(id)), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил удаление заказа');
         removeLocal('orders', id);
+        state.selectedOrders = state.selectedOrders.filter(item => item !== id);
+        scheduleGithubSnapshot();
         toast('Заказ удален у всех устройств.');
       } catch (error) {
         showFirebaseError('Заказ не удален', error);
@@ -1106,8 +1424,9 @@
           updatedAtIso:nowIso(),
           updatedAt:serverTimestamp()
         };
-        await setDoc(refs.inventoryItem(id), payload, { merge:true });
+        await withTimeout(setDoc(refs.inventoryItem(id), payload, { merge:true }), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил сохранение склада');
         upsertLocal('inventory', payload);
+        scheduleGithubSnapshot();
         toast('Склад обновлен.');
       } catch (error) {
         showFirebaseError('Склад не сохранен', error);
@@ -1116,8 +1435,9 @@
     }
     async function deleteInventoryItem(id){
       try {
-        await deleteDoc(refs.inventoryItem(id));
+        await withTimeout(deleteDoc(refs.inventoryItem(id)), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил удаление склада');
         removeLocal('inventory', id);
+        scheduleGithubSnapshot();
         toast('Позиция удалена.');
       } catch (error) {
         showFirebaseError('Позиция не удалена', error);
@@ -1135,8 +1455,9 @@
           updatedAtIso:nowIso(),
           updatedAt:serverTimestamp()
         };
-        await setDoc(refs.financeItem(id), payload, { merge:true });
+        await withTimeout(setDoc(refs.financeItem(id), payload, { merge:true }), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил сохранение финансов');
         upsertLocal('finance', payload);
+        scheduleGithubSnapshot();
         toast('Финансы обновлены.');
       } catch (error) {
         showFirebaseError('Финансы не сохранены', error);
@@ -1145,8 +1466,9 @@
     }
     async function deleteFinanceItem(id){
       try {
-        await deleteDoc(refs.financeItem(id));
+        await withTimeout(deleteDoc(refs.financeItem(id)), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил удаление операции');
         removeLocal('finance', id);
+        scheduleGithubSnapshot();
         toast('Операция удалена.');
       } catch (error) {
         showFirebaseError('Операция не удалена', error);
@@ -1166,8 +1488,9 @@
           updatedAtIso:nowIso(),
           updatedAt:serverTimestamp()
         };
-        await setDoc(refs.master(id), payload, { merge:true });
+        await withTimeout(setDoc(refs.master(id), payload, { merge:true }), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил сохранение мастера');
         upsertLocal('masters', payload);
+        scheduleGithubSnapshot();
         toast('Мастер сохранен.');
       } catch (error) {
         showFirebaseError('Мастер не сохранен', error);
@@ -1177,8 +1500,9 @@
     async function deleteMaster(id){
       if (!isAdmin()) return toast('Удалять участников может только администратор.');
       try {
-        await deleteDoc(refs.master(id));
+        await withTimeout(deleteDoc(refs.master(id)), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил удаление мастера');
         removeLocal('masters', id);
+        scheduleGithubSnapshot();
         toast('Мастер удален, доступ закрыт.');
       } catch (error) {
         showFirebaseError('Мастер не удален', error);
@@ -1194,9 +1518,10 @@
           updatedAtIso:nowIso(),
           updatedAt:serverTimestamp()
         };
-        await setDoc(refs.settings(), payload, { merge:true });
+        await withTimeout(setDoc(refs.settings(), payload, { merge:true }), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил сохранение настроек');
         state.settings = { ...state.settings, ...payload };
         render();
+        scheduleGithubSnapshot();
         toast('Настройки сохранены.');
       } catch (error) {
         showFirebaseError('Настройки не сохранены', error);
@@ -1291,36 +1616,104 @@
     }
     function renderOrders(){
       const orders = filteredOrders();
+      state.selectedOrders = state.selectedOrders.filter(id => state.orders.some(order => order.id === id));
+      const filtersActive = Boolean(state.filters.status || state.filters.master || state.filters.payment || state.filters.source);
+      const page = pageOrders(orders);
+      const firstRow = orders.length ? page.start + 1 : 0;
+      const lastRow = Math.min(page.start + page.items.length, orders.length);
+      const selectedCount = state.selectedOrders.length;
+      const allPageSelected = Boolean(page.items.length && page.items.every(order => state.selectedOrders.includes(order.id)));
+      const columnMenu = state.columnsMenuOpen ? `
+        <div class="columns-popover">
+          ${Object.entries(ORDER_COLUMN_LABELS).map(([key,label]) => `
+            <label>
+              <input type="checkbox" data-toggle-column="${safe(key)}" ${columnEnabled(key) ? 'checked' : ''}>
+              <span>${safe(label)}</span>
+            </label>
+          `).join('')}
+        </div>
+      ` : '';
+      const tableHeaders = `
+        <th><input class="order-check" id="selectAllOrders" type="checkbox" ${allPageSelected ? 'checked' : ''}></th>
+        ${columnEnabled('icons') ? '<th></th>' : ''}
+        ${columnEnabled('number') ? '<th>№ заказа</th>' : ''}
+        ${columnEnabled('receiver') ? '<th>Приемщик</th>' : ''}
+        ${columnEnabled('manager') ? '<th>Менеджер</th>' : ''}
+        ${columnEnabled('master') ? '<th>Мастер</th>' : ''}
+        ${columnEnabled('status') ? '<th>Статус</th>' : ''}
+        ${columnEnabled('device') ? '<th>Устройство</th>' : ''}
+        ${columnEnabled('total') ? '<th>Стоимость</th>' : ''}
+        ${columnEnabled('paid') ? '<th>Оплачено</th>' : ''}
+        ${columnEnabled('client') ? '<th>Клиент</th>' : ''}
+        ${columnEnabled('actions') ? '<th><span class="icon-btn" title="Действия">⚙</span></th>' : ''}
+      `;
+      const tableRows = page.items.map(order => `
+        <tr>
+          <td><input class="order-check" type="checkbox" data-select-order="${safe(order.id)}" ${state.selectedOrders.includes(order.id) ? 'checked' : ''}></td>
+          ${columnEnabled('icons') ? `
+            <td>
+              <div class="order-icons">
+                <span title="В сервисе">⌂</span>
+                <button class="star-btn ${order.favorite ? 'active' : ''}" title="Избранное" type="button" data-toggle-favorite="${safe(order.id)}">☆</button>
+              </div>
+            </td>
+          ` : ''}
+          ${columnEnabled('number') ? `
+            <td>
+              <span class="order-number">${safe(order.number)}</span>
+              <span class="order-date">${orderDate(order)}</span>
+            </td>
+          ` : ''}
+          ${columnEnabled('receiver') ? `<td>${safe(orderPerson(order, 'receiver'))}</td>` : ''}
+          ${columnEnabled('manager') ? `<td>${safe(orderPerson(order, 'manager'))}</td>` : ''}
+          ${columnEnabled('master') ? `<td>${safe(order.master || '—')}</td>` : ''}
+          ${columnEnabled('status') ? `
+            <td>
+              <select class="order-status-select ${safe(STATUS_CLASS[order.status] || 'new')}" data-status-order="${safe(order.id)}">${statusOptions(order.status)}</select>
+            </td>
+          ` : ''}
+          ${columnEnabled('device') ? `
+            <td class="order-device">
+              <b>${safe(orderDeviceTitle(order))}</b>
+              <span>${safe(order.serial || order.storagePlace || order.problem || '—')}</span>
+            </td>
+          ` : ''}
+          ${columnEnabled('total') ? `<td class="money">${money(order.total)}</td>` : ''}
+          ${columnEnabled('paid') ? `<td class="money">${money(order.paid)}</td>` : ''}
+          ${columnEnabled('client') ? `
+            <td class="order-client">
+              <b>${safe(order.client || '—')}</b>
+              <span>${safe(order.phone || '—')}</span>
+            </td>
+          ` : ''}
+          ${columnEnabled('actions') ? `
+            <td>
+              <div class="row-actions">
+                <button class="btn btn-small btn-secondary" data-edit-order="${safe(order.id)}">Открыть</button>
+                <button class="btn btn-small btn-secondary" data-print-order="${safe(order.id)}">Печать</button>
+                ${isAdmin() ? `<button class="btn btn-small btn-danger" data-delete-order="${safe(order.id)}">Удалить</button>` : ''}
+              </div>
+            </td>
+          ` : ''}
+        </tr>
+      `).join('');
       const tableHtml = orders.length ? `
         <div class="table-wrap">
-          <table>
+          <table class="orders-table">
             <thead>
-              <tr>
-                <th>Номер</th><th>Клиент</th><th>Устройство</th><th>Мастер</th><th>Статус</th><th>Срок</th><th>Сумма</th><th>Долг</th><th></th>
-              </tr>
+              <tr>${tableHeaders}</tr>
             </thead>
-            <tbody>
-              ${orders.map(order => `
-                <tr>
-                  <td><b>${safe(order.number)}</b><br><span class="muted">${safe(order.type || 'Ремонт')}</span></td>
-                  <td>${safe(order.client)}<br><span class="muted">${safe(order.phone)}</span></td>
-                  <td>${safe(order.device)} ${safe(order.model || '')}<br><span class="muted">${safe(order.serial || order.storagePlace || '—')}</span></td>
-                  <td>${safe(order.master || '—')}</td>
-                  <td><select data-status-order="${safe(order.id)}">${statusOptions(order.status)}</select></td>
-                  <td>${formatDate(order.deadline)} ${isOverdue(order) ? '<span class="badge danger">срок</span>' : ''}</td>
-                  <td class="money">${money(order.total)}</td>
-                  <td class="money">${money(Math.max(0, amount(order.total) - amount(order.paid)))}</td>
-                  <td>
-                    <div class="row-actions">
-                      <button class="btn btn-small btn-secondary" data-edit-order="${safe(order.id)}">Открыть</button>
-                      <button class="btn btn-small btn-secondary" data-print-order="${safe(order.id)}">Печать</button>
-                      ${isAdmin() ? `<button class="btn btn-small btn-danger" data-delete-order="${safe(order.id)}">Удалить</button>` : ''}
-                    </div>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
+            <tbody>${tableRows}</tbody>
           </table>
+        </div>
+        <div class="table-footer">
+          <span>Показано ${firstRow}-${lastRow} из ${orders.length}</span>
+          <label class="field" style="max-width:160px;margin:0">
+            <span>Строк на странице</span>
+            <select id="ordersPerPage">
+              ${[10,25,50,100].map(size => `<option value="${size}" ${state.ordersPerPage === size ? 'selected' : ''}>${size}</option>`).join('')}
+            </select>
+          </label>
         </div>
       ` : `<div class="empty">Заказов пока нет.</div>`;
       const kanbanHtml = `
@@ -1353,9 +1746,26 @@
       `;
       views.orders.innerHTML = `
         ${renderStats()}
-        <div class="panel">
-          <div class="filters">
+        <div class="orders-workbar">
+          <div class="pager">
+            <button class="icon-btn" type="button" data-page-prev title="Предыдущая страница">‹</button>
+            <span>${state.ordersPage}</span>
+            <button class="icon-btn" type="button" data-page-next title="Следующая страница">›</button>
+          </div>
+          <div class="columns-control">
+            <button class="icon-btn" id="columnsMenuBtn" type="button" title="Колонки">☷</button>
+            ${columnMenu}
+          </div>
+          <button class="filter-button ${state.filtersOpen || filtersActive ? 'active' : ''}" id="toggleFiltersBtn" type="button">Фильтровать</button>
+          <div class="search-group">
             <input id="orderSearch" placeholder="Поиск: клиент, номер, телефон, устройство" value="${safe(state.filters.search)}">
+            <button class="btn btn-primary" id="ordersFindBtn" type="button">Найти</button>
+          </div>
+          <button class="btn btn-primary" id="newOrderBtn" type="button">Создать заказ</button>
+        </div>
+        ${state.filtersOpen || filtersActive ? `
+          <div class="orders-filter-panel">
+            <div class="filters">
             <select id="statusFilter"><option value="">Все статусы</option>${statusOptions(state.filters.status)}</select>
             <select id="masterFilter"><option value="">Все мастера</option>${masterOptions(state.filters.master)}</select>
             <select id="sourceFilter"><option value="">Все источники</option>${sourceOptions(state.filters.source)}</select>
@@ -1365,13 +1775,23 @@
               <option value="debt" ${state.filters.payment === 'debt' ? 'selected' : ''}>Есть долг</option>
             </select>
             <button class="btn btn-secondary" id="resetFiltersBtn" type="button">Сбросить</button>
+            </div>
           </div>
-        </div>
+        ` : ''}
+        ${selectedCount ? `
+          <div class="bulkbar">
+            <b>Выбрано заказов: ${selectedCount}</b>
+            <div class="row-actions">
+              <button class="btn btn-small btn-secondary" id="bulkPrintOrdersBtn" type="button">Печать</button>
+              ${isAdmin() ? `<button class="btn btn-small btn-danger" id="bulkDeleteOrdersBtn" type="button">Удалить выбранные</button>` : ''}
+            </div>
+          </div>
+        ` : ''}
         <div class="panel">
           <div class="panel-head">
             <h3>Заказы</h3>
             <div class="row-actions">
-              <span class="muted">${orders.length} из ${state.orders.length}</span>
+              <span class="muted">${orders.length} из ${state.orders.length} · страница ${state.ordersPage}/${page.totalPages}</span>
               <div class="segmented">
                 <button type="button" data-order-mode="table" class="${state.orderMode === 'table' ? 'active' : ''}">Таблица</button>
                 <button type="button" data-order-mode="kanban" class="${state.orderMode === 'kanban' ? 'active' : ''}">Канбан</button>
@@ -1642,6 +2062,17 @@
             <p class="muted">Основная база: Firebase Firestore. Проект: one-service-crm.</p>
             <p class="muted">Realtime-данные: crmWorkspaces/${WORKSPACE_ID}/data с документами order, master, inventory, finance и settings.</p>
             <p class="muted">Статус: ${state.firebaseReady ? 'подключен' : 'подключение'}. Слушатели работают через onSnapshot.</p>
+            <form id="githubForm" class="grid-2" style="margin-top:14px">
+              <label class="field"><span>GitHub owner</span><input name="owner" value="${safe(state.githubConfig.owner)}" placeholder="имя аккаунта или организации"></label>
+              <label class="field"><span>Repository</span><input name="repo" value="${safe(state.githubConfig.repo)}" placeholder="one-service-crm"></label>
+              <label class="field"><span>Branch</span><input name="branch" value="${safe(state.githubConfig.branch || 'main')}"></label>
+              <label class="field"><span>Путь к snapshot JSON</span><input name="path" value="${safe(state.githubConfig.path || 'crm-data/one-service.json')}"></label>
+              <label class="field" style="grid-column:1/-1"><span>GitHub token</span><input name="token" type="password" value="${safe(state.githubConfig.token)}" placeholder="fine-grained token с доступом Contents read/write"></label>
+              <div class="modal-actions" style="grid-column:1/-1">
+                <button class="btn btn-secondary" id="githubPushNowBtn" type="button">Сохранить снимок сейчас</button>
+                <button class="btn btn-primary" type="submit">Сохранить GitHub</button>
+              </div>
+            </form>
           </div>
         `
       };
@@ -1711,6 +2142,8 @@
           <label class="field"><span>Тип заказа</span><select name="type">${listOptions(state.settings.orderTypes || [], order.type || (state.settings.orderTypes || [])[0] || '')}</select></label>
           <label class="field"><span>Статус</span><select name="status">${statusOptions(order.status || 'new')}</select></label>
           <label class="field"><span>Мастер</span><select name="master"><option value="">Не выбран</option>${masterOptions(order.master)}</select></label>
+          <label class="field"><span>Приемщик</span><input name="receiver" value="${safe(order.receiver || state.user?.name || '')}"></label>
+          <label class="field"><span>Менеджер</span><input name="manager" value="${safe(order.manager || state.user?.name || '')}"></label>
           <label class="field"><span>Приоритет</span><select name="priority"><option value="normal" ${order.priority !== 'urgent' ? 'selected' : ''}>Обычный</option><option value="urgent" ${order.priority === 'urgent' ? 'selected' : ''}>Срочный</option></select></label>
           <label class="field"><span>Клиент</span><input name="client" value="${safe(order.client || '')}" required></label>
           <label class="field"><span>Телефон</span><input name="phone" value="${safe(order.phone || '')}"></label>
@@ -1825,6 +2258,42 @@
       win.document.write(html);
       win.document.close();
     }
+    function printOrders(orders){
+      const rows = orders.map(order => `
+        <tr>
+          <td>${safe(order.number)}</td>
+          <td>${safe(orderDate(order))}</td>
+          <td>${safe(order.client || '')}<br>${safe(order.phone || '')}</td>
+          <td>${safe(orderDeviceTitle(order))}<br>${safe(order.serial || '')}</td>
+          <td>${safe(STATUSES[order.status] || order.status)}</td>
+          <td>${safe(order.master || '')}</td>
+          <td>${money(order.total)}</td>
+          <td>${money(order.paid)}</td>
+          <td>${money(orderDebt(order))}</td>
+        </tr>
+      `).join('');
+      const html = `
+        <html lang="ru"><head><meta charset="UTF-8"><title>Реестр заказов</title>
+        <style>
+          body{font-family:Arial,sans-serif;color:#111;margin:0;padding:22px}
+          h1{font-size:24px;margin:0 0 6px}.muted{color:#555;margin-bottom:14px}
+          table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:7px;text-align:left;vertical-align:top}
+          th{background:#f3f4f6}
+        </style></head><body>
+          <h1>${safe(state.settings.serviceName)} · реестр заказов</h1>
+          <div class="muted">${new Date().toLocaleString('ru-RU')} · ${orders.length} шт.</div>
+          <table>
+            <thead><tr><th>№</th><th>Дата</th><th>Клиент</th><th>Устройство</th><th>Статус</th><th>Мастер</th><th>Сумма</th><th>Оплачено</th><th>Долг</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <script>window.addEventListener('load',()=>setTimeout(()=>{window.print()},150))<\/script>
+        </body></html>
+      `;
+      const win = window.open('', '_blank', 'width=1100,height=900');
+      if (!win) return toast('Браузер заблокировал печать.');
+      win.document.write(html);
+      win.document.close();
+    }
 
     document.addEventListener('click', async event => {
       const close = event.target.closest('[data-close-modal]');
@@ -1845,6 +2314,27 @@
         state.orderMode = mode.dataset.orderMode;
         renderOrders();
       }
+      if (event.target.closest('#columnsMenuBtn')) {
+        state.columnsMenuOpen = !state.columnsMenuOpen;
+        renderOrders();
+      }
+      if (event.target.closest('#toggleFiltersBtn')) {
+        state.filtersOpen = !state.filtersOpen;
+        renderOrders();
+      }
+      if (event.target.closest('#ordersFindBtn')) {
+        resetOrdersPage();
+        renderOrders();
+      }
+      if (event.target.closest('[data-page-prev]')) {
+        state.ordersPage = Math.max(1, state.ordersPage - 1);
+        renderOrders();
+      }
+      if (event.target.closest('[data-page-next]')) {
+        const totalPages = Math.max(1, Math.ceil(filteredOrders().length / state.ordersPerPage));
+        state.ordersPage = Math.min(totalPages, state.ordersPage + 1);
+        renderOrders();
+      }
       if (event.target.closest('#dashNewOrderBtn')) orderModal();
       if (event.target.closest('#dashInventoryBtn')) { state.view = 'inventory'; render(); }
       if (event.target.closest('#dashFinanceBtn')) { state.view = 'finance'; render(); }
@@ -1855,6 +2345,11 @@
       if (event.target.closest('#newMasterBtn')) masterModal();
       const editOrder = event.target.closest('[data-edit-order]');
       if (editOrder) orderModal(state.orders.find(item => item.id === editOrder.dataset.editOrder));
+      const favoriteBtn = event.target.closest('[data-toggle-favorite]');
+      if (favoriteBtn) {
+        const order = state.orders.find(item => item.id === favoriteBtn.dataset.toggleFavorite);
+        if (order) await saveOrder({ ...order, favorite:!order.favorite });
+      }
       const deleteOrderBtn = event.target.closest('[data-delete-order]');
       if (deleteOrderBtn && confirm('Удалить заказ у всех устройств?')) await deleteOrder(deleteOrderBtn.dataset.deleteOrder);
       const printBtn = event.target.closest('[data-print-order]');
@@ -1874,8 +2369,27 @@
       if (editMaster) masterModal(state.masters.find(item => item.id === editMaster.dataset.editMaster));
       const deleteMasterBtn = event.target.closest('[data-delete-master]');
       if (deleteMasterBtn && confirm('Удалить мастера и закрыть ему доступ?')) await deleteMaster(deleteMasterBtn.dataset.deleteMaster);
+      if (event.target.closest('#bulkPrintOrdersBtn')) {
+        const selected = state.orders.filter(order => state.selectedOrders.includes(order.id));
+        if (selected.length === 1) printOrder(selected[0]);
+        if (selected.length > 1) printOrders(selected);
+      }
+      if (event.target.closest('#bulkDeleteOrdersBtn') && isAdmin() && confirm('Удалить выбранные заказы у всех устройств?')) {
+        const ids = [...state.selectedOrders];
+        for (const id of ids) await deleteOrder(id);
+        state.selectedOrders = [];
+        renderOrders();
+      }
+      if (event.target.closest('#githubPushNowBtn')) {
+        try {
+          await pushGithubSnapshot(true);
+        } catch (error) {
+          toast(error.message || 'GitHub-снимок не сохранен');
+        }
+      }
       if (event.target.closest('#resetFiltersBtn')) {
         state.filters = { search:'', status:'', master:'', payment:'', source:'' };
+        resetOrdersPage();
         renderOrders();
       }
     });
@@ -1886,14 +2400,42 @@
         const order = state.orders.find(item => item.id === status.dataset.statusOrder);
         if (order) await saveOrder({ ...order, status:status.value });
       }
-      if (event.target.id === 'statusFilter') { state.filters.status = event.target.value; renderOrders(); }
-      if (event.target.id === 'masterFilter') { state.filters.master = event.target.value; renderOrders(); }
-      if (event.target.id === 'sourceFilter') { state.filters.source = event.target.value; renderOrders(); }
-      if (event.target.id === 'paymentFilter') { state.filters.payment = event.target.value; renderOrders(); }
+      const toggleColumn = event.target.closest('[data-toggle-column]');
+      if (toggleColumn) {
+        state.visibleColumns[toggleColumn.dataset.toggleColumn] = toggleColumn.checked;
+        localStorage.setItem(ORDER_COLUMNS_KEY, JSON.stringify(state.visibleColumns));
+        renderOrders();
+      }
+      const selectOrder = event.target.closest('[data-select-order]');
+      if (selectOrder) {
+        const id = selectOrder.dataset.selectOrder;
+        state.selectedOrders = selectOrder.checked
+          ? uniq([...state.selectedOrders, id])
+          : state.selectedOrders.filter(item => item !== id);
+        renderOrders();
+      }
+      if (event.target.id === 'selectAllOrders') {
+        const page = pageOrders(filteredOrders());
+        const ids = page.items.map(order => order.id);
+        state.selectedOrders = event.target.checked
+          ? uniq([...state.selectedOrders, ...ids])
+          : state.selectedOrders.filter(id => !ids.includes(id));
+        renderOrders();
+      }
+      if (event.target.id === 'ordersPerPage') {
+        state.ordersPerPage = Number(event.target.value || 25);
+        resetOrdersPage();
+        renderOrders();
+      }
+      if (event.target.id === 'statusFilter') { state.filters.status = event.target.value; resetOrdersPage(); renderOrders(); }
+      if (event.target.id === 'masterFilter') { state.filters.master = event.target.value; resetOrdersPage(); renderOrders(); }
+      if (event.target.id === 'sourceFilter') { state.filters.source = event.target.value; resetOrdersPage(); renderOrders(); }
+      if (event.target.id === 'paymentFilter') { state.filters.payment = event.target.value; resetOrdersPage(); renderOrders(); }
     });
     document.addEventListener('input', event => {
       if (event.target.id === 'orderSearch') {
         state.filters.search = event.target.value;
+        resetOrdersPage();
         renderOrders();
       }
     });
@@ -1935,6 +2477,11 @@
         const roles = [...form.querySelectorAll('input[name="roles"]:checked')].map(item => item.value);
         await saveMaster({ ...data, roles:roles.length ? roles : ['orders'] });
         closeModal();
+      }
+      if (form.id === 'githubForm') {
+        saveGithubConfig(data);
+        toast('GitHub настройки сохранены.');
+        renderSettings();
       }
       if (form.id === 'settingsForm') {
         const scope = data.settingsScope;
@@ -1980,8 +2527,8 @@
     window.crmTestFirebaseWrite = async () => {
       const id = uid('probe');
       const ref = doc(db, 'crmWorkspaces', WORKSPACE_ID, 'data', dataDocId('probe', id));
-      await setDoc(ref, { type:'probe', id, createdAtIso:nowIso(), updatedAt:serverTimestamp() });
-      await deleteDoc(ref);
+      await withTimeout(setDoc(ref, { type:'probe', id, createdAtIso:nowIso(), updatedAt:serverTimestamp() }), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил тестовую запись');
+      await withTimeout(deleteDoc(ref), FIRESTORE_TIMEOUT_MS, 'Firestore не подтвердил тестовое удаление');
       toast('Firebase запись/удаление работает.');
       return true;
     };
