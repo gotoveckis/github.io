@@ -8593,7 +8593,8 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 <script type="module" id="release-cloud-sync">
 (async function(){
   const DATA_KEYS = [
-    'one_service_settings',
+    // Настройки и сотрудники синхронизируются отдельным устойчивым модулем ниже.
+    // Здесь их не трогаем, чтобы старое устройство не затирало роли/мастеров.
     'one_service_inventory',
     'one_service_services',
     'one_service_expenses',
@@ -9339,9 +9340,12 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   function isConfigured(){ const f = getConfig().firebase || {}; return Boolean(f.apiKey && f.projectId && f.appId); }
   function readSettings(){ return readLocalJson(SETTINGS_KEY, {}) || {}; }
   function normalizeProfiles(settings){
-    const profiles = Array.isArray(settings.masterProfiles) ? settings.masterProfiles : [];
-    const masters = Array.isArray(settings.masters) ? settings.masters : [];
-    return { ...settings, masterProfiles: profiles, masters: masters.length ? masters : profiles.map(p => p && p.name).filter(Boolean) };
+    const profiles = Array.isArray(settings.masterProfiles) ? settings.masterProfiles.filter(Boolean) : [];
+    const masterNamesFromProfiles = profiles.map(p => p && p.name).filter(Boolean);
+    const masters = Array.isArray(settings.masters) ? settings.masters.filter(Boolean) : [];
+    // Если профили мастеров есть — список мастеров всегда строим из них.
+    // Так второй/третий мастер и его параметры не теряются после синхронизации.
+    return { ...settings, masterProfiles: profiles, masters: masterNamesFromProfiles.length ? masterNamesFromProfiles : masters };
   }
   function stampSettings(settings){
     return normalizeProfiles({
@@ -9395,6 +9399,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       updatedBy: clientId
     }, { merge: true }).catch(() => {});
   }
+  window.crmPushSettingsNow = pushSettingsNow;
   function schedulePush(){
     if (!ready || applyingRemote) return;
     clearTimeout(pushTimer);
@@ -9505,34 +9510,112 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 <script id="release-admin-only-settings-access-guard">
 (function(){
   function currentUser(){ return window.crmCurrentUser || null; }
+  function roles(){ return Array.isArray(currentUser()?.roles) ? currentUser().roles : []; }
+  function canManageStaff(){
+    const user = currentUser();
+    return Boolean(user && (user.isAdmin || roles().includes('all') || roles().includes('staff')));
+  }
   function isAdmin(){ return !!currentUser()?.isAdmin; }
   function guardAdminArea(){
     const accessTab = document.querySelector('[data-settings-target="access"]');
     const syncTab = document.querySelector('[data-settings-target="sync"]');
-    [accessTab, syncTab].forEach(tab => {
-      if (!tab) return;
-      tab.hidden = !isAdmin();
-      tab.disabled = !isAdmin();
-    });
+    if (accessTab) {
+      accessTab.hidden = !canManageStaff();
+      accessTab.disabled = !canManageStaff();
+    }
+    if (syncTab) {
+      syncTab.hidden = !isAdmin();
+      syncTab.disabled = !isAdmin();
+    }
     const addMaster = document.getElementById('addMasterProfileBtn');
-    if (addMaster) { addMaster.hidden = !isAdmin(); addMaster.disabled = !isAdmin(); }
-    document.querySelectorAll('[data-open-master-profile], [data-settings-delete-service], #deleteMasterProfileBtn, #saveMasterProfileBtn').forEach(node => {
+    if (addMaster) { addMaster.hidden = !canManageStaff(); addMaster.disabled = !canManageStaff(); }
+    document.querySelectorAll('[data-open-master-profile], #deleteMasterProfileBtn, #saveMasterProfileBtn').forEach(node => {
       if (!node) return;
-      node.hidden = !isAdmin() && (node.id === 'deleteMasterProfileBtn' || node.id === 'saveMasterProfileBtn' || node.id === 'addMasterProfileBtn');
+      node.hidden = !canManageStaff() && (node.id === 'deleteMasterProfileBtn' || node.id === 'saveMasterProfileBtn' || node.id === 'addMasterProfileBtn');
+      node.disabled = !canManageStaff() && (node.id === 'deleteMasterProfileBtn' || node.id === 'saveMasterProfileBtn' || node.id === 'addMasterProfileBtn');
     });
   }
   document.addEventListener('click', function(event){
     const protectedClick = event.target.closest('#addMasterProfileBtn,#saveMasterProfileBtn,#deleteMasterProfileBtn,[data-open-master-profile]');
-    if (protectedClick && !isAdmin()) {
+    if (protectedClick && !canManageStaff()) {
       event.preventDefault();
       event.stopImmediatePropagation();
-      alert('Добавлять и изменять мастеров может только администратор.');
+      alert('Добавлять, удалять и изменять роли сотрудников может только администратор или пользователь с доступом «Сотрудники».');
     }
   }, true);
   document.addEventListener('crm:settings-access-sync-applied', guardAdminArea);
   document.addEventListener('crm:cloud-sync-applied', guardAdminArea);
   setInterval(guardAdminArea, 1500);
   setTimeout(guardAdminArea, 300);
+})();
+</script>
+
+
+<script id="release-staff-settings-final-stability-patch">
+(function(){
+  const SETTINGS_KEY = 'one_service_settings';
+  const AUTH_USER_KEY = 'crm_current_user';
+  function safeJson(text, fallback){ try { return JSON.parse(text); } catch(e){ return fallback; } }
+  function writeSettingsDirect(next){
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(next));
+    try { if (typeof window.renderAll === 'function') window.renderAll(); } catch(e) {}
+    try { if (typeof window.fillSettingsForm === 'function') window.fillSettingsForm(); } catch(e) {}
+    try { document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied')); } catch(e) {}
+  }
+  function normalizeSettingsNow(){
+    const settings = safeJson(localStorage.getItem(SETTINGS_KEY) || '{}', {}) || {};
+    const profiles = Array.isArray(settings.masterProfiles) ? settings.masterProfiles.filter(Boolean) : [];
+    if (profiles.length) {
+      const fixed = {
+        ...settings,
+        masters: profiles.map(p => p && p.name).filter(Boolean),
+        masterProfiles: profiles.map((p, idx) => ({
+          ...p,
+          id: p.id || ('master_' + Date.now() + '_' + idx),
+          name: String(p.name || '').trim() || ('Мастер ' + (idx + 1)),
+          login: String(p.login || '').trim(),
+          password: String(p.password || ''),
+          roles: Array.isArray(p.roles) && p.roles.length ? p.roles : ['orders','tasks'],
+          updatedAt: p.updatedAt || new Date().toISOString()
+        }))
+      };
+      if (JSON.stringify(fixed) !== JSON.stringify(settings)) writeSettingsDirect(fixed);
+    }
+  }
+  function currentUser(){ return window.crmCurrentUser || safeJson(localStorage.getItem(AUTH_USER_KEY) || 'null', null); }
+  function canManageStaff(){
+    const user = currentUser();
+    const roles = Array.isArray(user?.roles) ? user.roles : [];
+    return Boolean(user && (user.isAdmin || roles.includes('all') || roles.includes('staff')));
+  }
+  // После сохранения мастера принудительно нормализуем настройки и отправляем их в Firebase.
+  document.addEventListener('click', function(event){
+    if (event.target.closest('#saveMasterProfileBtn,#deleteMasterProfileBtn')) {
+      setTimeout(function(){
+        normalizeSettingsNow();
+        if (typeof window.crmPushSettingsNow === 'function') window.crmPushSettingsNow().catch(function(){});
+      }, 250);
+    }
+  }, true);
+  document.addEventListener('submit', function(event){
+    if (event.target && event.target.id === 'settingsForm') {
+      setTimeout(function(){
+        normalizeSettingsNow();
+        if (typeof window.crmPushSettingsNow === 'function') window.crmPushSettingsNow().catch(function(){});
+      }, 250);
+    }
+  }, true);
+  // Страховка: пользователь с ролью «Сотрудники» видит вкладку доступа и может менять роли/сотрудников.
+  function applyStaffAccessVisibility(){
+    const accessTab = document.querySelector('[data-settings-target="access"]');
+    if (accessTab) { accessTab.hidden = !canManageStaff(); accessTab.disabled = !canManageStaff(); }
+    const add = document.getElementById('addMasterProfileBtn');
+    if (add) { add.hidden = !canManageStaff(); add.disabled = !canManageStaff(); }
+  }
+  document.addEventListener('crm:cloud-sync-applied', applyStaffAccessVisibility);
+  document.addEventListener('crm:settings-access-sync-applied', applyStaffAccessVisibility);
+  setInterval(applyStaffAccessVisibility, 1200);
+  setTimeout(function(){ normalizeSettingsNow(); applyStaffAccessVisibility(); }, 500);
 })();
 </script>
 
