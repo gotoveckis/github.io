@@ -4598,8 +4598,16 @@
     }
 
     function isCurrentUserAdmin() {
+      const user = window.crmCurrentUser || null;
+      if (user && (user.isAdmin || (Array.isArray(user.roles) && user.roles.includes('all')))) return true;
       const role = (getStorageItem('one_service_current_user_role') || getStorageItem('crm_user_role') || '').toLowerCase();
       if (role) return role.includes('admin') || role.includes('администратор');
+      return getStorageItem(AUTH_STORAGE_KEY) === '1';
+    }
+
+    function canCurrentUserCreateOrders() {
+      const user = window.crmCurrentUser || null;
+      if (user && (user.isAdmin || (Array.isArray(user.roles) && (user.roles.includes('all') || user.roles.includes('orders'))))) return true;
       return getStorageItem(AUTH_STORAGE_KEY) === '1';
     }
 
@@ -6301,6 +6309,10 @@
 
     orderForm.addEventListener('submit', event => {
       event.preventDefault();
+      if (!editingId && !canCurrentUserCreateOrders()) {
+        window.alert('Создавать заказы может только пользователь, которому администратор дал доступ к разделу «Заказы».');
+        return;
+      }
       const orders = getOrders();
       const oldOrder = editingId ? orders.find(item => item.id === editingId) : null;
       const payload = collectFormData(oldOrder);
@@ -7880,7 +7892,7 @@ document.addEventListener('DOMContentLoaded', function(){
     ACCESS_ROLES.forEach(role => {
       if (!role.menuId) return;
       const settingsAllowed = role.key === 'settings' && (userHasRole('settings') || userHasRole('documents') || userHasRole('staff'));
-      const allowed = signedIn && (activeUser?.isAdmin || settingsAllowed || userHasRole(role.key) || role.key === 'orders');
+      const allowed = signedIn && (activeUser?.isAdmin || settingsAllowed || userHasRole(role.key));
       const button = document.getElementById(role.menuId);
       if (button) {
         button.hidden = !allowed;
@@ -8784,16 +8796,41 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     if (!firebaseReady) return;
     await Promise.all(DATA_KEYS.map(key => writeFirebaseKey(key)));
   }
+  function mergeDeletedOrderIds(remoteRaw) {
+    const localIds = safeJson(localStorage.getItem('one_service_deleted_order_ids'), []);
+    const remoteIds = safeJson(remoteRaw, []);
+    return JSON.stringify([...new Set([
+      ...(Array.isArray(localIds) ? localIds.map(String) : []),
+      ...(Array.isArray(remoteIds) ? remoteIds.map(String) : [])
+    ].filter(Boolean))]);
+  }
+  function filterOrdersByDeletedIds(rawOrders) {
+    const orders = safeJson(rawOrders, []);
+    const deletedIds = new Set((safeJson(localStorage.getItem('one_service_deleted_order_ids'), []) || []).map(String));
+    if (!Array.isArray(orders)) return rawOrders;
+    return JSON.stringify(orders.filter(order => order && !deletedIds.has(String(order.id || ''))));
+  }
   function applyFirebaseDoc(key, data) {
     if (!data || data.updatedBy === clientId || typeof data.raw !== 'string') return;
-    if (localStorage.getItem(key) === data.raw) return;
+    let incomingRaw = data.raw;
+    if (key === 'one_service_deleted_order_ids') incomingRaw = mergeDeletedOrderIds(data.raw);
+    if (key === 'one_service_orders') incomingRaw = filterOrdersByDeletedIds(data.raw);
+    if (localStorage.getItem(key) === incomingRaw) return;
     applyingRemote = true;
     try {
-      localStorage.setItem(key, data.raw);
+      localStorage.setItem(key, incomingRaw);
+      if (key === 'one_service_deleted_order_ids') {
+        const filteredOrders = filterOrdersByDeletedIds(localStorage.getItem('one_service_orders') || '[]');
+        localStorage.setItem('one_service_orders', filteredOrders);
+      }
     } finally {
       applyingRemote = false;
     }
-    setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
+    if (key === 'one_service_deleted_order_ids') {
+      setTimeout(() => writeFirebaseKey('one_service_deleted_order_ids').catch(() => {}), 80);
+      setTimeout(() => writeFirebaseKey('one_service_orders').catch(() => {}), 120);
+    }
+    setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен. Автообновление включено.');
     scheduleRefresh();
   }
   async function initializeFirebase(currentToken) {
@@ -8934,6 +8971,83 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
   fillCloudForm();
   await initializeCloudSync();
+})();
+</script>
+
+
+<script id="release-online-sync-access-final-fix">
+(function(){
+  function currentUser(){ return window.crmCurrentUser || null; }
+  function userCanOrders(){
+    const user = currentUser();
+    if (!user) return false;
+    if (user.isAdmin) return true;
+    const roles = Array.isArray(user.roles) ? user.roles : [];
+    return roles.includes('all') || roles.includes('orders');
+  }
+  function userIsAdmin(){
+    const user = currentUser();
+    return Boolean(user && (user.isAdmin || (Array.isArray(user.roles) && user.roles.includes('all'))));
+  }
+  function updateCreateButtons(){
+    const allowed = userCanOrders();
+    document.querySelectorAll('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]').forEach(btn => {
+      btn.hidden = !allowed;
+      btn.disabled = !allowed;
+      btn.title = allowed ? '' : 'Создание заказов разрешает администратор в настройках доступа';
+    });
+  }
+  function cleanupDeletedOrders(){
+    try{
+      const deleted = new Set((JSON.parse(localStorage.getItem('one_service_deleted_order_ids') || '[]') || []).map(String));
+      const orders = JSON.parse(localStorage.getItem('one_service_orders') || '[]') || [];
+      if (!Array.isArray(orders)) return;
+      const filtered = orders.filter(order => order && !deleted.has(String(order.id || '')));
+      if (filtered.length !== orders.length) localStorage.setItem('one_service_orders', JSON.stringify(filtered));
+    }catch(e){}
+  }
+  document.addEventListener('submit', function(event){
+    if (event.target && event.target.id === 'orderForm') {
+      const title = (document.getElementById('orderModalTitle')?.textContent || '').toLowerCase();
+      const creating = title.includes('нов');
+      if (creating && !userCanOrders()) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        alert('Создавать заказы может только пользователь, которому администратор дал доступ к разделу «Заказы».');
+      }
+    }
+  }, true);
+  document.addEventListener('click', function(event){
+    const createBtn = event.target.closest('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]');
+    if (createBtn && !userCanOrders()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Создание заказов недоступно. Администратор должен выдать доступ к разделу «Заказы» в настройках.');
+      return;
+    }
+    const deleteControl = event.target.closest('[data-order-action="delete"], option[value="delete"]');
+    if (deleteControl && !userIsAdmin()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Удалять заказы может только администратор.');
+    }
+  }, true);
+  window.addEventListener('storage', function(event){
+    if (['one_service_orders','one_service_deleted_order_ids','one_service_settings'].includes(event.key)) {
+      cleanupDeletedOrders();
+      updateCreateButtons();
+      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch(e) {}
+    }
+  });
+  document.addEventListener('crm:cloud-sync-applied', function(){
+    cleanupDeletedOrders();
+    updateCreateButtons();
+  });
+  setInterval(function(){
+    cleanupDeletedOrders();
+    updateCreateButtons();
+  }, 2500);
+  setTimeout(function(){ cleanupDeletedOrders(); updateCreateButtons(); }, 300);
 })();
 </script>
 
