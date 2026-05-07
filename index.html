@@ -1605,7 +1605,7 @@
 
   </style>
 
-<style id="row-actions-gear-patch-style">
+<style id="release-row-actions-gear-style">
 #ordersMainTable thead th:last-child,
 #ordersMainTable tbody td[data-label="Действия"]{display:none !important;}
 #ordersMainTable tbody tr{cursor:pointer;}
@@ -1633,7 +1633,6 @@
 </style>
 
 <style>
-/* PATCH_SAFE_ORDER_MODAL_2026 */
 #floatingCreateBtn{
   display:none !important;
 }
@@ -1721,7 +1720,6 @@
 
 
 <style>
-/* PATCH_ORDER_MODAL_STATUS_INFO_STRONG_2026 */
 #orderModalOverlay .modal,
 #orderActionsModalOverlay .modal{
   position:relative;
@@ -1867,7 +1865,6 @@
 
 
 <style>
-/* PATCH_MOBILE_FIT_SMARTPHONES_2026 */
 @media (max-width: 768px){
   html,
   body{
@@ -2332,7 +2329,7 @@
 }
 </style>
 
-<style id="codex-navigation-auth-polish">
+<style id="release-navigation-auth-polish">
   .topbar-actions{
     gap:10px;
     margin-left:auto;
@@ -2554,7 +2551,7 @@
   }
 </style>
 
-<style id="codex-viewport-fit-1366">
+<style id="release-viewport-fit-1366">
   :root{
     --app-header-height:64px;
     --sidebar-width-fit:232px;
@@ -2858,7 +2855,7 @@
   }
 </style>
 
-<style id="codex-master-service-settings-polish">
+<style id="release-master-service-settings-polish">
   .settings-services-panel,
   .master-access-panel,
   .docs-no-preview-panel{
@@ -3003,7 +3000,7 @@
   }
 </style>
 
-<style id="codex-interface-theme-pagination">
+<style id="release-interface-theme-pagination">
   .orders-pagination{
     display:flex;
     align-items:center;
@@ -3155,6 +3152,138 @@
     .theme-preview-grid{
       grid-template-columns:1fr;
     }
+  }
+</style>
+
+<style id="release-dark-settings-access-fix">
+  :root{
+    --border:var(--line);
+  }
+
+  .settings-section[data-settings-section="orders"] .form-grid,
+  .settings-section[data-settings-section="finance"] .form-grid,
+  .settings-section[data-settings-section="warehouse"] .form-grid{
+    background:rgba(255,250,245,.74);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px;
+  }
+
+  .settings-section[data-settings-section="orders"] textarea,
+  .settings-section[data-settings-section="finance"] textarea,
+  .settings-section[data-settings-section="warehouse"] textarea{
+    min-height:118px;
+    line-height:1.45;
+  }
+
+  body[data-ui-theme="dark"] .workspace-page-overlay,
+  body[data-ui-theme="dark"] .workspace-page-overlay .modal{
+    background:#0f172a !important;
+    color:var(--text) !important;
+  }
+
+  body[data-ui-theme="dark"] header .logo,
+  body[data-ui-theme="dark"] header .logo-text{
+    color:#f8fafc !important;
+  }
+
+  body[data-ui-theme="dark"] header .logo-one{
+    color:#fff !important;
+    box-shadow:0 8px 18px rgba(249,115,22,.34);
+  }
+
+  body[data-ui-theme="dark"] .settings-nav,
+  body[data-ui-theme="dark"] .settings-section,
+  body[data-ui-theme="dark"] .stat,
+  body[data-ui-theme="dark"] .table-scroll,
+  body[data-ui-theme="dark"] .orders-tools-menu,
+  body[data-ui-theme="dark"] .template-card,
+  body[data-ui-theme="dark"] .template-empty,
+  body[data-ui-theme="dark"] .workspace-page-overlay .data-card,
+  body[data-ui-theme="dark"] .workspace-page-overlay .mini-panel,
+  body[data-ui-theme="dark"] .workspace-page-overlay .stats-card,
+  body[data-ui-theme="dark"] .workspace-page-overlay form,
+  body[data-ui-theme="dark"] .workspace-page-overlay .table-scroll,
+  body[data-ui-theme="dark"] .docs-simple-card,
+  body[data-ui-theme="dark"] .docs-preview-card,
+  body[data-ui-theme="dark"] .docs-preview-stage,
+  body[data-ui-theme="dark"] .role-check-grid label{
+    background:#111827 !important;
+    border-color:#374151 !important;
+    color:var(--text) !important;
+  }
+
+  body[data-ui-theme="dark"] .modal h3,
+  body[data-ui-theme="dark"] .modal h4,
+  body[data-ui-theme="dark"] .hero-card h1,
+  body[data-ui-theme="dark"] .stat b,
+  body[data-ui-theme="dark"] #orderModalTitle,
+  body[data-ui-theme="dark"] #orderActionsTitle,
+  body[data-ui-theme="dark"] .settings-section h4,
+  body[data-ui-theme="dark"] .section-title,
+  body[data-ui-theme="dark"] .data-card h4,
+  body[data-ui-theme="dark"] .docs-simple-card h5,
+  body[data-ui-theme="dark"] .theme-preview-card b,
+  body[data-ui-theme="dark"] .settings-service-row b,
+  body[data-ui-theme="dark"] .master-profile-row b,
+  body[data-ui-theme="dark"] .mini-row b,
+  body[data-ui-theme="dark"] .doc-text-card summary,
+  body[data-ui-theme="dark"] .template-card-title{
+    color:#f8fafc !important;
+  }
+
+  body[data-ui-theme="dark"] .modal p,
+  body[data-ui-theme="dark"] .section-note,
+  body[data-ui-theme="dark"] .field-label,
+  body[data-ui-theme="dark"] .settings-hint,
+  body[data-ui-theme="dark"] .sidebar-title,
+  body[data-ui-theme="dark"] .stat span,
+  body[data-ui-theme="dark"] .data-card p,
+  body[data-ui-theme="dark"] .docs-help,
+  body[data-ui-theme="dark"] .theme-preview-card span,
+  body[data-ui-theme="dark"] .settings-service-row span,
+  body[data-ui-theme="dark"] .master-profile-row span,
+  body[data-ui-theme="dark"] .mini-row span,
+  body[data-ui-theme="dark"] .orders-pagination-info,
+  body[data-ui-theme="dark"] .current-user-chip,
+  body[data-ui-theme="dark"] .empty-state{
+    color:#cbd5e1 !important;
+  }
+
+  body[data-ui-theme="dark"] th,
+  body[data-ui-theme="dark"] tr:hover td{
+    background:#111827 !important;
+  }
+
+  body[data-ui-theme="dark"] input::placeholder,
+  body[data-ui-theme="dark"] textarea::placeholder{
+    color:#94a3b8 !important;
+    opacity:1;
+  }
+
+  body[data-ui-theme="dark"] .settings-tab:hover,
+  body[data-ui-theme="dark"] .small-btn:hover,
+  body[data-ui-theme="dark"] .orders-page-btn:hover{
+    background:#1f2937 !important;
+  }
+
+  body[data-ui-theme="dark"] .modal-close{
+    background:#1f2937 !important;
+    border:1px solid #374151 !important;
+    color:#f8fafc !important;
+  }
+
+  body[data-ui-theme="dark"] .settings-section[data-settings-section="orders"] .form-grid,
+  body[data-ui-theme="dark"] .settings-section[data-settings-section="finance"] .form-grid,
+  body[data-ui-theme="dark"] .settings-section[data-settings-section="warehouse"] .form-grid{
+    background:rgba(15,23,42,.38);
+    border:1px solid #374151;
+    border-radius:16px;
+    padding:14px;
+  }
+
+  .master-editor-overlay{
+    z-index:1200 !important;
   }
 </style>
 
@@ -3491,6 +3620,7 @@
             <button class="settings-tab" type="button" data-settings-target="warehouse">Склад</button>
             <button class="settings-tab" type="button" data-settings-target="access">Доступ</button>
             <button class="settings-tab" type="button" data-settings-target="documents">Документы</button>
+            <button class="settings-tab" type="button" data-settings-target="sync">Синхронизация</button>
           </nav>
 
           <div class="settings-content">
@@ -3525,11 +3655,11 @@
               <div class="form-grid">
                 <label class="field-label">Основная валюта
                   <select id="currencySelect">
+                    <option value="UAH">UAH — Гривна</option>
+                    <option value="RUB">RUB — Рубли</option>
                     <option value="USD">USD — Доллар</option>
                     <option value="EUR">EUR — Евро</option>
-                    <option value="UAH">UAH — Гривна</option>
                     <option value="GEL">GEL — Лари</option>
-                    <option value="TRY">TRY — Лира</option>
                   </select>
                 </label>
                 <label class="field-label">Язык интерфейса
@@ -3591,6 +3721,15 @@
               <h4>Финансы и кассы</h4>
               <p class="section-note">По примеру Gincore: отдельные кассы, статьи расходов, способы оплаты и правила зарплаты.</p>
               <div class="form-grid">
+                <label class="field-label">Валюта финансов
+                  <select id="financeCurrencySelect">
+                    <option value="UAH">Гривна (UAH)</option>
+                    <option value="RUB">Рубли (RUB)</option>
+                    <option value="USD">Доллар (USD)</option>
+                    <option value="EUR">Евро (EUR)</option>
+                    <option value="GEL">Лари (GEL)</option>
+                  </select>
+                </label>
                 <label class="field-label full">Кассы
                   <textarea id="cashRegistersInput" placeholder="Основная касса|UAH|активна"></textarea>
                 </label>
@@ -3645,6 +3784,49 @@
                 <label class="field-label full">Доступ к складам
                   <textarea id="warehouseAccessInput" placeholder="Мастер|Основной склад|просмотр, списание"></textarea>
                 </label>
+              </div>
+            </section>
+
+            <section class="settings-section" data-settings-section="sync">
+              <h4>Синхронизация</h4>
+              <div class="form-grid">
+                <label class="field-label">Firebase API key
+                  <input type="text" id="firebaseApiKeyInput" autocomplete="off">
+                </label>
+                <label class="field-label">Firebase authDomain
+                  <input type="text" id="firebaseAuthDomainInput" autocomplete="off">
+                </label>
+                <label class="field-label">Firebase projectId
+                  <input type="text" id="firebaseProjectIdInput" autocomplete="off">
+                </label>
+                <label class="field-label">Firebase appId
+                  <input type="text" id="firebaseAppIdInput" autocomplete="off">
+                </label>
+                <label class="field-label">Firebase storageBucket
+                  <input type="text" id="firebaseStorageBucketInput" autocomplete="off">
+                </label>
+                <label class="field-label">Firebase messagingSenderId
+                  <input type="text" id="firebaseMessagingSenderIdInput" autocomplete="off">
+                </label>
+                <label class="field-label">Workspace ID
+                  <input type="text" id="cloudWorkspaceIdInput" autocomplete="off" placeholder="one-service">
+                </label>
+                <label class="field-label">GitHub owner
+                  <input type="text" id="githubOwnerInput" autocomplete="off">
+                </label>
+                <label class="field-label">GitHub repository
+                  <input type="text" id="githubRepoInput" autocomplete="off">
+                </label>
+                <label class="field-label">GitHub branch
+                  <input type="text" id="githubBranchInput" autocomplete="off" placeholder="main">
+                </label>
+                <label class="field-label">GitHub path
+                  <input type="text" id="githubPathInput" autocomplete="off" placeholder="crm-data/one-service.json">
+                </label>
+                <label class="field-label">GitHub token
+                  <input type="password" id="githubTokenInput" autocomplete="off">
+                </label>
+                <p class="settings-hint full" id="cloudSyncStatus">Синхронизация не настроена.</p>
               </div>
             </section>
 
@@ -3751,7 +3933,6 @@
 
                 <div class="docs-preview-card">
                   <h4 class="section-title">Живой предпросмотр</h4>
-                  <p class="section-note">Показывает итоговый документ с учетом общих настроек и карточек-конструкторов.</p>
                   <div class="docs-preview-toolbar">
                     <button class="docs-preview-tab active" type="button" data-doc-preview="acceptance">Акт приёма</button>
                     <button class="docs-preview-tab" type="button" data-doc-preview="completed">Выполненные</button>
@@ -3948,10 +4129,10 @@
 
     const CURRENCIES = {
       UAH: { label: 'Гривна', code: 'UAH', fallback: 'грн' },
+      RUB: { label: 'Рубли', code: 'RUB', fallback: '₽' },
       USD: { label: 'Доллар', code: 'USD', fallback: '$' },
       EUR: { label: 'Евро', code: 'EUR', fallback: '€' },
-      GEL: { label: 'Лари', code: 'GEL', fallback: '₾' },
-      TRY: { label: 'Лира', code: 'TRY', fallback: '₺' }
+      GEL: { label: 'Лари', code: 'GEL', fallback: '₾' }
     };
 
     const DEFAULT_SETTINGS = {
@@ -4414,7 +4595,7 @@
     function saveOrders(items, options = {}) {
       const saved = setJson(ORDERS_KEY, Array.isArray(items) ? items.map(migrateOrder) : []);
       if (!saved) {
-        window.alert('Не удалось сохранить заказы. Проверьте, разрешено ли браузеру использовать localStorage.');
+        window.alert('Не удалось сохранить заказы.');
       }
       if (saved && options.backup !== false) {
         logActivity('Заказы', 'Обновлены заказы');
@@ -5236,6 +5417,14 @@
       return document.getElementById(id)?.value.trim() || '';
     }
 
+    function syncCurrencySelectors(sourceId) {
+      const source = document.getElementById(sourceId);
+      if (!source) return;
+      const targetId = sourceId === 'financeCurrencySelect' ? 'currencySelect' : 'financeCurrencySelect';
+      const target = document.getElementById(targetId);
+      if (target) target.value = source.value;
+    }
+
     function fillSettingsForm() {
       const settings = getSettings();
       setFormValue('settingsServiceNameInput', settings.serviceName);
@@ -5245,6 +5434,7 @@
       setFormValue('companyLegalNameInput', settings.companyLegalName);
       setFormValue('companyTaxIdInput', settings.companyTaxId);
       setFormValue('currencySelect', settings.currency);
+      setFormValue('financeCurrencySelect', settings.currency);
       setFormValue('interfaceLanguageInput', settings.interfaceLanguage);
       setFormValue('timezoneInput', settings.timezone);
       setFormValue('dateFormatInput', settings.dateFormat);
@@ -5811,73 +6001,6 @@
     }
 
     function seedInitialData() {
-      if (!getInventory().length) {
-        saveInventory([
-          { id: 'part1', name: 'LED подсветка TV', category: 'Подсветка', sku: 'TV-BL-55', stock: 4, unitCost: 1800, minStock: 1 },
-          { id: 'part2', name: 'Дисплей iPhone 13', category: 'Дисплеи', sku: 'IP13-DISP', stock: 2, unitCost: 0, minStock: 1 }
-        ], { backup: false });
-      }
-
-      if (!getServices().length) {
-        saveServices([
-          { id: 'srv1', name: 'Диагностика', price: 300, cost: 0, warrantyDays: '0', rewardPercent: '30' },
-          { id: 'srv2', name: 'Замена подсветки телевизора', price: 2700, cost: 0, warrantyDays: '30', rewardPercent: '20' },
-          { id: 'srv3', name: 'Замена дисплея телефона', price: 1200, cost: 0, warrantyDays: '30', rewardPercent: '20' }
-        ], { backup: false });
-      }
-
-      if (!getSuppliers().length) {
-        saveSuppliers([
-          { id: 'sup1', name: 'Основной поставщик', phone: '', note: 'Поставщик по умолчанию' }
-        ], { backup: false });
-      }
-
-      if (!getOrders().length) {
-        saveOrders([
-          {
-            id: 'seed1',
-            orderNumber: '1001',
-            orderType: 'Платный ремонт',
-            status: 'in_progress',
-            deadlineAt: addDays(new Date(Date.now() - 86400000).toISOString(), 3),
-            deviceType: 'Телевизор',
-            deviceModel: 'Samsung UE55TU7090',
-            clientName: 'Виктор Петров',
-            clientPhone: '+380501112233',
-            masterName: 'Алексей',
-            problemDescription: 'Нет изображения, звук есть',
-            completedWorks: '',
-            masterNotes: 'Проверить подсветку и блок питания',
-            totalCost: '4500',
-            partsCost: '1800',
-            paidAmount: '1000',
-            discountAmount: '',
-            warrantyDays: '30',
-            warrantyUntil: addDays(new Date(Date.now() - 86400000).toISOString(), 30),
-            createdAt: new Date(Date.now() - 86400000).toISOString()
-          },
-          {
-            id: 'seed2',
-            orderNumber: '1002',
-            orderType: 'Платный ремонт',
-            status: 'new',
-            deadlineAt: addDays(new Date().toISOString(), 3),
-            deviceType: 'Телефон',
-            deviceModel: 'iPhone 13',
-            clientName: 'Максим Коваленко',
-            clientPhone: '+380509998877',
-            masterName: 'Дмитрий',
-            problemDescription: 'Разбит экран',
-            masterNotes: 'Согласовать стоимость дисплея',
-            totalCost: '',
-            partsCost: '',
-            paidAmount: '',
-            discountAmount: '',
-            warrantyDays: '30',
-            createdAt: new Date().toISOString()
-          }
-        ], { backup: false });
-      }
     }
 
     authForm.addEventListener('submit', event => {
@@ -6375,6 +6498,7 @@
 
     document.getElementById('settingsForm').addEventListener('submit', event => {
       event.preventDefault();
+      syncCurrencySelectors('financeCurrencySelect');
       const masters = parseListTextarea(getFormValue('mastersInput'));
       const paymentMethods = parseListTextarea(getFormValue('paymentMethodsInput'));
       const expenseCategories = parseListTextarea(getFormValue('expenseCategoriesInput'));
@@ -6393,7 +6517,7 @@
         companyEmail: getFormValue('companyEmailInput'),
         companyLegalName: getFormValue('companyLegalNameInput'),
         companyTaxId: getFormValue('companyTaxIdInput'),
-        currency: getFormValue('currencySelect') || DEFAULT_SETTINGS.currency,
+        currency: getFormValue('financeCurrencySelect') || getFormValue('currencySelect') || DEFAULT_SETTINGS.currency,
         interfaceLanguage: getFormValue('interfaceLanguageInput') || DEFAULT_SETTINGS.interfaceLanguage,
         timezone: getFormValue('timezoneInput') || DEFAULT_SETTINGS.timezone,
         dateFormat: getFormValue('dateFormatInput') || DEFAULT_SETTINGS.dateFormat,
@@ -6460,6 +6584,12 @@
       }
     });
 
+    document.getElementById('settingsForm').addEventListener('change', event => {
+      if (event.target?.id === 'financeCurrencySelect' || event.target?.id === 'currencySelect') {
+        syncCurrencySelectors(event.target.id);
+      }
+    });
+
     document.getElementById('clientSearchInput').addEventListener('input', renderClients);
     document.getElementById('clientsList').addEventListener('click', event => {
       const button = event.target.closest('[data-new-order-client]');
@@ -6488,7 +6618,7 @@
   </script>
 
 
-<script id="row-actions-gear-patch-script">
+<script id="release-row-actions-gear-script">
 document.addEventListener('DOMContentLoaded', function(){
   const table = document.querySelector('.table-card table');
   const toolbarExtended = document.querySelector('.toolbar-extended');
@@ -6526,7 +6656,6 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 <script>
-/* PATCH_SAFE_AUTH_AND_ORDER_SUMMARY_2026 */
 (function(){
   const AUTH_LOGIN = 'gotoveckis';
   const AUTH_PASSWORD = '18101997';
@@ -6674,7 +6803,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 <script>
-/* PATCH_ORDER_MODAL_STATUS_INFO_STRONG_2026 */
 (function(){
   function el(id){ return document.getElementById(id); }
 
@@ -6771,7 +6899,7 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-<script id="codex-simple-documents-settings">
+<script id="release-simple-documents-settings">
 (function(){
   const section = document.querySelector('[data-settings-section="documents"]');
   if (!section || section.dataset.simpleDocsReady === '1') return;
@@ -6942,7 +7070,7 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-<script id="codex-workspace-pages-auth-ui">
+<script id="release-workspace-pages-auth-ui">
 (function(){
   const workspacePages = {
     clientsBtn: { overlay: 'clientsModalOverlay', prepare: () => safeCall('renderClients') },
@@ -7034,7 +7162,7 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-<script id="codex-settings-services-masters-roles">
+<script id="release-settings-services-masters-roles">
 (function(){
   const SETTINGS_STORAGE_KEY = 'one_service_settings';
   const AUTH_REMEMBER_KEY = 'crm_auth';
@@ -7927,7 +8055,7 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-<script id="codex-interface-settings-pagination">
+<script id="release-interface-settings-pagination">
 (function(){
   const SETTINGS_KEY = 'one_service_settings';
   const PER_PAGE_OPTIONS = Array.from({ length: 16 }, (_, index) => 25 + (index * 5));
@@ -7995,7 +8123,6 @@ document.addEventListener('DOMContentLoaded', function(){
       section.dataset.settingsSection = 'interface';
       section.innerHTML = `
         <h4>Интерфейс</h4>
-        <p class="section-note">Настройте внешний вид CRM и количество заказов, которое показывается на одной странице.</p>
         <div class="interface-settings-panel">
           <div class="form-grid">
             <label class="field-label">Тема CRM
@@ -8080,7 +8207,7 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-<script id="codex-a4-bilingual-documents-and-gear-cleanup">
+<script id="release-a4-bilingual-documents-and-gear-cleanup">
 (function(){
   function safeText(value) {
     try {
@@ -8382,6 +8509,385 @@ document.addEventListener('DOMContentLoaded', function(){
   } else {
     init();
   }
+})();
+</script>
+
+<script>
+window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
+  workspaceId: 'one-service',
+  firebase: {
+    apiKey: 'AIzaSyDrAWXv0oPhpvAPvqnLj8PMaFJHCLJggzM',
+    authDomain: 'one-service-crm.firebaseapp.com',
+    projectId: 'one-service-crm',
+    appId: '1:945997466278:web:ea2e731b635cc5c7c00267',
+    storageBucket: 'one-service-crm.firebasestorage.app',
+    messagingSenderId: '945997466278'
+  },
+  github: {
+    owner: '',
+    repo: '',
+    branch: 'main',
+    path: 'crm-data/one-service.json',
+    token: ''
+  }
+};
+</script>
+
+<script type="module" id="release-cloud-sync">
+(async function(){
+  const DATA_KEYS = [
+    'one_service_settings',
+    'one_service_orders',
+    'one_service_inventory',
+    'one_service_services',
+    'one_service_expenses',
+    'one_service_tasks',
+    'one_service_suppliers',
+    'one_service_activity'
+  ];
+  const CONFIG_KEY = 'one_service_cloud_config';
+  const CLIENT_KEY = 'one_service_cloud_client_id';
+  const DATA_KEY_SET = new Set(DATA_KEYS);
+  const firebaseVersion = '10.12.5';
+  let config = readConfig();
+  let db = null;
+  let firebaseApi = null;
+  let firebaseReady = false;
+  let applyingRemote = false;
+  let pushTimer = null;
+  let githubTimer = null;
+  let refreshTimer = null;
+  let initToken = 0;
+  let firebaseUnsubscribes = [];
+  const clientId = ensureClientId();
+
+  function safeJson(value, fallback = null) {
+    try { return JSON.parse(value); } catch (error) { return fallback; }
+  }
+  function readLocalJson(key, fallback = {}) {
+    try { return safeJson(localStorage.getItem(key), fallback) || fallback; } catch (error) { return fallback; }
+  }
+  function writeLocalJson(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (error) { return false; }
+  }
+  function cleanObject(value) {
+    return Object.fromEntries(Object.entries(value || {}).filter(([, item]) => item !== undefined && item !== null && String(item).trim() !== ''));
+  }
+  function readConfig() {
+    const releaseConfig = window.CRM_RELEASE_CLOUD_CONFIG || {};
+    const storedConfig = readLocalJson(CONFIG_KEY, {});
+    return {
+      workspaceId: storedConfig.workspaceId || releaseConfig.workspaceId || 'one-service',
+      firebase: {
+        ...cleanObject(releaseConfig.firebase),
+        ...cleanObject(storedConfig.firebase)
+      },
+      github: {
+        branch: 'main',
+        path: 'crm-data/one-service.json',
+        ...cleanObject(releaseConfig.github),
+        ...cleanObject(storedConfig.github)
+      }
+    };
+  }
+  function ensureClientId() {
+    try {
+      const saved = localStorage.getItem(CLIENT_KEY);
+      if (saved) return saved;
+      const id = window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem(CLIENT_KEY, id);
+      return id;
+    } catch (error) {
+      return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+  }
+  function setStatus(message) {
+    const node = document.getElementById('cloudSyncStatus');
+    if (node) node.textContent = message;
+  }
+  function firebaseConfigured() {
+    const firebase = config.firebase || {};
+    return Boolean(firebase.apiKey && firebase.projectId && firebase.appId);
+  }
+  function githubConfigured() {
+    const github = config.github || {};
+    return Boolean(github.owner && github.repo && github.branch && github.path);
+  }
+  function workspaceId() {
+    return String(config.workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
+  }
+  function fillCloudForm() {
+    config = readConfig();
+    const map = {
+      firebaseApiKeyInput: config.firebase.apiKey,
+      firebaseAuthDomainInput: config.firebase.authDomain,
+      firebaseProjectIdInput: config.firebase.projectId,
+      firebaseAppIdInput: config.firebase.appId,
+      firebaseStorageBucketInput: config.firebase.storageBucket,
+      firebaseMessagingSenderIdInput: config.firebase.messagingSenderId,
+      cloudWorkspaceIdInput: config.workspaceId,
+      githubOwnerInput: config.github.owner,
+      githubRepoInput: config.github.repo,
+      githubBranchInput: config.github.branch || 'main',
+      githubPathInput: config.github.path || 'crm-data/one-service.json',
+      githubTokenInput: config.github.token
+    };
+    Object.entries(map).forEach(([id, value]) => {
+      const input = document.getElementById(id);
+      if (input) input.value = value || '';
+    });
+    updateInitialStatus();
+  }
+  function saveCloudForm() {
+    const next = {
+      workspaceId: document.getElementById('cloudWorkspaceIdInput')?.value.trim() || 'one-service',
+      firebase: {
+        apiKey: document.getElementById('firebaseApiKeyInput')?.value.trim() || '',
+        authDomain: document.getElementById('firebaseAuthDomainInput')?.value.trim() || '',
+        projectId: document.getElementById('firebaseProjectIdInput')?.value.trim() || '',
+        appId: document.getElementById('firebaseAppIdInput')?.value.trim() || '',
+        storageBucket: document.getElementById('firebaseStorageBucketInput')?.value.trim() || '',
+        messagingSenderId: document.getElementById('firebaseMessagingSenderIdInput')?.value.trim() || ''
+      },
+      github: {
+        owner: document.getElementById('githubOwnerInput')?.value.trim() || '',
+        repo: document.getElementById('githubRepoInput')?.value.trim() || '',
+        branch: document.getElementById('githubBranchInput')?.value.trim() || 'main',
+        path: document.getElementById('githubPathInput')?.value.trim() || 'crm-data/one-service.json',
+        token: document.getElementById('githubTokenInput')?.value.trim() || ''
+      }
+    };
+    writeLocalJson(CONFIG_KEY, next);
+    config = readConfig();
+    initializeCloudSync();
+  }
+  function updateInitialStatus() {
+    if (firebaseConfigured() && githubConfigured()) setStatus('Firebase и GitHub подключены.');
+    else if (firebaseConfigured()) setStatus('Firebase подключен.');
+    else if (githubConfigured()) setStatus('GitHub подключен.');
+    else setStatus('Синхронизация не настроена.');
+  }
+  function parseStoredValue(key) {
+    const raw = localStorage.getItem(key);
+    if (raw === null) return null;
+    return safeJson(raw, raw);
+  }
+  function buildSnapshot() {
+    const data = {};
+    DATA_KEYS.forEach(key => { data[key] = parseStoredValue(key); });
+    return {
+      version: 3,
+      workspaceId: workspaceId(),
+      updatedAt: new Date().toISOString(),
+      updatedBy: clientId,
+      data
+    };
+  }
+  function applySnapshot(snapshot) {
+    if (!snapshot || typeof snapshot !== 'object' || !snapshot.data) return;
+    applyingRemote = true;
+    try {
+      DATA_KEYS.forEach(key => {
+        if (!(key in snapshot.data)) return;
+        localStorage.setItem(key, JSON.stringify(snapshot.data[key]));
+      });
+    } finally {
+      applyingRemote = false;
+    }
+    scheduleRefresh();
+  }
+  function scheduleRefresh() {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => {
+      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch (error) {}
+      try { if (typeof window.fillSettingsForm === 'function') window.fillSettingsForm(); } catch (error) {}
+      try {
+        const settings = safeJson(localStorage.getItem('one_service_settings'), {}) || {};
+        const theme = settings.interfaceTheme === 'dark' ? 'dark' : 'light';
+        document.body.dataset.uiTheme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0f172a' : '#2563eb');
+      } catch (error) {}
+      document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied'));
+    }, 180);
+  }
+  async function importFirebase() {
+    if (firebaseApi) return firebaseApi;
+    const [appMod, firestoreMod, authMod] = await Promise.all([
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-firestore.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-auth.js`)
+    ]);
+    firebaseApi = { ...appMod, ...firestoreMod, ...authMod };
+    return firebaseApi;
+  }
+  function firebaseDocRef(key) {
+    return firebaseApi.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
+  }
+  async function writeFirebaseKey(key) {
+    if (!firebaseReady || applyingRemote || !DATA_KEY_SET.has(key)) return;
+    const raw = localStorage.getItem(key);
+    if (raw === null) return;
+    await firebaseApi.setDoc(firebaseDocRef(key), {
+      raw,
+      updatedAt: firebaseApi.serverTimestamp(),
+      updatedAtIso: new Date().toISOString(),
+      updatedBy: clientId
+    }, { merge: true });
+  }
+  async function pushFirebaseAll() {
+    if (!firebaseReady) return;
+    await Promise.all(DATA_KEYS.map(key => writeFirebaseKey(key)));
+  }
+  function applyFirebaseDoc(key, data) {
+    if (!data || data.updatedBy === clientId || typeof data.raw !== 'string') return;
+    if (localStorage.getItem(key) === data.raw) return;
+    applyingRemote = true;
+    try {
+      localStorage.setItem(key, data.raw);
+    } finally {
+      applyingRemote = false;
+    }
+    setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
+    scheduleRefresh();
+  }
+  async function initializeFirebase(currentToken) {
+    if (!firebaseConfigured()) return false;
+    const api = await importFirebase();
+    const firebaseConfig = cleanObject(config.firebase);
+    const appName = `crm-${firebaseConfig.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
+    const app = api.getApps().find(item => item.name === appName) || api.initializeApp(firebaseConfig, appName);
+    try { await api.signInAnonymously(api.getAuth(app)); } catch (error) {}
+    db = api.getFirestore(app);
+    firebaseReady = true;
+    for (const key of DATA_KEYS) {
+      if (currentToken !== initToken) return false;
+      const ref = api.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
+      const snap = await api.getDoc(ref);
+      if (snap.exists()) applyFirebaseDoc(key, snap.data());
+      else await writeFirebaseKey(key);
+      const unsubscribe = api.onSnapshot(ref, next => {
+        if (next.exists()) applyFirebaseDoc(key, next.data());
+      });
+      firebaseUnsubscribes.push(unsubscribe);
+    }
+    setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
+    return true;
+  }
+  function scheduleFirebasePush(key) {
+    if (!firebaseReady || !DATA_KEY_SET.has(key)) return;
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(() => {
+      writeFirebaseKey(key).catch(() => setStatus('Firebase недоступен.'));
+    }, 450);
+  }
+  function utf8ToBase64(text) {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+    return btoa(binary);
+  }
+  function base64ToUtf8(text) {
+    const binary = atob(String(text || '').replace(/\s/g, ''));
+    const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+  function githubHeaders(extra = {}) {
+    const headers = {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2026-03-10',
+      ...extra
+    };
+    if (config.github?.token) headers.Authorization = `Bearer ${config.github.token}`;
+    return headers;
+  }
+  async function readGithubSnapshot() {
+    if (!githubConfigured()) return null;
+    const { owner, repo, branch, path } = config.github;
+    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(branch)}`;
+    const response = await fetch(url, { headers: githubHeaders() });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error('github-read');
+    const payload = await response.json();
+    return {
+      sha: payload.sha,
+      snapshot: safeJson(base64ToUtf8(payload.content), null)
+    };
+  }
+  async function pushGithubSnapshot() {
+    if (!githubConfigured() || !config.github.token) return;
+    const { owner, repo, branch, path } = config.github;
+    const current = await readGithubSnapshot().catch(() => null);
+    const snapshot = buildSnapshot();
+    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}`;
+    const body = {
+      message: `CRM sync ${snapshot.updatedAt}`,
+      branch,
+      content: utf8ToBase64(JSON.stringify(snapshot, null, 2))
+    };
+    if (current?.sha) body.sha = current.sha;
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: githubHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(body)
+    });
+    if (!response.ok) throw new Error('github-write');
+    if (!firebaseConfigured()) setStatus('GitHub подключен.');
+  }
+  function scheduleGithubPush() {
+    if (!githubConfigured() || !config.github.token) return;
+    clearTimeout(githubTimer);
+    githubTimer = setTimeout(() => {
+      pushGithubSnapshot().catch(() => setStatus(firebaseReady ? 'Firebase подключен. GitHub недоступен.' : 'GitHub недоступен.'));
+    }, 1800);
+  }
+  async function initializeGithubFallback() {
+    if (!githubConfigured() || firebaseConfigured()) return;
+    const current = await readGithubSnapshot().catch(() => null);
+    if (current?.snapshot?.data) applySnapshot(current.snapshot);
+    setStatus('GitHub подключен.');
+  }
+  async function initializeCloudSync() {
+    config = readConfig();
+    updateInitialStatus();
+    initToken += 1;
+    const currentToken = initToken;
+    firebaseReady = false;
+    firebaseUnsubscribes.forEach(unsubscribe => {
+      try { unsubscribe(); } catch (error) {}
+    });
+    firebaseUnsubscribes = [];
+    if (firebaseConfigured()) {
+      try {
+        await initializeFirebase(currentToken);
+        await pushFirebaseAll();
+      } catch (error) {
+        setStatus('Firebase недоступен.');
+      }
+    }
+    try { await initializeGithubFallback(); } catch (error) {}
+    try { await pushGithubSnapshot(); } catch (error) {
+      if (githubConfigured() && config.github.token) setStatus(firebaseReady ? 'Firebase подключен. GitHub недоступен.' : 'GitHub недоступен.');
+    }
+  }
+  const nativeSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function(key, value) {
+    const result = nativeSetItem.call(this, key, value);
+    if (this === localStorage && DATA_KEY_SET.has(key) && !applyingRemote) {
+      scheduleFirebasePush(key);
+      scheduleGithubPush();
+    }
+    return result;
+  };
+  const form = document.getElementById('settingsForm');
+  if (form) {
+    form.addEventListener('submit', saveCloudForm);
+    form.addEventListener('change', event => {
+      if (event.target?.id && /^(firebase|github|cloudWorkspace)/.test(event.target.id)) saveCloudForm();
+    });
+  }
+  document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
+  fillCloudForm();
+  await initializeCloudSync();
 })();
 </script>
 
