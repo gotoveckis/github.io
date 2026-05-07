@@ -9298,5 +9298,243 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 })();
 </script>
 
+
+
+<script type="module" id="release-stable-settings-access-firestore-sync">
+(async function(){
+  const SETTINGS_KEY = 'one_service_settings';
+  const CONFIG_KEY = 'one_service_cloud_config';
+  const CLIENT_KEY = 'one_service_cloud_client_id';
+  const firebaseVersion = '10.12.5';
+  const LIVE_DOC_ID = 'one_service_settings_live';
+  let api = null;
+  let db = null;
+  let ready = false;
+  let applyingRemote = false;
+  let pushTimer = null;
+
+  function safeJson(text, fallback){ try { return JSON.parse(text); } catch(e){ return fallback; } }
+  function cleanObject(value){ return Object.fromEntries(Object.entries(value || {}).filter(([,v]) => v !== undefined && v !== null && String(v).trim() !== '')); }
+  function readLocalJson(key, fallback){ return safeJson(localStorage.getItem(key) || '', fallback); }
+  function writeLocalJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+  function getClientId(){
+    let id = localStorage.getItem(CLIENT_KEY);
+    if (!id) {
+      id = crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+      localStorage.setItem(CLIENT_KEY, id);
+    }
+    return id;
+  }
+  const clientId = getClientId();
+
+  function getConfig(){
+    const release = window.CRM_RELEASE_CLOUD_CONFIG || {};
+    const stored = readLocalJson(CONFIG_KEY, {}) || {};
+    return {
+      workspaceId: stored.workspaceId || release.workspaceId || 'one-service',
+      firebase: { ...cleanObject(release.firebase), ...cleanObject(stored.firebase) }
+    };
+  }
+  function workspaceId(){ return String(getConfig().workspaceId || 'one-service').replace(/[\/#?\[\]]/g, '-') || 'one-service'; }
+  function isConfigured(){ const f = getConfig().firebase || {}; return Boolean(f.apiKey && f.projectId && f.appId); }
+  function readSettings(){ return readLocalJson(SETTINGS_KEY, {}) || {}; }
+  function normalizeProfiles(settings){
+    const profiles = Array.isArray(settings.masterProfiles) ? settings.masterProfiles : [];
+    const masters = Array.isArray(settings.masters) ? settings.masters : [];
+    return { ...settings, masterProfiles: profiles, masters: masters.length ? masters : profiles.map(p => p && p.name).filter(Boolean) };
+  }
+  function stampSettings(settings){
+    return normalizeProfiles({
+      ...(settings || {}),
+      __cloudUpdatedAt: new Date().toISOString(),
+      __cloudUpdatedBy: clientId
+    });
+  }
+  function timeOf(settings){
+    const t = Date.parse(settings?.__cloudUpdatedAt || settings?.updatedAt || '');
+    return Number.isFinite(t) ? t : 0;
+  }
+  function refreshUi(){
+    setTimeout(() => {
+      try { if (typeof window.fillSettingsForm === 'function') window.fillSettingsForm(); } catch(e) {}
+      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch(e) {}
+      try { document.dispatchEvent(new CustomEvent('crm:settings-access-sync-applied')); } catch(e) {}
+      try { document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied')); } catch(e) {}
+    }, 80);
+  }
+  async function importFirebase(){
+    if (api) return api;
+    const [appMod, firestoreMod, authMod] = await Promise.all([
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-firestore.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-auth.js`)
+    ]);
+    api = { ...appMod, ...firestoreMod, ...authMod };
+    return api;
+  }
+  function docRef(){ return api.doc(db, 'crmWorkspaces', workspaceId(), 'data', LIVE_DOC_ID); }
+  function legacyDocRef(){ return api.doc(db, 'crmWorkspaces', workspaceId(), 'data', SETTINGS_KEY); }
+  async function pushSettingsNow(){
+    if (!ready || applyingRemote) return;
+    const settings = stampSettings(readSettings());
+    applyingRemote = true;
+    try { writeLocalJson(SETTINGS_KEY, settings); } finally { applyingRemote = false; }
+    await api.setDoc(docRef(), {
+      type: 'settings_access',
+      raw: JSON.stringify(settings),
+      settings,
+      updatedAtIso: settings.__cloudUpdatedAt,
+      updatedAt: api.serverTimestamp(),
+      updatedBy: clientId
+    }, { merge: true });
+    // Дублируем в старый документ, чтобы старый модуль CRM тоже видел свежие настройки.
+    await api.setDoc(legacyDocRef(), {
+      raw: JSON.stringify(settings),
+      updatedAtIso: settings.__cloudUpdatedAt,
+      updatedAt: api.serverTimestamp(),
+      updatedBy: clientId
+    }, { merge: true }).catch(() => {});
+  }
+  function schedulePush(){
+    if (!ready || applyingRemote) return;
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(() => pushSettingsNow().catch(() => {
+      const node = document.getElementById('cloudSyncStatus');
+      if (node) node.textContent = 'Firebase подключен, но настройки временно не записались.';
+    }), 250);
+  }
+  function applyRemoteSettings(remote){
+    const settings = remote?.settings && typeof remote.settings === 'object' ? remote.settings : safeJson(remote?.raw || '', null);
+    if (!settings || typeof settings !== 'object') return false;
+    const local = readSettings();
+    // Защита от отката: если локальные настройки явно новее, не затираем их старым документом.
+    if (timeOf(local) && timeOf(local) > timeOf(settings)) return false;
+    const normalized = normalizeProfiles(settings);
+    const oldRaw = localStorage.getItem(SETTINGS_KEY) || '';
+    const nextRaw = JSON.stringify(normalized);
+    if (oldRaw === nextRaw) return false;
+    applyingRemote = true;
+    try { localStorage.setItem(SETTINGS_KEY, nextRaw); } finally { applyingRemote = false; }
+    refreshUi();
+    return true;
+  }
+
+  async function fetchRemoteSettings(){
+    if (!ready && isConfigured()) await start(true);
+    if (!ready) return false;
+    const snap = await api.getDoc(docRef());
+    if (snap.exists()) return applyRemoteSettings(snap.data());
+    const legacy = await api.getDoc(legacyDocRef()).catch(() => null);
+    if (legacy && legacy.exists()) return applyRemoteSettings(legacy.data());
+    return false;
+  }
+  window.crmForceSettingsSync = fetchRemoteSettings;
+
+  const previousSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function(key, value){
+    const result = previousSetItem.call(this, key, value);
+    if (this === localStorage && key === SETTINGS_KEY && !applyingRemote) schedulePush();
+    return result;
+  };
+
+  function patchAuthRetry(){
+    const form = document.getElementById('authForm');
+    if (!form || form.dataset.onlineSettingsRetry === '1') return;
+    form.dataset.onlineSettingsRetry = '1';
+    form.addEventListener('submit', async function(event){
+      const login = document.getElementById('authLogin')?.value?.trim() || '';
+      const pass = document.getElementById('authPassword')?.value || '';
+      // Если стандартная авторизация уже пройдет — не мешаем. Если пользователь не админ, заранее подтягиваем свежие мастера.
+      if (login && login.toLowerCase() !== 'gotoveckis') {
+        await fetchRemoteSettings().catch(() => false);
+      }
+      setTimeout(() => {
+        const authVisible = getComputedStyle(document.getElementById('authShell') || document.body).display !== 'none';
+        const errorNode = document.getElementById('authError');
+        if (authVisible && errorNode && errorNode.classList.contains('show') && login && pass) {
+          fetchRemoteSettings().then(() => {
+            try {
+              const retryEvent = new Event('submit', { bubbles:true, cancelable:true });
+              form.dispatchEvent(retryEvent);
+            } catch(e) {}
+          }).catch(() => {});
+        }
+      }, 120);
+    }, true);
+  }
+
+  async function start(reentry){
+    if (ready || !isConfigured()) return ready;
+    const firebase = await importFirebase();
+    const cfg = cleanObject(getConfig().firebase);
+    const appName = `crm-stable-settings-${cfg.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
+    const app = firebase.getApps().find(x => x.name === appName) || firebase.initializeApp(cfg, appName);
+    try { await firebase.signInAnonymously(firebase.getAuth(app)); } catch(e) {}
+    db = firebase.getFirestore(app);
+    ready = true;
+
+    const liveSnap = await firebase.getDoc(docRef()).catch(() => null);
+    if (liveSnap && liveSnap.exists()) {
+      applyRemoteSettings(liveSnap.data());
+    } else {
+      const legacySnap = await firebase.getDoc(legacyDocRef()).catch(() => null);
+      if (legacySnap && legacySnap.exists()) applyRemoteSettings(legacySnap.data());
+      else await pushSettingsNow().catch(() => {});
+    }
+
+    firebase.onSnapshot(docRef(), snap => {
+      if (snap.exists()) {
+        applyRemoteSettings(snap.data());
+        const node = document.getElementById('cloudSyncStatus');
+        if (node) node.textContent = 'Firebase подключен. Заказы, настройки и доступы синхронизируются.';
+      }
+    }, error => {
+      const node = document.getElementById('cloudSyncStatus');
+      if (node) node.textContent = 'Ошибка синхронизации настроек Firebase. Проверь Rules и Anonymous Auth.';
+      console.warn('Settings/access sync error', error);
+    });
+    patchAuthRetry();
+    return true;
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => start(false).catch(console.warn), { once:true });
+  else start(false).catch(console.warn);
+})();
+</script>
+
+<script id="release-admin-only-settings-access-guard">
+(function(){
+  function currentUser(){ return window.crmCurrentUser || null; }
+  function isAdmin(){ return !!currentUser()?.isAdmin; }
+  function guardAdminArea(){
+    const accessTab = document.querySelector('[data-settings-target="access"]');
+    const syncTab = document.querySelector('[data-settings-target="sync"]');
+    [accessTab, syncTab].forEach(tab => {
+      if (!tab) return;
+      tab.hidden = !isAdmin();
+      tab.disabled = !isAdmin();
+    });
+    const addMaster = document.getElementById('addMasterProfileBtn');
+    if (addMaster) { addMaster.hidden = !isAdmin(); addMaster.disabled = !isAdmin(); }
+    document.querySelectorAll('[data-open-master-profile], [data-settings-delete-service], #deleteMasterProfileBtn, #saveMasterProfileBtn').forEach(node => {
+      if (!node) return;
+      node.hidden = !isAdmin() && (node.id === 'deleteMasterProfileBtn' || node.id === 'saveMasterProfileBtn' || node.id === 'addMasterProfileBtn');
+    });
+  }
+  document.addEventListener('click', function(event){
+    const protectedClick = event.target.closest('#addMasterProfileBtn,#saveMasterProfileBtn,#deleteMasterProfileBtn,[data-open-master-profile]');
+    if (protectedClick && !isAdmin()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Добавлять и изменять мастеров может только администратор.');
+    }
+  }, true);
+  document.addEventListener('crm:settings-access-sync-applied', guardAdminArea);
+  document.addEventListener('crm:cloud-sync-applied', guardAdminArea);
+  setInterval(guardAdminArea, 1500);
+  setTimeout(guardAdminArea, 300);
+})();
+</script>
+
 </body>
 </html>
