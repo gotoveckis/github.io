@@ -1186,7 +1186,6 @@
       }
     }
 
-    /* HelloClient-like compact business UI */
     :root{
       --bg:#f6f7fb;
       --surface:#fff;
@@ -3287,6 +3286,110 @@
   }
 </style>
 
+
+
+<style id="orders-list-compact-final-fix">
+/* Компактный список заказов: меньше пустого места на ПК */
+@media (min-width: 769px){
+  .page{
+    padding-top:12px !important;
+  }
+
+  .panel{
+    padding:10px 12px !important;
+    margin-bottom:10px !important;
+  }
+
+  .toolbar{
+    gap:8px !important;
+    margin-bottom:8px !important;
+  }
+
+  .toolbar-extended{
+    gap:8px !important;
+    margin-top:8px !important;
+  }
+
+  .toolbar input,
+  .toolbar select,
+  .toolbar button,
+  .toolbar-extended input,
+  .toolbar-extended select,
+  .toolbar-extended button{
+    min-height:34px !important;
+    height:34px !important;
+    padding-top:6px !important;
+    padding-bottom:6px !important;
+    font-size:13px !important;
+    border-radius:7px !important;
+  }
+
+  .table-card{
+    padding:0 10px 8px !important;
+    border-radius:8px !important;
+  }
+
+  .table-scroll{
+    border-radius:8px !important;
+  }
+
+  #ordersMainTable{
+    border-collapse:collapse !important;
+  }
+
+  #ordersMainTable th{
+    padding:8px 10px !important;
+    height:30px !important;
+    font-size:10px !important;
+    line-height:1.15 !important;
+  }
+
+  #ordersMainTable td{
+    padding:7px 10px !important;
+    height:38px !important;
+    font-size:13px !important;
+    line-height:1.2 !important;
+    vertical-align:middle !important;
+  }
+
+  #ordersMainTable tbody tr{
+    min-height:38px !important;
+  }
+
+  #ordersMainTable tbody tr:hover td{
+    background:#f8fbff !important;
+  }
+
+  #ordersMainTable td b{
+    font-size:13px !important;
+    line-height:1.1 !important;
+  }
+
+  #ordersMainTable .status-select,
+  #ordersMainTable .actions-select{
+    height:32px !important;
+    min-height:32px !important;
+    padding:4px 28px 4px 8px !important;
+    font-size:12px !important;
+    line-height:1.1 !important;
+    border-radius:7px !important;
+  }
+
+  .empty-state{
+    padding:16px 8px !important;
+  }
+}
+
+/* На очень широких экранах таблица не растягивается визуально слишком грубо */
+@media (min-width: 1100px){
+  #ordersMainTable th,
+  #ordersMainTable td{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="blob blob-1"></div>
@@ -3719,7 +3822,7 @@
 
             <section class="settings-section" data-settings-section="finance">
               <h4>Финансы и кассы</h4>
-              <p class="section-note">По примеру Gincore: отдельные кассы, статьи расходов, способы оплаты и правила зарплаты.</p>
+              <p class="section-note">Отдельные кассы, статьи расходов, способы оплаты и правила зарплаты.</p>
               <div class="form-grid">
                 <label class="field-label">Валюта финансов
                   <select id="financeCurrencySelect">
@@ -3770,7 +3873,7 @@
 
             <section class="settings-section" data-settings-section="access">
               <h4>Сотрудники и доступ</h4>
-              <p class="section-note">Роли и доступы пока сохраняются как справочник; дальше их можно подключить к ограничениям интерфейса.</p>
+              <p class="section-note">Администратор управляет мастерами, логинами, паролями и правами входа.</p>
               <div class="form-grid">
                 <label class="field-label full">Мастера
                   <textarea id="mastersInput" placeholder="Алексей"></textarea>
@@ -3833,7 +3936,7 @@
             
             <section class="settings-section" data-settings-section="documents">
               <h4>Документы и резервные копии</h4>
-              <p class="section-note">Расширенное управление макетами печати: общие настройки, конструкторы шаблонов по типам заказов и по статусам, как в Gincore-подобной логике.</p>
+              <p class="section-note">Настройки печатных форм, шаблонов по типам заказов и статусам.</p>
               <div class="docs-builder">
                 <div class="docs-fields">
                   <div class="form-grid">
@@ -8590,111 +8693,189 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 };
 </script>
 
-<script type="module" id="release-cloud-sync">
+<style id="release-final-polish">
+  :root{
+    --radius:16px;
+  }
+  .card,
+  .panel,
+  .table-card,
+  .modal,
+  .data-card,
+  .mini-panel,
+  .sidebar-card{
+    border-radius:14px !important;
+  }
+  .table-scroll{
+    overflow:auto;
+    scrollbar-gutter:stable;
+  }
+  #ordersMainTable{
+    table-layout:fixed;
+    min-width:1240px;
+  }
+  #ordersMainTable th,
+  #ordersMainTable td{
+    vertical-align:middle;
+  }
+  #ordersMainTable .status-select,
+  #ordersMainTable .actions-select{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+  }
+  .master-profile-row{
+    transition:background .18s ease,border-color .18s ease,transform .18s ease;
+  }
+  .master-profile-row:hover{
+    transform:translateY(-1px);
+    border-color:var(--accent);
+  }
+  .release-sync-pill{
+    display:inline-flex;
+    align-items:center;
+    min-height:30px;
+    padding:0 10px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    color:var(--accent-dark);
+    font-size:12px;
+    font-weight:900;
+    white-space:nowrap;
+  }
+  body[data-ui-theme="dark"] .release-sync-pill{
+    background:rgba(249,115,22,.18);
+    color:#fed7aa;
+  }
+</style>
+
+<script type="module" id="release-final-realtime-sync">
 (async function(){
-  const DATA_KEYS = [
-    'one_service_settings',
+  if (window.__ONE_SERVICE_FINAL_REALTIME_SYNC__) return;
+  window.__ONE_SERVICE_FINAL_REALTIME_SYNC__ = true;
+
+  const FIREBASE_VERSION = '10.12.5';
+  const SETTINGS_KEY = 'one_service_settings';
+  const ORDERS_KEY = 'one_service_orders';
+  const DELETED_ORDERS_KEY = 'one_service_deleted_order_ids';
+  const CONFIG_KEY = 'one_service_cloud_config';
+  const CLIENT_KEY = 'one_service_cloud_client_id';
+  const AUTH_REMEMBER_KEY = 'crm_auth';
+  const AUTH_USER_KEY = 'crm_current_user';
+  const SYNC_KEYS = [
+    SETTINGS_KEY,
     'one_service_inventory',
     'one_service_services',
     'one_service_expenses',
     'one_service_tasks',
     'one_service_suppliers',
-    'one_service_activity'
+    'one_service_activity',
+    'one_service_backups'
   ];
-  const CONFIG_KEY = 'one_service_cloud_config';
-  const CLIENT_KEY = 'one_service_cloud_client_id';
-  const DATA_KEY_SET = new Set(DATA_KEYS);
-  const firebaseVersion = '10.12.5';
-  let config = readConfig();
-  let db = null;
+  const DATA_KEY_SET = new Set([...SYNC_KEYS, ORDERS_KEY, DELETED_ORDERS_KEY]);
+  const ADMIN_USER = { id:'admin', name:'Администратор', login:'gotoveckis', password:'18101997', roles:['all'], isAdmin:true };
+  const ALL_ROLES = ['orders','clients','inventory','services','tasks','finance','reports','suppliers','activity','settings','documents','staff'];
   let firebaseApi = null;
-  let firebaseReady = false;
+  let db = null;
+  let ready = false;
   let applyingRemote = false;
-  let pushTimer = null;
-  let githubTimer = null;
+  let initialized = false;
   let refreshTimer = null;
-  let initToken = 0;
-  let firebaseUnsubscribes = [];
+  let orderPushTimer = null;
+  let settingsPushTimer = null;
+  let githubPushTimer = null;
+  const keyPushTimers = new Map();
   const clientId = ensureClientId();
 
-  function safeJson(value, fallback = null) {
-    try { return JSON.parse(value); } catch (error) { return fallback; }
+  function safeJson(text, fallback){
+    try { return JSON.parse(text); } catch (error) { return fallback; }
   }
-  function readLocalJson(key, fallback = {}) {
-    try { return safeJson(localStorage.getItem(key), fallback) || fallback; } catch (error) { return fallback; }
+  function readRaw(key){
+    try { return localStorage.getItem(key); } catch (error) { return null; }
   }
-  function writeLocalJson(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (error) { return false; }
+  function writeRaw(key, raw){
+    try { localStorage.setItem(key, raw); return true; } catch (error) { return false; }
   }
-  function cleanObject(value) {
-    return Object.fromEntries(Object.entries(value || {}).filter(([, item]) => item !== undefined && item !== null && String(item).trim() !== ''));
+  function readJson(key, fallback){
+    const raw = readRaw(key);
+    if (raw === null || raw === '') return fallback;
+    return safeJson(raw, fallback);
   }
-  function readConfig() {
-    const releaseConfig = window.CRM_RELEASE_CLOUD_CONFIG || {};
-    const storedConfig = readLocalJson(CONFIG_KEY, {});
+  function writeJson(key, value){
+    return writeRaw(key, JSON.stringify(value));
+  }
+  function nowIso(){
+    return new Date().toISOString();
+  }
+  function cleanObject(value){
+    const out = {};
+    Object.entries(value || {}).forEach(([key, item]) => {
+      if (item !== undefined && item !== null && String(item).trim() !== '') out[key] = item;
+    });
+    return out;
+  }
+  function ensureClientId(){
+    const saved = readRaw(CLIENT_KEY);
+    if (saved) return saved;
+    const id = crypto?.randomUUID ? crypto.randomUUID() : `client_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    try { localStorage.setItem(CLIENT_KEY, id); } catch (error) {}
+    return id;
+  }
+  function getConfig(){
+    const release = window.CRM_RELEASE_CLOUD_CONFIG || {};
+    const stored = readJson(CONFIG_KEY, {}) || {};
     return {
-      workspaceId: storedConfig.workspaceId || releaseConfig.workspaceId || 'one-service',
-      firebase: {
-        ...cleanObject(releaseConfig.firebase),
-        ...cleanObject(storedConfig.firebase)
-      },
-      github: {
-        branch: 'main',
-        path: 'crm-data/one-service.json',
-        ...cleanObject(releaseConfig.github),
-        ...cleanObject(storedConfig.github)
-      }
+      workspaceId: stored.workspaceId || release.workspaceId || 'one-service',
+      firebase: { ...cleanObject(release.firebase), ...cleanObject(stored.firebase) },
+      github: { ...cleanObject(release.github), ...cleanObject(stored.github) }
     };
   }
-  function ensureClientId() {
-    try {
-      const saved = localStorage.getItem(CLIENT_KEY);
-      if (saved) return saved;
-      const id = window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      localStorage.setItem(CLIENT_KEY, id);
-      return id;
-    } catch (error) {
-      return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  function workspaceId(){
+    return String(getConfig().workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
+  }
+  function firebaseConfigured(){
+    const f = getConfig().firebase || {};
+    return Boolean(f.apiKey && f.projectId && f.appId);
+  }
+  function githubConfigured(){
+    const g = getConfig().github || {};
+    return Boolean(g.owner && g.repo && g.branch && g.path && g.token);
+  }
+  function setSyncStatus(text){
+    let node = document.getElementById('cloudSyncStatus');
+    if (node) node.textContent = text;
+    let chip = document.getElementById('releaseSyncChip');
+    const actions = document.querySelector('.topbar-actions');
+    if (!chip && actions) {
+      chip = document.createElement('span');
+      chip.id = 'releaseSyncChip';
+      chip.className = 'release-sync-pill';
+      actions.prepend(chip);
     }
+    if (chip) chip.textContent = text.includes('подключ') ? 'Online' : 'Offline';
   }
-  function setStatus(message) {
-    const node = document.getElementById('cloudSyncStatus');
-    if (node) node.textContent = message;
-  }
-  function firebaseConfigured() {
-    const firebase = config.firebase || {};
-    return Boolean(firebase.apiKey && firebase.projectId && firebase.appId);
-  }
-  function githubConfigured() {
-    const github = config.github || {};
-    return Boolean(github.owner && github.repo && github.branch && github.path);
-  }
-  function workspaceId() {
-    return String(config.workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
-  }
-  function fillCloudForm() {
-    config = readConfig();
+  function fillCloudForm(){
+    const cfg = getConfig();
     const map = {
-      firebaseApiKeyInput: config.firebase.apiKey,
-      firebaseAuthDomainInput: config.firebase.authDomain,
-      firebaseProjectIdInput: config.firebase.projectId,
-      firebaseAppIdInput: config.firebase.appId,
-      firebaseStorageBucketInput: config.firebase.storageBucket,
-      firebaseMessagingSenderIdInput: config.firebase.messagingSenderId,
-      cloudWorkspaceIdInput: config.workspaceId,
-      githubOwnerInput: config.github.owner,
-      githubRepoInput: config.github.repo,
-      githubBranchInput: config.github.branch || 'main',
-      githubPathInput: config.github.path || 'crm-data/one-service.json',
-      githubTokenInput: config.github.token
+      firebaseApiKeyInput: cfg.firebase.apiKey,
+      firebaseAuthDomainInput: cfg.firebase.authDomain,
+      firebaseProjectIdInput: cfg.firebase.projectId,
+      firebaseAppIdInput: cfg.firebase.appId,
+      firebaseStorageBucketInput: cfg.firebase.storageBucket,
+      firebaseMessagingSenderIdInput: cfg.firebase.messagingSenderId,
+      cloudWorkspaceIdInput: cfg.workspaceId,
+      githubOwnerInput: cfg.github.owner,
+      githubRepoInput: cfg.github.repo,
+      githubBranchInput: cfg.github.branch || 'main',
+      githubPathInput: cfg.github.path || 'crm-data/one-service.json',
+      githubTokenInput: cfg.github.token
     };
     Object.entries(map).forEach(([id, value]) => {
       const input = document.getElementById(id);
-      if (input) input.value = value || '';
+      if (input && !input.value) input.value = value || '';
     });
-    updateInitialStatus();
   }
-  function saveCloudForm() {
+  function saveCloudConfigFromForm(){
     const next = {
       workspaceId: document.getElementById('cloudWorkspaceIdInput')?.value.trim() || 'one-service',
       firebase: {
@@ -8713,590 +8894,732 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
         token: document.getElementById('githubTokenInput')?.value.trim() || ''
       }
     };
-    writeLocalJson(CONFIG_KEY, next);
-    config = readConfig();
-    initializeCloudSync();
+    writeJson(CONFIG_KEY, next);
   }
-  function updateInitialStatus() {
-    if (firebaseConfigured() && githubConfigured()) setStatus('Firebase и GitHub подключены.');
-    else if (firebaseConfigured()) setStatus('Firebase подключен.');
-    else if (githubConfigured()) setStatus('GitHub подключен.');
-    else setStatus('Синхронизация не настроена.');
+  function normalizeRoles(roles, fallback = ['orders','tasks']){
+    const source = Array.isArray(roles) ? roles : String(roles || '').split(',');
+    if (source.includes('all')) return ['all'];
+    const result = [...new Set(source.map(item => String(item || '').trim()).filter(item => ALL_ROLES.includes(item)))];
+    return result.length ? result : fallback;
   }
-  function parseStoredValue(key) {
-    const raw = localStorage.getItem(key);
-    if (raw === null) return null;
-    return safeJson(raw, raw);
+  function slug(value, fallback){
+    const clean = String(value || '').toLowerCase().trim().replace(/[^a-zа-я0-9]+/gi, '_').replace(/^_+|_+$/g, '');
+    return clean || fallback;
   }
-  function buildSnapshot() {
-    const data = {};
-    DATA_KEYS.forEach(key => { data[key] = parseStoredValue(key); });
+  function normalizeSettings(raw, stamp = false){
+    const settings = raw && typeof raw === 'object' ? raw : {};
+    const names = Array.isArray(settings.masters) ? settings.masters.filter(Boolean).map(String) : [];
+    const profiles = (Array.isArray(settings.masterProfiles) ? settings.masterProfiles : []).map((profile, index) => {
+      const name = String(profile?.name || names[index] || `Мастер ${index + 1}`).trim();
+      return {
+        ...profile,
+        id: String(profile?.id || `master_${slug(profile?.login || name, index + 1)}_${index}`),
+        name,
+        login: String(profile?.login || '').trim(),
+        password: String(profile?.password || ''),
+        roles: normalizeRoles(profile?.roles || profile?.permissions || [], ['orders','tasks']),
+        salaryPercent: String(profile?.salaryPercent ?? settings.defaultSalaryPercent ?? '20'),
+        updatedAt: profile?.updatedAt || nowIso()
+      };
+    });
+    names.forEach((name, index) => {
+      if (!profiles.some(profile => profile.name === name)) {
+        profiles.push({
+          id: `master_${slug(name, index + 1)}_${index}`,
+          name,
+          login: '',
+          password: '',
+          roles: ['orders','tasks'],
+          salaryPercent: String(settings.defaultSalaryPercent || '20'),
+          updatedAt: nowIso()
+        });
+      }
+    });
+    const seen = new Set();
+    const uniqueProfiles = profiles.map(profile => {
+      let login = profile.login;
+      if (login) {
+        const base = login;
+        let count = 2;
+        while (seen.has(login.toLowerCase())) login = `${base}.${count++}`;
+        seen.add(login.toLowerCase());
+      }
+      return { ...profile, login };
+    });
     return {
-      version: 3,
-      workspaceId: workspaceId(),
-      updatedAt: new Date().toISOString(),
-      updatedBy: clientId,
-      data
+      ...settings,
+      masterProfiles: uniqueProfiles,
+      masters: uniqueProfiles.map(profile => profile.name).filter(Boolean),
+      __cloudUpdatedAt: stamp ? nowIso() : (settings.__cloudUpdatedAt || settings.updatedAtIso || settings.updatedAt || nowIso()),
+      __cloudUpdatedBy: stamp ? clientId : (settings.__cloudUpdatedBy || settings.updatedBy || '')
     };
   }
-  function applySnapshot(snapshot) {
-    if (!snapshot || typeof snapshot !== 'object' || !snapshot.data) return;
-    applyingRemote = true;
-    try {
-      DATA_KEYS.forEach(key => {
-        if (!(key in snapshot.data)) return;
-        localStorage.setItem(key, JSON.stringify(snapshot.data[key]));
-      });
-    } finally {
-      applyingRemote = false;
-    }
-    scheduleRefresh();
+  function readSettings(){
+    return normalizeSettings(readJson(SETTINGS_KEY, {}) || {});
   }
-  function scheduleRefresh() {
-    clearTimeout(refreshTimer);
-    refreshTimer = setTimeout(() => {
-      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch (error) {}
-      try { if (typeof window.fillSettingsForm === 'function') window.fillSettingsForm(); } catch (error) {}
-      try {
-        const settings = safeJson(localStorage.getItem('one_service_settings'), {}) || {};
-        const theme = settings.interfaceTheme === 'dark' ? 'dark' : 'light';
-        document.body.dataset.uiTheme = theme;
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0f172a' : '#2563eb');
-      } catch (error) {}
-      document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied'));
-    }, 180);
+  function writeSettings(settings, remote = false){
+    const normalized = normalizeSettings(settings, !remote);
+    applyingRemote = remote;
+    try { writeJson(SETTINGS_KEY, normalized); }
+    finally { applyingRemote = false; }
+    return normalized;
   }
-  async function importFirebase() {
+  function orderTime(order){
+    const t = Date.parse(order?.updatedAt || order?.updatedAtIso || order?.createdAt || '');
+    return Number.isFinite(t) ? t : 0;
+  }
+  function normalizeOrder(order, stamp = false){
+    if (!order || typeof order !== 'object') return null;
+    const id = String(order.id || '').trim();
+    if (!id) return null;
+    const now = nowIso();
+    return {
+      ...order,
+      id,
+      createdAt: order.createdAt || now,
+      updatedAt: stamp ? now : (order.updatedAt || order.createdAt || now),
+      __cloudUpdatedAt: stamp ? now : (order.__cloudUpdatedAt || order.updatedAt || order.createdAt || now),
+      __cloudUpdatedBy: stamp ? clientId : (order.__cloudUpdatedBy || '')
+    };
+  }
+  function deletedSet(){
+    const raw = readJson(DELETED_ORDERS_KEY, []);
+    return new Set(Array.isArray(raw) ? raw.map(String).filter(Boolean) : []);
+  }
+  function saveDeletedSet(ids, remote = false){
+    applyingRemote = remote;
+    try { writeJson(DELETED_ORDERS_KEY, [...new Set([...ids].map(String).filter(Boolean))]); }
+    finally { applyingRemote = false; }
+  }
+  function readOrders(){
+    const deleted = deletedSet();
+    const raw = readJson(ORDERS_KEY, []);
+    return Array.isArray(raw) ? raw.map(order => normalizeOrder(order)).filter(order => order && !deleted.has(order.id)) : [];
+  }
+  function writeOrders(orders, remote = false){
+    const deleted = deletedSet();
+    const byId = new Map();
+    (Array.isArray(orders) ? orders : []).forEach(item => {
+      const order = normalizeOrder(item);
+      if (!order || deleted.has(order.id)) return;
+      const prev = byId.get(order.id);
+      if (!prev || orderTime(order) >= orderTime(prev)) byId.set(order.id, order);
+    });
+    applyingRemote = remote;
+    try { writeJson(ORDERS_KEY, [...byId.values()].sort((a,b) => orderTime(b) - orderTime(a))); }
+    finally { applyingRemote = false; }
+  }
+  function mergeOrder(order){
+    const incoming = normalizeOrder(order);
+    if (!incoming || deletedSet().has(incoming.id)) return false;
+    const orders = readOrders();
+    const index = orders.findIndex(item => item.id === incoming.id);
+    if (index >= 0 && orderTime(orders[index]) > orderTime(incoming)) return false;
+    if (index >= 0) orders[index] = { ...orders[index], ...incoming };
+    else orders.unshift(incoming);
+    writeOrders(orders, true);
+    return true;
+  }
+  function deleteOrderLocal(id, remote = false){
+    if (!id) return false;
+    const deleted = deletedSet();
+    deleted.add(String(id));
+    saveDeletedSet(deleted, remote);
+    writeOrders(readOrders().filter(order => order.id !== String(id)), remote);
+    return true;
+  }
+  async function importFirebase(){
     if (firebaseApi) return firebaseApi;
     const [appMod, firestoreMod, authMod] = await Promise.all([
-      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-app.js`),
-      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-firestore.js`),
-      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-auth.js`)
+      import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-firestore.js`),
+      import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-auth.js`)
     ]);
     firebaseApi = { ...appMod, ...firestoreMod, ...authMod };
     return firebaseApi;
   }
-  function firebaseDocRef(key) {
-    return firebaseApi.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
+  function dataCollection(){
+    return firebaseApi.collection(db, 'crmWorkspaces', workspaceId(), 'data');
   }
-  async function writeFirebaseKey(key) {
-    if (!firebaseReady || applyingRemote || !DATA_KEY_SET.has(key)) return;
-    const raw = localStorage.getItem(key);
-    if (raw === null) return;
-    await firebaseApi.setDoc(firebaseDocRef(key), {
-      raw,
-      updatedAt: firebaseApi.serverTimestamp(),
-      updatedAtIso: new Date().toISOString(),
-      updatedBy: clientId
-    }, { merge: true });
+  function docRef(id){
+    return firebaseApi.doc(db, 'crmWorkspaces', workspaceId(), 'data', id);
   }
-  async function pushFirebaseAll() {
-    if (!firebaseReady) return;
-    await Promise.all(DATA_KEYS.map(key => writeFirebaseKey(key)));
+  function safeDocId(value){
+    return encodeURIComponent(String(value || '')).replace(/%/g, '_');
   }
-  function mergeDeletedOrderIds(remoteRaw) {
-    const localIds = safeJson(localStorage.getItem('one_service_deleted_order_ids'), []);
-    const remoteIds = safeJson(remoteRaw, []);
-    return JSON.stringify([...new Set([
-      ...(Array.isArray(localIds) ? localIds.map(String) : []),
-      ...(Array.isArray(remoteIds) ? remoteIds.map(String) : [])
-    ].filter(Boolean))]);
-  }
-  function orderTimestamp(order) {
-    const value = order && (order.updatedAt || order.createdAt || order.date || order.acceptedAt || '');
-    const time = Date.parse(value);
-    return Number.isFinite(time) ? time : 0;
-  }
-  function filterOrdersByDeletedIds(rawOrders) {
-    const orders = safeJson(rawOrders, []);
-    const deletedIds = new Set((safeJson(localStorage.getItem('one_service_deleted_order_ids'), []) || []).map(String));
-    if (!Array.isArray(orders)) return rawOrders || '[]';
-    return JSON.stringify(orders.filter(order => order && !deletedIds.has(String(order.id || ''))));
-  }
-  function mergeOrdersRaw(remoteRaw) {
-    const localOrders = safeJson(localStorage.getItem('one_service_orders') || '[]', []);
-    const remoteOrders = safeJson(remoteRaw || '[]', []);
-    const deletedIds = new Set((safeJson(localStorage.getItem('one_service_deleted_order_ids'), []) || []).map(String));
-    const map = new Map();
-    function put(order) {
-      if (!order || typeof order !== 'object') return;
-      const id = String(order.id || '');
-      if (!id || deletedIds.has(id)) return;
-      const previous = map.get(id);
-      if (!previous || orderTimestamp(order) >= orderTimestamp(previous)) map.set(id, order);
-    }
-    if (Array.isArray(remoteOrders)) remoteOrders.forEach(put);
-    if (Array.isArray(localOrders)) localOrders.forEach(put);
-    return JSON.stringify(Array.from(map.values()).filter(order => !deletedIds.has(String(order.id || ''))));
-  }
-  function applyFirebaseDoc(key, data) {
-    if (!data || typeof data.raw !== 'string') return;
-    let incomingRaw = data.raw;
-    let shouldWriteBack = false;
-
-    if (key === 'one_service_deleted_order_ids') {
-      incomingRaw = mergeDeletedOrderIds(data.raw);
-      shouldWriteBack = incomingRaw !== data.raw;
-    }
-
-    if (key === 'one_service_orders') {
-      incomingRaw = mergeOrdersRaw(data.raw);
-      shouldWriteBack = incomingRaw !== data.raw;
-    }
-
-    const currentRaw = localStorage.getItem(key);
-    const changed = currentRaw !== incomingRaw;
-
-    if (changed) {
+  function orderDocId(id){ return `order_${safeDocId(id)}`; }
+  function deletedDocId(id){ return `deleted_order_${safeDocId(id)}`; }
+  async function setRemoteRaw(key){
+    if (!ready || applyingRemote || key === ORDERS_KEY || key === DELETED_ORDERS_KEY) return;
+    let raw = readRaw(key);
+    let settingsPayload = null;
+    if (key === SETTINGS_KEY) {
+      settingsPayload = normalizeSettings(readSettings(), true);
       applyingRemote = true;
-      try {
-        localStorage.setItem(key, incomingRaw);
-        if (key === 'one_service_deleted_order_ids') {
-          const filteredOrders = filterOrdersByDeletedIds(localStorage.getItem('one_service_orders') || '[]');
-          localStorage.setItem('one_service_orders', filteredOrders);
-        }
-      } finally {
-        applyingRemote = false;
-      }
+      try { writeJson(SETTINGS_KEY, settingsPayload); }
+      finally { applyingRemote = false; }
+      raw = JSON.stringify(settingsPayload);
+    } else if (raw === null) {
+      raw = '[]';
     }
-
-    if (key === 'one_service_deleted_order_ids') {
-      setTimeout(() => writeFirebaseKey('one_service_deleted_order_ids').catch(() => {}), 80);
-      setTimeout(() => writeFirebaseKey('one_service_orders').catch(() => {}), 120);
-    } else if (key === 'one_service_orders' && (changed || shouldWriteBack)) {
-      setTimeout(() => writeFirebaseKey('one_service_orders').catch(() => {}), 120);
-    }
-
-    if (changed) {
-      setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен. Автообновление включено.');
-      scheduleRefresh();
-    }
-  }
-  async function initializeFirebase(currentToken) {
-    if (!firebaseConfigured()) return false;
-    const api = await importFirebase();
-    const firebaseConfig = cleanObject(config.firebase);
-    const appName = `crm-${firebaseConfig.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
-    const app = api.getApps().find(item => item.name === appName) || api.initializeApp(firebaseConfig, appName);
-    try { await api.signInAnonymously(api.getAuth(app)); } catch (error) {}
-    db = api.getFirestore(app);
-    firebaseReady = true;
-    for (const key of DATA_KEYS) {
-      if (currentToken !== initToken) return false;
-      const ref = api.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
-      const snap = await api.getDoc(ref);
-      if (snap.exists()) applyFirebaseDoc(key, snap.data());
-      else await writeFirebaseKey(key);
-      const unsubscribe = api.onSnapshot(ref, next => {
-        if (next.exists()) applyFirebaseDoc(key, next.data());
-      });
-      firebaseUnsubscribes.push(unsubscribe);
-    }
-    setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
-    return true;
-  }
-  function scheduleFirebasePush(key) {
-    if (!firebaseReady || !DATA_KEY_SET.has(key)) return;
-    clearTimeout(pushTimer);
-    pushTimer = setTimeout(() => {
-      writeFirebaseKey(key).catch(() => setStatus('Firebase недоступен.'));
-    }, 450);
-  }
-  function utf8ToBase64(text) {
-    const bytes = new TextEncoder().encode(text);
-    let binary = '';
-    bytes.forEach(byte => { binary += String.fromCharCode(byte); });
-    return btoa(binary);
-  }
-  function base64ToUtf8(text) {
-    const binary = atob(String(text || '').replace(/\s/g, ''));
-    const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
-    return new TextDecoder().decode(bytes);
-  }
-  function githubHeaders(extra = {}) {
-    const headers = {
-      Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2026-03-10',
-      ...extra
-    };
-    if (config.github?.token) headers.Authorization = `Bearer ${config.github.token}`;
-    return headers;
-  }
-  async function readGithubSnapshot() {
-    if (!githubConfigured()) return null;
-    const { owner, repo, branch, path } = config.github;
-    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(branch)}`;
-    const response = await fetch(url, { headers: githubHeaders() });
-    if (response.status === 404) return null;
-    if (!response.ok) throw new Error('github-read');
-    const payload = await response.json();
-    return {
-      sha: payload.sha,
-      snapshot: safeJson(base64ToUtf8(payload.content), null)
-    };
-  }
-  async function pushGithubSnapshot() {
-    if (!githubConfigured() || !config.github.token) return;
-    const { owner, repo, branch, path } = config.github;
-    const current = await readGithubSnapshot().catch(() => null);
-    const snapshot = buildSnapshot();
-    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}`;
-    const body = {
-      message: `CRM sync ${snapshot.updatedAt}`,
-      branch,
-      content: utf8ToBase64(JSON.stringify(snapshot, null, 2))
-    };
-    if (current?.sha) body.sha = current.sha;
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: githubHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify(body)
-    });
-    if (!response.ok) throw new Error('github-write');
-    if (!firebaseConfigured()) setStatus('GitHub подключен.');
-  }
-  function scheduleGithubPush() {
-    if (!githubConfigured() || !config.github.token) return;
-    clearTimeout(githubTimer);
-    githubTimer = setTimeout(() => {
-      pushGithubSnapshot().catch(() => setStatus(firebaseReady ? 'Firebase подключен. GitHub недоступен.' : 'GitHub недоступен.'));
-    }, 1800);
-  }
-  async function initializeGithubFallback() {
-    if (!githubConfigured() || firebaseConfigured()) return;
-    const current = await readGithubSnapshot().catch(() => null);
-    if (current?.snapshot?.data) applySnapshot(current.snapshot);
-    setStatus('GitHub подключен.');
-  }
-  async function initializeCloudSync() {
-    config = readConfig();
-    updateInitialStatus();
-    initToken += 1;
-    const currentToken = initToken;
-    firebaseReady = false;
-    firebaseUnsubscribes.forEach(unsubscribe => {
-      try { unsubscribe(); } catch (error) {}
-    });
-    firebaseUnsubscribes = [];
-    if (firebaseConfigured()) {
-      try {
-        await initializeFirebase(currentToken);
-        // Важно: не отправляем все локальные данные сразу после запуска.
-        // Иначе устройство со старым localStorage может перезаписать свежие заказы в Firebase.
-      } catch (error) {
-        setStatus('Firebase недоступен.');
-      }
-    }
-    try { await initializeGithubFallback(); } catch (error) {}
-    try { await pushGithubSnapshot(); } catch (error) {
-      if (githubConfigured() && config.github.token) setStatus(firebaseReady ? 'Firebase подключен. GitHub недоступен.' : 'GitHub недоступен.');
-    }
-  }
-  const nativeSetItem = Storage.prototype.setItem;
-  Storage.prototype.setItem = function(key, value) {
-    const result = nativeSetItem.call(this, key, value);
-    if (this === localStorage && DATA_KEY_SET.has(key) && !applyingRemote) {
-      scheduleFirebasePush(key);
-      scheduleGithubPush();
-    }
-    return result;
-  };
-  const form = document.getElementById('settingsForm');
-  if (form) {
-    form.addEventListener('submit', saveCloudForm);
-    form.addEventListener('change', event => {
-      if (event.target?.id && /^(firebase|github|cloudWorkspace)/.test(event.target.id)) saveCloudForm();
-    });
-  }
-  document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
-  fillCloudForm();
-  await initializeCloudSync();
-})();
-</script>
-
-
-<script id="release-online-sync-access-final-fix">
-(function(){
-  function currentUser(){ return window.crmCurrentUser || null; }
-  function userCanOrders(){
-    const user = currentUser();
-    if (!user) return false;
-    if (user.isAdmin) return true;
-    const roles = Array.isArray(user.roles) ? user.roles : [];
-    return roles.includes('all') || roles.includes('orders');
-  }
-  function userIsAdmin(){
-    const user = currentUser();
-    return Boolean(user && (user.isAdmin || (Array.isArray(user.roles) && user.roles.includes('all'))));
-  }
-  function updateCreateButtons(){
-    const allowed = userCanOrders();
-    document.querySelectorAll('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]').forEach(btn => {
-      btn.hidden = !allowed;
-      btn.disabled = !allowed;
-      btn.title = allowed ? '' : 'Создание заказов разрешает администратор в настройках доступа';
-    });
-  }
-  function cleanupDeletedOrders(){
-    try{
-      const deleted = new Set((JSON.parse(localStorage.getItem('one_service_deleted_order_ids') || '[]') || []).map(String));
-      const orders = JSON.parse(localStorage.getItem('one_service_orders') || '[]') || [];
-      if (!Array.isArray(orders)) return;
-      const filtered = orders.filter(order => order && !deleted.has(String(order.id || '')));
-      if (filtered.length !== orders.length) localStorage.setItem('one_service_orders', JSON.stringify(filtered));
-    }catch(e){}
-  }
-  document.addEventListener('submit', function(event){
-    if (event.target && event.target.id === 'orderForm') {
-      const title = (document.getElementById('orderModalTitle')?.textContent || '').toLowerCase();
-      const creating = title.includes('нов');
-      if (creating && !userCanOrders()) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        alert('Создавать заказы может только пользователь, которому администратор дал доступ к разделу «Заказы».');
-      }
-    }
-  }, true);
-  document.addEventListener('click', function(event){
-    const createBtn = event.target.closest('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]');
-    if (createBtn && !userCanOrders()) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      alert('Создание заказов недоступно. Администратор должен выдать доступ к разделу «Заказы» в настройках.');
-      return;
-    }
-    const deleteControl = event.target.closest('[data-order-action="delete"], option[value="delete"]');
-    if (deleteControl && !userIsAdmin()) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      alert('Удалять заказы может только администратор.');
-    }
-  }, true);
-  window.addEventListener('storage', function(event){
-    if (['one_service_orders','one_service_deleted_order_ids','one_service_settings'].includes(event.key)) {
-      cleanupDeletedOrders();
-      updateCreateButtons();
-      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch(e) {}
-    }
-  });
-  document.addEventListener('crm:cloud-sync-applied', function(){
-    cleanupDeletedOrders();
-    updateCreateButtons();
-  });
-  setInterval(function(){
-    cleanupDeletedOrders();
-    updateCreateButtons();
-  }, 2500);
-  setTimeout(function(){ cleanupDeletedOrders(); updateCreateButtons(); }, 300);
-})();
-</script>
-
-
-
-<script type="module" id="release-stable-per-order-firestore-sync">
-(async function(){
-  const ORDERS_KEY = 'one_service_orders';
-  const DELETED_KEY = 'one_service_deleted_order_ids';
-  const CONFIG_KEY = 'one_service_cloud_config';
-  const CLIENT_KEY = 'one_service_cloud_client_id';
-  const firebaseVersion = '10.12.5';
-  let api = null;
-  let db = null;
-  let ready = false;
-  let applyingRemote = false;
-  let pushTimer = null;
-  let pushedOnce = false;
-
-  function safeJson(text, fallback){ try { return JSON.parse(text); } catch(e){ return fallback; } }
-  function cleanObject(value){ return Object.fromEntries(Object.entries(value || {}).filter(([,v]) => v !== undefined && v !== null && String(v).trim() !== '')); }
-  function readLocalJson(key, fallback){ return safeJson(localStorage.getItem(key) || '', fallback); }
-  function writeLocalJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
-  function getClientId(){
-    let id = localStorage.getItem(CLIENT_KEY);
-    if (!id) { id = crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2); localStorage.setItem(CLIENT_KEY, id); }
-    return id;
-  }
-  const clientId = getClientId();
-
-  function getConfig(){
-    const release = window.CRM_RELEASE_CLOUD_CONFIG || {};
-    const stored = readLocalJson(CONFIG_KEY, {}) || {};
-    return {
-      workspaceId: stored.workspaceId || release.workspaceId || 'one-service',
-      firebase: { ...cleanObject(release.firebase), ...cleanObject(stored.firebase) }
-    };
-  }
-  function workspaceId(){ return String(getConfig().workspaceId || 'one-service').replace(/[\/#?\[\]]/g, '-') || 'one-service'; }
-  function isConfigured(){ const f = getConfig().firebase || {}; return Boolean(f.apiKey && f.projectId && f.appId); }
-  function safeId(id){ return encodeURIComponent(String(id || '')).replace(/%/g, '_'); }
-  function docIdToOrderId(docId){ return decodeURIComponent(String(docId || '').replace(/^order_/, '').replace(/_/g, '%')); }
-  function deletedDocIdToOrderId(docId){ return decodeURIComponent(String(docId || '').replace(/^deleted_order_/, '').replace(/_/g, '%')); }
-  function orderDocId(id){ return 'order_' + safeId(id); }
-  function deletedDocId(id){ return 'deleted_order_' + safeId(id); }
-  function orderTime(order){
-    const t = Date.parse(order?.updatedAt || order?.createdAt || order?.date || '');
-    return Number.isFinite(t) ? t : 0;
-  }
-  function getDeletedSet(){ return new Set((readLocalJson(DELETED_KEY, []) || []).map(String).filter(Boolean)); }
-  function addDeletedId(id){
-    if (!id) return false;
-    const ids = Array.from(getDeletedSet());
-    if (ids.includes(String(id))) return false;
-    ids.push(String(id));
-    applyingRemote = true;
-    try { writeLocalJson(DELETED_KEY, ids); } finally { applyingRemote = false; }
-    return true;
-  }
-  function removeDeletedId(id){
-    const old = Array.from(getDeletedSet());
-    const next = old.filter(x => x !== String(id));
-    if (next.length === old.length) return false;
-    applyingRemote = true;
-    try { writeLocalJson(DELETED_KEY, next); } finally { applyingRemote = false; }
-    return true;
-  }
-  function getOrders(){
-    const deleted = getDeletedSet();
-    const orders = readLocalJson(ORDERS_KEY, []);
-    return Array.isArray(orders) ? orders.filter(o => o && !deleted.has(String(o.id || ''))) : [];
-  }
-  function setOrders(orders){
-    const deleted = getDeletedSet();
-    const clean = Array.isArray(orders) ? orders.filter(o => o && !deleted.has(String(o.id || ''))) : [];
-    applyingRemote = true;
-    try { writeLocalJson(ORDERS_KEY, clean); } finally { applyingRemote = false; }
-  }
-  function mergeOrder(order){
-    if (!order || typeof order !== 'object' || !order.id) return false;
-    if (getDeletedSet().has(String(order.id))) return false;
-    const orders = getOrders();
-    const index = orders.findIndex(o => String(o.id) === String(order.id));
-    if (index >= 0 && orderTime(orders[index]) > orderTime(order)) return false;
-    if (index >= 0) orders[index] = { ...orders[index], ...order };
-    else orders.unshift(order);
-    setOrders(orders);
-    return true;
-  }
-  function removeLocalOrder(id){
-    const orders = getOrders();
-    const next = orders.filter(o => String(o.id || '') !== String(id));
-    if (next.length === orders.length) return false;
-    setOrders(next);
-    return true;
-  }
-  function refreshUi(){
-    setTimeout(() => {
-      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch(e) {}
-      document.dispatchEvent(new CustomEvent('crm:stable-order-sync-applied'));
-    }, 80);
-  }
-  async function importFirebase(){
-    if (api) return api;
-    const [appMod, firestoreMod, authMod] = await Promise.all([
-      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-app.js`),
-      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-firestore.js`),
-      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-auth.js`)
-    ]);
-    api = { ...appMod, ...firestoreMod, ...authMod };
-    return api;
-  }
-  function dataCollection(){ return api.collection(db, 'crmWorkspaces', workspaceId(), 'data'); }
-  function orderRef(id){ return api.doc(db, 'crmWorkspaces', workspaceId(), 'data', orderDocId(id)); }
-  function deletedRef(id){ return api.doc(db, 'crmWorkspaces', workspaceId(), 'data', deletedDocId(id)); }
-  async function pushOrder(order){
-    if (!ready || !order || !order.id || getDeletedSet().has(String(order.id))) return;
-    await api.setDoc(orderRef(order.id), {
-      type: 'order',
-      order,
-      orderId: String(order.id),
-      updatedAtIso: order.updatedAt || new Date().toISOString(),
-      updatedAt: api.serverTimestamp(),
+    await firebaseApi.setDoc(docRef(key), {
+      type: 'raw',
+      key,
+      raw,
+      updatedAtIso: nowIso(),
+      updatedAt: firebaseApi.serverTimestamp(),
       updatedBy: clientId
-    }, { merge: true });
+    }, { merge:true });
+    if (key === SETTINGS_KEY) {
+      await firebaseApi.setDoc(docRef('settings_current'), {
+        type: 'settings',
+        settings: settingsPayload || readSettings(),
+        raw,
+        updatedAtIso: nowIso(),
+        updatedAt: firebaseApi.serverTimestamp(),
+        updatedBy: clientId
+      }, { merge:true });
+    }
   }
-  async function pushDeleted(id){
+  async function pushAllRawKeys(){
+    await Promise.all(SYNC_KEYS.map(key => setRemoteRaw(key).catch(console.warn)));
+  }
+  async function setRemoteOrder(order){
+    const normalized = normalizeOrder(order);
+    if (!ready || !normalized || deletedSet().has(normalized.id)) return;
+    await firebaseApi.setDoc(docRef(orderDocId(normalized.id)), {
+      type: 'order',
+      orderId: normalized.id,
+      order: normalized,
+      updatedAtIso: normalized.updatedAt || nowIso(),
+      updatedAt: firebaseApi.serverTimestamp(),
+      updatedBy: clientId
+    }, { merge:true });
+  }
+  async function setRemoteDeleted(id){
     if (!ready || !id) return;
-    await api.setDoc(deletedRef(id), {
+    await firebaseApi.setDoc(docRef(deletedDocId(id)), {
       type: 'deleted_order',
       orderId: String(id),
-      deletedAtIso: new Date().toISOString(),
-      deletedAt: api.serverTimestamp(),
+      deletedAtIso: nowIso(),
+      updatedAt: firebaseApi.serverTimestamp(),
       updatedBy: clientId
-    }, { merge: true });
-    try { await api.deleteDoc(orderRef(id)); } catch(e) {}
+    }, { merge:true });
+    try { await firebaseApi.deleteDoc(docRef(orderDocId(id))); } catch (error) {}
   }
-  function schedulePushAll(){
-    if (!ready || applyingRemote) return;
-    clearTimeout(pushTimer);
-    pushTimer = setTimeout(async () => {
-      const orders = getOrders();
-      const deleted = Array.from(getDeletedSet());
-      try {
-        await Promise.all([...orders.map(pushOrder), ...deleted.map(pushDeleted)]);
-      } catch(e) {
-        const node = document.getElementById('cloudSyncStatus');
-        if (node) node.textContent = 'Firebase подключен, но запись заказов временно недоступна.';
-      }
-    }, 250);
+  async function pushAllOrders(){
+    await Promise.all([
+      ...readOrders().map(order => setRemoteOrder(order)),
+      ...[...deletedSet()].map(id => setRemoteDeleted(id))
+    ]);
   }
-
+  function buildSnapshot(){
+    const data = {};
+    [...SYNC_KEYS, ORDERS_KEY, DELETED_ORDERS_KEY].forEach(key => {
+      data[key] = readJson(key, key === SETTINGS_KEY ? {} : []);
+    });
+    return {
+      workspaceId: workspaceId(),
+      updatedAt: nowIso(),
+      updatedBy: clientId,
+      data
+    };
+  }
+  function utf8ToBase64(text){
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      binary += String.fromCharCode(...bytes.slice(i, i + chunk));
+    }
+    return btoa(binary);
+  }
+  async function pushGitHubBackup(){
+    if (!githubConfigured()) return false;
+    const cfg = getConfig().github;
+    const apiPath = cfg.path.split('/').map(encodeURIComponent).join('/');
+    const baseUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${apiPath}`;
+    const headers = {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${cfg.token}`,
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+    let sha = '';
+    const current = await fetch(`${baseUrl}?ref=${encodeURIComponent(cfg.branch)}`, { headers }).catch(() => null);
+    if (current && current.ok) {
+      const body = await current.json().catch(() => ({}));
+      sha = body.sha || '';
+    }
+    const payload = {
+      message: `CRM sync ${new Date().toISOString()}`,
+      branch: cfg.branch,
+      content: utf8ToBase64(JSON.stringify(buildSnapshot(), null, 2))
+    };
+    if (sha) payload.sha = sha;
+    const saved = await fetch(baseUrl, {
+      method: 'PUT',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return Boolean(saved && saved.ok);
+  }
+  function scheduleGithubPush(){
+    if (!githubConfigured()) return;
+    clearTimeout(githubPushTimer);
+    githubPushTimer = setTimeout(() => {
+      pushGitHubBackup().catch(() => setSyncStatus('GitHub не обновлен.'));
+    }, 3000);
+  }
+  function scheduleRawPush(key){
+    if (applyingRemote || !DATA_KEY_SET.has(key)) return;
+    scheduleGithubPush();
+    if (!ready || !initialized) return;
+    if (key === ORDERS_KEY || key === DELETED_ORDERS_KEY) {
+      clearTimeout(orderPushTimer);
+      orderPushTimer = setTimeout(() => pushAllOrders().catch(() => setSyncStatus('Ошибка записи заказов.')), 250);
+      return;
+    }
+    if (key === SETTINGS_KEY) {
+      clearTimeout(settingsPushTimer);
+      settingsPushTimer = setTimeout(() => setRemoteRaw(SETTINGS_KEY).catch(() => setSyncStatus('Ошибка записи настроек.')), 250);
+      return;
+    }
+    clearTimeout(keyPushTimers.get(key));
+    keyPushTimers.set(key, setTimeout(() => setRemoteRaw(key).catch(() => setSyncStatus('Ошибка записи данных.')), 350));
+  }
   const nativeSetItem = Storage.prototype.setItem;
   Storage.prototype.setItem = function(key, value){
     const result = nativeSetItem.call(this, key, value);
-    if (this === localStorage && (key === ORDERS_KEY || key === DELETED_KEY) && !applyingRemote) schedulePushAll();
+    if (this === localStorage && !applyingRemote && DATA_KEY_SET.has(key)) scheduleRawPush(key);
     return result;
   };
-
-  async function start(){
-    if (!isConfigured()) return;
-    const firebase = (await importFirebase());
-    const cfg = cleanObject(getConfig().firebase);
-    const appName = `crm-stable-orders-${cfg.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
-    const app = firebase.getApps().find(x => x.name === appName) || firebase.initializeApp(cfg, appName);
-    try { await firebase.signInAnonymously(firebase.getAuth(app)); } catch(e) {}
-    db = firebase.getFirestore(app);
-    ready = true;
-
-    firebase.onSnapshot(dataCollection(), snap => {
+  function applyRemoteRawDoc(data){
+    if (!data || data.updatedBy === clientId || !data.key || typeof data.raw !== 'string') return false;
+    if (readRaw(data.key) === data.raw) return false;
+    applyingRemote = true;
+    try { localStorage.setItem(data.key, data.raw); }
+    finally { applyingRemote = false; }
+    if (data.key === SETTINGS_KEY) handleSettingsAfterRemote();
+    return true;
+  }
+  function applyRemoteSettingsDoc(data){
+    const source = data?.settings && typeof data.settings === 'object' ? data.settings : safeJson(data?.raw || '', null);
+    if (!source || typeof source !== 'object') return false;
+    const remoteStamp = data?.updatedAtIso || source.__cloudUpdatedAt || source.updatedAtIso || source.updatedAt || nowIso();
+    const incoming = normalizeSettings({
+      ...source,
+      __cloudUpdatedAt: source.__cloudUpdatedAt || remoteStamp,
+      __cloudUpdatedBy: data?.updatedBy || source.__cloudUpdatedBy || ''
+    });
+    const local = readSettings();
+    if (local.__cloudUpdatedBy === clientId && Date.parse(local.__cloudUpdatedAt || '') > Date.parse(incoming.__cloudUpdatedAt || '')) return false;
+    const old = readRaw(SETTINGS_KEY);
+    const next = JSON.stringify(incoming);
+    if (old === next) return false;
+    applyingRemote = true;
+    try { localStorage.setItem(SETTINGS_KEY, next); }
+    finally { applyingRemote = false; }
+    handleSettingsAfterRemote();
+    return true;
+  }
+  function handleSettingsAfterRemote(){
+    validateCurrentUser();
+    scheduleRefresh();
+  }
+  async function loadInitialRemote(){
+    const snap = await firebaseApi.getDocs(dataCollection());
+    let hasRemoteOrders = false;
+    const remoteKeys = new Set();
+    snap.forEach(docSnap => {
+      const id = docSnap.id;
+      const data = docSnap.data() || {};
+      if (id.startsWith('deleted_order_') || data.type === 'deleted_order') {
+        if (data.orderId) deleteOrderLocal(data.orderId, true);
+      }
+    });
+    snap.forEach(docSnap => {
+      const id = docSnap.id;
+      const data = docSnap.data() || {};
+      if (id === 'settings_current') {
+        remoteKeys.add(SETTINGS_KEY);
+        applyRemoteSettingsDoc(data);
+        return;
+      }
+      if (SYNC_KEYS.includes(id)) {
+        remoteKeys.add(id);
+        applyRemoteRawDoc({ ...data, key:id });
+        return;
+      }
+      if (id.startsWith('order_') || data.type === 'order') {
+        hasRemoteOrders = true;
+        if (data.order) mergeOrder(data.order);
+      }
+    });
+    initialized = true;
+    if (!hasRemoteOrders && readOrders().length) await pushAllOrders();
+    for (const key of SYNC_KEYS) {
+      if (!remoteKeys.has(key) && readRaw(key) !== null) await setRemoteRaw(key).catch(console.warn);
+    }
+    scheduleRefresh();
+  }
+  function listenRemote(){
+    firebaseApi.onSnapshot(dataCollection(), snap => {
       let changed = false;
       snap.docChanges().forEach(change => {
         const id = change.doc.id;
         const data = change.doc.data() || {};
-        if (id.startsWith('deleted_order_')) {
-          const orderId = data.orderId || deletedDocIdToOrderId(id);
-          if (addDeletedId(orderId)) changed = true;
-          if (removeLocalOrder(orderId)) changed = true;
+        if (id === 'settings_current') {
+          changed = applyRemoteSettingsDoc(data) || changed;
           return;
         }
-        if (id.startsWith('order_')) {
-          const orderId = data.orderId || docIdToOrderId(id);
-          if (change.type === 'removed') {
-            // Само удаление документа без tombstone не считаем удалением заказа, чтобы случайный сбой не стер локальный заказ.
-            return;
-          }
-          const order = data.order && typeof data.order === 'object' ? data.order : null;
-          if (order && order.id) {
-            if (mergeOrder(order)) changed = true;
-          } else if (orderId) {
-            // пустой документ игнорируем
-          }
+        if (id.startsWith('deleted_order_') || data.type === 'deleted_order') {
+          if (data.orderId) changed = deleteOrderLocal(data.orderId, true) || changed;
+          return;
+        }
+        if (id.startsWith('order_') || data.type === 'order') {
+          if (change.type !== 'removed' && data.order) changed = mergeOrder(data.order) || changed;
+          return;
+        }
+        if (SYNC_KEYS.includes(id)) {
+          changed = applyRemoteRawDoc({ ...data, key:id }) || changed;
         }
       });
-      if (!pushedOnce) { pushedOnce = true; schedulePushAll(); }
-      if (changed) refreshUi();
-      const node = document.getElementById('cloudSyncStatus');
-      if (node) node.textContent = 'Firebase подключен. Заказы синхронизируются в реальном времени.';
-    }, error => {
-      const node = document.getElementById('cloudSyncStatus');
-      if (node) node.textContent = 'Ошибка синхронизации заказов Firebase. Проверь Firestore Rules и Anonymous Auth.';
-      console.warn('Stable order sync error', error);
-    });
+      if (changed) scheduleRefresh();
+      setSyncStatus('Firebase подключен.');
+    }, () => setSyncStatus('Ошибка Firebase.'));
   }
+  async function startFirebase(){
+    if (ready) return true;
+    if (!firebaseConfigured()) {
+      setSyncStatus('Firebase не настроен.');
+      return false;
+    }
+    const api = await importFirebase();
+    const cfg = cleanObject(getConfig().firebase);
+    const appName = `one-service-${cfg.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
+    const app = api.getApps().find(item => item.name === appName) || api.initializeApp(cfg, appName);
+    try { await api.signInAnonymously(api.getAuth(app)); } catch (error) {}
+    db = api.getFirestore(app);
+    ready = true;
+    await loadInitialRemote();
+    listenRemote();
+    await pushAllRawKeys().catch(console.warn);
+    scheduleGithubPush();
+    setSyncStatus('Firebase подключен.');
+    return true;
+  }
+  function scheduleRefresh(){
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => {
+      try { if (typeof window.fillSettingsForm === 'function') window.fillSettingsForm(); } catch (error) {}
+      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch (error) {}
+      try { if (typeof window.renderMasterProfilesList === 'function') window.renderMasterProfilesList(); } catch (error) {}
+      applyAccessRules();
+      document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied'));
+      document.dispatchEvent(new CustomEvent('crm:settings-access-sync-applied'));
+      document.dispatchEvent(new CustomEvent('crm:stable-order-sync-applied'));
+    }, 100);
+  }
+  function currentUser(){
+    return window.crmCurrentUser || safeJson(readRaw(AUTH_USER_KEY) || 'null', null);
+  }
+  function isAdminUser(user = currentUser()){
+    return Boolean(user && (user.isAdmin || (Array.isArray(user.roles) && user.roles.includes('all')) || user.id === 'admin'));
+  }
+  function isParticipant(){
+    return Boolean(currentUser());
+  }
+  function findMasterByLogin(login){
+    const needle = String(login || '').trim().toLowerCase();
+    return readSettings().masterProfiles.find(profile => profile.login && profile.login.toLowerCase() === needle);
+  }
+  function findMasterById(id){
+    return readSettings().masterProfiles.find(profile => profile.id === id);
+  }
+  async function fetchSettingsForAuth(){
+    if (!ready) await startFirebase().catch(() => false);
+    if (!ready) return false;
+    const snap = await firebaseApi.getDoc(docRef('settings_current')).catch(() => null);
+    if (snap && snap.exists()) return applyRemoteSettingsDoc(snap.data());
+    const legacy = await firebaseApi.getDoc(docRef(SETTINGS_KEY)).catch(() => null);
+    if (legacy && legacy.exists()) return applyRemoteRawDoc({ ...legacy.data(), key:SETTINGS_KEY });
+    return false;
+  }
+  function authenticate(login, password){
+    const cleanLogin = String(login || '').trim();
+    if (cleanLogin.toLowerCase() === ADMIN_USER.login.toLowerCase() && password === ADMIN_USER.password) return { ...ADMIN_USER, password:'' };
+    const profile = findMasterByLogin(cleanLogin);
+    if (profile && profile.password && String(profile.password) === String(password || '')) return { ...profile, isAdmin:false, password:'' };
+    return null;
+  }
+  function setSession(user, remember){
+    window.crmCurrentUser = user || null;
+    if (user) {
+      if (remember) writeRaw(AUTH_REMEMBER_KEY, '1');
+      else { try { localStorage.removeItem(AUTH_REMEMBER_KEY); } catch (error) {} }
+      writeRaw(AUTH_USER_KEY, JSON.stringify(user));
+    } else {
+      try { localStorage.removeItem(AUTH_REMEMBER_KEY); } catch (error) {}
+      try { localStorage.removeItem(AUTH_USER_KEY); } catch (error) {}
+    }
+    const chip = document.getElementById('currentUserChip');
+    if (chip) chip.textContent = user ? user.name : '';
+    applyAccessRules();
+  }
+  function showAuth(){
+    const authShell = document.getElementById('authShell');
+    const appShell = document.getElementById('appShell');
+    if (authShell) authShell.style.display = 'flex';
+    if (appShell) {
+      appShell.classList.remove('is-authenticated');
+      appShell.style.display = 'none';
+    }
+  }
+  function showApp(){
+    const authShell = document.getElementById('authShell');
+    const appShell = document.getElementById('appShell');
+    if (authShell) authShell.style.display = 'none';
+    if (appShell) {
+      appShell.classList.add('is-authenticated');
+      appShell.style.display = 'block';
+    }
+    scheduleRefresh();
+  }
+  function validateCurrentUser(){
+    const user = currentUser();
+    if (!user || isAdminUser(user)) return true;
+    const profile = findMasterById(user.id);
+    if (!profile) {
+      setSession(null, false);
+      showAuth();
+      return false;
+    }
+    const updated = { ...profile, isAdmin:false, password:'' };
+    window.crmCurrentUser = updated;
+    writeRaw(AUTH_USER_KEY, JSON.stringify(updated));
+    return true;
+  }
+  function patchAuth(){
+    const oldForm = document.getElementById('authForm');
+    if (!oldForm || oldForm.dataset.releaseFinalAuth === '1') return;
+    const form = oldForm.cloneNode(true);
+    form.dataset.releaseFinalAuth = '1';
+    oldForm.replaceWith(form);
+    const loginInput = form.querySelector('#authLogin');
+    const passwordInput = form.querySelector('#authPassword');
+    const rememberInput = form.querySelector('#rememberMe');
+    const errorNode = document.getElementById('authError');
+    const clearError = () => {
+      if (!errorNode) return;
+      errorNode.textContent = '';
+      errorNode.classList.remove('show');
+    };
+    const showError = message => {
+      if (!errorNode) return;
+      errorNode.textContent = message;
+      errorNode.classList.add('show');
+    };
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      clearError();
+      await fetchSettingsForAuth().catch(() => false);
+      const user = authenticate(loginInput?.value, passwordInput?.value || '');
+      if (!user) {
+        showError('Неверный логин или пароль');
+        passwordInput?.focus();
+        passwordInput?.select();
+        return;
+      }
+      setSession(user, Boolean(rememberInput?.checked));
+      if (passwordInput) passwordInput.value = '';
+      showApp();
+    }, true);
+    const remembered = readRaw(AUTH_REMEMBER_KEY) === '1';
+    if (rememberInput) rememberInput.checked = remembered;
+    const stored = safeJson(readRaw(AUTH_USER_KEY) || 'null', null);
+    if (remembered && stored) {
+      if (stored.isAdmin) setSession({ ...ADMIN_USER, password:'' }, true);
+      else if (findMasterById(stored.id)) setSession({ ...findMasterById(stored.id), isAdmin:false, password:'' }, true);
+      else setSession(null, false);
+    }
+    const logout = document.getElementById('logoutBtn');
+    if (logout && logout.dataset.releaseFinalLogout !== '1') {
+      logout.dataset.releaseFinalLogout = '1';
+      logout.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setSession(null, false);
+        showAuth();
+      }, true);
+    }
+  }
+  function applyAccessRules(){
+    const user = currentUser();
+    const participant = Boolean(user);
+    const admin = isAdminUser(user);
+    const allowOrders = participant;
+    document.querySelectorAll('#ordersBtn,[data-menu-action="ordersBtn"]').forEach(node => {
+      node.hidden = !participant;
+      node.disabled = !participant;
+    });
+    document.querySelectorAll('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]').forEach(node => {
+      node.hidden = !allowOrders;
+      node.disabled = !allowOrders;
+    });
+    document.querySelectorAll('select[data-action="change-status"]').forEach(select => {
+      select.disabled = !allowOrders;
+    });
+    document.querySelectorAll('[data-order-action="delete"],[data-delete-order]').forEach(node => {
+      node.hidden = !admin;
+      node.disabled = !admin;
+    });
+    document.querySelectorAll('select[data-action="order-actions"]').forEach(select => {
+      Array.from(select.options || []).forEach(option => {
+        if (option.value === 'delete') option.hidden = !admin;
+      });
+    });
+    document.querySelectorAll('[data-settings-target="access"],[data-settings-target="sync"]').forEach(tab => {
+      tab.hidden = !admin;
+      tab.disabled = !admin;
+    });
+    document.querySelectorAll('[data-settings-section="access"],[data-settings-section="sync"]').forEach(section => {
+      section.hidden = !admin;
+    });
+    document.querySelectorAll('#addMasterProfileBtn,#saveMasterProfileBtn,#deleteMasterProfileBtn').forEach(node => {
+      node.hidden = !admin;
+      node.disabled = !admin;
+    });
+    document.querySelectorAll('[data-open-master-profile]').forEach(node => {
+      node.disabled = !admin;
+      node.style.pointerEvents = admin ? '' : 'none';
+    });
+    document.body.classList.toggle('is-admin-user', admin);
+    document.body.classList.toggle('is-participant-user', participant);
+  }
+  window.isCurrentUserAdmin = () => isAdminUser();
+  window.canCurrentUserCreateOrders = () => isParticipant();
+  window.crmPushSettingsNow = async () => setRemoteRaw(SETTINGS_KEY);
+  window.crmFetchSettingsForAuth = fetchSettingsForAuth;
+  window.crmForceSettingsSync = fetchSettingsForAuth;
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once:true });
-  else start();
+  const originalDelete = window.deleteOrderPermanently;
+  window.deleteOrderPermanently = function(order){
+    if (!isAdminUser()) {
+      alert('Удалять заказы может только администратор.');
+      return false;
+    }
+    const id = order && order.id;
+    if (!id) return false;
+    deleteOrderLocal(id);
+    setRemoteDeleted(id).catch(() => setSyncStatus('Ошибка удаления заказа.'));
+    try { if (typeof window.logActivity === 'function') window.logActivity('Заказ', `Удален заказ № ${order.orderNumber || ''}`); } catch (error) {}
+    scheduleRefresh();
+    return true;
+  };
+  const originalOpenMasterEditor = window.openMasterEditor;
+  const originalSaveMasterEditor = window.saveMasterEditor;
+  const originalDeleteCurrentMaster = window.deleteCurrentMaster;
+  window.openMasterEditor = function(id){
+    if (!isAdminUser()) {
+      alert('Мастеров может изменять только администратор.');
+      return false;
+    }
+    return typeof originalOpenMasterEditor === 'function' ? originalOpenMasterEditor(id) : false;
+  };
+  window.saveMasterEditor = function(){
+    if (!isAdminUser()) {
+      alert('Мастеров может изменять только администратор.');
+      return false;
+    }
+    const result = typeof originalSaveMasterEditor === 'function' ? originalSaveMasterEditor() : false;
+    setTimeout(() => setRemoteRaw(SETTINGS_KEY).catch(console.warn), 250);
+    scheduleGithubPush();
+    return result;
+  };
+  window.deleteCurrentMaster = function(){
+    if (!isAdminUser()) {
+      alert('Удалять участников может только администратор.');
+      return false;
+    }
+    const result = typeof originalDeleteCurrentMaster === 'function' ? originalDeleteCurrentMaster() : false;
+    setTimeout(() => setRemoteRaw(SETTINGS_KEY).catch(console.warn), 250);
+    scheduleGithubPush();
+    return result;
+  };
+  document.addEventListener('click', event => {
+    const masterControl = event.target.closest('#addMasterProfileBtn,#saveMasterProfileBtn,#deleteMasterProfileBtn,[data-open-master-profile]');
+    if (masterControl && !isAdminUser()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Мастеров может изменять только администратор.');
+      return;
+    }
+    const deleteOrder = event.target.closest('[data-order-action="delete"],[data-delete-order]');
+    if (deleteOrder && !isAdminUser()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Удалять заказы может только администратор.');
+      return;
+    }
+    const createOrder = event.target.closest('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]');
+    if (createOrder && !isParticipant()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Создавать заказы могут только авторизованные участники.');
+    }
+  }, true);
+  document.addEventListener('change', event => {
+    const actionSelect = event.target.closest?.('select[data-action="order-actions"]');
+    if (actionSelect && actionSelect.value === 'delete' && !isAdminUser()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      actionSelect.value = '';
+      alert('Удалять заказы может только администратор.');
+      return;
+    }
+    if (event.target.closest?.('select[data-action="change-status"]') && !isParticipant()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Изменять статус могут только авторизованные участники.');
+    }
+  }, true);
+  document.addEventListener('submit', event => {
+    if (event.target?.id === 'orderForm' && !isParticipant()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Создавать и изменять заказы могут только авторизованные участники.');
+    }
+    if (event.target?.id === 'settingsForm') {
+      saveCloudConfigFromForm();
+      setTimeout(() => setRemoteRaw(SETTINGS_KEY).catch(console.warn), 250);
+    }
+  }, true);
+  document.addEventListener('click', event => {
+    if (event.target.closest?.('#saveMasterProfileBtn,#deleteMasterProfileBtn')) {
+      setTimeout(() => setRemoteRaw(SETTINGS_KEY).catch(console.warn), 250);
+    }
+  }, true);
+  document.addEventListener('crm:cloud-sync-applied', applyAccessRules);
+  document.addEventListener('crm:settings-access-sync-applied', applyAccessRules);
+  document.addEventListener('DOMContentLoaded', () => {
+    fillCloudForm();
+    patchAuth();
+    startFirebase().catch(() => setSyncStatus('Ошибка запуска Firebase.'));
+    applyAccessRules();
+  }, { once:true });
+  if (document.readyState !== 'loading') {
+    fillCloudForm();
+    patchAuth();
+    startFirebase().catch(() => setSyncStatus('Ошибка запуска Firebase.'));
+    applyAccessRules();
+  }
+  setInterval(() => {
+    validateCurrentUser();
+    applyAccessRules();
+  }, 1800);
 })();
 </script>
-
 </body>
 </html>
+
