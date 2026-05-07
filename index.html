@@ -8784,6 +8784,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   let orderPushTimer = null;
   let settingsPushTimer = null;
   let githubPushTimer = null;
+  let remoteUnsubscribes = [];
   const keyPushTimers = new Map();
   const clientId = ensureClientId();
 
@@ -9049,6 +9050,93 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   function orderDocId(id){ return `order_${safeDocId(id)}`; }
   function deletedDocId(id){ return `deleted_order_${safeDocId(id)}`; }
+  function rawArray(raw){
+    const parsed = safeJson(raw || '[]', []);
+    return Array.isArray(parsed) ? parsed : [];
+  }
+  function mergeDeletedRaw(remoteRaw){
+    const before = readRaw(DELETED_ORDERS_KEY) || '[]';
+    const merged = new Set([
+      ...rawArray(before).map(String),
+      ...rawArray(remoteRaw).map(String)
+    ].filter(Boolean));
+    const next = JSON.stringify([...merged]);
+    if (next === before) return false;
+    saveDeletedSet(merged, true);
+    writeOrders(readOrders(), true);
+    return true;
+  }
+  function mergeOrdersRaw(remoteRaw){
+    const before = readRaw(ORDERS_KEY) || '[]';
+    const deleted = deletedSet();
+    const byId = new Map();
+    function put(order){
+      const normalized = normalizeOrder(order);
+      if (!normalized || deleted.has(normalized.id)) return;
+      const previous = byId.get(normalized.id);
+      if (!previous || orderTime(normalized) >= orderTime(previous)) byId.set(normalized.id, normalized);
+    }
+    rawArray(before).forEach(put);
+    rawArray(remoteRaw).forEach(put);
+    const nextOrders = [...byId.values()].sort((a,b) => orderTime(b) - orderTime(a));
+    const next = JSON.stringify(nextOrders);
+    if (next === before) return false;
+    writeOrders(nextOrders, true);
+    return true;
+  }
+  function applyOrdersDoc(data){
+    if (!data) return false;
+    if (Array.isArray(data.deletedIds)) mergeDeletedRaw(JSON.stringify(data.deletedIds));
+    if (typeof data.deletedRaw === 'string') mergeDeletedRaw(data.deletedRaw);
+    const raw = typeof data.raw === 'string'
+      ? data.raw
+      : (Array.isArray(data.orders) ? JSON.stringify(data.orders) : null);
+    return raw ? mergeOrdersRaw(raw) : false;
+  }
+  function applyDeletedDoc(data){
+    if (!data) return false;
+    const raw = typeof data.raw === 'string'
+      ? data.raw
+      : (Array.isArray(data.deletedIds) ? JSON.stringify(data.deletedIds) : null);
+    return raw ? mergeDeletedRaw(raw) : false;
+  }
+  async function setRemoteOrdersSnapshot(){
+    if (!ready || applyingRemote) return;
+    const orders = readOrders();
+    const raw = JSON.stringify(orders);
+    const payload = {
+      type: 'orders_snapshot',
+      key: ORDERS_KEY,
+      raw,
+      orders,
+      deletedIds: [...deletedSet()],
+      updatedAtIso: nowIso(),
+      updatedAt: firebaseApi.serverTimestamp(),
+      updatedBy: clientId
+    };
+    await Promise.all([
+      firebaseApi.setDoc(docRef(ORDERS_KEY), payload, { merge:true }),
+      firebaseApi.setDoc(docRef('orders_current'), payload, { merge:true })
+    ]);
+  }
+  async function setRemoteDeletedSnapshot(){
+    if (!ready || applyingRemote) return;
+    const deletedIds = [...deletedSet()];
+    const raw = JSON.stringify(deletedIds);
+    const payload = {
+      type: 'deleted_orders_snapshot',
+      key: DELETED_ORDERS_KEY,
+      raw,
+      deletedIds,
+      updatedAtIso: nowIso(),
+      updatedAt: firebaseApi.serverTimestamp(),
+      updatedBy: clientId
+    };
+    await Promise.all([
+      firebaseApi.setDoc(docRef(DELETED_ORDERS_KEY), payload, { merge:true }),
+      firebaseApi.setDoc(docRef('deleted_orders_current'), payload, { merge:true })
+    ]);
+  }
   async function setRemoteRaw(key){
     if (!ready || applyingRemote || key === ORDERS_KEY || key === DELETED_ORDERS_KEY) return;
     let raw = readRaw(key);
@@ -9106,9 +9194,15 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       updatedBy: clientId
     }, { merge:true });
     try { await firebaseApi.deleteDoc(docRef(orderDocId(id))); } catch (error) {}
+    await Promise.all([
+      setRemoteDeletedSnapshot().catch(console.warn),
+      setRemoteOrdersSnapshot().catch(console.warn)
+    ]);
   }
   async function pushAllOrders(){
     await Promise.all([
+      setRemoteOrdersSnapshot(),
+      setRemoteDeletedSnapshot(),
       ...readOrders().map(order => setRemoteOrder(order)),
       ...[...deletedSet()].map(id => setRemoteDeleted(id))
     ]);
@@ -9194,7 +9288,10 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     return result;
   };
   function applyRemoteRawDoc(data){
-    if (!data || data.updatedBy === clientId || !data.key || typeof data.raw !== 'string') return false;
+    if (!data || !data.key) return false;
+    if (data.key === ORDERS_KEY) return applyOrdersDoc(data);
+    if (data.key === DELETED_ORDERS_KEY) return applyDeletedDoc(data);
+    if (data.updatedBy === clientId || typeof data.raw !== 'string') return false;
     if (readRaw(data.key) === data.raw) return false;
     applyingRemote = true;
     try { localStorage.setItem(data.key, data.raw); }
@@ -9227,9 +9324,45 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     scheduleRefresh();
   }
   async function loadInitialRemote(){
-    const snap = await firebaseApi.getDocs(dataCollection());
     let hasRemoteOrders = false;
     const remoteKeys = new Set();
+    const loadDoc = async (id, handler) => {
+      const snap = await firebaseApi.getDoc(docRef(id)).catch(() => null);
+      if (!snap || !snap.exists()) return false;
+      handler(snap.data() || {}, id);
+      return true;
+    };
+    if (await loadDoc(DELETED_ORDERS_KEY, data => applyRemoteRawDoc({ ...data, key:DELETED_ORDERS_KEY }))) remoteKeys.add(DELETED_ORDERS_KEY);
+    if (await loadDoc('deleted_orders_current', data => applyDeletedDoc(data))) remoteKeys.add(DELETED_ORDERS_KEY);
+    if (await loadDoc(ORDERS_KEY, data => applyRemoteRawDoc({ ...data, key:ORDERS_KEY }))) {
+      remoteKeys.add(ORDERS_KEY);
+      hasRemoteOrders = true;
+    }
+    if (await loadDoc('orders_current', data => applyOrdersDoc(data))) {
+      remoteKeys.add(ORDERS_KEY);
+      hasRemoteOrders = true;
+    }
+    await loadDoc('settings_current', data => {
+      remoteKeys.add(SETTINGS_KEY);
+      applyRemoteSettingsDoc(data);
+    });
+    for (const key of SYNC_KEYS) {
+      await loadDoc(key, data => {
+        remoteKeys.add(key);
+        applyRemoteRawDoc({ ...data, key });
+      });
+    }
+    const snap = await firebaseApi.getDocs(dataCollection()).catch(() => null);
+    if (!snap) {
+      initialized = true;
+      if (!hasRemoteOrders && readOrders().length) await pushAllOrders();
+      for (const key of SYNC_KEYS) {
+        if (!remoteKeys.has(key) && readRaw(key) !== null) await setRemoteRaw(key).catch(console.warn);
+      }
+      scheduleRefresh();
+      setSyncStatus('Firebase подключен. Документный realtime включен.');
+      return;
+    }
     snap.forEach(docSnap => {
       const id = docSnap.id;
       const data = docSnap.data() || {};
@@ -9250,6 +9383,17 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
         applyRemoteRawDoc({ ...data, key:id });
         return;
       }
+      if (id === ORDERS_KEY || id === 'orders_current') {
+        remoteKeys.add(ORDERS_KEY);
+        hasRemoteOrders = true;
+        applyOrdersDoc(data);
+        return;
+      }
+      if (id === DELETED_ORDERS_KEY || id === 'deleted_orders_current') {
+        remoteKeys.add(DELETED_ORDERS_KEY);
+        applyDeletedDoc(data);
+        return;
+      }
       if (id.startsWith('order_') || data.type === 'order') {
         hasRemoteOrders = true;
         if (data.order) mergeOrder(data.order);
@@ -9263,7 +9407,25 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     scheduleRefresh();
   }
   function listenRemote(){
-    firebaseApi.onSnapshot(dataCollection(), snap => {
+    remoteUnsubscribes.forEach(unsubscribe => { try { unsubscribe(); } catch (error) {} });
+    remoteUnsubscribes = [];
+    const listenDoc = (id, handler) => {
+      const unsubscribe = firebaseApi.onSnapshot(docRef(id), snap => {
+        if (!snap.exists()) return;
+        if (handler(snap.data() || {}, id)) scheduleRefresh();
+        setSyncStatus('Firebase подключен. Realtime включен.');
+      }, () => setSyncStatus('Ошибка Firebase realtime.'));
+      remoteUnsubscribes.push(unsubscribe);
+    };
+    listenDoc(ORDERS_KEY, data => applyRemoteRawDoc({ ...data, key:ORDERS_KEY }));
+    listenDoc('orders_current', data => applyOrdersDoc(data));
+    listenDoc(DELETED_ORDERS_KEY, data => applyRemoteRawDoc({ ...data, key:DELETED_ORDERS_KEY }));
+    listenDoc('deleted_orders_current', data => applyDeletedDoc(data));
+    listenDoc('settings_current', data => applyRemoteSettingsDoc(data));
+    SYNC_KEYS.forEach(key => {
+      listenDoc(key, data => applyRemoteRawDoc({ ...data, key }));
+    });
+    const collectionUnsubscribe = firebaseApi.onSnapshot(dataCollection(), snap => {
       let changed = false;
       snap.docChanges().forEach(change => {
         const id = change.doc.id;
@@ -9276,6 +9438,14 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
           if (data.orderId) changed = deleteOrderLocal(data.orderId, true) || changed;
           return;
         }
+        if (id === ORDERS_KEY || id === 'orders_current') {
+          changed = applyOrdersDoc(data) || changed;
+          return;
+        }
+        if (id === DELETED_ORDERS_KEY || id === 'deleted_orders_current') {
+          changed = applyDeletedDoc(data) || changed;
+          return;
+        }
         if (id.startsWith('order_') || data.type === 'order') {
           if (change.type !== 'removed' && data.order) changed = mergeOrder(data.order) || changed;
           return;
@@ -9286,7 +9456,8 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       });
       if (changed) scheduleRefresh();
       setSyncStatus('Firebase подключен.');
-    }, () => setSyncStatus('Ошибка Firebase.'));
+    }, () => setSyncStatus('Firebase подключен. Документный realtime включен.'));
+    remoteUnsubscribes.push(collectionUnsubscribe);
   }
   async function startFirebase(){
     if (ready) return true;
@@ -9502,6 +9673,21 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   window.crmPushSettingsNow = async () => setRemoteRaw(SETTINGS_KEY);
   window.crmFetchSettingsForAuth = fetchSettingsForAuth;
   window.crmForceSettingsSync = fetchSettingsForAuth;
+  window.crmForceOrdersSync = async () => {
+    await startFirebase();
+    await pushAllOrders();
+    setSyncStatus('Заказы отправлены в Firebase.');
+    return true;
+  };
+  window.crmRealtimeSyncStatus = () => ({
+    firebaseReady: ready,
+    initialized,
+    workspaceId: workspaceId(),
+    orders: readOrders().length,
+    deletedOrders: deletedSet().size,
+    firebaseConfigured: firebaseConfigured(),
+    githubConfigured: githubConfigured()
+  });
 
   const originalDelete = window.deleteOrderPermanently;
   window.deleteOrderPermanently = function(order){
