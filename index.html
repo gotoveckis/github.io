@@ -4104,6 +4104,7 @@
     const AUTH_PASSWORD = '18101997';
     const AUTH_STORAGE_KEY = 'crm_auth';
     const ORDERS_KEY = 'one_service_orders';
+    const DELETED_ORDERS_KEY = 'one_service_deleted_order_ids';
     const SETTINGS_KEY = 'one_service_settings';
     const INVENTORY_KEY = 'one_service_inventory';
     const BACKUPS_KEY = 'one_service_backups';
@@ -4587,19 +4588,59 @@
       };
     }
 
+    function getDeletedOrderIds() {
+      const parsed = getJson(DELETED_ORDERS_KEY, []);
+      return new Set(Array.isArray(parsed) ? parsed.map(String).filter(Boolean) : []);
+    }
+
+    function saveDeletedOrderIds(ids) {
+      return setJson(DELETED_ORDERS_KEY, Array.from(new Set(Array.isArray(ids) ? ids.map(String).filter(Boolean) : [])));
+    }
+
+    function isCurrentUserAdmin() {
+      const role = (getStorageItem('one_service_current_user_role') || getStorageItem('crm_user_role') || '').toLowerCase();
+      if (role) return role.includes('admin') || role.includes('администратор');
+      return getStorageItem(AUTH_STORAGE_KEY) === '1';
+    }
+
     function getOrders() {
       const parsed = getJson(ORDERS_KEY, []);
-      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateOrder) : [];
+      const deletedIds = getDeletedOrderIds();
+      return Array.isArray(parsed)
+        ? parsed.filter(item => item && typeof item === 'object' && !deletedIds.has(String(item.id || ''))).map(migrateOrder)
+        : [];
     }
 
     function saveOrders(items, options = {}) {
-      const saved = setJson(ORDERS_KEY, Array.isArray(items) ? items.map(migrateOrder) : []);
+      const deletedIds = getDeletedOrderIds();
+      const cleanItems = Array.isArray(items)
+        ? items.filter(item => item && !deletedIds.has(String(item.id || ''))).map(migrateOrder)
+        : [];
+      const saved = setJson(ORDERS_KEY, cleanItems);
       if (!saved) {
         window.alert('Не удалось сохранить заказы.');
       }
       if (saved && options.backup !== false) {
         logActivity('Заказы', 'Обновлены заказы');
         createAutoBackup();
+      }
+      return saved;
+    }
+
+    function deleteOrderPermanently(order) {
+      if (!order) return false;
+      if (!isCurrentUserAdmin()) {
+        window.alert('Удалять заказы может только администратор.');
+        return false;
+      }
+      const deletedIds = Array.from(getDeletedOrderIds());
+      if (!deletedIds.includes(String(order.id))) deletedIds.push(String(order.id));
+      saveDeletedOrderIds(deletedIds);
+      const orders = getOrders().filter(item => item.id !== order.id);
+      const saved = saveOrders(orders);
+      if (saved) {
+        logActivity('Заказ', `Удален заказ № ${order.orderNumber || ''}`);
+        renderAll();
       }
       return saved;
     }
@@ -4981,6 +5022,7 @@
         const tr = document.createElement('tr');
         const safeId = escapeHtml(item.id);
         const safeStatus = STATUS_CONFIG[item.status] ? item.status : 'new';
+        const deleteOptionHtml = isCurrentUserAdmin() ? '<option value="delete">Удалить</option>' : '';
 
         tr.innerHTML = `
           <td data-label="№ заказа"><b>${escapeHtml(item.orderNumber)}</b></td>
@@ -5013,7 +5055,7 @@
               <option value="whatsapp">WhatsApp клиенту</option>
               <option value="sms">SMS клиенту</option>
               <option value="telegram">Telegram текст</option>
-              <option value="delete">Удалить</option>
+              ${deleteOptionHtml}
             </select>
           </td>
         `;
@@ -6243,9 +6285,12 @@
       if (action === 'label') printLabel(order);
       if (['whatsapp', 'sms', 'telegram'].includes(action)) openNotification(order, action);
       if (action === 'delete') {
+        if (!isCurrentUserAdmin()) {
+          window.alert('Удалять заказы может только администратор.');
+          return;
+        }
         if (!window.confirm(`Удалить заказ № ${order.orderNumber || ''}?`)) return;
-        const orders = getOrders().filter(item => item.id !== id);
-        if (saveOrders(orders)) renderAll();
+        deleteOrderPermanently(order);
       }
     });
 
@@ -6642,12 +6687,12 @@ document.addEventListener('DOMContentLoaded', function(){
   if (columnsList && !columnsList.children.length) {const prefs=getColumnPrefs();columnsList.innerHTML=columns.map(col=>'<label><input type="checkbox" data-column-key="'+col.key+'" '+(prefs[col.key]!==false?'checked':'')+'><span>'+col.label+'</span></label>').join('');columnsList.addEventListener('change', function(event){const input=event.target.closest('input[data-column-key]');if(!input)return;const prefs=getColumnPrefs();prefs[input.dataset.columnKey]=input.checked;localStorage.setItem(columnStorageKey, JSON.stringify(prefs));applyColumnPrefs();});}
   applyColumnPrefs();
   if (menuBtn && toolsMenu) {menuBtn.addEventListener('click', function(event){event.stopPropagation();toolsMenu.classList.toggle('open');});toolsMenu.addEventListener('click', function(event){const btn=event.target.closest('[data-menu-action]');if(!btn)return;document.getElementById(btn.dataset.menuAction)?.click();toolsMenu.classList.remove('open');});document.addEventListener('click', function(event){if(!toolsMenu.classList.contains('open'))return;if(toolsMenu.contains(event.target)||menuBtn.contains(event.target))return;toolsMenu.classList.remove('open');});}
-  if (!document.getElementById('orderActionsModalOverlay')) {const modal=document.createElement('div');modal.className='modal-overlay order-actions-modal';modal.id='orderActionsModalOverlay';modal.innerHTML='<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">×</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для выбранного заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">—</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">—</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-secondary" type="button" data-order-action="acceptance">Печать акта приема</button><button class="btn btn-secondary" type="button" data-order-action="completed">Печать акта выполненных работ</button><button class="btn btn-secondary" type="button" data-order-action="warranty">Печать гарантии</button><button class="btn btn-secondary" type="button" data-order-action="label">Печать наклейки / QR</button><button class="btn btn-secondary" type="button" data-order-action="whatsapp">WhatsApp клиенту</button><button class="btn btn-secondary" type="button" data-order-action="sms">SMS клиенту</button><button class="btn btn-secondary" type="button" data-order-action="telegram">Telegram текст</button><button class="btn btn-danger" type="button" data-order-action="delete">Удалить заказ</button></div></div>';document.body.appendChild(modal);}
+  if (!document.getElementById('orderActionsModalOverlay')) {const modal=document.createElement('div');modal.className='modal-overlay order-actions-modal';modal.id='orderActionsModalOverlay';modal.innerHTML='<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">×</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для выбранного заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">—</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">—</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-secondary" type="button" data-order-action="acceptance">Печать акта приема</button><button class="btn btn-secondary" type="button" data-order-action="completed">Печать акта выполненных работ</button><button class="btn btn-secondary" type="button" data-order-action="warranty">Печать гарантии</button><button class="btn btn-secondary" type="button" data-order-action="label">Печать наклейки / QR</button><button class="btn btn-secondary" type="button" data-order-action="whatsapp">WhatsApp клиенту</button><button class="btn btn-secondary" type="button" data-order-action="sms">SMS клиенту</button><button class="btn btn-secondary" type="button" data-order-action="telegram">Telegram текст</button><button class="btn btn-danger" id="orderActionsDeleteBtn" type="button" data-order-action="delete">Удалить заказ</button></div></div>';document.body.appendChild(modal);}
   const overlay=document.getElementById('orderActionsModalOverlay'); const titleEl=document.getElementById('orderActionsTitle'); const clientEl=document.getElementById('orderActionsClient'); const deviceEl=document.getElementById('orderActionsDevice'); const statusEl=document.getElementById('orderActionsStatusBadge'); let activeOrderId=null;
-  function openOrderActions(order){if(!order)return;activeOrderId=order.id;titleEl.textContent='Действия с заказом № '+(order.orderNumber||'');clientEl.textContent=(order.clientName||'—')+(order.clientPhone?' • '+order.clientPhone:'');deviceEl.textContent=(order.deviceType||'—')+(order.deviceModel?' • '+order.deviceModel:'');statusEl.textContent=typeof getStatusLabel==='function'?getStatusLabel(order.status):(order.status||'Статус');overlay.classList.add('open');}
+  function openOrderActions(order){if(!order)return;const deleteBtn=document.getElementById('orderActionsDeleteBtn');if(deleteBtn)deleteBtn.style.display=(typeof isCurrentUserAdmin==='function'&&isCurrentUserAdmin())?'':'none';activeOrderId=order.id;titleEl.textContent='Действия с заказом № '+(order.orderNumber||'');clientEl.textContent=(order.clientName||'—')+(order.clientPhone?' • '+order.clientPhone:'');deviceEl.textContent=(order.deviceType||'—')+(order.deviceModel?' • '+order.deviceModel:'');statusEl.textContent=typeof getStatusLabel==='function'?getStatusLabel(order.status):(order.status||'Статус');overlay.classList.add('open');}
   function closeOrderActions(){overlay.classList.remove('open');activeOrderId=null;}
   function currentOrder(){return typeof findOrderById==='function'?findOrderById(activeOrderId):null;}
-  function handleOrderAction(action){const order=currentOrder();if(!order)return;closeOrderActions();if(action==='edit'&&typeof openModal==='function')openModal(order);else if(action==='history'&&typeof renderHistory==='function')renderHistory(order);else if(action==='acceptance'&&typeof printAcceptanceAct==='function')printAcceptanceAct(order);else if(action==='completed'&&typeof printCompletedAct==='function')printCompletedAct(order);else if(action==='warranty'&&typeof printWarranty==='function')printWarranty(order);else if(action==='label'&&typeof printLabel==='function')printLabel(order);else if(['whatsapp','sms','telegram'].includes(action)&&typeof openNotification==='function')openNotification(order,action);else if(action==='delete'){if(!window.confirm('Удалить заказ № '+(order.orderNumber||'')+'?'))return;const orders=typeof getOrders==='function'?getOrders().filter(item=>item.id!==order.id):[];const saved=typeof saveOrders==='function'?saveOrders(orders):false;if(saved!==false){if(typeof logActivity==='function')logActivity('Заказ','Удален заказ № '+(order.orderNumber||''));if(typeof renderAll==='function')renderAll();else if(typeof renderOrders==='function')renderOrders();}}}
+  function handleOrderAction(action){const order=currentOrder();if(!order)return;closeOrderActions();if(action==='edit'&&typeof openModal==='function')openModal(order);else if(action==='history'&&typeof renderHistory==='function')renderHistory(order);else if(action==='acceptance'&&typeof printAcceptanceAct==='function')printAcceptanceAct(order);else if(action==='completed'&&typeof printCompletedAct==='function')printCompletedAct(order);else if(action==='warranty'&&typeof printWarranty==='function')printWarranty(order);else if(action==='label'&&typeof printLabel==='function')printLabel(order);else if(['whatsapp','sms','telegram'].includes(action)&&typeof openNotification==='function')openNotification(order,action);else if(action==='delete'){if(typeof isCurrentUserAdmin==='function'&&!isCurrentUserAdmin()){window.alert('Удалять заказы может только администратор.');return;}if(!window.confirm('Удалить заказ № '+(order.orderNumber||'')+'?'))return;if(typeof deleteOrderPermanently==='function')deleteOrderPermanently(order);else{const orders=typeof getOrders==='function'?getOrders().filter(item=>item.id!==order.id):[];const saved=typeof saveOrders==='function'?saveOrders(orders):false;if(saved!==false){if(typeof renderAll==='function')renderAll();else if(typeof renderOrders==='function')renderOrders();}}}}
   document.getElementById('closeOrderActionsModal')?.addEventListener('click', closeOrderActions);
   overlay?.addEventListener('click', function(event){if(event.target===overlay){closeOrderActions();return;} const btn=event.target.closest('[data-order-action]'); if(!btn)return; handleOrderAction(btn.dataset.orderAction);});
   document.addEventListener('keydown', function(event){if(event.key==='Escape'&&overlay&&overlay.classList.contains('open'))closeOrderActions();});
@@ -8538,6 +8583,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   const DATA_KEYS = [
     'one_service_settings',
     'one_service_orders',
+    'one_service_deleted_order_ids',
     'one_service_inventory',
     'one_service_services',
     'one_service_expenses',
