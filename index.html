@@ -4598,8 +4598,16 @@
     }
 
     function isCurrentUserAdmin() {
+      const user = window.crmCurrentUser || null;
+      if (user && (user.isAdmin || (Array.isArray(user.roles) && user.roles.includes('all')))) return true;
       const role = (getStorageItem('one_service_current_user_role') || getStorageItem('crm_user_role') || '').toLowerCase();
       if (role) return role.includes('admin') || role.includes('администратор');
+      return getStorageItem(AUTH_STORAGE_KEY) === '1';
+    }
+
+    function canCurrentUserCreateOrders() {
+      const user = window.crmCurrentUser || null;
+      if (user && (user.isAdmin || (Array.isArray(user.roles) && (user.roles.includes('all') || user.roles.includes('orders'))))) return true;
       return getStorageItem(AUTH_STORAGE_KEY) === '1';
     }
 
@@ -6301,6 +6309,10 @@
 
     orderForm.addEventListener('submit', event => {
       event.preventDefault();
+      if (!editingId && !canCurrentUserCreateOrders()) {
+        window.alert('Создавать заказы может только пользователь, которому администратор дал доступ к разделу «Заказы».');
+        return;
+      }
       const orders = getOrders();
       const oldOrder = editingId ? orders.find(item => item.id === editingId) : null;
       const payload = collectFormData(oldOrder);
@@ -7880,7 +7892,7 @@ document.addEventListener('DOMContentLoaded', function(){
     ACCESS_ROLES.forEach(role => {
       if (!role.menuId) return;
       const settingsAllowed = role.key === 'settings' && (userHasRole('settings') || userHasRole('documents') || userHasRole('staff'));
-      const allowed = signedIn && (activeUser?.isAdmin || settingsAllowed || userHasRole(role.key) || role.key === 'orders');
+      const allowed = signedIn && (activeUser?.isAdmin || settingsAllowed || userHasRole(role.key));
       const button = document.getElementById(role.menuId);
       if (button) {
         button.hidden = !allowed;
@@ -8582,8 +8594,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 (async function(){
   const DATA_KEYS = [
     'one_service_settings',
-    'one_service_orders',
-    'one_service_deleted_order_ids',
     'one_service_inventory',
     'one_service_services',
     'one_service_expenses',
@@ -8784,17 +8794,83 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     if (!firebaseReady) return;
     await Promise.all(DATA_KEYS.map(key => writeFirebaseKey(key)));
   }
-  function applyFirebaseDoc(key, data) {
-    if (!data || data.updatedBy === clientId || typeof data.raw !== 'string') return;
-    if (localStorage.getItem(key) === data.raw) return;
-    applyingRemote = true;
-    try {
-      localStorage.setItem(key, data.raw);
-    } finally {
-      applyingRemote = false;
+  function mergeDeletedOrderIds(remoteRaw) {
+    const localIds = safeJson(localStorage.getItem('one_service_deleted_order_ids'), []);
+    const remoteIds = safeJson(remoteRaw, []);
+    return JSON.stringify([...new Set([
+      ...(Array.isArray(localIds) ? localIds.map(String) : []),
+      ...(Array.isArray(remoteIds) ? remoteIds.map(String) : [])
+    ].filter(Boolean))]);
+  }
+  function orderTimestamp(order) {
+    const value = order && (order.updatedAt || order.createdAt || order.date || order.acceptedAt || '');
+    const time = Date.parse(value);
+    return Number.isFinite(time) ? time : 0;
+  }
+  function filterOrdersByDeletedIds(rawOrders) {
+    const orders = safeJson(rawOrders, []);
+    const deletedIds = new Set((safeJson(localStorage.getItem('one_service_deleted_order_ids'), []) || []).map(String));
+    if (!Array.isArray(orders)) return rawOrders || '[]';
+    return JSON.stringify(orders.filter(order => order && !deletedIds.has(String(order.id || ''))));
+  }
+  function mergeOrdersRaw(remoteRaw) {
+    const localOrders = safeJson(localStorage.getItem('one_service_orders') || '[]', []);
+    const remoteOrders = safeJson(remoteRaw || '[]', []);
+    const deletedIds = new Set((safeJson(localStorage.getItem('one_service_deleted_order_ids'), []) || []).map(String));
+    const map = new Map();
+    function put(order) {
+      if (!order || typeof order !== 'object') return;
+      const id = String(order.id || '');
+      if (!id || deletedIds.has(id)) return;
+      const previous = map.get(id);
+      if (!previous || orderTimestamp(order) >= orderTimestamp(previous)) map.set(id, order);
     }
-    setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
-    scheduleRefresh();
+    if (Array.isArray(remoteOrders)) remoteOrders.forEach(put);
+    if (Array.isArray(localOrders)) localOrders.forEach(put);
+    return JSON.stringify(Array.from(map.values()).filter(order => !deletedIds.has(String(order.id || ''))));
+  }
+  function applyFirebaseDoc(key, data) {
+    if (!data || typeof data.raw !== 'string') return;
+    let incomingRaw = data.raw;
+    let shouldWriteBack = false;
+
+    if (key === 'one_service_deleted_order_ids') {
+      incomingRaw = mergeDeletedOrderIds(data.raw);
+      shouldWriteBack = incomingRaw !== data.raw;
+    }
+
+    if (key === 'one_service_orders') {
+      incomingRaw = mergeOrdersRaw(data.raw);
+      shouldWriteBack = incomingRaw !== data.raw;
+    }
+
+    const currentRaw = localStorage.getItem(key);
+    const changed = currentRaw !== incomingRaw;
+
+    if (changed) {
+      applyingRemote = true;
+      try {
+        localStorage.setItem(key, incomingRaw);
+        if (key === 'one_service_deleted_order_ids') {
+          const filteredOrders = filterOrdersByDeletedIds(localStorage.getItem('one_service_orders') || '[]');
+          localStorage.setItem('one_service_orders', filteredOrders);
+        }
+      } finally {
+        applyingRemote = false;
+      }
+    }
+
+    if (key === 'one_service_deleted_order_ids') {
+      setTimeout(() => writeFirebaseKey('one_service_deleted_order_ids').catch(() => {}), 80);
+      setTimeout(() => writeFirebaseKey('one_service_orders').catch(() => {}), 120);
+    } else if (key === 'one_service_orders' && (changed || shouldWriteBack)) {
+      setTimeout(() => writeFirebaseKey('one_service_orders').catch(() => {}), 120);
+    }
+
+    if (changed) {
+      setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен. Автообновление включено.');
+      scheduleRefresh();
+    }
   }
   async function initializeFirebase(currentToken) {
     if (!firebaseConfigured()) return false;
@@ -8905,7 +8981,8 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     if (firebaseConfigured()) {
       try {
         await initializeFirebase(currentToken);
-        await pushFirebaseAll();
+        // Важно: не отправляем все локальные данные сразу после запуска.
+        // Иначе устройство со старым localStorage может перезаписать свежие заказы в Firebase.
       } catch (error) {
         setStatus('Firebase недоступен.');
       }
@@ -8934,6 +9011,290 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
   fillCloudForm();
   await initializeCloudSync();
+})();
+</script>
+
+
+<script id="release-online-sync-access-final-fix">
+(function(){
+  function currentUser(){ return window.crmCurrentUser || null; }
+  function userCanOrders(){
+    const user = currentUser();
+    if (!user) return false;
+    if (user.isAdmin) return true;
+    const roles = Array.isArray(user.roles) ? user.roles : [];
+    return roles.includes('all') || roles.includes('orders');
+  }
+  function userIsAdmin(){
+    const user = currentUser();
+    return Boolean(user && (user.isAdmin || (Array.isArray(user.roles) && user.roles.includes('all'))));
+  }
+  function updateCreateButtons(){
+    const allowed = userCanOrders();
+    document.querySelectorAll('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]').forEach(btn => {
+      btn.hidden = !allowed;
+      btn.disabled = !allowed;
+      btn.title = allowed ? '' : 'Создание заказов разрешает администратор в настройках доступа';
+    });
+  }
+  function cleanupDeletedOrders(){
+    try{
+      const deleted = new Set((JSON.parse(localStorage.getItem('one_service_deleted_order_ids') || '[]') || []).map(String));
+      const orders = JSON.parse(localStorage.getItem('one_service_orders') || '[]') || [];
+      if (!Array.isArray(orders)) return;
+      const filtered = orders.filter(order => order && !deleted.has(String(order.id || '')));
+      if (filtered.length !== orders.length) localStorage.setItem('one_service_orders', JSON.stringify(filtered));
+    }catch(e){}
+  }
+  document.addEventListener('submit', function(event){
+    if (event.target && event.target.id === 'orderForm') {
+      const title = (document.getElementById('orderModalTitle')?.textContent || '').toLowerCase();
+      const creating = title.includes('нов');
+      if (creating && !userCanOrders()) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        alert('Создавать заказы может только пользователь, которому администратор дал доступ к разделу «Заказы».');
+      }
+    }
+  }, true);
+  document.addEventListener('click', function(event){
+    const createBtn = event.target.closest('#createOrderBtn,#floatingCreateBtn,[data-new-order-client]');
+    if (createBtn && !userCanOrders()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Создание заказов недоступно. Администратор должен выдать доступ к разделу «Заказы» в настройках.');
+      return;
+    }
+    const deleteControl = event.target.closest('[data-order-action="delete"], option[value="delete"]');
+    if (deleteControl && !userIsAdmin()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Удалять заказы может только администратор.');
+    }
+  }, true);
+  window.addEventListener('storage', function(event){
+    if (['one_service_orders','one_service_deleted_order_ids','one_service_settings'].includes(event.key)) {
+      cleanupDeletedOrders();
+      updateCreateButtons();
+      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch(e) {}
+    }
+  });
+  document.addEventListener('crm:cloud-sync-applied', function(){
+    cleanupDeletedOrders();
+    updateCreateButtons();
+  });
+  setInterval(function(){
+    cleanupDeletedOrders();
+    updateCreateButtons();
+  }, 2500);
+  setTimeout(function(){ cleanupDeletedOrders(); updateCreateButtons(); }, 300);
+})();
+</script>
+
+
+
+<script type="module" id="release-stable-per-order-firestore-sync">
+(async function(){
+  const ORDERS_KEY = 'one_service_orders';
+  const DELETED_KEY = 'one_service_deleted_order_ids';
+  const CONFIG_KEY = 'one_service_cloud_config';
+  const CLIENT_KEY = 'one_service_cloud_client_id';
+  const firebaseVersion = '10.12.5';
+  let api = null;
+  let db = null;
+  let ready = false;
+  let applyingRemote = false;
+  let pushTimer = null;
+  let pushedOnce = false;
+
+  function safeJson(text, fallback){ try { return JSON.parse(text); } catch(e){ return fallback; } }
+  function cleanObject(value){ return Object.fromEntries(Object.entries(value || {}).filter(([,v]) => v !== undefined && v !== null && String(v).trim() !== '')); }
+  function readLocalJson(key, fallback){ return safeJson(localStorage.getItem(key) || '', fallback); }
+  function writeLocalJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+  function getClientId(){
+    let id = localStorage.getItem(CLIENT_KEY);
+    if (!id) { id = crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2); localStorage.setItem(CLIENT_KEY, id); }
+    return id;
+  }
+  const clientId = getClientId();
+
+  function getConfig(){
+    const release = window.CRM_RELEASE_CLOUD_CONFIG || {};
+    const stored = readLocalJson(CONFIG_KEY, {}) || {};
+    return {
+      workspaceId: stored.workspaceId || release.workspaceId || 'one-service',
+      firebase: { ...cleanObject(release.firebase), ...cleanObject(stored.firebase) }
+    };
+  }
+  function workspaceId(){ return String(getConfig().workspaceId || 'one-service').replace(/[\/#?\[\]]/g, '-') || 'one-service'; }
+  function isConfigured(){ const f = getConfig().firebase || {}; return Boolean(f.apiKey && f.projectId && f.appId); }
+  function safeId(id){ return encodeURIComponent(String(id || '')).replace(/%/g, '_'); }
+  function docIdToOrderId(docId){ return decodeURIComponent(String(docId || '').replace(/^order_/, '').replace(/_/g, '%')); }
+  function deletedDocIdToOrderId(docId){ return decodeURIComponent(String(docId || '').replace(/^deleted_order_/, '').replace(/_/g, '%')); }
+  function orderDocId(id){ return 'order_' + safeId(id); }
+  function deletedDocId(id){ return 'deleted_order_' + safeId(id); }
+  function orderTime(order){
+    const t = Date.parse(order?.updatedAt || order?.createdAt || order?.date || '');
+    return Number.isFinite(t) ? t : 0;
+  }
+  function getDeletedSet(){ return new Set((readLocalJson(DELETED_KEY, []) || []).map(String).filter(Boolean)); }
+  function addDeletedId(id){
+    if (!id) return false;
+    const ids = Array.from(getDeletedSet());
+    if (ids.includes(String(id))) return false;
+    ids.push(String(id));
+    applyingRemote = true;
+    try { writeLocalJson(DELETED_KEY, ids); } finally { applyingRemote = false; }
+    return true;
+  }
+  function removeDeletedId(id){
+    const old = Array.from(getDeletedSet());
+    const next = old.filter(x => x !== String(id));
+    if (next.length === old.length) return false;
+    applyingRemote = true;
+    try { writeLocalJson(DELETED_KEY, next); } finally { applyingRemote = false; }
+    return true;
+  }
+  function getOrders(){
+    const deleted = getDeletedSet();
+    const orders = readLocalJson(ORDERS_KEY, []);
+    return Array.isArray(orders) ? orders.filter(o => o && !deleted.has(String(o.id || ''))) : [];
+  }
+  function setOrders(orders){
+    const deleted = getDeletedSet();
+    const clean = Array.isArray(orders) ? orders.filter(o => o && !deleted.has(String(o.id || ''))) : [];
+    applyingRemote = true;
+    try { writeLocalJson(ORDERS_KEY, clean); } finally { applyingRemote = false; }
+  }
+  function mergeOrder(order){
+    if (!order || typeof order !== 'object' || !order.id) return false;
+    if (getDeletedSet().has(String(order.id))) return false;
+    const orders = getOrders();
+    const index = orders.findIndex(o => String(o.id) === String(order.id));
+    if (index >= 0 && orderTime(orders[index]) > orderTime(order)) return false;
+    if (index >= 0) orders[index] = { ...orders[index], ...order };
+    else orders.unshift(order);
+    setOrders(orders);
+    return true;
+  }
+  function removeLocalOrder(id){
+    const orders = getOrders();
+    const next = orders.filter(o => String(o.id || '') !== String(id));
+    if (next.length === orders.length) return false;
+    setOrders(next);
+    return true;
+  }
+  function refreshUi(){
+    setTimeout(() => {
+      try { if (typeof window.renderAll === 'function') window.renderAll(); } catch(e) {}
+      document.dispatchEvent(new CustomEvent('crm:stable-order-sync-applied'));
+    }, 80);
+  }
+  async function importFirebase(){
+    if (api) return api;
+    const [appMod, firestoreMod, authMod] = await Promise.all([
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-firestore.js`),
+      import(`https://www.gstatic.com/firebasejs/${firebaseVersion}/firebase-auth.js`)
+    ]);
+    api = { ...appMod, ...firestoreMod, ...authMod };
+    return api;
+  }
+  function dataCollection(){ return api.collection(db, 'crmWorkspaces', workspaceId(), 'data'); }
+  function orderRef(id){ return api.doc(db, 'crmWorkspaces', workspaceId(), 'data', orderDocId(id)); }
+  function deletedRef(id){ return api.doc(db, 'crmWorkspaces', workspaceId(), 'data', deletedDocId(id)); }
+  async function pushOrder(order){
+    if (!ready || !order || !order.id || getDeletedSet().has(String(order.id))) return;
+    await api.setDoc(orderRef(order.id), {
+      type: 'order',
+      order,
+      orderId: String(order.id),
+      updatedAtIso: order.updatedAt || new Date().toISOString(),
+      updatedAt: api.serverTimestamp(),
+      updatedBy: clientId
+    }, { merge: true });
+  }
+  async function pushDeleted(id){
+    if (!ready || !id) return;
+    await api.setDoc(deletedRef(id), {
+      type: 'deleted_order',
+      orderId: String(id),
+      deletedAtIso: new Date().toISOString(),
+      deletedAt: api.serverTimestamp(),
+      updatedBy: clientId
+    }, { merge: true });
+    try { await api.deleteDoc(orderRef(id)); } catch(e) {}
+  }
+  function schedulePushAll(){
+    if (!ready || applyingRemote) return;
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(async () => {
+      const orders = getOrders();
+      const deleted = Array.from(getDeletedSet());
+      try {
+        await Promise.all([...orders.map(pushOrder), ...deleted.map(pushDeleted)]);
+      } catch(e) {
+        const node = document.getElementById('cloudSyncStatus');
+        if (node) node.textContent = 'Firebase подключен, но запись заказов временно недоступна.';
+      }
+    }, 250);
+  }
+
+  const nativeSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function(key, value){
+    const result = nativeSetItem.call(this, key, value);
+    if (this === localStorage && (key === ORDERS_KEY || key === DELETED_KEY) && !applyingRemote) schedulePushAll();
+    return result;
+  };
+
+  async function start(){
+    if (!isConfigured()) return;
+    const firebase = (await importFirebase());
+    const cfg = cleanObject(getConfig().firebase);
+    const appName = `crm-stable-orders-${cfg.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
+    const app = firebase.getApps().find(x => x.name === appName) || firebase.initializeApp(cfg, appName);
+    try { await firebase.signInAnonymously(firebase.getAuth(app)); } catch(e) {}
+    db = firebase.getFirestore(app);
+    ready = true;
+
+    firebase.onSnapshot(dataCollection(), snap => {
+      let changed = false;
+      snap.docChanges().forEach(change => {
+        const id = change.doc.id;
+        const data = change.doc.data() || {};
+        if (id.startsWith('deleted_order_')) {
+          const orderId = data.orderId || deletedDocIdToOrderId(id);
+          if (addDeletedId(orderId)) changed = true;
+          if (removeLocalOrder(orderId)) changed = true;
+          return;
+        }
+        if (id.startsWith('order_')) {
+          const orderId = data.orderId || docIdToOrderId(id);
+          if (change.type === 'removed') {
+            // Само удаление документа без tombstone не считаем удалением заказа, чтобы случайный сбой не стер локальный заказ.
+            return;
+          }
+          const order = data.order && typeof data.order === 'object' ? data.order : null;
+          if (order && order.id) {
+            if (mergeOrder(order)) changed = true;
+          } else if (orderId) {
+            // пустой документ игнорируем
+          }
+        }
+      });
+      if (!pushedOnce) { pushedOnce = true; schedulePushAll(); }
+      if (changed) refreshUi();
+      const node = document.getElementById('cloudSyncStatus');
+      if (node) node.textContent = 'Firebase подключен. Заказы синхронизируются в реальном времени.';
+    }, error => {
+      const node = document.getElementById('cloudSyncStatus');
+      if (node) node.textContent = 'Ошибка синхронизации заказов Firebase. Проверь Firestore Rules и Anonymous Auth.';
+      console.warn('Stable order sync error', error);
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once:true });
+  else start();
 })();
 </script>
 
