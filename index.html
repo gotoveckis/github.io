@@ -8554,7 +8554,8 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   let firebaseApi = null;
   let firebaseReady = false;
   let applyingRemote = false;
-  let pushTimer = null;
+  const firebasePushTimers = new Map();
+  const localWriteTimestamps = new Map();
   let githubTimer = null;
   let refreshTimer = null;
   let initToken = 0;
@@ -8727,12 +8728,16 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     if (!firebaseReady || applyingRemote || !DATA_KEY_SET.has(key)) return;
     const raw = localStorage.getItem(key);
     if (raw === null) return;
+    const writeStartedAt = Date.now();
     await firebaseApi.setDoc(firebaseDocRef(key), {
       raw,
       updatedAt: firebaseApi.serverTimestamp(),
       updatedAtIso: new Date().toISOString(),
       updatedBy: clientId
     }, { merge: true });
+    if ((localWriteTimestamps.get(key) || 0) <= writeStartedAt) {
+      localWriteTimestamps.delete(key);
+    }
   }
   async function pushFirebaseAll() {
     if (!firebaseReady) return;
@@ -8740,6 +8745,9 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   function applyFirebaseDoc(key, data) {
     if (!data || data.updatedBy === clientId || typeof data.raw !== 'string') return;
+    const localWriteAt = localWriteTimestamps.get(key) || 0;
+    const remoteWriteAt = Date.parse(data.updatedAtIso || '') || 0;
+    if (localWriteAt && (!remoteWriteAt || remoteWriteAt < localWriteAt)) return;
     if (localStorage.getItem(key) === data.raw) return;
     applyingRemote = true;
     try {
@@ -8775,10 +8783,12 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   function scheduleFirebasePush(key) {
     if (!firebaseReady || !DATA_KEY_SET.has(key)) return;
-    clearTimeout(pushTimer);
-    pushTimer = setTimeout(() => {
+    clearTimeout(firebasePushTimers.get(key));
+    const timer = setTimeout(() => {
+      firebasePushTimers.delete(key);
       writeFirebaseKey(key).catch(() => setStatus('Firebase недоступен.'));
     }, 450);
+    firebasePushTimers.set(key, timer);
   }
   function utf8ToBase64(text) {
     const bytes = new TextEncoder().encode(text);
@@ -8873,6 +8883,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   Storage.prototype.setItem = function(key, value) {
     const result = nativeSetItem.call(this, key, value);
     if (this === localStorage && DATA_KEY_SET.has(key) && !applyingRemote) {
+      localWriteTimestamps.set(key, Date.now());
       scheduleFirebasePush(key);
       scheduleGithubPush();
     }
