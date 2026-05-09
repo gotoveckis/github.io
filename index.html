@@ -4788,6 +4788,582 @@ body[data-ui-theme="dark"] td{
   }
 </style>
 
+<style id="release-management-pagination-crud">
+.manage-tools{
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) minmax(180px,240px) auto;
+  align-items:center;
+  gap:10px;
+  margin:16px 0 10px;
+}
+.manage-tools.manage-tools-single{
+  grid-template-columns:minmax(220px,1fr) auto;
+}
+.manage-tools input,
+.manage-tools select{
+  min-height:44px;
+  padding:10px 12px;
+  border-radius:12px;
+}
+.manage-counter{
+  min-height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fffaf5;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+  text-align:center;
+  white-space:nowrap;
+}
+.management-list{
+  display:grid;
+  gap:10px;
+  margin-top:12px;
+}
+.management-list .manage-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:14px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(180deg,#fff,#fffaf5);
+  box-shadow:0 8px 20px rgba(50,33,14,.06);
+}
+.manage-main{
+  min-width:0;
+}
+.manage-main b{
+  display:block;
+  color:#0f172a;
+  font-size:15px;
+  line-height:1.25;
+  overflow-wrap:anywhere;
+}
+.manage-main span,
+.manage-meta{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12.5px;
+  font-weight:700;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+.manage-price{
+  min-width:104px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  color:#0f172a;
+  font-size:14px;
+  font-weight:900;
+  text-align:center;
+  white-space:nowrap;
+}
+.manage-actions{
+  justify-content:flex-end;
+  flex-wrap:nowrap;
+}
+.manage-actions .small-btn,
+.order-row-actions .small-btn{
+  min-height:36px;
+  padding:0 12px;
+  border-radius:10px;
+  font-size:12.5px;
+}
+.small-btn.manage-danger,
+.order-row-actions .order-action-danger{
+  background:#fff1f2;
+  border-color:#fecdd3;
+  color:#be123c;
+}
+.manage-pager{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:12px 0 2px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.74);
+}
+.manage-page-info{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+}
+.manage-page-controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.manage-page-current{
+  min-width:72px;
+  padding:7px 10px;
+  border-radius:10px;
+  background:#fff7ed;
+  color:#9a3412;
+  font-size:13px;
+  font-weight:900;
+  text-align:center;
+}
+.manage-page-btn{
+  min-height:34px;
+  padding:0 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  color:#1f1a16;
+  font-size:12.5px;
+  font-weight:900;
+  cursor:pointer;
+}
+.manage-page-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.order-actions-cell{
+  min-width:230px;
+}
+.order-row-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.order-row-actions .small-btn{
+  background:#fff;
+}
+#inventoryModalOverlay .simple-table{
+  min-width:880px;
+}
+#inventoryTableBody td:first-child span{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+#inventoryTableBody .inline-actions{
+  flex-wrap:nowrap;
+}
+#financeSummary .data-card p{
+  font-size:20px;
+  font-weight:900;
+  color:#0f172a;
+}
+.expense-editing-note{
+  display:none;
+}
+@media (max-width: 768px){
+  .manage-tools,
+  .manage-tools.manage-tools-single{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .manage-counter{
+    justify-content:flex-start;
+    white-space:normal;
+  }
+  .management-list .manage-row{
+    grid-template-columns:1fr;
+    gap:10px;
+    padding:12px;
+    border-radius:13px;
+  }
+  .manage-price{
+    justify-self:start;
+    min-width:0;
+  }
+  .manage-actions{
+    width:100%;
+    justify-content:flex-start;
+    flex-wrap:wrap;
+  }
+  .manage-actions .small-btn{
+    flex:1 1 120px;
+  }
+  .manage-pager{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .manage-page-controls{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+  }
+  .manage-page-btn{
+    width:100%;
+  }
+  #ordersTableBody td.order-actions-cell{
+    display:block !important;
+    grid-column:1 / -1 !important;
+  }
+  #ordersTableBody td.order-actions-cell::before{
+    display:block;
+    margin-bottom:6px !important;
+  }
+  .order-row-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:6px;
+  }
+  .order-row-actions .small-btn{
+    width:100%;
+    min-height:32px;
+    padding:0 8px;
+  }
+  #inventoryModalOverlay .table-scroll{
+    overflow:visible;
+  }
+  #inventoryModalOverlay .simple-table{
+    min-width:0;
+    display:block;
+  }
+  #inventoryModalOverlay .simple-table thead{
+    display:none;
+  }
+  #inventoryModalOverlay .simple-table tbody{
+    display:grid;
+    gap:10px;
+  }
+  #inventoryModalOverlay .simple-table tr{
+    display:grid;
+    gap:2px;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:linear-gradient(180deg,#fff,#fffaf5);
+    box-shadow:0 8px 18px rgba(15,23,42,.07);
+  }
+  #inventoryModalOverlay .simple-table td{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    padding:7px 2px;
+    border:0;
+    font-size:13px;
+  }
+  #inventoryModalOverlay .simple-table td::before{
+    content:attr(data-label);
+    flex:0 0 92px;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+  }
+  #inventoryModalOverlay .simple-table td:first-child{
+    display:block;
+  }
+  #inventoryModalOverlay .simple-table td:first-child::before{
+    display:block;
+    margin-bottom:4px;
+  }
+  #inventoryModalOverlay .simple-table td:last-child{
+    display:block;
+  }
+  #inventoryModalOverlay .simple-table td:last-child::before{
+    display:block;
+    margin-bottom:7px;
+  }
+  #inventoryTableBody .inline-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  #inventoryTableBody .inline-actions .small-btn{
+    width:100%;
+  }
+}
+body[data-ui-theme="dark"] .manage-tools,
+body[data-ui-theme="dark"] .manage-row,
+body[data-ui-theme="dark"] .manage-pager,
+body[data-ui-theme="dark"] #inventoryModalOverlay .simple-table tr{
+  background:linear-gradient(180deg,rgba(32,30,28,.98),rgba(25,23,21,.98)) !important;
+  border-color:var(--line) !important;
+  box-shadow:var(--shadow) !important;
+}
+body[data-ui-theme="dark"] .manage-counter,
+body[data-ui-theme="dark"] .manage-price,
+body[data-ui-theme="dark"] .manage-page-current{
+  background:#201d1a !important;
+  border-color:#4a423b !important;
+  color:#fff7ed !important;
+}
+body[data-ui-theme="dark"] .manage-main b,
+body[data-ui-theme="dark"] #financeSummary .data-card p{
+  color:#fff7ed !important;
+}
+body[data-ui-theme="dark"] .manage-main span,
+body[data-ui-theme="dark"] .manage-meta,
+body[data-ui-theme="dark"] .manage-page-info{
+  color:var(--muted) !important;
+}
+body[data-ui-theme="dark"] .manage-page-btn,
+body[data-ui-theme="dark"] .order-row-actions .small-btn{
+  background:#201d1a !important;
+  border-color:#4a423b !important;
+  color:#f4f1ed !important;
+}
+body[data-ui-theme="dark"] .small-btn.manage-danger,
+body[data-ui-theme="dark"] .order-row-actions .order-action-danger{
+  background:rgba(225,29,72,.18) !important;
+  border-color:rgba(251,113,133,.62) !important;
+  color:#fecdd3 !important;
+}
+</style>
+
+<style id="release-settings-crud-directories-style">
+.settings-directory-panel{
+  display:grid;
+  gap:14px;
+}
+.settings-directory-card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  padding:14px;
+  box-shadow:0 8px 20px rgba(50,33,14,.05);
+}
+.settings-directory-card h5{
+  margin:0 0 10px;
+  color:var(--text);
+  font-size:15px;
+  line-height:1.25;
+}
+.settings-directory-card .form-grid{
+  gap:10px;
+}
+.settings-directory-toolbar{
+  display:grid;
+  grid-template-columns:minmax(180px,1fr) auto;
+  align-items:center;
+  gap:10px;
+  margin:12px 0 10px;
+}
+.settings-directory-toolbar input{
+  min-height:42px;
+  padding:10px 12px;
+}
+.settings-directory-list{
+  display:grid;
+  gap:10px;
+}
+.settings-directory-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:linear-gradient(180deg,#fff,#fffaf5);
+}
+.settings-directory-row b{
+  display:block;
+  color:var(--text);
+  font-size:14px;
+  line-height:1.25;
+  overflow-wrap:anywhere;
+}
+.settings-directory-row span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+.settings-directory-empty{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+  padding:10px 0;
+}
+@media (max-width: 768px){
+  .settings-directory-toolbar,
+  .settings-directory-row{
+    grid-template-columns:1fr;
+  }
+  .settings-directory-row .inline-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .settings-directory-row .small-btn{
+    width:100%;
+  }
+}
+body[data-ui-theme="dark"] .settings-directory-card,
+body[data-ui-theme="dark"] .settings-directory-row{
+  background:linear-gradient(180deg,rgba(32,30,28,.98),rgba(25,23,21,.98)) !important;
+  border-color:var(--line) !important;
+  color:var(--text) !important;
+  box-shadow:var(--shadow) !important;
+}
+body[data-ui-theme="dark"] .settings-directory-row b,
+body[data-ui-theme="dark"] .settings-directory-card h5{
+  color:#fff7ed !important;
+}
+body[data-ui-theme="dark"] .settings-directory-row span,
+body[data-ui-theme="dark"] .settings-directory-empty{
+  color:var(--muted) !important;
+}
+</style>
+
+<style id="release-clients-crud-pagination-style">
+.clients-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+.client-card{
+  display:grid;
+  gap:12px;
+  padding:16px;
+  border-radius:14px;
+}
+.client-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.client-card-head h4{
+  margin:0 0 4px;
+  color:var(--text);
+  font-size:18px;
+  line-height:1.2;
+  overflow-wrap:anywhere;
+}
+.client-card-head p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+}
+.client-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.client-stats span{
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fffaf5;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+}
+.client-stats b{
+  display:block;
+  margin-top:2px;
+  color:#0f172a;
+  font-size:13px;
+  white-space:nowrap;
+}
+.client-note{
+  padding:10px 12px;
+  border:1px dashed var(--line);
+  border-radius:12px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.client-actions{
+  gap:8px;
+}
+.client-order-list{
+  display:grid;
+  gap:7px;
+}
+.client-order-row{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+}
+.client-order-row b{
+  color:#c2410c;
+  font-size:12px;
+}
+.client-order-row span{
+  color:var(--text);
+  font-size:12px;
+  font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.client-order-row em{
+  color:var(--muted);
+  font-size:11px;
+  font-style:normal;
+  font-weight:800;
+}
+.client-editor-overlay{
+  z-index:170;
+}
+@media (max-width:768px){
+  .clients-grid{
+    grid-template-columns:1fr;
+  }
+  .client-card{
+    padding:12px;
+  }
+  .client-stats{
+    grid-template-columns:1fr;
+  }
+  .client-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .client-actions .small-btn:first-child{
+    grid-column:1 / -1;
+  }
+  .client-order-row{
+    grid-template-columns:1fr;
+    gap:2px;
+  }
+  .client-order-row span{
+    white-space:normal;
+  }
+}
+body[data-ui-theme="dark"] .client-stats span,
+body[data-ui-theme="dark"] .client-note,
+body[data-ui-theme="dark"] .client-order-row{
+  background:#201d1a !important;
+  border-color:#4a423b !important;
+}
+body[data-ui-theme="dark"] .client-card-head h4,
+body[data-ui-theme="dark"] .client-stats b,
+body[data-ui-theme="dark"] .client-order-row span{
+  color:#fff7ed !important;
+}
+body[data-ui-theme="dark"] .client-card-head p,
+body[data-ui-theme="dark"] .client-stats span,
+body[data-ui-theme="dark"] .client-note,
+body[data-ui-theme="dark"] .client-order-row em{
+  color:var(--muted) !important;
+}
+</style>
+
 </head>
 <body>
   <div class="blob blob-1"></div>
@@ -5622,6 +6198,7 @@ body[data-ui-theme="dark"] td{
     const EXPENSES_KEY = 'one_service_expenses';
     const TASKS_KEY = 'one_service_tasks';
     const SUPPLIERS_KEY = 'one_service_suppliers';
+    const CLIENTS_KEY = 'one_service_clients';
     const ACTIVITY_KEY = 'one_service_activity';
 
     const STATUS_CONFIG = {
@@ -5788,6 +6365,15 @@ body[data-ui-theme="dark"] td{
     let partsDraft = [];
     let servicesDraft = [];
     let ordersCurrentPage = 1;
+    const MANAGEMENT_PAGE_SIZE = 15;
+    let inventoryCurrentPage = 1;
+    let servicesCurrentPage = 1;
+    let financeCurrentPage = 1;
+    let editingExpenseId = null;
+    const CLIENTS_PAGE_SIZE = 25;
+    let clientsCurrentPage = 1;
+    const ACTIVITY_PAGE_SIZE = 25;
+    let activityCurrentPage = 1;
 
     function showAuthError(message) {
       authError.textContent = message;
@@ -6278,6 +6864,44 @@ body[data-ui-theme="dark"] td{
       return saved;
     }
 
+    function clientKeyFromValues(name = '', phone = '') {
+      return normalizePhone(phone) || String(name || '').trim().toLowerCase() || 'Без телефона';
+    }
+
+    function clientKeyFromOrder(order = {}) {
+      return clientKeyFromValues(order.clientName, order.clientPhone);
+    }
+
+    function migrateClientProfile(item = {}) {
+      const clientName = String(item.clientName || item.name || '');
+      const clientPhone = String(item.clientPhone || item.phone || '');
+      return {
+        id: item.id || makeOrderId(),
+        key: String(item.key || clientKeyFromValues(clientName, clientPhone)),
+        clientName,
+        clientPhone,
+        address: String(item.address || ''),
+        note: String(item.note || ''),
+        hidden: Boolean(item.hidden),
+        updatedAt: item.updatedAt || new Date().toISOString()
+      };
+    }
+
+    function getClientProfiles() {
+      const parsed = getJson(CLIENTS_KEY, []);
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'object').map(migrateClientProfile) : [];
+    }
+
+    function saveClientProfiles(items, options = {}) {
+      const saved = setJson(CLIENTS_KEY, Array.isArray(items) ? items.map(migrateClientProfile) : []);
+      if (!saved) window.alert('Не удалось сохранить клиентов.');
+      if (saved && options.backup !== false) {
+        logActivity('Клиенты', 'Обновлены клиенты');
+        createAutoBackup();
+      }
+      return saved;
+    }
+
     function getActivity() {
       const parsed = getJson(ACTIVITY_KEY, []);
       return Array.isArray(parsed) ? parsed : [];
@@ -6301,6 +6925,7 @@ body[data-ui-theme="dark"] td{
         expenses: getExpenses(),
         tasks: getTasks(),
         suppliers: getSuppliers(),
+        clients: getClientProfiles(),
         activity: getActivity()
       };
       const backups = [backup, ...getBackups()].slice(0, 12);
@@ -6562,20 +7187,12 @@ body[data-ui-theme="dark"] td{
           <td data-label="Гарантия">${warrantyBadge(item)}</td>
           <td data-label="Дата">${escapeHtml(formatDate(item.createdAt))}</td>
           <td data-label="Обновлен">${escapeHtml(formatDate(item.updatedAt))}</td>
-          <td data-label="Действия">
-            <select class="actions-select" data-action="order-actions" data-id="${safeId}">
-              <option value="">Действия</option>
-              <option value="edit">Изменить</option>
-              <option value="history">История статусов</option>
-              <option value="acceptance">Печать акта приема</option>
-              <option value="completed">Печать акта выполненных работ</option>
-              <option value="warranty">Печать гарантии</option>
-              <option value="label">Печать наклейки / QR</option>
-              <option value="whatsapp">WhatsApp клиенту</option>
-              <option value="sms">SMS клиенту</option>
-              <option value="telegram">Telegram текст</option>
-              <option value="delete">Удалить</option>
-            </select>
+          <td data-label="Действия" class="order-actions-cell">
+            <div class="order-row-actions">
+              <button class="small-btn" type="button" data-order-direct-action="open" data-id="${safeId}">Открыть</button>
+              <button class="small-btn" type="button" data-order-direct-action="edit" data-id="${safeId}">Изменить</button>
+              <button class="small-btn order-action-danger" type="button" data-order-direct-action="delete" data-id="${safeId}">Удалить</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -6851,28 +7468,104 @@ body[data-ui-theme="dark"] td{
       return updated;
     }
 
+    function clampManagementPage(total, page) {
+      const totalPages = Math.max(1, Math.ceil(total / MANAGEMENT_PAGE_SIZE));
+      return Math.min(Math.max(Number(page) || 1, 1), totalPages);
+    }
+
+    function managementPageItems(items, page) {
+      const start = (page - 1) * MANAGEMENT_PAGE_SIZE;
+      return items.slice(start, start + MANAGEMENT_PAGE_SIZE);
+    }
+
+    function managementPagerHtml(kind, total, page) {
+      const totalPages = Math.max(1, Math.ceil(total / MANAGEMENT_PAGE_SIZE));
+      const start = total ? ((page - 1) * MANAGEMENT_PAGE_SIZE) + 1 : 0;
+      const end = Math.min(total, page * MANAGEMENT_PAGE_SIZE);
+      return `
+        <div class="manage-page-info">${total ? `Показано ${start}-${end} из ${total}` : 'Записей нет'}</div>
+        <div class="manage-page-controls">
+          <button class="manage-page-btn" type="button" data-crm-page-kind="${kind}" data-crm-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Назад</button>
+          <span class="manage-page-current">${page} / ${totalPages}</span>
+          <button class="manage-page-btn" type="button" data-crm-page-kind="${kind}" data-crm-page="${page + 1}" ${page >= totalPages ? 'disabled' : ''}>Вперед</button>
+        </div>
+      `;
+    }
+
+    function includesQuery(source, query) {
+      const needle = String(query || '').trim().toLowerCase();
+      if (!needle) return true;
+      return String(source || '').toLowerCase().includes(needle);
+    }
+
+    function uniqueValues(values) {
+      return [...new Set(values.map(item => String(item || '').trim()).filter(Boolean))];
+    }
+
+    function ensureInventoryTools(items = []) {
+      const tableWrap = document.getElementById('inventoryTableBody')?.closest('.table-scroll');
+      if (!tableWrap) return;
+      let tools = document.getElementById('inventoryListTools');
+      if (!tools) {
+        tools = document.createElement('div');
+        tools.className = 'manage-tools';
+        tools.id = 'inventoryListTools';
+        tools.innerHTML = `
+          <input type="search" id="inventorySearchInput" placeholder="Поиск по складу">
+          <select id="inventoryCategoryFilter"><option value="">Все категории</option></select>
+          <div class="manage-counter" id="inventoryListCounter"></div>
+        `;
+        tableWrap.before(tools);
+        document.getElementById('inventorySearchInput')?.addEventListener('input', () => { inventoryCurrentPage = 1; renderInventory(); });
+        document.getElementById('inventoryCategoryFilter')?.addEventListener('change', () => { inventoryCurrentPage = 1; renderInventory(); });
+      }
+      if (!document.getElementById('inventoryPager')) {
+        const pager = document.createElement('div');
+        pager.className = 'manage-pager';
+        pager.id = 'inventoryPager';
+        tableWrap.after(pager);
+      }
+      const categoryFilter = document.getElementById('inventoryCategoryFilter');
+      if (categoryFilter) {
+        const current = categoryFilter.value;
+        const categories = uniqueValues([...(getSettings().inventoryCategories || []), ...items.map(item => item.category)]);
+        categoryFilter.innerHTML = '<option value="">Все категории</option>' + categories.map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join('');
+        categoryFilter.value = categories.includes(current) ? current : '';
+      }
+    }
+
     function renderInventory() {
       const tbodyInventory = document.getElementById('inventoryTableBody');
       const items = getInventory();
+      ensureInventoryTools(items);
+      const query = document.getElementById('inventorySearchInput')?.value || '';
+      const category = document.getElementById('inventoryCategoryFilter')?.value || '';
+      const filtered = items.filter(item => includesQuery([item.name, item.category, item.sku, item.stock, item.unitCost].join(' '), query) && (!category || item.category === category));
+      inventoryCurrentPage = clampManagementPage(filtered.length, inventoryCurrentPage);
+      const pageItems = managementPageItems(filtered, inventoryCurrentPage);
+      const counter = document.getElementById('inventoryListCounter');
+      if (counter) counter.textContent = `Всего: ${items.length} · найдено: ${filtered.length}`;
 
-      tbodyInventory.innerHTML = items.map(item => {
+      tbodyInventory.innerHTML = pageItems.map(item => {
         const low = item.minStock && item.stock <= item.minStock;
         return `
           <tr>
-            <td><b>${escapeHtml(item.name)}</b><br><span>${escapeHtml(item.sku || 'Без артикула')}</span></td>
-            <td>${escapeHtml(item.category || '—')}</td>
-            <td>${low ? '<span class="badge badge-bad">' : '<span class="badge badge-good">'}${item.stock} шт.</span></td>
-            <td>${escapeHtml(money(item.unitCost))}</td>
-            <td>${item.minStock || 0}</td>
-            <td>
+            <td data-label="Деталь"><b>${escapeHtml(item.name)}</b><br><span>${escapeHtml(item.sku || 'Без артикула')}</span></td>
+            <td data-label="Категория">${escapeHtml(item.category || '—')}</td>
+            <td data-label="Остаток">${low ? '<span class="badge badge-bad">' : '<span class="badge badge-good">'}${item.stock} шт.</span></td>
+            <td data-label="Себестоимость">${escapeHtml(money(item.unitCost))}</td>
+            <td data-label="Минимум">${item.minStock || 0}</td>
+            <td data-label="Действия">
               <div class="inline-actions">
                 <button class="small-btn" type="button" data-edit-part="${escapeHtml(item.id)}">Изменить</button>
-                <button class="small-btn" type="button" data-delete-part="${escapeHtml(item.id)}">Удалить</button>
+                <button class="small-btn manage-danger" type="button" data-delete-part="${escapeHtml(item.id)}">Удалить</button>
               </div>
             </td>
           </tr>
         `;
-      }).join('') || '<tr><td colspan="6">Склад пока пуст.</td></tr>';
+      }).join('') || `<tr><td data-label="" colspan="6">${items.length ? 'По этому поиску товаров нет.' : 'Склад пока пуст.'}</td></tr>`;
+      const pager = document.getElementById('inventoryPager');
+      if (pager) pager.innerHTML = managementPagerHtml('inventory', filtered.length, inventoryCurrentPage);
     }
 
     function setInventoryForm(part = null) {
@@ -6889,12 +7582,17 @@ body[data-ui-theme="dark"] td{
     function buildClients() {
       const groups = new Map();
       getOrders().forEach(order => {
-        const key = normalizePhone(order.clientPhone) || order.clientName || 'Без телефона';
+        const key = clientKeyFromOrder(order);
         if (!groups.has(key)) {
           groups.set(key, {
             key,
             clientName: order.clientName,
             clientPhone: order.clientPhone,
+            address: '',
+            note: '',
+            profileId: '',
+            hidden: false,
+            updatedAt: order.updatedAt || order.createdAt || '',
             orders: [],
             total: 0,
             paid: 0,
@@ -6909,44 +7607,260 @@ body[data-ui-theme="dark"] td{
         client.total += parseAmount(order.totalCost);
         client.paid += parseAmount(order.paidAmount);
         client.debt += getDebt(order);
+        client.updatedAt = client.updatedAt || order.updatedAt || order.createdAt || '';
+      });
+
+      getClientProfiles().forEach(profile => {
+        const key = profile.key || clientKeyFromValues(profile.clientName, profile.clientPhone);
+        if (!groups.has(key)) {
+          groups.set(key, {
+            key,
+            clientName: profile.clientName,
+            clientPhone: profile.clientPhone,
+            address: profile.address,
+            note: profile.note,
+            profileId: profile.id,
+            hidden: profile.hidden,
+            updatedAt: profile.updatedAt,
+            orders: [],
+            total: 0,
+            paid: 0,
+            debt: 0
+          });
+        }
+
+        const client = groups.get(key);
+        client.profileId = profile.id;
+        client.hidden = profile.hidden;
+        client.clientName = profile.clientName || client.clientName;
+        client.clientPhone = profile.clientPhone || client.clientPhone;
+        client.address = profile.address || '';
+        client.note = profile.note || '';
+        client.updatedAt = profile.updatedAt || client.updatedAt;
       });
 
       return [...groups.values()].sort((a, b) => {
-        const lastA = Math.max(...a.orders.map(order => Date.parse(order.createdAt) || 0));
-        const lastB = Math.max(...b.orders.map(order => Date.parse(order.createdAt) || 0));
+        const lastA = Math.max(Date.parse(a.updatedAt) || 0, ...a.orders.map(order => Date.parse(order.createdAt) || 0));
+        const lastB = Math.max(Date.parse(b.updatedAt) || 0, ...b.orders.map(order => Date.parse(order.createdAt) || 0));
         return lastB - lastA;
+      }).filter(client => !client.hidden);
+    }
+
+    function ensureClientsUi() {
+      const search = document.getElementById('clientSearchInput');
+      const list = document.getElementById('clientsList');
+      if (!search || !list) return;
+      if (!document.getElementById('clientsListCounter')) {
+        const tools = document.createElement('div');
+        tools.className = 'manage-tools manage-tools-single';
+        tools.id = 'clientsListTools';
+        tools.innerHTML = `
+          <div class="manage-counter" id="clientsListCounter"></div>
+          <button class="btn btn-secondary" type="button" id="resetClientsSearchBtn">Сбросить поиск</button>
+        `;
+        search.after(tools);
+        document.getElementById('resetClientsSearchBtn')?.addEventListener('click', () => {
+          search.value = '';
+          clientsCurrentPage = 1;
+          renderClients();
+        });
+      }
+      if (!document.getElementById('clientsPager')) {
+        const pager = document.createElement('div');
+        pager.className = 'manage-pager';
+        pager.id = 'clientsPager';
+        list.after(pager);
+      }
+      ensureClientEditorModal();
+    }
+
+    function clientsPagerHtml(total, page) {
+      const totalPages = Math.max(1, Math.ceil(total / CLIENTS_PAGE_SIZE));
+      if (total <= CLIENTS_PAGE_SIZE) return '';
+      const start = ((page - 1) * CLIENTS_PAGE_SIZE) + 1;
+      const end = Math.min(total, page * CLIENTS_PAGE_SIZE);
+      return `
+        <div class="manage-page-info">Показано ${start}-${end} из ${total}</div>
+        <div class="manage-page-controls">
+          <button class="manage-page-btn" type="button" data-clients-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Назад</button>
+          <span class="manage-page-current">${page} / ${totalPages}</span>
+          <button class="manage-page-btn" type="button" data-clients-page="${page + 1}" ${page >= totalPages ? 'disabled' : ''}>Вперед</button>
+        </div>
+      `;
+    }
+
+    function ensureClientEditorModal() {
+      if (document.getElementById('clientEditorOverlay')) return;
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay client-editor-overlay';
+      overlay.id = 'clientEditorOverlay';
+      overlay.innerHTML = `
+        <div class="modal">
+          <button class="modal-close" id="closeClientEditorBtn" type="button" aria-label="Close">×</button>
+          <h3 id="clientEditorTitle">Клиент</h3>
+          <p>Изменение имени и телефона обновит связанные заказы этого клиента. Удаление клиента скрывает его из списка, заказы остаются в CRM.</p>
+          <form id="clientEditorForm">
+            <input type="hidden" id="clientEditKeyInput">
+            <input type="hidden" id="clientEditProfileIdInput">
+            <div class="form-grid">
+              <label class="field-label">Имя клиента
+                <input type="text" id="clientEditNameInput" placeholder="Имя клиента" required>
+              </label>
+              <label class="field-label">Телефон
+                <input type="tel" id="clientEditPhoneInput" placeholder="+995...">
+              </label>
+              <label class="field-label full">Адрес
+                <input type="text" id="clientEditAddressInput" placeholder="Адрес клиента">
+              </label>
+              <label class="field-label full">Заметка
+                <textarea id="clientEditNoteInput" placeholder="Комментарий по клиенту"></textarea>
+              </label>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-secondary" id="cancelClientEditBtn" type="button">Отмена</button>
+              <button class="btn btn-primary" type="submit">Сохранить клиента</button>
+            </div>
+          </form>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      document.getElementById('closeClientEditorBtn')?.addEventListener('click', closeClientEditor);
+      document.getElementById('cancelClientEditBtn')?.addEventListener('click', closeClientEditor);
+      overlay.addEventListener('click', event => { if (event.target === overlay) closeClientEditor(); });
+      document.getElementById('clientEditorForm')?.addEventListener('submit', saveClientFromEditor);
+    }
+
+    function openClientEditor(client) {
+      ensureClientEditorModal();
+      document.getElementById('clientEditKeyInput').value = client?.key || '';
+      document.getElementById('clientEditProfileIdInput').value = client?.profileId || '';
+      document.getElementById('clientEditNameInput').value = client?.clientName || '';
+      document.getElementById('clientEditPhoneInput').value = client?.clientPhone || '';
+      document.getElementById('clientEditAddressInput').value = client?.address || '';
+      document.getElementById('clientEditNoteInput').value = client?.note || '';
+      document.getElementById('clientEditorTitle').textContent = `Клиент: ${client?.clientName || client?.clientPhone || 'без имени'}`;
+      document.getElementById('clientEditorOverlay').classList.add('open');
+      setTimeout(() => document.getElementById('clientEditNameInput')?.focus(), 0);
+    }
+
+    function closeClientEditor() {
+      document.getElementById('clientEditorOverlay')?.classList.remove('open');
+    }
+
+    function saveClientFromEditor(event) {
+      event.preventDefault();
+      const oldKey = document.getElementById('clientEditKeyInput').value;
+      const profileId = document.getElementById('clientEditProfileIdInput').value;
+      const clientName = document.getElementById('clientEditNameInput').value.trim();
+      const clientPhone = document.getElementById('clientEditPhoneInput').value.trim();
+      const address = document.getElementById('clientEditAddressInput').value.trim();
+      const note = document.getElementById('clientEditNoteInput').value.trim();
+      if (!clientName && !clientPhone) return window.alert('Укажите имя или телефон клиента.');
+
+      const newKey = clientKeyFromValues(clientName, clientPhone);
+      const now = new Date().toISOString();
+      const profiles = getClientProfiles().filter(profile => profile.id !== profileId && profile.key !== oldKey && profile.key !== newKey);
+      profiles.unshift(migrateClientProfile({
+        id: profileId || makeOrderId(),
+        key: newKey,
+        clientName,
+        clientPhone,
+        address,
+        note,
+        hidden: false,
+        updatedAt: now
+      }));
+
+      const orders = getOrders();
+      const updatedOrders = orders.map(order => {
+        if (clientKeyFromOrder(order) !== oldKey) return order;
+        return {
+          ...order,
+          clientName: clientName || order.clientName,
+          clientPhone: clientPhone || order.clientPhone,
+          updatedAt: now
+        };
       });
+
+      if (saveOrders(updatedOrders, { backup: false }) && saveClientProfiles(profiles, { backup: false })) {
+        logActivity('Клиенты', `Обновлен клиент "${clientName || clientPhone}"`);
+        createAutoBackup();
+        closeClientEditor();
+        renderAll();
+      }
+    }
+
+    function deleteClientFromList(client) {
+      if (!client) return;
+      const label = client.clientName || client.clientPhone || 'клиента';
+      if (!window.confirm(`Удалить "${label}" из списка клиентов? Заказы останутся в CRM.`)) return;
+      const profiles = getClientProfiles().filter(profile => profile.id !== client.profileId && profile.key !== client.key);
+      profiles.unshift(migrateClientProfile({
+        id: client.profileId || makeOrderId(),
+        key: client.key,
+        clientName: client.clientName,
+        clientPhone: client.clientPhone,
+        address: client.address,
+        note: client.note,
+        hidden: true,
+        updatedAt: new Date().toISOString()
+      }));
+      if (saveClientProfiles(profiles)) renderAll();
     }
 
     function renderClients() {
       const list = document.getElementById('clientsList');
+      ensureClientsUi();
       const query = (document.getElementById('clientSearchInput').value || '').trim().toLowerCase();
       const clients = buildClients().filter(client => {
-        const haystack = `${client.clientName} ${client.clientPhone}`.toLowerCase();
+        const haystack = `${client.clientName} ${client.clientPhone} ${client.address} ${client.note}`.toLowerCase();
         return !query || haystack.includes(query);
       });
+      const totalPages = Math.max(1, Math.ceil(clients.length / CLIENTS_PAGE_SIZE));
+      clientsCurrentPage = Math.min(Math.max(clientsCurrentPage, 1), totalPages);
+      const pageStart = (clientsCurrentPage - 1) * CLIENTS_PAGE_SIZE;
+      const pageItems = clients.slice(pageStart, pageStart + CLIENTS_PAGE_SIZE);
+      const counter = document.getElementById('clientsListCounter');
+      if (counter) counter.textContent = `Всего: ${buildClients().length} · найдено: ${clients.length}`;
 
-      list.innerHTML = clients.map(client => `
-        <div class="data-card">
-          <h4>${escapeHtml(client.clientName || 'Без имени')}</h4>
-          <p>${escapeHtml(client.clientPhone || 'Телефон не указан')} · заказов: ${client.orders.length} · сумма: ${escapeHtml(money(client.total))} · долг: ${escapeHtml(money(client.debt))}</p>
-          <div class="inline-actions" style="margin-bottom:10px;">
-            <button class="small-btn" type="button" data-new-order-client="${escapeHtml(client.key)}">Новый заказ этому клиенту</button>
+      list.classList.add('clients-grid');
+      list.innerHTML = pageItems.map(client => {
+        const recentOrders = client.orders.slice().sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 4);
+        return `
+        <div class="data-card client-card">
+          <div class="client-card-head">
+            <div>
+              <h4>${escapeHtml(client.clientName || 'Без имени')}</h4>
+              <p>${escapeHtml(client.clientPhone || 'Телефон не указан')}</p>
+            </div>
+            <span class="badge">${client.orders.length} заказов</span>
           </div>
-          <table class="simple-table">
-            <tbody>
-              ${client.orders.map(order => `
-                <tr>
-                  <td>№ ${escapeHtml(order.orderNumber)}</td>
-                  <td>${escapeHtml(order.deviceType)} ${escapeHtml(order.deviceModel)}</td>
-                  <td>${escapeHtml(getStatusLabel(order.status))}</td>
-                  <td>${escapeHtml(formatDate(order.createdAt))}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+          <div class="client-stats">
+            <span>Сумма: <b>${escapeHtml(money(client.total))}</b></span>
+            <span>Оплачено: <b>${escapeHtml(money(client.paid))}</b></span>
+            <span>Долг: <b>${escapeHtml(money(client.debt))}</b></span>
+          </div>
+          ${client.address ? `<div class="client-note"><b>Адрес:</b> ${escapeHtml(client.address)}</div>` : ''}
+          ${client.note ? `<div class="client-note"><b>Заметка:</b> ${escapeHtml(client.note)}</div>` : ''}
+          <div class="inline-actions client-actions">
+            <button class="small-btn" type="button" data-new-order-client="${escapeHtml(client.key)}">Новый заказ этому клиенту</button>
+            <button class="small-btn" type="button" data-edit-client="${escapeHtml(client.key)}">Изменить</button>
+            <button class="small-btn manage-danger" type="button" data-delete-client="${escapeHtml(client.key)}">Удалить</button>
+          </div>
+          <div class="client-order-list">
+            ${recentOrders.map(order => `
+              <div class="client-order-row">
+                <b>№ ${escapeHtml(order.orderNumber)}</b>
+                <span>${escapeHtml(order.deviceType)} ${escapeHtml(order.deviceModel)} · ${escapeHtml(getStatusLabel(order.status))}</span>
+                <em>${escapeHtml(formatDateOnly(order.createdAt))}</em>
+              </div>
+            `).join('') || '<div class="section-note">Заказов пока нет.</div>'}
+          </div>
         </div>
-      `).join('') || '<div class="section-note">Клиенты не найдены.</div>';
+      `;
+      }).join('') || '<div class="section-note">Клиенты не найдены.</div>';
+      const pager = document.getElementById('clientsPager');
+      if (pager) pager.innerHTML = clientsPagerHtml(clients.length, clientsCurrentPage);
     }
 
     function renderHistory(order) {
@@ -7240,6 +8154,28 @@ body[data-ui-theme="dark"] td{
     function renderDocumentPreview() { const stage = document.getElementById('docsPreviewStage'); if (!stage) return; const active = document.querySelector('.docs-preview-tab.active')?.dataset.docPreview || 'acceptance'; const order = getPreviewOrder(); const map = { acceptance: renderAcceptanceAct(order, true), completed: renderCompletedAct(order, true), warranty: renderWarranty(order, true), label: renderLabelHtml(order, true) }; stage.innerHTML = `<div class="docs-page ${active === 'label' ? 'label-page' : ''}">${map[active] || ''}</div>`; }
     function renderNotificationPreview() { window.alert(buildNotificationText(getPreviewOrder(), getDocumentDraftSettings())); }
     function getDocStyle(settings) { const pageSize = escapeHtml(settings.printPageSize || 'A4'); const baseFont = Number(settings.printBaseFontSize || 14) || 14; const primaryColor = escapeHtml(settings.printPrimaryColor || '#2563eb'); return `@page{size:${pageSize === 'auto' ? 'A4' : pageSize};margin:14mm} body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:0;font-size:${baseFont}px} .doc{max-width:780px;margin:0 auto;padding:10px 0} .head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:18px} .brand{font-size:${baseFont + 12}px;font-weight:900;color:${primaryColor}} .sub{font-size:${Math.max(baseFont-2,11)}px;color:#555;line-height:1.5} h1{font-size:${baseFont + 8}px;text-align:center;margin:18px 0 20px} table{width:100%;border-collapse:collapse;margin-top:8px} th,td{border:1px solid #222;padding:8px 10px;font-size:${baseFont}px;text-align:left} .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-bottom:14px} .field{border:1px solid #222;border-radius:8px;padding:10px 12px;min-height:42px} .label{font-size:${Math.max(baseFont-2,11)}px;font-weight:700;color:#555;margin-bottom:4px} .value{font-size:${baseFont}px;line-height:1.5;word-break:break-word} .full{margin-bottom:12px} .signatures{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:34px} .sign-line{margin-top:36px;border-top:1px solid #111;padding-top:6px;font-size:${Math.max(baseFont-1,12)}px} .small{font-size:${Math.max(baseFont-2,11)}px;color:#444;line-height:1.5} .notice{border:1px dashed #555;border-radius:8px;padding:12px;margin-top:16px;font-size:${Math.max(baseFont-1,12)}px;line-height:1.6} .doc-footer{margin-top:20px;padding-top:10px;border-top:1px solid #ddd;font-size:${Math.max(baseFont-2,11)}px;color:#555;line-height:1.5} .label-card{width:92mm;min-height:48mm;border:1px solid #111;padding:8mm;display:grid;grid-template-columns:1fr 34mm;gap:6mm;align-items:center} .qr{width:34mm;height:34mm} .stamp{display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border:1px solid ${primaryColor};border-radius:999px;color:${primaryColor};font-size:${Math.max(baseFont-2,11)}px;font-weight:800;margin-top:10px}`; }
+    function ensureServicesTools() {
+      const list = document.getElementById('servicesList');
+      if (!list) return;
+      if (!document.getElementById('servicesListTools')) {
+        const tools = document.createElement('div');
+        tools.className = 'manage-tools manage-tools-single';
+        tools.id = 'servicesListTools';
+        tools.innerHTML = `
+          <input type="search" id="servicesSearchInput" placeholder="Поиск услуги">
+          <div class="manage-counter" id="servicesListCounter"></div>
+        `;
+        list.before(tools);
+        document.getElementById('servicesSearchInput')?.addEventListener('input', () => { servicesCurrentPage = 1; renderServices(); });
+      }
+      if (!document.getElementById('servicesPager')) {
+        const pager = document.createElement('div');
+        pager.className = 'manage-pager';
+        pager.id = 'servicesPager';
+        list.after(pager);
+      }
+    }
+
     function setServiceForm(service = null) {
       editingServiceId = service?.id || null;
       document.getElementById('serviceNameInput').value = service?.name || '';
@@ -7253,17 +8189,27 @@ body[data-ui-theme="dark"] td{
     function renderServices() {
       const list = document.getElementById('servicesList');
       if (!list) return;
+      ensureServicesTools();
       const services = getServices();
-      list.innerHTML = services.map(service => `
-        <div class="mini-row">
-          <div><b>${escapeHtml(service.name)}</b><br><span>Себестоимость: ${escapeHtml(money(service.cost))} · гарантия: ${escapeHtml(service.warrantyDays || '—')} дней · мастеру: ${escapeHtml(service.rewardPercent || getSettings().defaultSalaryPercent)}%</span></div>
-          <span>${escapeHtml(money(service.price))}</span>
-          <div class="inline-actions">
+      const query = document.getElementById('servicesSearchInput')?.value || '';
+      const filtered = services.filter(service => includesQuery([service.name, service.price, service.cost, service.warrantyDays, service.rewardPercent].join(' '), query));
+      servicesCurrentPage = clampManagementPage(filtered.length, servicesCurrentPage);
+      const pageItems = managementPageItems(filtered, servicesCurrentPage);
+      const counter = document.getElementById('servicesListCounter');
+      if (counter) counter.textContent = `Всего: ${services.length} · найдено: ${filtered.length}`;
+      list.classList.add('management-list');
+      list.innerHTML = pageItems.map(service => `
+        <div class="manage-row">
+          <div class="manage-main"><b>${escapeHtml(service.name)}</b><span>Себестоимость: ${escapeHtml(money(service.cost))} · гарантия: ${escapeHtml(service.warrantyDays || '—')} дней · мастеру: ${escapeHtml(service.rewardPercent || getSettings().defaultSalaryPercent)}%</span></div>
+          <div class="manage-price">${escapeHtml(money(service.price))}</div>
+          <div class="inline-actions manage-actions">
             <button class="small-btn" type="button" data-edit-service="${escapeHtml(service.id)}">Изменить</button>
-            <button class="small-btn" type="button" data-delete-service="${escapeHtml(service.id)}">Удалить</button>
+            <button class="small-btn manage-danger" type="button" data-delete-service="${escapeHtml(service.id)}">Удалить</button>
           </div>
         </div>
-      `).join('') || '<div class="section-note">Прайс услуг пока пуст.</div>';
+      `).join('') || `<div class="section-note">${services.length ? 'По этому поиску услуг нет.' : 'Прайс услуг пока пуст.'}</div>`;
+      const pager = document.getElementById('servicesPager');
+      if (pager) pager.innerHTML = managementPagerHtml('services', filtered.length, servicesCurrentPage);
     }
 
     function setTaskForm(task = null) {
@@ -7311,12 +8257,74 @@ body[data-ui-theme="dark"] td{
       }).join('') || '<div class="section-note">Задач пока нет.</div>';
     }
 
+    function setExpenseForm(expense = null) {
+      editingExpenseId = expense?.id || null;
+      document.getElementById('expenseTitleInput').value = expense?.title || '';
+      document.getElementById('expenseCategoryInput').value = expense?.category || document.getElementById('expenseCategoryInput').value || '';
+      document.getElementById('expenseAmountInput').value = expense?.amount ?? '';
+      document.getElementById('expenseDateInput').value = expense?.date || toDateInput(new Date().toISOString());
+      document.getElementById('expenseNoteInput').value = expense?.note || '';
+      const submit = document.querySelector('#expenseForm button[type="submit"]');
+      if (submit) submit.textContent = expense ? 'Обновить расход' : 'Добавить расход';
+      const reset = document.getElementById('cancelExpenseEditBtn');
+      if (reset) reset.style.display = expense ? '' : 'none';
+    }
+
+    function ensureFinanceTools(expenses = []) {
+      const list = document.getElementById('expensesList');
+      if (!list) return;
+      if (!document.getElementById('financeListTools')) {
+        const tools = document.createElement('div');
+        tools.className = 'manage-tools';
+        tools.id = 'financeListTools';
+        tools.innerHTML = `
+          <input type="search" id="financeExpenseSearchInput" placeholder="Поиск расхода">
+          <select id="financeCategoryFilter"><option value="">Все категории</option></select>
+          <div class="manage-counter" id="financeListCounter"></div>
+        `;
+        list.before(tools);
+        document.getElementById('financeExpenseSearchInput')?.addEventListener('input', () => { financeCurrentPage = 1; renderFinance(); });
+        document.getElementById('financeCategoryFilter')?.addEventListener('change', () => { financeCurrentPage = 1; renderFinance(); });
+      }
+      if (!document.getElementById('financePager')) {
+        const pager = document.createElement('div');
+        pager.className = 'manage-pager';
+        pager.id = 'financePager';
+        list.after(pager);
+      }
+      if (!document.getElementById('cancelExpenseEditBtn')) {
+        const submit = document.querySelector('#expenseForm button[type="submit"]');
+        const reset = document.createElement('button');
+        reset.className = 'btn btn-secondary';
+        reset.id = 'cancelExpenseEditBtn';
+        reset.type = 'button';
+        reset.textContent = 'Новый расход';
+        reset.style.display = 'none';
+        submit?.after(reset);
+        reset.addEventListener('click', () => setExpenseForm());
+      }
+      const categories = uniqueValues([...(getSettings().expenseCategories || []), ...expenses.map(expense => expense.category)]);
+      const categoryInput = document.getElementById('expenseCategoryInput');
+      if (categoryInput) {
+        const current = categoryInput.value;
+        categoryInput.innerHTML = categories.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
+        if (categories.includes(current)) categoryInput.value = current;
+      }
+      const filter = document.getElementById('financeCategoryFilter');
+      if (filter) {
+        const current = filter.value;
+        filter.innerHTML = '<option value="">Все категории</option>' + categories.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
+        filter.value = categories.includes(current) ? current : '';
+      }
+    }
+
     function renderFinance() {
       const summary = document.getElementById('financeSummary');
       const expensesList = document.getElementById('expensesList');
       if (!summary || !expensesList) return;
       const orders = getOrders();
       const expenses = getExpenses();
+      ensureFinanceTools(expenses);
       const revenue = orders.reduce((sum, order) => sum + parseAmount(order.paidAmount), 0);
       const expenseTotal = expenses.reduce((sum, expense) => sum + parseAmount(expense.amount), 0);
       const salaryMap = calculateSalaryByMaster();
@@ -7328,15 +8336,26 @@ body[data-ui-theme="dark"] td{
         <div class="data-card"><h4>Себестоимость деталей</h4><p>${escapeHtml(money(partsCost))}</p></div>
         <div class="data-card"><h4>Зарплата</h4><p>${escapeHtml(money(salaryTotal))}</p></div>
       `;
-      expensesList.innerHTML = expenses.map(expense => `
-        <div class="mini-row">
-          <div><b>${escapeHtml(expense.title)}</b><br><span>${escapeHtml(expense.category || 'Без категории')} · ${escapeHtml(formatDateOnly(expense.date))} · ${escapeHtml(expense.note)}</span></div>
-          <span>${escapeHtml(money(expense.amount))}</span>
-          <button class="small-btn" type="button" data-delete-expense="${escapeHtml(expense.id)}">Удалить</button>
+      const query = document.getElementById('financeExpenseSearchInput')?.value || '';
+      const category = document.getElementById('financeCategoryFilter')?.value || '';
+      const filtered = expenses.filter(expense => includesQuery([expense.title, expense.category, expense.note, expense.amount, expense.date].join(' '), query) && (!category || expense.category === category));
+      financeCurrentPage = clampManagementPage(filtered.length, financeCurrentPage);
+      const pageItems = managementPageItems(filtered, financeCurrentPage);
+      const counter = document.getElementById('financeListCounter');
+      if (counter) counter.textContent = `Всего: ${expenses.length} · найдено: ${filtered.length}`;
+      expensesList.classList.add('management-list');
+      expensesList.innerHTML = pageItems.map(expense => `
+        <div class="manage-row">
+          <div class="manage-main"><b>${escapeHtml(expense.title)}</b><span>${escapeHtml(expense.category || 'Без категории')} · ${escapeHtml(formatDateOnly(expense.date))}${expense.note ? ` · ${escapeHtml(expense.note)}` : ''}</span></div>
+          <div class="manage-price">${escapeHtml(money(expense.amount))}</div>
+          <div class="inline-actions manage-actions">
+            <button class="small-btn" type="button" data-edit-expense="${escapeHtml(expense.id)}">Изменить</button>
+            <button class="small-btn manage-danger" type="button" data-delete-expense="${escapeHtml(expense.id)}">Удалить</button>
+          </div>
         </div>
-      `).join('') || '<div class="section-note">Расходов пока нет.</div>';
-      const categorySelect = document.getElementById('expenseCategoryInput');
-      if (categorySelect) categorySelect.innerHTML = getSettings().expenseCategories.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
+      `).join('') || `<div class="section-note">${expenses.length ? 'По этому поиску расходов нет.' : 'Расходов пока нет.'}</div>`;
+      const pager = document.getElementById('financePager');
+      if (pager) pager.innerHTML = managementPagerHtml('finance', filtered.length, financeCurrentPage);
     }
 
     function setSupplierForm(supplier = null) {
@@ -7369,12 +8388,47 @@ body[data-ui-theme="dark"] td{
     function renderActivity() {
       const list = document.getElementById('activityList');
       if (!list) return;
-      list.innerHTML = getActivity().map(item => `
+      if (!document.getElementById('activityListCounter')) {
+        const counter = document.createElement('div');
+        counter.className = 'manage-counter';
+        counter.id = 'activityListCounter';
+        list.before(counter);
+      }
+      if (!document.getElementById('activityPager')) {
+        const pager = document.createElement('div');
+        pager.className = 'manage-pager';
+        pager.id = 'activityPager';
+        list.after(pager);
+      }
+
+      const items = getActivity();
+      const totalPages = Math.max(1, Math.ceil(items.length / ACTIVITY_PAGE_SIZE));
+      activityCurrentPage = Math.min(Math.max(activityCurrentPage, 1), totalPages);
+      const pageStart = (activityCurrentPage - 1) * ACTIVITY_PAGE_SIZE;
+      const pageItems = items.slice(pageStart, pageStart + ACTIVITY_PAGE_SIZE);
+      const counter = document.getElementById('activityListCounter');
+      if (counter) counter.textContent = `Всего записей: ${items.length}`;
+
+      list.classList.add('management-list');
+      list.innerHTML = pageItems.map(item => `
         <div class="mini-row">
           <div><b>${escapeHtml(item.action)}</b><br><span>${escapeHtml(item.detail || '')}</span></div>
           <span>${escapeHtml(formatDate(item.at))}</span>
         </div>
       `).join('') || '<div class="section-note">Журнал пока пуст.</div>';
+      const pager = document.getElementById('activityPager');
+      if (pager) {
+        const start = items.length ? pageStart + 1 : 0;
+        const end = Math.min(items.length, pageStart + ACTIVITY_PAGE_SIZE);
+        pager.innerHTML = items.length > ACTIVITY_PAGE_SIZE ? `
+          <div class="manage-page-info">Показано ${start}-${end} из ${items.length}</div>
+          <div class="manage-page-controls">
+            <button class="manage-page-btn" type="button" data-activity-page="${activityCurrentPage - 1}" ${activityCurrentPage <= 1 ? 'disabled' : ''}>Назад</button>
+            <span class="manage-page-current">${activityCurrentPage} / ${totalPages}</span>
+            <button class="manage-page-btn" type="button" data-activity-page="${activityCurrentPage + 1}" ${activityCurrentPage >= totalPages ? 'disabled' : ''}>Вперед</button>
+          </div>
+        ` : '';
+      }
     }
 
     function renderAll() {
@@ -7554,6 +8608,7 @@ body[data-ui-theme="dark"] td{
           setJson(EXPENSES_KEY, Array.isArray(data.expenses) ? data.expenses.map(migrateExpense) : getExpenses());
           setJson(TASKS_KEY, Array.isArray(data.tasks) ? data.tasks.map(migrateTask) : getTasks());
           setJson(SUPPLIERS_KEY, Array.isArray(data.suppliers) ? data.suppliers.map(migrateSupplier) : getSuppliers());
+          setJson(CLIENTS_KEY, Array.isArray(data.clients) ? data.clients.map(migrateClientProfile) : getClientProfiles());
           setJson(ACTIVITY_KEY, Array.isArray(data.activity) ? data.activity : getActivity());
           saveOrders(orders.map(migrateOrder), { backup: false });
           logActivity('Импорт', 'Импортированы данные CRM');
@@ -7627,11 +8682,13 @@ body[data-ui-theme="dark"] td{
       clientsModalOverlay.classList.add('open');
     });
     document.getElementById('inventoryBtn').addEventListener('click', () => {
+      inventoryCurrentPage = 1;
       setInventoryForm();
       renderInventory();
       inventoryModalOverlay.classList.add('open');
     });
     document.getElementById('servicesBtn').addEventListener('click', () => {
+      servicesCurrentPage = 1;
       setServiceForm();
       renderServices();
       servicesModalOverlay.classList.add('open');
@@ -7642,7 +8699,8 @@ body[data-ui-theme="dark"] td{
       tasksModalOverlay.classList.add('open');
     });
     document.getElementById('financeBtn').addEventListener('click', () => {
-      document.getElementById('expenseDateInput').value = toDateInput(new Date().toISOString());
+      financeCurrentPage = 1;
+      setExpenseForm();
       renderFinance();
       financeModalOverlay.classList.add('open');
     });
@@ -7656,6 +8714,7 @@ body[data-ui-theme="dark"] td{
       suppliersModalOverlay.classList.add('open');
     });
     document.getElementById('activityBtn').addEventListener('click', () => {
+      activityCurrentPage = 1;
       renderActivity();
       activityModalOverlay.classList.add('open');
     });
@@ -7703,6 +8762,22 @@ body[data-ui-theme="dark"] td{
       if (!button || button.disabled) return;
       ordersCurrentPage = Number(button.dataset.ordersPage) || 1;
       renderOrders();
+    });
+
+    document.addEventListener('click', event => {
+      const button = event.target.closest('[data-crm-page]');
+      if (!button || button.disabled) return;
+      const page = Number(button.dataset.crmPage) || 1;
+      if (button.dataset.crmPageKind === 'inventory') {
+        inventoryCurrentPage = page;
+        renderInventory();
+      } else if (button.dataset.crmPageKind === 'services') {
+        servicesCurrentPage = page;
+        renderServices();
+      } else if (button.dataset.crmPageKind === 'finance') {
+        financeCurrentPage = page;
+        renderFinance();
+      }
     });
 
     formFields.orderStatus.addEventListener('change', () => applyStatusSelectStyle(formFields.orderStatus));
@@ -7814,6 +8889,29 @@ body[data-ui-theme="dark"] td{
       if (action === 'delete') {
         if (!window.confirm(`Удалить заказ № ${order.orderNumber || ''}?`)) return;
         const orders = getOrders().filter(item => item.id !== id);
+        if (saveOrders(orders)) renderAll();
+      }
+    });
+
+    tbody.addEventListener('click', event => {
+      const button = event.target.closest('[data-order-direct-action]');
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const order = findOrderById(button.dataset.id);
+      if (!order) return;
+      const action = button.dataset.orderDirectAction;
+      if (action === 'open') {
+        button.closest('tr')?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        return;
+      }
+      if (action === 'edit') {
+        openModal(order);
+        return;
+      }
+      if (action === 'delete') {
+        if (!window.confirm(`Удалить заказ № ${order.orderNumber || ''}?`)) return;
+        const orders = getOrders().filter(item => item.id !== order.id);
         if (saveOrders(orders)) renderAll();
       }
     });
@@ -7991,25 +9089,40 @@ body[data-ui-theme="dark"] td{
     document.getElementById('expenseForm').addEventListener('submit', event => {
       event.preventDefault();
       const items = getExpenses();
-      items.unshift(migrateExpense({
+      const oldExpense = editingExpenseId ? items.find(item => item.id === editingExpenseId) : null;
+      const payload = migrateExpense({
+        ...(oldExpense || {}),
+        id: editingExpenseId || makeOrderId(),
         title: document.getElementById('expenseTitleInput').value.trim(),
         category: document.getElementById('expenseCategoryInput').value,
         amount: document.getElementById('expenseAmountInput').value,
         date: document.getElementById('expenseDateInput').value,
         note: document.getElementById('expenseNoteInput').value.trim()
-      }));
+      });
+      const index = items.findIndex(item => item.id === payload.id);
+      if (index >= 0) items[index] = payload;
+      else items.unshift(payload);
       if (saveExpenses(items)) {
         document.getElementById('expenseForm').reset();
-        document.getElementById('expenseDateInput').value = toDateInput(new Date().toISOString());
+        setExpenseForm();
         renderAll();
       }
     });
 
     document.getElementById('expensesList').addEventListener('click', event => {
-      const button = event.target.closest('[data-delete-expense]');
-      if (!button) return;
+      const editButton = event.target.closest('[data-edit-expense]');
+      const deleteButton = event.target.closest('[data-delete-expense]');
+      if (!editButton && !deleteButton) return;
       const items = getExpenses();
-      saveExpenses(items.filter(item => item.id !== button.dataset.deleteExpense));
+      if (editButton) {
+        const expense = items.find(item => item.id === editButton.dataset.editExpense);
+        if (expense) setExpenseForm(expense);
+        return;
+      }
+      const expense = items.find(item => item.id === deleteButton.dataset.deleteExpense);
+      if (!expense || !window.confirm(`Удалить расход "${expense.title || ''}"?`)) return;
+      saveExpenses(items.filter(item => item.id !== expense.id));
+      if (editingExpenseId === expense.id) setExpenseForm();
       renderAll();
     });
 
@@ -8161,16 +9274,42 @@ body[data-ui-theme="dark"] td{
       }
     });
 
-    document.getElementById('clientSearchInput').addEventListener('input', renderClients);
+    document.getElementById('clientSearchInput').addEventListener('input', () => {
+      clientsCurrentPage = 1;
+      renderClients();
+    });
     document.getElementById('clientsList').addEventListener('click', event => {
-      const button = event.target.closest('[data-new-order-client]');
-      if (!button) return;
-      const client = buildClients().find(item => item.key === button.dataset.newOrderClient);
+      const editButton = event.target.closest('[data-edit-client]');
+      const deleteButton = event.target.closest('[data-delete-client]');
+      const newOrderButton = event.target.closest('[data-new-order-client]');
+      const key = editButton?.dataset.editClient || deleteButton?.dataset.deleteClient || newOrderButton?.dataset.newOrderClient || '';
+      if (!key) return;
+      const client = buildClients().find(item => item.key === key);
       if (!client) return;
+      if (editButton) {
+        openClientEditor(client);
+        return;
+      }
+      if (deleteButton) {
+        deleteClientFromList(client);
+        return;
+      }
       clientsModalOverlay.classList.remove('open');
       openModal();
       formFields.clientName.value = client.clientName || '';
       formFields.clientPhone.value = client.clientPhone || '';
+    });
+    document.addEventListener('click', event => {
+      const pageButton = event.target.closest('[data-clients-page]');
+      if (!pageButton || pageButton.disabled) return;
+      clientsCurrentPage = Number(pageButton.dataset.clientsPage) || 1;
+      renderClients();
+    });
+    document.addEventListener('click', event => {
+      const pageButton = event.target.closest('[data-activity-page]');
+      if (!pageButton || pageButton.disabled) return;
+      activityCurrentPage = Number(pageButton.dataset.activityPage) || 1;
+      renderActivity();
     });
 
     importFileInput.addEventListener('change', () => importData(importFileInput.files[0]));
@@ -9020,6 +10159,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
   let editingMasterId = null;
   let activeUser = null;
+  let settingsServicesCurrentPage = 1;
+  const SETTINGS_SERVICES_PAGE_SIZE = 15;
 
   function fallbackEscape(value) {
     return String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -9351,7 +10492,11 @@ document.addEventListener('DOMContentLoaded', function(){
               <button class="btn btn-secondary" id="settingsResetServiceBtn" type="button">Очистить</button>
             </div>
           </div>
-          <div class="settings-service-list" id="settingsServicesList"></div>
+          <div class="manage-tools manage-tools-single" id="settingsServicesTools">
+            <input type="search" id="settingsServicesSearchInput" placeholder="Поиск услуги">
+            <div class="manage-counter" id="settingsServicesCounter"></div>
+          </div>
+          <div class="settings-service-list management-list" id="settingsServicesList"></div>
         </div>
       `;
       const ordersSection = content.querySelector('[data-settings-section="orders"]');
@@ -9376,18 +10521,55 @@ document.addEventListener('DOMContentLoaded', function(){
     const list = document.getElementById('settingsServicesList');
     if (!list || typeof getServices !== 'function') return;
     const services = getServices();
-    list.innerHTML = services.length ? services.map(service => `
-      <div class="settings-service-row">
-        <div>
+    const search = document.getElementById('settingsServicesSearchInput');
+    if (search && search.dataset.bound !== '1') {
+      search.dataset.bound = '1';
+      search.addEventListener('input', () => {
+        settingsServicesCurrentPage = 1;
+        renderSettingsServicesList();
+      });
+    }
+    const query = String(search?.value || '').trim().toLowerCase();
+    const filtered = services.filter(service => {
+      const haystack = `${service.name} ${service.price} ${service.cost} ${service.warrantyDays} ${service.rewardPercent}`.toLowerCase();
+      return !query || haystack.includes(query);
+    });
+    const totalPages = Math.max(1, Math.ceil(filtered.length / SETTINGS_SERVICES_PAGE_SIZE));
+    settingsServicesCurrentPage = Math.min(Math.max(settingsServicesCurrentPage, 1), totalPages);
+    const start = (settingsServicesCurrentPage - 1) * SETTINGS_SERVICES_PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + SETTINGS_SERVICES_PAGE_SIZE);
+    const counter = document.getElementById('settingsServicesCounter');
+    if (counter) counter.textContent = `Всего: ${services.length} · найдено: ${filtered.length}`;
+    list.classList.add('management-list');
+    list.innerHTML = pageItems.length ? pageItems.map(service => `
+      <div class="settings-service-row manage-row">
+        <div class="manage-main">
           <b>${html(service.name || 'Без названия')}</b><br>
           <span>Цена: ${html(formatMoney(service.price))} · себестоимость: ${html(formatMoney(service.cost))} · гарантия: ${html(service.warrantyDays || '—')} дней · по услуге: ${html(service.rewardPercent || '—')}%</span>
         </div>
-        <div class="inline-actions">
+        <div class="inline-actions manage-actions">
           <button class="small-btn" type="button" data-settings-edit-service="${html(service.id)}">Изменить</button>
-          <button class="small-btn" type="button" data-settings-delete-service="${html(service.id)}">Удалить</button>
+          <button class="small-btn manage-danger" type="button" data-settings-delete-service="${html(service.id)}">Удалить</button>
         </div>
       </div>
-    `).join('') : '<div class="section-note">Прайс услуг пока пуст.</div>';
+    `).join('') : `<div class="section-note">${services.length ? 'По этому поиску услуг нет.' : 'Прайс услуг пока пуст.'}</div>`;
+    let pager = document.getElementById('settingsServicesPager');
+    if (!pager) {
+      pager = document.createElement('div');
+      pager.className = 'manage-pager';
+      pager.id = 'settingsServicesPager';
+      list.after(pager);
+    }
+    const shownStart = filtered.length ? start + 1 : 0;
+    const shownEnd = Math.min(filtered.length, start + SETTINGS_SERVICES_PAGE_SIZE);
+    pager.innerHTML = filtered.length > SETTINGS_SERVICES_PAGE_SIZE ? `
+      <div class="manage-page-info">Показано ${shownStart}-${shownEnd} из ${filtered.length}</div>
+      <div class="manage-page-controls">
+        <button class="manage-page-btn" type="button" data-settings-services-page="${settingsServicesCurrentPage - 1}" ${settingsServicesCurrentPage <= 1 ? 'disabled' : ''}>Назад</button>
+        <span class="manage-page-current">${settingsServicesCurrentPage} / ${totalPages}</span>
+        <button class="manage-page-btn" type="button" data-settings-services-page="${settingsServicesCurrentPage + 1}" ${settingsServicesCurrentPage >= totalPages ? 'disabled' : ''}>Вперед</button>
+      </div>
+    ` : '';
   }
   function saveSettingsServiceFromForm() {
     if (typeof getServices !== 'function' || typeof saveServices !== 'function') return;
@@ -9817,6 +10999,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function wireEvents() {
     document.addEventListener('click', event => {
+      const servicesPageButton = event.target.closest('[data-settings-services-page]');
+      if (servicesPageButton) {
+        settingsServicesCurrentPage = Number(servicesPageButton.dataset.settingsServicesPage) || 1;
+        renderSettingsServicesList();
+        return;
+      }
       const serviceEdit = event.target.closest('[data-settings-edit-service]');
       const serviceDelete = event.target.closest('[data-settings-delete-service]');
       if (serviceEdit && typeof getServices === 'function') {
@@ -9921,6 +11109,537 @@ document.addEventListener('DOMContentLoaded', function(){
     setupAuth();
     overrideSalaryCalculation();
     applyRoleAccess();
+    wireEvents();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+<script id="release-settings-crud-directories">
+(function(){
+  const PAGE_SIZE = 15;
+  const state = {
+    orderTypes: { page: 1, edit: null },
+    customFields: { page: 1, edit: null },
+    cashRegisters: { page: 1, edit: null },
+    paymentMethods: { page: 1, edit: null },
+    expenseCategories: { page: 1, edit: null },
+    warehouses: { page: 1, edit: null },
+    warehouseTypes: { page: 1, edit: null },
+    inventoryCategories: { page: 1, edit: null }
+  };
+
+  function $(id){ return document.getElementById(id); }
+  function text(value){ return typeof escapeHtml === 'function' ? escapeHtml(value ?? '') : String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
+  function settings(){ return typeof getSettings === 'function' ? getSettings() : {}; }
+  function setValue(id, value = ''){ const node = $(id); if (node) node.value = value ?? ''; }
+  function filled(value){ return String(value || '').trim(); }
+  function pageCount(total){ return Math.max(1, Math.ceil(total / PAGE_SIZE)); }
+  function clamp(kind, total){ state[kind].page = Math.min(Math.max(Number(state[kind].page) || 1, 1), pageCount(total)); return state[kind].page; }
+  function searchValue(kind){ return filled($(`${kind}Search`)?.value).toLowerCase(); }
+  function matchesSearch(value, query){ return !query || String(value || '').toLowerCase().includes(query); }
+  function splitPipe(line){ return String(line || '').split('|').map(item => item.trim()); }
+  function lineFromParts(parts){ return parts.map(item => filled(item)).filter(Boolean).join('|'); }
+  function simpleLine(value){ return filled(value); }
+  function arrayLine(items){ return (items || []).map(item => String(item || '').trim()).filter(Boolean).join('\n'); }
+
+  function syncHidden(current = settings()) {
+    setValue('orderTypesInput', typeof formatOrderTypes === 'function' ? formatOrderTypes(current.orderTypes || []) : '');
+    setValue('customOrderFieldsInput', typeof formatCustomOrderFields === 'function' ? formatCustomOrderFields(current.customOrderFields || []) : '');
+    setValue('cashRegistersInput', arrayLine(current.cashRegisters));
+    setValue('paymentMethodsInput', arrayLine(current.paymentMethods));
+    setValue('expenseCategoriesInput', arrayLine(current.expenseCategories));
+    setValue('warehousesInput', arrayLine(current.warehouses));
+    setValue('warehouseTypesInput', arrayLine(current.warehouseTypes));
+    setValue('inventoryCategoriesInput', arrayLine(current.inventoryCategories));
+  }
+
+  function patchSettings(patch, message) {
+    const ok = typeof saveSettings === 'function' ? saveSettings(patch) : false;
+    if (!ok) return false;
+    syncHidden(settings());
+    try { if (typeof renderAll === 'function') renderAll(); } catch (error) {}
+    try { if (typeof logActivity === 'function') logActivity('Настройки', message || 'Обновлены справочники'); } catch (error) {}
+    return true;
+  }
+
+  function statusOptions(value = 'new') {
+    return Object.entries(typeof STATUS_CONFIG === 'object' ? STATUS_CONFIG : {}).map(([key, item]) =>
+      `<option value="${text(key)}" ${key === value ? 'selected' : ''}>${text(item.label || key)}</option>`
+    ).join('');
+  }
+
+  function currencyOptions(value = 'GEL') {
+    const items = [
+      ['UAH','Гривна (UAH)'],
+      ['RUB','Рубли (RUB)'],
+      ['USD','Доллар (USD)'],
+      ['EUR','Евро (EUR)'],
+      ['GEL','Лари (GEL)']
+    ];
+    return items.map(([key, label]) => `<option value="${key}" ${key === value ? 'selected' : ''}>${label}</option>`).join('');
+  }
+
+  function typeOptions(value = 'text') {
+    return [
+      ['text','Текст'],
+      ['number','Число'],
+      ['date','Дата'],
+      ['list','Список'],
+      ['checkbox','Галочка']
+    ].map(([key, label]) => `<option value="${key}" ${key === value ? 'selected' : ''}>${label}</option>`).join('');
+  }
+
+  function pager(kind, total) {
+    const page = clamp(kind, total);
+    const pages = pageCount(total);
+    if (total <= PAGE_SIZE) return '';
+    const start = ((page - 1) * PAGE_SIZE) + 1;
+    const end = Math.min(total, page * PAGE_SIZE);
+    return `
+      <div class="manage-page-info">Показано ${start}-${end} из ${total}</div>
+      <div class="manage-page-controls">
+        <button class="manage-page-btn" type="button" data-settings-page-kind="${kind}" data-settings-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Назад</button>
+        <span class="manage-page-current">${page} / ${pages}</span>
+        <button class="manage-page-btn" type="button" data-settings-page-kind="${kind}" data-settings-page="${page + 1}" ${page >= pages ? 'disabled' : ''}>Вперед</button>
+      </div>
+    `;
+  }
+
+  function renderList(kind, sourceItems, renderer, emptyText) {
+    const list = $(`${kind}List`);
+    const counter = $(`${kind}Counter`);
+    const pagerNode = $(`${kind}Pager`);
+    if (!list) return;
+    const query = searchValue(kind);
+    const indexed = sourceItems.map((item, index) => ({ item, index }));
+    const filtered = indexed.filter(entry => matchesSearch(JSON.stringify(entry.item), query));
+    const page = clamp(kind, filtered.length);
+    const start = (page - 1) * PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + PAGE_SIZE);
+    if (counter) counter.textContent = `Всего: ${sourceItems.length} · найдено: ${filtered.length}`;
+    list.innerHTML = pageItems.length ? pageItems.map(entry => renderer(entry.item, entry.index)).join('') : `<div class="settings-directory-empty">${emptyText}</div>`;
+    if (pagerNode) pagerNode.innerHTML = pager(kind, filtered.length);
+  }
+
+  function buildOrdersSection() {
+    const section = document.querySelector('[data-settings-section="orders"]');
+    if (!section || section.dataset.crudReady === '1') return;
+    section.dataset.crudReady = '1';
+    section.innerHTML = `
+      <h4>Заказы</h4>
+      <p class="section-note">Типы заказов и дополнительные поля теперь редактируются карточками с кнопками, без больших списков текста.</p>
+      <div class="settings-directory-panel">
+        <div class="settings-directory-card">
+          <h5>Основные параметры</h5>
+          <div class="form-grid">
+            <label class="field-label">Префикс номера<input type="text" id="orderPrefixInput" placeholder="SR-"></label>
+            <label class="field-label">Стартовый номер<input type="number" id="orderStartNumberInput" min="1" step="1" placeholder="1000"></label>
+            <label class="field-label">Гарантия по умолчанию, дней<input type="number" id="defaultWarrantyDaysInput" min="0" step="1"></label>
+            <label class="field-label">Срок выполнения, дней<input type="number" id="defaultDeadlineDaysInput" min="0" step="1"></label>
+            <label class="field-label">Процент мастеру<input type="number" id="defaultSalaryPercentInput" min="0" step="0.01"></label>
+          </div>
+        </div>
+        <div class="settings-directory-card" data-settings-card="orderTypes">
+          <h5>Типы заказов</h5>
+          <div class="form-grid">
+            <input type="hidden" id="orderTypeEditIndex">
+            <label class="field-label">Название<input type="text" id="orderTypeNameEditor" placeholder="Платный ремонт"></label>
+            <label class="field-label">Стартовый статус<select id="orderTypeStatusEditor"></select></label>
+            <label class="field-label">Гарантия, дней<input type="number" id="orderTypeWarrantyEditor" min="0" step="1" placeholder="30"></label>
+            <label class="field-label">Срок, дней<input type="number" id="orderTypeDeadlineEditor" min="0" step="1" placeholder="3"></label>
+          </div>
+          <div class="inline-actions" style="margin-top:12px">
+            <button class="btn btn-primary" type="button" data-settings-save="orderTypes">Сохранить тип</button>
+            <button class="btn btn-secondary" type="button" data-settings-reset="orderTypes">Очистить</button>
+          </div>
+          <div class="settings-directory-toolbar"><input type="search" id="orderTypesSearch" placeholder="Поиск типа заказа"><div class="manage-counter" id="orderTypesCounter"></div></div>
+          <div class="settings-directory-list" id="orderTypesList"></div>
+          <div class="manage-pager" id="orderTypesPager"></div>
+        </div>
+        <div class="settings-directory-card" data-settings-card="customFields">
+          <h5>Дополнительные поля заказа</h5>
+          <div class="form-grid">
+            <input type="hidden" id="customFieldEditIndex">
+            <label class="field-label">Ключ<input type="text" id="customFieldKeyEditor" placeholder="serialNumber"></label>
+            <label class="field-label">Название<input type="text" id="customFieldLabelEditor" placeholder="Серийный номер / IMEI"></label>
+            <label class="field-label">Тип<select id="customFieldTypeEditor"></select></label>
+            <label class="field-label">Обязательное<select id="customFieldRequiredEditor"><option value="no">Нет</option><option value="yes">Да</option></select></label>
+            <label class="field-label full">Варианты для списка<input type="text" id="customFieldOptionsEditor" placeholder="вариант 1, вариант 2"></label>
+          </div>
+          <div class="inline-actions" style="margin-top:12px">
+            <button class="btn btn-primary" type="button" data-settings-save="customFields">Сохранить поле</button>
+            <button class="btn btn-secondary" type="button" data-settings-reset="customFields">Очистить</button>
+          </div>
+          <div class="settings-directory-toolbar"><input type="search" id="customFieldsSearch" placeholder="Поиск поля"><div class="manage-counter" id="customFieldsCounter"></div></div>
+          <div class="settings-directory-list" id="customFieldsList"></div>
+          <div class="manage-pager" id="customFieldsPager"></div>
+        </div>
+        <div class="settings-hidden-sync">
+          <textarea id="orderTypesInput"></textarea>
+          <textarea id="customOrderFieldsInput"></textarea>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildFinanceSection() {
+    const section = document.querySelector('[data-settings-section="finance"]');
+    if (!section || section.dataset.crudReady === '1') return;
+    section.dataset.crudReady = '1';
+    section.innerHTML = `
+      <h4>Финансы и кассы</h4>
+      <p class="section-note">Кассы, способы оплаты и статьи расходов редактируются отдельными карточками с поиском и страницами по 15.</p>
+      <div class="settings-directory-panel">
+        <div class="settings-directory-card">
+          <h5>Общие параметры</h5>
+          <div class="form-grid">
+            <label class="field-label">Валюта финансов<select id="financeCurrencySelect"></select></label>
+            <label class="field-label">Модель зарплаты<select id="salaryModeInput"><option value="percent">Процент от услуг</option><option value="fixed">Фиксированная</option><option value="mixed">Смешанная</option></select></label>
+            <label class="field-label">Лимит долга клиента<input type="number" id="clientDebtLimitInput" min="0" step="0.01" placeholder="0"></label>
+          </div>
+        </div>
+        ${editorCard('cashRegisters','Кассы','Название кассы','Основная касса','Сохранить кассу')}
+        ${editorCard('paymentMethods','Способы оплаты','Название способа','Наличные','Сохранить способ')}
+        ${editorCard('expenseCategories','Статьи расходов','Название статьи','Аренда','Сохранить статью')}
+        <div class="settings-hidden-sync">
+          <textarea id="cashRegistersInput"></textarea>
+          <textarea id="paymentMethodsInput"></textarea>
+          <textarea id="expenseCategoriesInput"></textarea>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildWarehouseSection() {
+    const section = document.querySelector('[data-settings-section="warehouse"]');
+    if (!section || section.dataset.crudReady === '1') return;
+    section.dataset.crudReady = '1';
+    section.innerHTML = `
+      <h4>Склад</h4>
+      <p class="section-note">Склады, типы складов и категории товаров редактируются карточками. Длинные списки делятся на страницы.</p>
+      <div class="settings-directory-panel">
+        ${editorCard('warehouses','Склады','Название склада','Основной склад','Сохранить склад')}
+        ${editorCard('warehouseTypes','Типы складов','Тип / описание','service_center — сервисный центр','Сохранить тип')}
+        ${editorCard('inventoryCategories','Категории склада','Название категории','Дисплеи','Сохранить категорию')}
+        <div class="settings-hidden-sync">
+          <textarea id="warehousesInput"></textarea>
+          <textarea id="warehouseTypesInput"></textarea>
+          <textarea id="inventoryCategoriesInput"></textarea>
+        </div>
+      </div>
+    `;
+  }
+
+  function editorCard(kind, title, label, placeholder, buttonText) {
+    const extra = (kind === 'cashRegisters' || kind === 'warehouses') ? `
+      <label class="field-label">Тип / валюта<input type="text" id="${kind}MetaEditor" placeholder="${kind === 'cashRegisters' ? 'GEL' : 'service_center'}"></label>
+      <label class="field-label">Статус<input type="text" id="${kind}StatusEditor" placeholder="активна"></label>
+    ` : '';
+    return `
+      <div class="settings-directory-card" data-settings-card="${kind}">
+        <h5>${title}</h5>
+        <div class="form-grid">
+          <input type="hidden" id="${kind}EditIndex">
+          <label class="field-label">${label}<input type="text" id="${kind}NameEditor" placeholder="${placeholder}"></label>
+          ${extra}
+        </div>
+        <div class="inline-actions" style="margin-top:12px">
+          <button class="btn btn-primary" type="button" data-settings-save="${kind}">${buttonText}</button>
+          <button class="btn btn-secondary" type="button" data-settings-reset="${kind}">Очистить</button>
+        </div>
+        <div class="settings-directory-toolbar"><input type="search" id="${kind}Search" placeholder="Поиск"><div class="manage-counter" id="${kind}Counter"></div></div>
+        <div class="settings-directory-list" id="${kind}List"></div>
+        <div class="manage-pager" id="${kind}Pager"></div>
+      </div>
+    `;
+  }
+
+  function fillBaseFields() {
+    const s = settings();
+    setValue('orderPrefixInput', s.orderPrefix || '');
+    setValue('orderStartNumberInput', s.orderStartNumber || '');
+    setValue('defaultWarrantyDaysInput', s.defaultWarrantyDays || '');
+    setValue('defaultDeadlineDaysInput', s.defaultDeadlineDays || '');
+    setValue('defaultSalaryPercentInput', s.defaultSalaryPercent || '');
+    const financeCurrency = $('financeCurrencySelect');
+    if (financeCurrency) {
+      financeCurrency.innerHTML = currencyOptions(s.currency || 'GEL');
+      financeCurrency.value = s.currency || 'GEL';
+    }
+    setValue('salaryModeInput', s.salaryMode || 'percent');
+    setValue('clientDebtLimitInput', s.clientDebtLimit || '');
+    const orderStatus = $('orderTypeStatusEditor');
+    if (orderStatus) orderStatus.innerHTML = statusOptions('new');
+    const customType = $('customFieldTypeEditor');
+    if (customType) customType.innerHTML = typeOptions('text');
+  }
+
+  function renderOrderTypes() {
+    const items = settings().orderTypes || [];
+    renderList('orderTypes', items, (item, index) => `
+      <div class="settings-directory-row">
+        <div><b>${text(item.name)}</b><span>Старт: ${text((STATUS_CONFIG[item.initialStatus] || {}).label || item.initialStatus || 'new')} · гарантия: ${text(item.warrantyDays || '—')} дней · срок: ${text(item.deadlineDays || '—')} дней</span></div>
+        <div class="inline-actions">
+          <button class="small-btn" type="button" data-settings-edit="orderTypes" data-index="${index}">Изменить</button>
+          <button class="small-btn manage-danger" type="button" data-settings-delete="orderTypes" data-index="${index}">Удалить</button>
+        </div>
+      </div>
+    `, 'Типы заказов пока не добавлены.');
+  }
+
+  function renderCustomFields() {
+    const items = settings().customOrderFields || [];
+    renderList('customFields', items, (item, index) => `
+      <div class="settings-directory-row">
+        <div><b>${text(item.label)} <span style="display:inline;color:var(--muted)">(${text(item.key)})</span></b><span>Тип: ${text(item.type || 'text')} · обязательное: ${item.required ? 'да' : 'нет'}${(item.options || []).length ? ' · варианты: ' + text((item.options || []).join(', ')) : ''}</span></div>
+        <div class="inline-actions">
+          <button class="small-btn" type="button" data-settings-edit="customFields" data-index="${index}">Изменить</button>
+          <button class="small-btn manage-danger" type="button" data-settings-delete="customFields" data-index="${index}">Удалить</button>
+        </div>
+      </div>
+    `, 'Дополнительные поля пока не добавлены.');
+  }
+
+  function renderStringList(kind, patchKey, emptyText) {
+    const items = settings()[patchKey] || [];
+    renderList(kind, items, (line, index) => {
+      const parts = splitPipe(line);
+      const title = parts[0] || line;
+      const meta = parts.slice(1).filter(Boolean).join(' · ');
+      return `
+        <div class="settings-directory-row">
+          <div><b>${text(title)}</b>${meta ? `<span>${text(meta)}</span>` : ''}</div>
+          <div class="inline-actions">
+            <button class="small-btn" type="button" data-settings-edit="${kind}" data-index="${index}">Изменить</button>
+            <button class="small-btn manage-danger" type="button" data-settings-delete="${kind}" data-index="${index}">Удалить</button>
+          </div>
+        </div>
+      `;
+    }, emptyText);
+  }
+
+  function renderAllDirectories() {
+    syncHidden(settings());
+    fillBaseFields();
+    renderOrderTypes();
+    renderCustomFields();
+    renderStringList('cashRegisters', 'cashRegisters', 'Кассы пока не добавлены.');
+    renderStringList('paymentMethods', 'paymentMethods', 'Способы оплаты пока не добавлены.');
+    renderStringList('expenseCategories', 'expenseCategories', 'Статьи расходов пока не добавлены.');
+    renderStringList('warehouses', 'warehouses', 'Склады пока не добавлены.');
+    renderStringList('warehouseTypes', 'warehouseTypes', 'Типы складов пока не добавлены.');
+    renderStringList('inventoryCategories', 'inventoryCategories', 'Категории склада пока не добавлены.');
+  }
+
+  function resetEditor(kind) {
+    const stateItem = state[kind];
+    if (stateItem) stateItem.edit = null;
+    setValue(`${kind}EditIndex`, '');
+    setValue(`${kind}NameEditor`, '');
+    setValue(`${kind}MetaEditor`, '');
+    setValue(`${kind}StatusEditor`, '');
+    if (kind === 'orderTypes') {
+      setValue('orderTypeEditIndex', '');
+      setValue('orderTypeNameEditor', '');
+      setValue('orderTypeWarrantyEditor', '');
+      setValue('orderTypeDeadlineEditor', '');
+      const status = $('orderTypeStatusEditor');
+      if (status) status.value = 'new';
+    }
+    if (kind === 'customFields') {
+      setValue('customFieldEditIndex', '');
+      setValue('customFieldKeyEditor', '');
+      setValue('customFieldLabelEditor', '');
+      setValue('customFieldOptionsEditor', '');
+      const type = $('customFieldTypeEditor');
+      if (type) type.value = 'text';
+      const required = $('customFieldRequiredEditor');
+      if (required) required.value = 'no';
+    }
+  }
+
+  function editItem(kind, index) {
+    const s = settings();
+    state[kind].edit = index;
+    if (kind === 'orderTypes') {
+      const item = (s.orderTypes || [])[index];
+      if (!item) return;
+      setValue('orderTypeEditIndex', index);
+      setValue('orderTypeNameEditor', item.name || '');
+      setValue('orderTypeWarrantyEditor', item.warrantyDays || '');
+      setValue('orderTypeDeadlineEditor', item.deadlineDays || '');
+      const status = $('orderTypeStatusEditor');
+      if (status) status.value = item.initialStatus || 'new';
+      return;
+    }
+    if (kind === 'customFields') {
+      const item = (s.customOrderFields || [])[index];
+      if (!item) return;
+      setValue('customFieldEditIndex', index);
+      setValue('customFieldKeyEditor', item.key || '');
+      setValue('customFieldLabelEditor', item.label || '');
+      setValue('customFieldOptionsEditor', (item.options || []).join(', '));
+      const type = $('customFieldTypeEditor');
+      if (type) type.value = item.type || 'text';
+      const required = $('customFieldRequiredEditor');
+      if (required) required.value = item.required ? 'yes' : 'no';
+      return;
+    }
+    const patchKey = kind;
+    const line = (s[patchKey] || [])[index] || '';
+    const parts = splitPipe(line);
+    setValue(`${kind}EditIndex`, index);
+    setValue(`${kind}NameEditor`, parts[0] || line);
+    setValue(`${kind}MetaEditor`, parts[1] || '');
+    setValue(`${kind}StatusEditor`, parts[2] || '');
+  }
+
+  function saveEditor(kind) {
+    const s = settings();
+    if (kind === 'orderTypes') {
+      const name = filled($('orderTypeNameEditor')?.value);
+      if (!name) return window.alert('Введите название типа заказа.');
+      const items = [...(s.orderTypes || [])];
+      const payload = {
+        name,
+        initialStatus: $('orderTypeStatusEditor')?.value || 'new',
+        warrantyDays: filled($('orderTypeWarrantyEditor')?.value),
+        deadlineDays: filled($('orderTypeDeadlineEditor')?.value)
+      };
+      const index = Number($('orderTypeEditIndex')?.value);
+      if (Number.isInteger(index) && index >= 0) items[index] = payload;
+      else items.unshift(payload);
+      if (patchSettings({ orderTypes: items }, `Обновлены типы заказов`)) {
+        resetEditor(kind);
+        renderOrderTypes();
+      }
+      return;
+    }
+    if (kind === 'customFields') {
+      const key = filled($('customFieldKeyEditor')?.value);
+      const label = filled($('customFieldLabelEditor')?.value);
+      if (!key || !label) return window.alert('Введите ключ и название поля.');
+      const items = [...(s.customOrderFields || [])];
+      const payload = {
+        key,
+        label,
+        type: $('customFieldTypeEditor')?.value || 'text',
+        required: $('customFieldRequiredEditor')?.value === 'yes',
+        options: filled($('customFieldOptionsEditor')?.value).split(',').map(item => item.trim()).filter(Boolean)
+      };
+      const index = Number($('customFieldEditIndex')?.value);
+      if (Number.isInteger(index) && index >= 0) items[index] = payload;
+      else items.unshift(payload);
+      if (patchSettings({ customOrderFields: items }, `Обновлены дополнительные поля заказов`)) {
+        resetEditor(kind);
+        renderCustomFields();
+      }
+      return;
+    }
+    const name = filled($(`${kind}NameEditor`)?.value);
+    if (!name) return window.alert('Введите название.');
+    const items = [...(s[kind] || [])];
+    const line = (kind === 'cashRegisters' || kind === 'warehouses')
+      ? lineFromParts([name, $(`${kind}MetaEditor`)?.value, $(`${kind}StatusEditor`)?.value])
+      : simpleLine(name);
+    const index = Number($(`${kind}EditIndex`)?.value);
+    if (Number.isInteger(index) && index >= 0) items[index] = line;
+    else items.unshift(line);
+    if (patchSettings({ [kind]: items }, `Обновлен справочник "${kind}"`)) {
+      resetEditor(kind);
+      renderStringList(kind, kind, 'Записей пока нет.');
+    }
+  }
+
+  function deleteItem(kind, index) {
+    const s = settings();
+    if (kind === 'orderTypes') {
+      const items = [...(s.orderTypes || [])];
+      if (items.length <= 1) return window.alert('Нужен хотя бы один тип заказа.');
+      const item = items[index];
+      if (!item || !window.confirm(`Удалить тип заказа "${item.name}"?`)) return;
+      items.splice(index, 1);
+      if (patchSettings({ orderTypes: items }, 'Удален тип заказа')) renderOrderTypes();
+      return;
+    }
+    if (kind === 'customFields') {
+      const items = [...(s.customOrderFields || [])];
+      const item = items[index];
+      if (!item || !window.confirm(`Удалить поле "${item.label}"?`)) return;
+      items.splice(index, 1);
+      if (patchSettings({ customOrderFields: items }, 'Удалено дополнительное поле')) renderCustomFields();
+      return;
+    }
+    const items = [...(s[kind] || [])];
+    const item = items[index];
+    if (!item || !window.confirm(`Удалить "${splitPipe(item)[0] || item}"?`)) return;
+    items.splice(index, 1);
+    if (patchSettings({ [kind]: items }, 'Удалена запись справочника')) renderStringList(kind, kind, 'Записей пока нет.');
+  }
+
+  function buildSections() {
+    buildOrdersSection();
+    buildFinanceSection();
+    buildWarehouseSection();
+    renderAllDirectories();
+  }
+
+  function wireEvents() {
+    document.addEventListener('click', event => {
+      const pageButton = event.target.closest('[data-settings-page]');
+      if (pageButton) {
+        const kind = pageButton.dataset.settingsPageKind;
+        if (state[kind]) {
+          state[kind].page = Number(pageButton.dataset.settingsPage) || 1;
+          renderAllDirectories();
+        }
+        return;
+      }
+      const saveButton = event.target.closest('[data-settings-save]');
+      if (saveButton) {
+        saveEditor(saveButton.dataset.settingsSave);
+        return;
+      }
+      const resetButton = event.target.closest('[data-settings-reset]');
+      if (resetButton) {
+        resetEditor(resetButton.dataset.settingsReset);
+        return;
+      }
+      const editButton = event.target.closest('[data-settings-edit]');
+      if (editButton) {
+        editItem(editButton.dataset.settingsEdit, Number(editButton.dataset.index));
+        return;
+      }
+      const deleteButton = event.target.closest('[data-settings-delete]');
+      if (deleteButton) {
+        deleteItem(deleteButton.dataset.settingsDelete, Number(deleteButton.dataset.index));
+      }
+    });
+    document.addEventListener('input', event => {
+      const input = event.target.closest('[id$="Search"]');
+      if (!input) return;
+      const kind = input.id.replace(/Search$/, '');
+      if (state[kind]) {
+        state[kind].page = 1;
+        renderAllDirectories();
+      }
+    });
+    document.getElementById('settingsForm')?.addEventListener('submit', () => syncHidden(settings()), true);
+    document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(buildSections, 120));
+    document.addEventListener('crm:cloud-sync-applied', () => setTimeout(buildSections, 120));
+    document.querySelectorAll('[data-settings-target]').forEach(tab => {
+      tab.addEventListener('click', () => setTimeout(buildSections, 30));
+    });
+  }
+
+  function init() {
+    buildSections();
     wireEvents();
   }
 
@@ -10730,6 +12449,589 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+<script id="release-management-pagination-crud-script">
+(function(){
+  const PAGE_SIZE = 15;
+  const state = {
+    servicesPage: 1,
+    inventoryPage: 1,
+    financePage: 1,
+    settingsServicesPage: 1,
+    expenseEditId: null
+  };
+
+  function el(id) {
+    return document.getElementById(id);
+  }
+
+  function html(value) {
+    if (typeof escapeHtml === 'function') return escapeHtml(value ?? '');
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function formatMoneySafe(value) {
+    return typeof money === 'function' ? money(value) : String(value ?? 0);
+  }
+
+  function formatDateOnlySafe(value) {
+    return typeof formatDateOnly === 'function' ? formatDateOnly(value) : String(value || '');
+  }
+
+  function includesText(source, query) {
+    const needle = String(query || '').trim().toLowerCase();
+    if (!needle) return true;
+    return String(source || '').toLowerCase().includes(needle);
+  }
+
+  function uniqueFilled(values) {
+    return [...new Set(values.map(item => String(item || '').trim()).filter(Boolean))];
+  }
+
+  function clampPage(total, page) {
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    return Math.min(Math.max(Number(page) || 1, 1), totalPages);
+  }
+
+  function pageSlice(items, page) {
+    const start = (page - 1) * PAGE_SIZE;
+    return items.slice(start, start + PAGE_SIZE);
+  }
+
+  function pagerHtml(kind, total, page) {
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const start = total ? ((page - 1) * PAGE_SIZE) + 1 : 0;
+    const end = Math.min(total, page * PAGE_SIZE);
+    return `
+      <div class="manage-page-info">${total ? `Показано ${start}-${end} из ${total}` : 'Записей нет'}</div>
+      <div class="manage-page-controls">
+        <button class="manage-page-btn" type="button" data-manage-kind="${kind}" data-manage-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Назад</button>
+        <span class="manage-page-current">${page} / ${totalPages}</span>
+        <button class="manage-page-btn" type="button" data-manage-kind="${kind}" data-manage-page="${page + 1}" ${page >= totalPages ? 'disabled' : ''}>Вперед</button>
+      </div>
+    `;
+  }
+
+  function setCounter(id, text) {
+    const node = el(id);
+    if (node) node.textContent = text;
+  }
+
+  function ensureFormResetButtons() {
+    const partBtn = el('savePartBtn');
+    if (partBtn && !el('resetPartBtn')) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-secondary';
+      btn.id = 'resetPartBtn';
+      btn.type = 'button';
+      btn.textContent = 'Новая деталь';
+      partBtn.after(btn);
+      btn.addEventListener('click', () => {
+        el('inventoryForm')?.reset();
+        if (typeof setInventoryForm === 'function') setInventoryForm();
+        if (typeof renderPartOptions === 'function') renderPartOptions();
+        if (typeof renderInventory === 'function') renderInventory();
+      });
+    }
+
+    const serviceBtn = el('saveServiceBtn');
+    if (serviceBtn && !el('resetServiceBtn')) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-secondary';
+      btn.id = 'resetServiceBtn';
+      btn.type = 'button';
+      btn.textContent = 'Новая услуга';
+      serviceBtn.after(btn);
+      btn.addEventListener('click', () => {
+        el('serviceForm')?.reset();
+        if (typeof setServiceForm === 'function') setServiceForm();
+        if (typeof renderServices === 'function') renderServices();
+      });
+    }
+
+    const expenseForm = el('expenseForm');
+    const expenseSubmit = expenseForm?.querySelector('button[type="submit"]');
+    if (expenseSubmit && !el('cancelExpenseEditBtn')) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-secondary';
+      btn.id = 'cancelExpenseEditBtn';
+      btn.type = 'button';
+      btn.textContent = 'Новый расход';
+      btn.style.display = 'none';
+      expenseSubmit.after(btn);
+      btn.addEventListener('click', () => resetExpenseForm());
+    }
+  }
+
+  function ensureServicesTools() {
+    const list = el('servicesList');
+    if (!list) return;
+    if (!el('servicesListTools')) {
+      const tools = document.createElement('div');
+      tools.className = 'manage-tools manage-tools-single';
+      tools.id = 'servicesListTools';
+      tools.innerHTML = `
+        <input type="search" id="servicesSearchInput" placeholder="Поиск услуги">
+        <div class="manage-counter" id="servicesListCounter"></div>
+      `;
+      list.before(tools);
+      tools.querySelector('input')?.addEventListener('input', () => {
+        state.servicesPage = 1;
+        window.renderServices?.();
+      });
+    }
+    if (!el('servicesPager')) {
+      const pager = document.createElement('div');
+      pager.className = 'manage-pager';
+      pager.id = 'servicesPager';
+      list.after(pager);
+    }
+  }
+
+  function renderServicesManaged() {
+    const list = el('servicesList');
+    if (!list || typeof getServices !== 'function') return;
+    ensureFormResetButtons();
+    ensureServicesTools();
+
+    const services = getServices();
+    const query = el('servicesSearchInput')?.value || '';
+    const filtered = services.filter(service => includesText([
+      service.name,
+      service.price,
+      service.cost,
+      service.warrantyDays,
+      service.rewardPercent
+    ].join(' '), query));
+
+    state.servicesPage = clampPage(filtered.length, state.servicesPage);
+    const items = pageSlice(filtered, state.servicesPage);
+    list.classList.add('management-list');
+    setCounter('servicesListCounter', `Всего: ${services.length} · найдено: ${filtered.length}`);
+    list.innerHTML = items.map(service => `
+      <div class="manage-row">
+        <div class="manage-main">
+          <b>${html(service.name || 'Без названия')}</b>
+          <span>Себестоимость: ${html(formatMoneySafe(service.cost))} · гарантия: ${html(service.warrantyDays || '—')} дней · мастеру: ${html(service.rewardPercent || getSettings().defaultSalaryPercent)}%</span>
+        </div>
+        <div class="manage-price">${html(formatMoneySafe(service.price))}</div>
+        <div class="inline-actions manage-actions">
+          <button class="small-btn" type="button" data-edit-service="${html(service.id)}">Изменить</button>
+          <button class="small-btn manage-danger" type="button" data-delete-service="${html(service.id)}">Удалить</button>
+        </div>
+      </div>
+    `).join('') || `<div class="section-note">${services.length ? 'По этому поиску услуг нет.' : 'Прайс услуг пока пуст.'}</div>`;
+    const pager = el('servicesPager');
+    if (pager) pager.innerHTML = pagerHtml('services', filtered.length, state.servicesPage);
+  }
+
+  function ensureInventoryTools() {
+    const body = el('inventoryTableBody');
+    const tableWrap = body?.closest('.table-scroll');
+    if (!body || !tableWrap) return;
+    if (!el('inventoryListTools')) {
+      const tools = document.createElement('div');
+      tools.className = 'manage-tools';
+      tools.id = 'inventoryListTools';
+      tools.innerHTML = `
+        <input type="search" id="inventorySearchInput" placeholder="Поиск по складу">
+        <select id="inventoryCategoryFilter"><option value="">Все категории</option></select>
+        <div class="manage-counter" id="inventoryListCounter"></div>
+      `;
+      tableWrap.before(tools);
+      tools.querySelector('#inventorySearchInput')?.addEventListener('input', () => {
+        state.inventoryPage = 1;
+        window.renderInventory?.();
+      });
+      tools.querySelector('#inventoryCategoryFilter')?.addEventListener('change', () => {
+        state.inventoryPage = 1;
+        window.renderInventory?.();
+      });
+    }
+    if (!el('inventoryPager')) {
+      const pager = document.createElement('div');
+      pager.className = 'manage-pager';
+      pager.id = 'inventoryPager';
+      tableWrap.after(pager);
+    }
+  }
+
+  function syncInventoryCategoryFilter(items) {
+    const select = el('inventoryCategoryFilter');
+    if (!select) return '';
+    const settingsCategories = typeof getSettings === 'function' ? (getSettings().inventoryCategories || []) : [];
+    const categories = uniqueFilled([...settingsCategories, ...items.map(item => item.category)]);
+    const current = select.value;
+    select.innerHTML = '<option value="">Все категории</option>' + categories.map(category => `<option value="${html(category)}">${html(category)}</option>`).join('');
+    select.value = categories.includes(current) ? current : '';
+    return select.value;
+  }
+
+  function renderInventoryManaged() {
+    const body = el('inventoryTableBody');
+    if (!body || typeof getInventory !== 'function') return;
+    ensureFormResetButtons();
+    ensureInventoryTools();
+    if (typeof renderPartOptions === 'function') renderPartOptions();
+
+    const items = getInventory();
+    const category = syncInventoryCategoryFilter(items);
+    const query = el('inventorySearchInput')?.value || '';
+    const filtered = items.filter(item => {
+      const haystack = [item.name, item.category, item.sku, item.stock, item.unitCost].join(' ');
+      return includesText(haystack, query) && (!category || item.category === category);
+    });
+
+    state.inventoryPage = clampPage(filtered.length, state.inventoryPage);
+    const pageItems = pageSlice(filtered, state.inventoryPage);
+    setCounter('inventoryListCounter', `Всего: ${items.length} · найдено: ${filtered.length}`);
+    body.innerHTML = pageItems.map(item => {
+      const low = item.minStock && item.stock <= item.minStock;
+      return `
+        <tr>
+          <td data-label="Деталь"><b>${html(item.name || 'Без названия')}</b><br><span>${html(item.sku || 'Без артикула')}</span></td>
+          <td data-label="Категория">${html(item.category || '—')}</td>
+          <td data-label="Остаток">${low ? '<span class="badge badge-bad">' : '<span class="badge badge-good">'}${html(item.stock)} шт.</span></td>
+          <td data-label="Себестоимость">${html(formatMoneySafe(item.unitCost))}</td>
+          <td data-label="Минимум">${html(item.minStock || 0)}</td>
+          <td data-label="Действия">
+            <div class="inline-actions">
+              <button class="small-btn" type="button" data-edit-part="${html(item.id)}">Изменить</button>
+              <button class="small-btn manage-danger" type="button" data-delete-part="${html(item.id)}">Удалить</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('') || `<tr><td data-label="" colspan="6">${items.length ? 'По этому поиску товаров нет.' : 'Склад пока пуст.'}</td></tr>`;
+    const pager = el('inventoryPager');
+    if (pager) pager.innerHTML = pagerHtml('inventory', filtered.length, state.inventoryPage);
+  }
+
+  function ensureFinanceTools() {
+    const form = el('expenseForm');
+    const list = el('expensesList');
+    if (!form || !list) return;
+    if (!el('financeListTools')) {
+      const tools = document.createElement('div');
+      tools.className = 'manage-tools';
+      tools.id = 'financeListTools';
+      tools.innerHTML = `
+        <input type="search" id="financeExpenseSearchInput" placeholder="Поиск расхода">
+        <select id="financeCategoryFilter"><option value="">Все категории</option></select>
+        <div class="manage-counter" id="financeListCounter"></div>
+      `;
+      list.before(tools);
+      tools.querySelector('#financeExpenseSearchInput')?.addEventListener('input', () => {
+        state.financePage = 1;
+        window.renderFinance?.();
+      });
+      tools.querySelector('#financeCategoryFilter')?.addEventListener('change', () => {
+        state.financePage = 1;
+        window.renderFinance?.();
+      });
+    }
+    if (!el('financePager')) {
+      const pager = document.createElement('div');
+      pager.className = 'manage-pager';
+      pager.id = 'financePager';
+      list.after(pager);
+    }
+  }
+
+  function syncExpenseCategories(expenses) {
+    const settingsCategories = typeof getSettings === 'function' ? (getSettings().expenseCategories || []) : [];
+    const categories = uniqueFilled([...settingsCategories, ...expenses.map(item => item.category)]);
+    const formCategory = el('expenseCategoryInput');
+    if (formCategory) {
+      const current = formCategory.value;
+      formCategory.innerHTML = categories.map(category => `<option value="${html(category)}">${html(category)}</option>`).join('');
+      if (categories.includes(current)) formCategory.value = current;
+      else if (categories.length && !state.expenseEditId) formCategory.value = categories[0];
+    }
+    const filter = el('financeCategoryFilter');
+    if (!filter) return '';
+    const currentFilter = filter.value;
+    filter.innerHTML = '<option value="">Все категории</option>' + categories.map(category => `<option value="${html(category)}">${html(category)}</option>`).join('');
+    filter.value = categories.includes(currentFilter) ? currentFilter : '';
+    return filter.value;
+  }
+
+  function resetExpenseForm(expense = null) {
+    state.expenseEditId = expense?.id || null;
+    const set = (id, value = '') => {
+      const node = el(id);
+      if (node) node.value = value ?? '';
+    };
+    set('expenseTitleInput', expense?.title || '');
+    set('expenseAmountInput', expense?.amount ?? '');
+    set('expenseDateInput', expense?.date || (typeof toDateInput === 'function' ? toDateInput(new Date().toISOString()) : ''));
+    set('expenseNoteInput', expense?.note || '');
+    if (el('expenseCategoryInput')) el('expenseCategoryInput').value = expense?.category || el('expenseCategoryInput').value || '';
+    const submit = el('expenseForm')?.querySelector('button[type="submit"]');
+    if (submit) submit.textContent = expense ? 'Обновить расход' : 'Добавить расход';
+    const cancel = el('cancelExpenseEditBtn');
+    if (cancel) cancel.style.display = expense ? '' : 'none';
+  }
+
+  function renderFinanceManaged() {
+    const summary = el('financeSummary');
+    const list = el('expensesList');
+    if (!summary || !list || typeof getOrders !== 'function' || typeof getExpenses !== 'function') return;
+    ensureFormResetButtons();
+    ensureFinanceTools();
+
+    const orders = getOrders();
+    const expenses = getExpenses();
+    const revenue = orders.reduce((sum, order) => sum + (typeof parseAmount === 'function' ? parseAmount(order.paidAmount) : Number(order.paidAmount || 0)), 0);
+    const expenseTotal = expenses.reduce((sum, expense) => sum + (typeof parseAmount === 'function' ? parseAmount(expense.amount) : Number(expense.amount || 0)), 0);
+    const salaryMap = typeof calculateSalaryByMaster === 'function' ? calculateSalaryByMaster() : new Map();
+    const salaryTotal = [...salaryMap.values()].reduce((sum, value) => sum + Number(value || 0), 0);
+    const partsCost = orders.reduce((sum, order) => sum + (typeof parseAmount === 'function' ? parseAmount(order.partsCost) : Number(order.partsCost || 0)), 0);
+    summary.innerHTML = `
+      <div class="data-card"><h4>Выручка</h4><p>${html(formatMoneySafe(revenue))}</p></div>
+      <div class="data-card"><h4>Расходы</h4><p>${html(formatMoneySafe(expenseTotal))}</p></div>
+      <div class="data-card"><h4>Себестоимость деталей</h4><p>${html(formatMoneySafe(partsCost))}</p></div>
+      <div class="data-card"><h4>Зарплата</h4><p>${html(formatMoneySafe(salaryTotal))}</p></div>
+    `;
+
+    const category = syncExpenseCategories(expenses);
+    const query = el('financeExpenseSearchInput')?.value || '';
+    const filtered = expenses.filter(expense => {
+      const haystack = [expense.title, expense.category, expense.note, expense.amount, expense.date].join(' ');
+      return includesText(haystack, query) && (!category || expense.category === category);
+    });
+    state.financePage = clampPage(filtered.length, state.financePage);
+    const pageItems = pageSlice(filtered, state.financePage);
+    setCounter('financeListCounter', `Всего: ${expenses.length} · найдено: ${filtered.length}`);
+    list.classList.add('management-list');
+    list.innerHTML = pageItems.map(expense => `
+      <div class="manage-row">
+        <div class="manage-main">
+          <b>${html(expense.title || 'Расход')}</b>
+          <span>${html(expense.category || 'Без категории')} · ${html(formatDateOnlySafe(expense.date))}${expense.note ? ` · ${html(expense.note)}` : ''}</span>
+        </div>
+        <div class="manage-price">${html(formatMoneySafe(expense.amount))}</div>
+        <div class="inline-actions manage-actions">
+          <button class="small-btn" type="button" data-edit-expense="${html(expense.id)}">Изменить</button>
+          <button class="small-btn manage-danger" type="button" data-delete-expense="${html(expense.id)}">Удалить</button>
+        </div>
+      </div>
+    `).join('') || `<div class="section-note">${expenses.length ? 'По этому поиску расходов нет.' : 'Расходов пока нет.'}</div>`;
+    const pager = el('financePager');
+    if (pager) pager.innerHTML = pagerHtml('finance', filtered.length, state.financePage);
+  }
+
+  function installExpenseEditing() {
+    const form = el('expenseForm');
+    const list = el('expensesList');
+    if (form && form.dataset.expenseEditReady !== '1') {
+      form.dataset.expenseEditReady = '1';
+      form.addEventListener('submit', event => {
+        if (!state.expenseEditId) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (typeof getExpenses !== 'function' || typeof saveExpenses !== 'function') return;
+        const items = getExpenses();
+        const old = items.find(item => item.id === state.expenseEditId);
+        const payloadSource = {
+          ...(old || {}),
+          id: state.expenseEditId,
+          title: el('expenseTitleInput')?.value.trim() || '',
+          category: el('expenseCategoryInput')?.value || '',
+          amount: el('expenseAmountInput')?.value || 0,
+          date: el('expenseDateInput')?.value || '',
+          note: el('expenseNoteInput')?.value.trim() || ''
+        };
+        if (!payloadSource.title) return window.alert('Введите название расхода.');
+        const payload = typeof migrateExpense === 'function' ? migrateExpense(payloadSource) : payloadSource;
+        const index = items.findIndex(item => item.id === payload.id);
+        if (index >= 0) items[index] = payload;
+        else items.unshift(payload);
+        if (saveExpenses(items)) {
+          resetExpenseForm();
+          if (typeof renderAll === 'function') renderAll();
+          else renderFinanceManaged();
+        }
+      }, true);
+    }
+
+    if (list && list.dataset.expenseEditReady !== '1') {
+      list.dataset.expenseEditReady = '1';
+      list.addEventListener('click', event => {
+        const editButton = event.target.closest('[data-edit-expense]');
+        const deleteButton = event.target.closest('[data-delete-expense]');
+        if (!editButton && !deleteButton) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const items = typeof getExpenses === 'function' ? getExpenses() : [];
+        if (editButton) {
+          const expense = items.find(item => item.id === editButton.dataset.editExpense);
+          if (!expense) return;
+          resetExpenseForm(expense);
+          el('expenseTitleInput')?.focus();
+          return;
+        }
+        const expense = items.find(item => item.id === deleteButton.dataset.deleteExpense);
+        if (!expense || !window.confirm(`Удалить расход "${expense.title || ''}"?`)) return;
+        if (typeof saveExpenses === 'function' && saveExpenses(items.filter(item => item.id !== expense.id))) {
+          if (state.expenseEditId === expense.id) resetExpenseForm();
+          if (typeof renderAll === 'function') renderAll();
+          else renderFinanceManaged();
+        }
+      }, true);
+    }
+  }
+
+  function enhanceOrderRows() {
+    const body = el('ordersTableBody');
+    if (!body) return;
+    body.querySelectorAll('select[data-action="order-actions"]').forEach(select => {
+      const id = select.dataset.id;
+      const cell = select.closest('td');
+      if (!cell || !id || cell.dataset.rowButtonsReady === '1') return;
+      cell.dataset.rowButtonsReady = '1';
+      cell.classList.add('order-actions-cell');
+      cell.innerHTML = `
+        <div class="order-row-actions" data-order-row-id="${html(id)}">
+          <button class="small-btn" type="button" data-order-row-action="open">Открыть</button>
+          <button class="small-btn" type="button" data-order-row-action="edit">Изменить</button>
+          <button class="small-btn order-action-danger" type="button" data-order-row-action="delete">Удалить</button>
+        </div>
+      `;
+    });
+  }
+
+  function installOrderRowButtons() {
+    const body = el('ordersTableBody');
+    if (!body || body.dataset.rowButtonsBound === '1') return;
+    body.dataset.rowButtonsBound = '1';
+    body.addEventListener('click', event => {
+      const button = event.target.closest('[data-order-row-action]');
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const wrap = button.closest('[data-order-row-id]');
+      const row = button.closest('tr');
+      const id = wrap?.dataset.orderRowId;
+      const order = id && typeof findOrderById === 'function' ? findOrderById(id) : null;
+      const action = button.dataset.orderRowAction;
+      if (action === 'open') {
+        row?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        return;
+      }
+      if (!order) return;
+      if (action === 'edit' && typeof openModal === 'function') {
+        openModal(order);
+        return;
+      }
+      if (action === 'delete') {
+        if (!window.confirm(`Удалить заказ № ${order.orderNumber || ''}?`)) return;
+        const orders = typeof getOrders === 'function' ? getOrders().filter(item => item.id !== order.id) : [];
+        const saved = typeof saveOrders === 'function' ? saveOrders(orders) : false;
+        if (saved !== false) {
+          try { if (typeof logActivity === 'function') logActivity('Заказ', `Удален заказ № ${order.orderNumber || ''}`); } catch (error) {}
+          if (typeof renderAll === 'function') renderAll();
+          else if (typeof renderOrders === 'function') renderOrders();
+        }
+      }
+    }, true);
+  }
+
+  function applySettingsServicesPager() {
+    const list = el('settingsServicesList');
+    if (!list) return;
+    const rows = [...list.querySelectorAll(':scope > .settings-service-row')];
+    let pager = el('settingsServicesPager');
+    if (!pager) {
+      pager = document.createElement('div');
+      pager.className = 'manage-pager';
+      pager.id = 'settingsServicesPager';
+      list.after(pager);
+    }
+    state.settingsServicesPage = clampPage(rows.length, state.settingsServicesPage);
+    const start = (state.settingsServicesPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    rows.forEach((row, index) => {
+      row.style.display = index >= start && index < end ? '' : 'none';
+    });
+    pager.innerHTML = rows.length > PAGE_SIZE ? pagerHtml('settingsServices', rows.length, state.settingsServicesPage) : '';
+  }
+
+  function watchSettingsServicesList() {
+    const list = el('settingsServicesList');
+    if (!list || list.dataset.pagerWatchReady === '1') return;
+    list.dataset.pagerWatchReady = '1';
+    new MutationObserver(() => applySettingsServicesPager()).observe(list, { childList: true });
+    applySettingsServicesPager();
+  }
+
+  document.addEventListener('click', event => {
+    const pageButton = event.target.closest('[data-manage-page]');
+    if (pageButton) {
+      const kind = pageButton.dataset.manageKind;
+      const page = Number(pageButton.dataset.managePage) || 1;
+      if (kind === 'services') {
+        state.servicesPage = page;
+        window.renderServices?.();
+      } else if (kind === 'inventory') {
+        state.inventoryPage = page;
+        window.renderInventory?.();
+      } else if (kind === 'finance') {
+        state.financePage = page;
+        window.renderFinance?.();
+      } else if (kind === 'settingsServices') {
+        state.settingsServicesPage = page;
+        applySettingsServicesPager();
+      }
+      return;
+    }
+
+    if (event.target.closest('[data-settings-target="settingsServices"], #settingsBtn')) {
+      setTimeout(watchSettingsServicesList, 120);
+    }
+  });
+
+  function install() {
+    ensureFormResetButtons();
+    installExpenseEditing();
+    installOrderRowButtons();
+    el('financeBtn')?.addEventListener('click', () => setTimeout(() => resetExpenseForm(), 0));
+    el('closeFinanceModal')?.addEventListener('click', () => resetExpenseForm());
+
+    if (typeof window.renderServices === 'function') window.renderServices = renderServicesManaged;
+    if (typeof window.renderInventory === 'function') window.renderInventory = renderInventoryManaged;
+    if (typeof window.renderFinance === 'function') window.renderFinance = renderFinanceManaged;
+
+    const originalRenderOrders = typeof window.renderOrders === 'function' ? window.renderOrders : null;
+    if (originalRenderOrders && originalRenderOrders.datasetManagementWrapped !== '1') {
+      const wrapped = function(){
+        originalRenderOrders.apply(this, arguments);
+        enhanceOrderRows();
+      };
+      wrapped.datasetManagementWrapped = '1';
+      window.renderOrders = wrapped;
+    }
+
+    try { window.renderServices?.(); } catch (error) {}
+    try { window.renderInventory?.(); } catch (error) {}
+    try { window.renderFinance?.(); } catch (error) {}
+    try { enhanceOrderRows(); } catch (error) {}
+    watchSettingsServicesList();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install, { once: true });
+  } else {
+    install();
+  }
+})();
+</script>
+
 <script>
 window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   workspaceId: 'one-service',
@@ -10761,6 +13063,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     'one_service_expenses',
     'one_service_tasks',
     'one_service_suppliers',
+    'one_service_clients',
     'one_service_activity'
   ];
   const CONFIG_KEY = 'one_service_cloud_config';
