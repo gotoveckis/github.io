@@ -3431,6 +3431,657 @@
 }
 </style>
 
+<style id="release-desktop-orders-compact-list">
+@media (min-width: 769px){
+  #ordersMainTable{
+    width:100% !important;
+    min-width:0 !important;
+    table-layout:fixed !important;
+    border-collapse:separate !important;
+    border-spacing:0 7px !important;
+  }
+
+  .table-scroll:has(#ordersMainTable){
+    overflow-x:visible !important;
+  }
+
+  #ordersMainTable thead th:nth-child(2),
+  #ordersMainTable tbody td:nth-child(2),
+  #ordersMainTable thead th:nth-child(8),
+  #ordersMainTable tbody td:nth-child(8),
+  #ordersMainTable thead th:nth-child(12),
+  #ordersMainTable tbody td:nth-child(12),
+  #ordersMainTable thead th:nth-child(14),
+  #ordersMainTable tbody td:nth-child(14),
+  #ordersMainTable thead th:nth-child(15),
+  #ordersMainTable tbody td:nth-child(15){
+    display:none !important;
+  }
+
+  #ordersMainTable thead th{
+    padding:0 8px 4px !important;
+    border-bottom:none !important;
+    background:transparent !important;
+    color:#64748b !important;
+    font-size:10px !important;
+    line-height:1.15 !important;
+    font-weight:900 !important;
+    letter-spacing:.02em !important;
+  }
+
+  #ordersMainTable th:nth-child(1),
+  #ordersMainTable td:nth-child(1){width:78px !important}
+  #ordersMainTable th:nth-child(3),
+  #ordersMainTable td:nth-child(3){width:145px !important}
+  #ordersMainTable th:nth-child(4),
+  #ordersMainTable td:nth-child(4){width:96px !important}
+  #ordersMainTable th:nth-child(5),
+  #ordersMainTable td:nth-child(5){width:118px !important}
+  #ordersMainTable th:nth-child(6),
+  #ordersMainTable td:nth-child(6){width:auto !important}
+  #ordersMainTable th:nth-child(7),
+  #ordersMainTable td:nth-child(7){width:116px !important}
+  #ordersMainTable th:nth-child(9),
+  #ordersMainTable td:nth-child(9){width:92px !important}
+  #ordersMainTable th:nth-child(10),
+  #ordersMainTable td:nth-child(10){width:112px !important}
+  #ordersMainTable th:nth-child(11),
+  #ordersMainTable td:nth-child(11){width:88px !important}
+  #ordersMainTable th:nth-child(13),
+  #ordersMainTable td:nth-child(13){width:112px !important}
+
+  #ordersMainTable tbody td{
+    padding:9px 8px !important;
+    border-top:1px solid #e5e7eb !important;
+    border-bottom:1px solid #e5e7eb !important;
+    background:#fff !important;
+    color:#1f2937 !important;
+    vertical-align:middle !important;
+    font-size:12px !important;
+    line-height:1.25 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(1){
+    border-left:1px solid #e5e7eb !important;
+    border-radius:10px 0 0 10px !important;
+    background:#fff7ed !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(13){
+    border-right:1px solid #e5e7eb !important;
+    border-radius:0 10px 10px 0 !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(1) b{
+    color:#c2410c !important;
+    font-size:14px !important;
+    line-height:1 !important;
+  }
+
+  #ordersMainTable tbody tr:hover td{
+    background:#f8fbff !important;
+    border-color:#bfdbfe !important;
+  }
+
+  #ordersMainTable tbody tr:hover td:nth-child(1){
+    background:#ffedd5 !important;
+  }
+
+  #ordersMainTable .status-select{
+    height:30px !important;
+    min-height:30px !important;
+    padding:4px 24px 4px 8px !important;
+    border-radius:999px !important;
+    font-size:10.5px !important;
+  }
+
+  #ordersMainTable .badge{
+    min-height:22px !important;
+    padding:3px 7px !important;
+    border-radius:999px !important;
+    font-size:10.5px !important;
+    line-height:1.1 !important;
+    white-space:normal !important;
+  }
+
+  #ordersMainTable td:nth-child(4),
+  #ordersMainTable td:nth-child(5),
+  #ordersMainTable td:nth-child(6),
+  #ordersMainTable td:nth-child(7){
+    white-space:normal !important;
+    word-break:break-word !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable thead th{
+    color:#94a3b8 !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody td{
+    background:#111827 !important;
+    border-color:#334155 !important;
+    color:#e5e7eb !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody td:nth-child(1){
+    background:rgba(154,52,18,.32) !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody td:nth-child(1) b{
+    color:#fdba74 !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody tr:hover td{
+    background:#172033 !important;
+    border-color:#475569 !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody tr:hover td:nth-child(1){
+    background:rgba(194,65,12,.36) !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1120px){
+  #ordersMainTable thead th:nth-child(7),
+  #ordersMainTable tbody td:nth-child(7),
+  #ordersMainTable thead th:nth-child(13),
+  #ordersMainTable tbody td:nth-child(13){
+    display:none !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(11){
+    border-right:1px solid #e5e7eb !important;
+    border-radius:0 10px 10px 0 !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody td:nth-child(11){
+    border-right-color:#334155 !important;
+  }
+}
+</style>
+
+<style id="release-orders-list-smart-layout">
+.order-list-primary{
+  display:block;
+  color:#0f172a;
+  font-weight:850;
+  line-height:1.2;
+}
+
+.order-list-secondary{
+  display:block;
+  margin-top:3px;
+  color:#64748b;
+  font-size:11px;
+  line-height:1.25;
+}
+
+.order-list-money{
+  color:#0f172a;
+  font-weight:900;
+  line-height:1.15;
+}
+
+.order-list-chipline{
+  margin-top:4px;
+}
+
+.orders-quick-filters{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:0 0 10px;
+}
+
+.orders-quick-filter{
+  min-height:32px;
+  padding:0 11px;
+  border:1px solid #dbe4ef;
+  border-radius:999px;
+  background:#fff;
+  color:#334155;
+  font-size:12px;
+  font-weight:850;
+  cursor:pointer;
+  transition:.16s ease;
+}
+
+.orders-quick-filter:hover{
+  border-color:#bfdbfe;
+  background:#f8fbff;
+  color:#1d4ed8;
+}
+
+.orders-quick-filter.active{
+  border-color:#fed7aa;
+  background:#fff7ed;
+  color:#c2410c;
+  box-shadow:0 5px 14px rgba(249,115,22,.12);
+}
+
+@media (min-width: 769px){
+  #ordersMainTable thead th:nth-child(5),
+  #ordersMainTable tbody td:nth-child(5),
+  #ordersMainTable thead th:nth-child(7),
+  #ordersMainTable tbody td:nth-child(7),
+  #ordersMainTable thead th:nth-child(10),
+  #ordersMainTable tbody td:nth-child(10),
+  #ordersMainTable thead th:nth-child(13),
+  #ordersMainTable tbody td:nth-child(13){
+    display:none !important;
+  }
+
+  #ordersMainTable th:nth-child(1),
+  #ordersMainTable td:nth-child(1){width:86px !important}
+  #ordersMainTable th:nth-child(3),
+  #ordersMainTable td:nth-child(3){width:150px !important}
+  #ordersMainTable th:nth-child(4),
+  #ordersMainTable td:nth-child(4){width:180px !important}
+  #ordersMainTable th:nth-child(6),
+  #ordersMainTable td:nth-child(6){width:auto !important}
+  #ordersMainTable th:nth-child(9),
+  #ordersMainTable td:nth-child(9){width:122px !important}
+  #ordersMainTable th:nth-child(11),
+  #ordersMainTable td:nth-child(11){width:112px !important}
+
+  #ordersMainTable tbody tr{
+    position:relative;
+  }
+
+  #ordersMainTable tbody td{
+    padding-top:8px !important;
+    padding-bottom:8px !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(1){
+    position:relative;
+    padding-left:15px !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(1)::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:8px;
+    bottom:8px;
+    width:4px;
+    border-radius:0 999px 999px 0;
+    background:#2563eb;
+  }
+
+  #ordersMainTable tbody td:nth-child(11){
+    border-right:1px solid #e5e7eb !important;
+    border-radius:0 10px 10px 0 !important;
+  }
+
+  #ordersMainTable tbody tr[data-row-status="diagnostics"] td:nth-child(1)::before{background:#6366f1}
+  #ordersMainTable tbody tr[data-row-status="in_progress"] td:nth-child(1)::before{background:#f97316}
+  #ordersMainTable tbody tr[data-row-status="awaiting_parts"] td:nth-child(1)::before{background:#d97706}
+  #ordersMainTable tbody tr[data-row-status="issued"] td:nth-child(1)::before{background:#16a34a}
+  #ordersMainTable tbody tr[data-row-status="awaiting_approval"] td:nth-child(1)::before{background:#06b6d4}
+  #ordersMainTable tbody tr[data-row-status="client_declined"] td:nth-child(1)::before,
+  #ordersMainTable tbody tr[data-row-status="repair_declined"] td:nth-child(1)::before{background:#e11d48}
+  #ordersMainTable tbody tr[data-row-status="issued_without_repair"] td:nth-child(1)::before{background:#8b5cf6}
+  #ordersMainTable tbody tr[data-row-status="donor"] td:nth-child(1)::before{background:#64748b}
+  #ordersMainTable tbody tr[data-deadline-state="overdue"] td:nth-child(1)::before{background:#dc2626}
+
+  #ordersMainTable .order-list-secondary{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+}
+
+@media (max-width: 768px){
+  .orders-quick-filters{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+    margin:0 0 8px;
+  }
+
+  .orders-quick-filter{
+    min-height:30px;
+    padding:0 7px;
+    font-size:11px;
+  }
+
+  #ordersTableBody td:nth-child(5),
+  #ordersTableBody td:nth-child(7),
+  #ordersTableBody td:nth-child(10),
+  #ordersTableBody td:nth-child(13){
+    display:none !important;
+  }
+
+  #ordersTableBody tr{
+    position:relative;
+    padding-left:10px !important;
+  }
+
+  #ordersTableBody tr::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:9px;
+    bottom:9px;
+    width:4px;
+    border-radius:0 999px 999px 0;
+    background:#2563eb;
+  }
+
+  #ordersTableBody tr[data-row-status="diagnostics"]::before{background:#6366f1}
+  #ordersTableBody tr[data-row-status="in_progress"]::before{background:#f97316}
+  #ordersTableBody tr[data-row-status="awaiting_parts"]::before{background:#d97706}
+  #ordersTableBody tr[data-row-status="issued"]::before{background:#16a34a}
+  #ordersTableBody tr[data-row-status="awaiting_approval"]::before{background:#06b6d4}
+  #ordersTableBody tr[data-row-status="client_declined"]::before,
+  #ordersTableBody tr[data-row-status="repair_declined"]::before{background:#e11d48}
+  #ordersTableBody tr[data-row-status="issued_without_repair"]::before{background:#8b5cf6}
+  #ordersTableBody tr[data-row-status="donor"]::before{background:#64748b}
+  #ordersTableBody tr[data-deadline-state="overdue"]::before{background:#dc2626}
+
+  #ordersTableBody td:nth-child(4),
+  #ordersTableBody td:nth-child(6),
+  #ordersTableBody td:nth-child(9),
+  #ordersTableBody td:nth-child(11){
+    grid-column:auto !important;
+  }
+
+  #ordersTableBody .order-list-secondary{
+    margin-top:2px;
+    font-size:10.5px;
+  }
+
+  #ordersTableBody .order-list-money{
+    font-size:12px;
+  }
+}
+
+body[data-ui-theme="dark"] .order-list-primary,
+body[data-ui-theme="dark"] .order-list-money{
+  color:#f8fafc;
+}
+
+body[data-ui-theme="dark"] .order-list-secondary{
+  color:#94a3b8;
+}
+
+body[data-ui-theme="dark"] .orders-quick-filter{
+  border-color:#334155;
+  background:#111827;
+  color:#cbd5e1;
+}
+
+body[data-ui-theme="dark"] .orders-quick-filter:hover{
+  border-color:#475569;
+  background:#172033;
+  color:#f8fafc;
+}
+
+body[data-ui-theme="dark"] .orders-quick-filter.active{
+  border-color:rgba(251,146,60,.45);
+  background:rgba(154,52,18,.34);
+  color:#fdba74;
+}
+</style>
+
+<style id="release-mobile-filters-collapse">
+.mobile-filters-toggle{
+  display:none;
+}
+
+@media (max-width: 768px){
+  .panel:has(#searchInput){
+    padding:8px !important;
+  }
+
+  .panel:has(#searchInput) .toolbar:first-of-type{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    gap:7px !important;
+    margin-bottom:7px !important;
+  }
+
+  #searchInput{
+    grid-column:1 / -1 !important;
+    min-height:36px !important;
+    padding:7px 10px !important;
+  }
+
+  #createOrderBtn{
+    min-height:34px !important;
+    padding:0 11px !important;
+    white-space:nowrap !important;
+  }
+
+  .mobile-filters-toggle{
+    display:inline-flex !important;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:34px;
+    padding:0 11px;
+    border:1px solid #dbe4ef;
+    border-radius:9px;
+    background:#fff;
+    color:#334155;
+    font-size:12px;
+    font-weight:850;
+    cursor:pointer;
+  }
+
+  .mobile-filters-toggle.active{
+    border-color:#fed7aa;
+    background:#fff7ed;
+    color:#c2410c;
+  }
+
+  .mobile-filters-toggle::before{
+    content:"Фильтры";
+  }
+
+  .mobile-filters-toggle[data-count]:not([data-count="0"])::after{
+    content:attr(data-count);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:18px;
+    height:18px;
+    padding:0 5px;
+    border-radius:999px;
+    background:#f97316;
+    color:#fff;
+    font-size:10px;
+    line-height:1;
+  }
+
+  .toolbar-extended.with-gear-tools{
+    display:none !important;
+    margin:0 !important;
+    padding:8px !important;
+    border:1px solid #e5e7eb !important;
+    border-radius:12px !important;
+    background:#f8fafc !important;
+  }
+
+  .toolbar-extended.with-gear-tools.mobile-filters-open{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:7px !important;
+    margin-bottom:7px !important;
+  }
+
+  .toolbar-extended.with-gear-tools .display-gear-cell{
+    grid-column:1 / -1 !important;
+  }
+
+  .toolbar-extended.with-gear-tools .gear-tools-btn{
+    width:100% !important;
+    min-height:34px !important;
+  }
+
+  #statusFilter,
+  #sortSelect{
+    display:none !important;
+  }
+
+  .toolbar.mobile-sort-open #statusFilter,
+  .toolbar.mobile-sort-open #sortSelect{
+    display:block !important;
+  }
+
+  .orders-quick-filters{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:6px !important;
+    margin:0 -2px 8px !important;
+    padding:0 2px 2px !important;
+    overflow-x:auto !important;
+    scrollbar-width:none;
+  }
+
+  .orders-quick-filters::-webkit-scrollbar{
+    display:none;
+  }
+
+  .orders-quick-filter{
+    flex:0 0 auto;
+    min-height:28px;
+    padding:0 10px;
+    font-size:11px;
+  }
+
+  body[data-ui-theme="dark"] .mobile-filters-toggle{
+    border-color:#334155;
+    background:#111827;
+    color:#cbd5e1;
+  }
+
+  body[data-ui-theme="dark"] .mobile-filters-toggle.active{
+    border-color:rgba(251,146,60,.45);
+    background:rgba(154,52,18,.34);
+    color:#fdba74;
+  }
+
+  body[data-ui-theme="dark"] .toolbar-extended.with-gear-tools{
+    border-color:#334155 !important;
+    background:#0f172a !important;
+  }
+}
+</style>
+
+<style id="release-desktop-orders-restore-date-payment">
+@media (min-width: 769px){
+  #ordersMainTable thead th:nth-child(10),
+  #ordersMainTable tbody td:nth-child(10),
+  #ordersMainTable thead th:nth-child(13),
+  #ordersMainTable tbody td:nth-child(13){
+    display:table-cell !important;
+  }
+
+  #ordersMainTable th:nth-child(1),
+  #ordersMainTable td:nth-child(1){width:76px !important}
+  #ordersMainTable th:nth-child(3),
+  #ordersMainTable td:nth-child(3){width:142px !important}
+  #ordersMainTable th:nth-child(4),
+  #ordersMainTable td:nth-child(4){width:160px !important}
+  #ordersMainTable th:nth-child(6),
+  #ordersMainTable td:nth-child(6){width:auto !important}
+  #ordersMainTable th:nth-child(9),
+  #ordersMainTable td:nth-child(9){width:100px !important}
+  #ordersMainTable th:nth-child(10),
+  #ordersMainTable td:nth-child(10){width:104px !important}
+  #ordersMainTable th:nth-child(11),
+  #ordersMainTable td:nth-child(11){width:86px !important}
+  #ordersMainTable th:nth-child(13),
+  #ordersMainTable td:nth-child(13){width:94px !important}
+
+  #ordersMainTable .order-number-cell .order-list-secondary,
+  #ordersMainTable .order-money-cell .order-list-chipline{
+    display:none !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(11){
+    border-right:none !important;
+    border-radius:0 !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(13){
+    border-right:1px solid #e5e7eb !important;
+    border-radius:0 10px 10px 0 !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(10),
+  #ordersMainTable tbody td:nth-child(13){
+    white-space:normal !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody td:nth-child(13){
+    border-right-color:#334155 !important;
+  }
+}
+</style>
+
+<style id="release-desktop-orders-balanced-columns">
+@media (min-width: 769px){
+  #ordersMainTable thead th:nth-child(8),
+  #ordersMainTable tbody td:nth-child(8),
+  #ordersMainTable thead th:nth-child(11),
+  #ordersMainTable tbody td:nth-child(11){
+    display:table-cell !important;
+  }
+
+  #ordersMainTable th:nth-child(1),
+  #ordersMainTable td:nth-child(1){width:76px !important}
+  #ordersMainTable th:nth-child(3),
+  #ordersMainTable td:nth-child(3){width:136px !important}
+  #ordersMainTable th:nth-child(4),
+  #ordersMainTable td:nth-child(4){width:145px !important}
+  #ordersMainTable th:nth-child(6),
+  #ordersMainTable td:nth-child(6){width:190px !important}
+  #ordersMainTable th:nth-child(8),
+  #ordersMainTable td:nth-child(8){width:108px !important}
+  #ordersMainTable th:nth-child(9),
+  #ordersMainTable td:nth-child(9){width:100px !important}
+  #ordersMainTable th:nth-child(10),
+  #ordersMainTable td:nth-child(10){width:104px !important}
+  #ordersMainTable th:nth-child(11),
+  #ordersMainTable td:nth-child(11){width:86px !important}
+  #ordersMainTable th:nth-child(13),
+  #ordersMainTable td:nth-child(13){width:94px !important}
+
+  #ordersMainTable tbody td:nth-child(11){
+    border-right:none !important;
+    border-radius:0 !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(13){
+    border-right:1px solid #e5e7eb !important;
+    border-radius:0 10px 10px 0 !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(6),
+  #ordersMainTable tbody td:nth-child(8){
+    white-space:normal !important;
+  }
+
+  #ordersMainTable tbody td:nth-child(8){
+    color:#334155 !important;
+    font-weight:750 !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody td:nth-child(8){
+    color:#cbd5e1 !important;
+  }
+
+  body[data-ui-theme="dark"] #ordersMainTable tbody td:nth-child(13){
+    border-right-color:#334155 !important;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="blob blob-1"></div>
@@ -5125,23 +5776,43 @@
         const tr = document.createElement('tr');
         const safeId = escapeHtml(item.id);
         const safeStatus = STATUS_CONFIG[item.status] ? item.status : 'new';
+        const deadlineState = getDeadlineState(item) || 'normal';
+        const paymentState = getPaymentState(item);
+        tr.dataset.rowStatus = safeStatus;
+        tr.dataset.deadlineState = deadlineState;
+        tr.dataset.paymentState = paymentState;
 
         tr.innerHTML = `
-          <td data-label="№ заказа"><b>${escapeHtml(item.orderNumber)}</b></td>
+          <td data-label="№ заказа" class="order-number-cell">
+            <b>${escapeHtml(item.orderNumber)}</b>
+            <span class="order-list-secondary">${escapeHtml(formatDateOnly(item.createdAt))}</span>
+          </td>
           <td data-label="Тип">${escapeHtml(item.orderType || '—')}</td>
           <td data-label="Статус">
             <select class="status-select ${getStatusClass(safeStatus)}" data-action="change-status" data-id="${safeId}" data-status="${safeStatus}">
               ${getStatusOptionsHtml(safeStatus)}
             </select>
           </td>
-          <td data-label="Техника">${escapeHtml(item.deviceType)}</td>
+          <td data-label="Техника" class="order-device-cell">
+            <div class="order-list-primary">${escapeHtml(item.deviceType || '—')}</div>
+            <div class="order-list-secondary">${escapeHtml(item.deviceModel || item.orderType || '—')}</div>
+          </td>
           <td data-label="Модель">${escapeHtml(item.deviceModel || '—')}</td>
-          <td data-label="Клиент">${escapeHtml(item.clientName)}</td>
+          <td data-label="Клиент" class="order-client-cell">
+            <div class="order-list-primary">${escapeHtml(item.clientName || '—')}</div>
+            <div class="order-list-secondary">${escapeHtml(item.clientPhone || '—')}</div>
+          </td>
           <td data-label="Телефон">${escapeHtml(item.clientPhone)}</td>
           <td data-label="Мастер">${escapeHtml(item.masterName || '—')}</td>
-          <td data-label="Стоимость">${escapeHtml(money(item.totalCost))}</td>
+          <td data-label="Стоимость" class="order-money-cell">
+            <div class="order-list-money">${escapeHtml(money(item.totalCost))}</div>
+            <div class="order-list-chipline">${paymentBadge(item)}</div>
+          </td>
           <td data-label="Оплата">${paymentBadge(item)}</td>
-          <td data-label="Срок">${deadlineBadge(item)}</td>
+          <td data-label="Срок" class="order-deadline-cell">
+            <div class="order-list-primary">${deadlineBadge(item)}</div>
+            <div class="order-list-secondary">${escapeHtml(formatDateOnly(item.createdAt))}</div>
+          </td>
           <td data-label="Гарантия">${warrantyBadge(item)}</td>
           <td data-label="Дата">${escapeHtml(formatDate(item.createdAt))}</td>
           <td data-label="Обновлен">${escapeHtml(formatDate(item.updatedAt))}</td>
@@ -6761,6 +7432,137 @@
     renderAll();
   </script>
 
+
+<script id="release-orders-quick-filters">
+(function(){
+  const quickFilters = [
+    { key: 'all', label: 'Все' },
+    { key: 'new', label: 'Новые', status: 'new' },
+    { key: 'work', label: 'В работе', status: 'in_progress' },
+    { key: 'overdue', label: 'Просроченные', deadline: 'overdue' },
+    { key: 'debt', label: 'Долги', payment: 'debt' },
+    { key: 'issued', label: 'Выданные', status: 'issued' }
+  ];
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function currentQuickKey() {
+    const status = byId('statusFilter')?.value || '';
+    const payment = byId('paymentFilter')?.value || '';
+    const deadline = byId('deadlineFilter')?.value || '';
+    const match = quickFilters.find(item =>
+      item.key !== 'all'
+      && (item.status || '') === status
+      && (item.payment || '') === payment
+      && (item.deadline || '') === deadline
+    );
+    return match ? match.key : (!status && !payment && !deadline ? 'all' : '');
+  }
+
+  function updateQuickFilters() {
+    const activeKey = currentQuickKey();
+    document.querySelectorAll('.orders-quick-filter').forEach(button => {
+      button.classList.toggle('active', button.dataset.quickFilter === activeKey);
+    });
+    updateMobileFiltersToggle();
+  }
+
+  function activeFilterCount() {
+    return [
+      'statusFilter',
+      'sortSelect',
+      'orderTypeFilter',
+      'masterFilter',
+      'paymentFilter',
+      'dateFromFilter',
+      'dateToFilter',
+      'minCostFilter',
+      'deadlineFilter'
+    ].reduce((count, id) => count + (byId(id)?.value ? 1 : 0), 0);
+  }
+
+  function updateMobileFiltersToggle() {
+    const toggle = byId('mobileFiltersToggle');
+    if (!toggle) return;
+    const count = activeFilterCount();
+    const extended = document.querySelector('.toolbar-extended');
+    const open = extended?.classList.contains('mobile-filters-open');
+    toggle.dataset.count = String(count);
+    toggle.classList.toggle('active', count > 0 || open);
+    toggle.setAttribute('aria-expanded', String(Boolean(open)));
+  }
+
+  function applyQuickFilter(key) {
+    const config = quickFilters.find(item => item.key === key) || quickFilters[0];
+    const status = byId('statusFilter');
+    const payment = byId('paymentFilter');
+    const deadline = byId('deadlineFilter');
+    if (status) status.value = config.status || '';
+    if (payment) payment.value = config.payment || '';
+    if (deadline) deadline.value = config.deadline || '';
+    try { if (typeof ordersCurrentPage !== 'undefined') ordersCurrentPage = 1; } catch (error) {}
+    try { if (typeof renderOrders === 'function') renderOrders(); } catch (error) {}
+    updateQuickFilters();
+  }
+
+  function ensureQuickFilters() {
+    if (document.getElementById('ordersQuickFilters')) {
+      updateQuickFilters();
+      return;
+    }
+    const anchor = document.querySelector('.toolbar-extended') || document.querySelector('.toolbar');
+    if (!anchor) return;
+    const mainToolbar = document.querySelector('.toolbar');
+    const createButton = byId('createOrderBtn');
+    if (mainToolbar && createButton && !byId('mobileFiltersToggle')) {
+      const toggle = document.createElement('button');
+      toggle.className = 'mobile-filters-toggle';
+      toggle.id = 'mobileFiltersToggle';
+      toggle.type = 'button';
+      toggle.dataset.count = '0';
+      toggle.setAttribute('aria-controls', 'ordersAdvancedFilters');
+      toggle.setAttribute('aria-expanded', 'false');
+      mainToolbar.insertBefore(toggle, createButton);
+      toggle.addEventListener('click', () => {
+        document.querySelector('.toolbar-extended')?.classList.toggle('mobile-filters-open');
+        mainToolbar.classList.toggle('mobile-sort-open');
+        updateMobileFiltersToggle();
+      });
+    }
+    document.querySelector('.toolbar-extended')?.setAttribute('id', 'ordersAdvancedFilters');
+    const bar = document.createElement('div');
+    bar.className = 'orders-quick-filters';
+    bar.id = 'ordersQuickFilters';
+    bar.innerHTML = quickFilters.map(item =>
+      `<button class="orders-quick-filter" type="button" data-quick-filter="${item.key}">${item.label}</button>`
+    ).join('');
+    anchor.insertAdjacentElement('afterend', bar);
+    bar.addEventListener('click', event => {
+      const button = event.target.closest('[data-quick-filter]');
+      if (!button) return;
+      applyQuickFilter(button.dataset.quickFilter);
+    });
+    updateQuickFilters();
+  }
+
+  function init() {
+    ensureQuickFilters();
+    ['statusFilter', 'sortSelect', 'orderTypeFilter', 'masterFilter', 'paymentFilter', 'dateFromFilter', 'dateToFilter', 'minCostFilter', 'deadlineFilter'].forEach(id => {
+      byId(id)?.addEventListener('change', updateQuickFilters);
+      byId(id)?.addEventListener('input', updateQuickFilters);
+    });
+    document.addEventListener('crm:cloud-sync-applied', updateQuickFilters);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
 
 <script id="release-row-actions-gear-script">
 document.addEventListener('DOMContentLoaded', function(){
