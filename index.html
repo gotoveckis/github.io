@@ -4385,6 +4385,398 @@ body[data-ui-theme="dark"] td{
 }
 </style>
 
+<style id="release-order-modal-responsive-form">
+  #orderModalOverlay {
+    align-items: center;
+    padding: 12px;
+  }
+
+  #orderModalOverlay *,
+  #orderModalOverlay *::before,
+  #orderModalOverlay *::after {
+    box-sizing: border-box;
+  }
+
+  #orderModalOverlay .modal {
+    width: min(1160px, calc(100vw - 24px));
+    max-width: none;
+    max-height: calc(100dvh - 24px);
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-radius: 18px;
+  }
+
+  #orderModalOverlay .modal-close {
+    top: 14px;
+    right: 14px;
+    z-index: 6;
+  }
+
+  #orderModalOverlay .modal > h3,
+  #orderModalOverlay .modal > p,
+  #orderModalOverlay .order-modal-summary {
+    flex: 0 0 auto;
+  }
+
+  #orderModalOverlay .modal > h3 {
+    margin: 0;
+    padding: 22px 58px 4px 24px;
+    font-size: 22px;
+    line-height: 1.15;
+  }
+
+  #orderModalOverlay .modal > p {
+    margin: 0;
+    padding: 0 24px 14px;
+    max-width: 720px;
+    color: var(--muted);
+  }
+
+  #orderModalOverlay .order-modal-summary {
+    margin: 0 24px 14px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  #orderForm {
+    min-height: 0;
+    overflow: auto;
+    padding: 0 24px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    overscroll-behavior: contain;
+  }
+
+  #orderForm .form-grid.order-form-enhanced {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  #orderForm .order-form-section {
+    min-width: 0;
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+  }
+
+  #orderForm .order-form-section-title {
+    display: flex;
+    align-items: center;
+    min-height: 22px;
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+
+  #orderForm .order-form-section-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    min-width: 0;
+  }
+
+  #orderForm .order-form-section-notes,
+  #orderForm .order-form-section-extra,
+  #orderForm .order-form-section-services,
+  #orderForm .order-form-section-parts {
+    grid-column: 1 / -1;
+  }
+
+  #orderForm .order-form-section-notes .order-form-section-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #orderForm .order-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #orderForm .order-field-wide {
+    grid-column: span 2;
+  }
+
+  #orderForm .order-form-section-notes .order-field-wide {
+    grid-column: span 2;
+  }
+
+  #orderForm .order-field-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  #orderForm .order-field > input,
+  #orderForm .order-field > select,
+  #orderForm .order-field > textarea,
+  #orderForm input,
+  #orderForm select,
+  #orderForm textarea {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #orderForm .order-field > input,
+  #orderForm .order-field > select {
+    min-height: 42px;
+  }
+
+  #orderForm .order-field > textarea {
+    min-height: 88px;
+    resize: vertical;
+  }
+
+  #orderForm .mini-panel {
+    min-width: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  #orderForm .order-form-section .mini-panel > .section-title {
+    display: none;
+  }
+
+  #orderForm .mini-panel .toolbar,
+  #orderForm .mini-panel .parts-grid {
+    min-width: 0;
+  }
+
+  #orderForm .mini-panel .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #orderForm .mini-panel .toolbar select,
+  #orderForm .mini-panel .toolbar input {
+    flex: 1 1 180px;
+    min-width: 0;
+  }
+
+  #orderForm .parts-grid {
+    grid-template-columns: minmax(180px, 1fr) minmax(100px, 140px) auto;
+  }
+
+  #orderForm .modal-actions {
+    flex: 0 0 auto;
+    width: 100%;
+    margin: 0;
+  }
+
+  #orderForm .order-print-actions {
+    justify-content: flex-start !important;
+    gap: 8px;
+    padding-top: 2px;
+  }
+
+  #orderForm .order-print-actions button {
+    min-height: 38px;
+    white-space: nowrap;
+  }
+
+  #orderForm .order-save-actions {
+    position: sticky;
+    bottom: -18px;
+    z-index: 5;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 12px 0 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), var(--panel) 42%);
+    border-top: 1px solid rgba(148, 163, 184, 0.2);
+  }
+
+  body.dark #orderModalOverlay .modal {
+    background: #1a1817;
+    border-color: rgba(255, 138, 42, 0.16);
+  }
+
+  body.dark #orderForm .order-form-section {
+    background: rgba(28, 25, 23, 0.94);
+    border-color: rgba(255, 138, 42, 0.16);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+  }
+
+  body.dark #orderForm .order-save-actions {
+    background: linear-gradient(180deg, rgba(26, 24, 23, 0.84), #1a1817 42%);
+    border-top-color: rgba(255, 138, 42, 0.18);
+  }
+
+  @media (max-width: 980px) {
+    #orderModalOverlay {
+      align-items: flex-end;
+      padding: 8px;
+    }
+
+    #orderModalOverlay .modal {
+      width: 100%;
+      max-height: calc(100dvh - 16px);
+      border-radius: 18px 18px 0 0;
+    }
+
+    #orderModalOverlay .modal > h3 {
+      padding: 18px 52px 4px 16px;
+      font-size: 19px;
+    }
+
+    #orderModalOverlay .modal > p {
+      display: none;
+    }
+
+    #orderModalOverlay .order-modal-summary {
+      margin: 8px 16px 10px;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 8px !important;
+      padding: 8px !important;
+    }
+
+    #orderModalOverlay .order-modal-summary-item {
+      padding: 9px !important;
+      min-width: 0;
+    }
+
+    #orderForm {
+      padding: 0 16px calc(14px + env(safe-area-inset-bottom));
+      gap: 12px;
+    }
+
+    #orderForm .form-grid.order-form-enhanced,
+    #orderForm .order-form-section-grid,
+    #orderForm .order-form-section-notes .order-form-section-grid {
+      grid-template-columns: 1fr;
+    }
+
+    #orderForm .order-form-section {
+      padding: 12px;
+      border-radius: 13px;
+      box-shadow: none;
+    }
+
+    #orderForm .order-field-wide,
+    #orderForm .order-form-section-notes .order-field-wide {
+      grid-column: auto;
+    }
+
+    #orderForm .order-field > input,
+    #orderForm .order-field > select {
+      min-height: 40px;
+    }
+
+    #orderForm .order-field > textarea {
+      min-height: 74px;
+    }
+
+    #orderForm .mini-panel .toolbar,
+    #orderForm .parts-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    #orderForm .mini-panel .toolbar select,
+    #orderForm .mini-panel .toolbar input {
+      flex-basis: auto;
+      width: 100%;
+    }
+
+    #orderForm .order-print-actions {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    #orderForm .order-print-actions button,
+    #orderForm .order-save-actions button {
+      width: 100% !important;
+      min-width: 0;
+      padding-inline: 10px;
+      white-space: normal;
+    }
+
+    #orderForm .order-save-actions {
+      bottom: 0;
+      display: grid !important;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr) !important;
+      gap: 8px !important;
+      margin-top: 0 !important;
+      padding: 10px 0 calc(8px + env(safe-area-inset-bottom)) !important;
+    }
+  }
+
+  @media (max-width: 520px) {
+    #orderModalOverlay {
+      padding: 0;
+    }
+
+    #orderModalOverlay .modal {
+      max-height: 100dvh;
+      border-radius: 0;
+    }
+
+    #orderModalOverlay .modal-close {
+      top: 10px;
+      right: 10px;
+    }
+
+    #orderModalOverlay .modal > h3 {
+      padding-left: 14px;
+      padding-right: 50px;
+      font-size: 18px;
+    }
+
+    #orderModalOverlay .order-modal-summary {
+      margin-inline: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    #orderModalOverlay .order-modal-summary-label {
+      font-size: 10px !important;
+    }
+
+    #orderModalOverlay .order-modal-summary-value {
+      font-size: 12px !important;
+    }
+
+    #orderForm {
+      padding-inline: 14px;
+    }
+
+    #orderForm .order-form-section {
+      padding: 10px;
+    }
+
+    #orderForm .order-form-section-title {
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    #orderForm .order-print-actions {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  @media (max-width: 340px) {
+    #orderModalOverlay .order-modal-summary {
+      grid-template-columns: 1fr !important;
+    }
+
+    #orderForm .order-save-actions {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
 </head>
 <body>
   <div class="blob blob-1"></div>
@@ -7764,6 +8156,120 @@ body[data-ui-theme="dark"] td{
     seedInitialData();
     renderAll();
   </script>
+
+<script id="release-order-modal-form-layout">
+(function(){
+  const labels = {
+    orderNumber: 'Номер заказа',
+    orderStatus: 'Статус',
+    orderType: 'Тип заказа',
+    deadlineAt: 'Срок выполнения',
+    clientName: 'Клиент',
+    clientPhone: 'Телефон',
+    clientSource: 'Источник клиента',
+    deviceType: 'Техника',
+    deviceModel: 'Модель',
+    masterName: 'Мастер',
+    warrantyDays: 'Гарантия, дней',
+    warrantyUntil: 'Гарантия до',
+    totalCost: 'Стоимость',
+    partsCost: 'Запчасти',
+    paidAmount: 'Оплачено',
+    discountAmount: 'Скидка',
+    paymentMethod: 'Оплата',
+    problemDescription: 'Неисправность',
+    completedWorks: 'Выполненные работы',
+    masterNotes: 'Заметки мастера',
+    taskNote: 'Задача'
+  };
+
+  const sections = [
+    { key: 'basic', title: 'Заказ', fields: ['orderNumber', 'orderStatus', 'orderType', 'deadlineAt'] },
+    { key: 'client', title: 'Клиент', fields: ['clientName', 'clientPhone', 'clientSource'] },
+    { key: 'device', title: 'Устройство', fields: ['deviceType', 'deviceModel', 'masterName', 'warrantyDays', 'warrantyUntil'] },
+    { key: 'finance', title: 'Финансы', fields: ['totalCost', 'partsCost', 'paidAmount', 'discountAmount', 'paymentMethod'] },
+    { key: 'notes', title: 'Описание', fields: ['problemDescription', 'completedWorks', 'masterNotes', 'taskNote'] }
+  ];
+
+  function getDirectGrid(form) {
+    return Array.from(form.children).find(child => child.classList && child.classList.contains('form-grid'));
+  }
+
+  function createSection(key, title) {
+    const section = document.createElement('div');
+    section.className = `order-form-section order-form-section-${key}`;
+    const heading = document.createElement('div');
+    heading.className = 'order-form-section-title';
+    heading.textContent = title;
+    const body = document.createElement('div');
+    body.className = 'order-form-section-grid';
+    section.append(heading, body);
+    return { section, body };
+  }
+
+  function wrapControl(id) {
+    const control = document.getElementById(id);
+    if (!control) return null;
+    if (control.parentElement && control.parentElement.classList.contains('order-field')) {
+      return control.parentElement;
+    }
+
+    const wrapper = document.createElement('label');
+    wrapper.className = 'order-field';
+    if (control.tagName === 'TEXTAREA') wrapper.classList.add('order-field-wide');
+
+    const label = document.createElement('span');
+    label.className = 'order-field-label';
+    label.textContent = labels[id] || control.getAttribute('placeholder') || id;
+    control.setAttribute('aria-label', label.textContent);
+
+    control.parentNode.insertBefore(wrapper, control);
+    wrapper.append(label, control);
+    return wrapper;
+  }
+
+  function appendPanel(grid, key, title, panel) {
+    if (!panel) return;
+    const built = createSection(key, title);
+    built.body.append(panel);
+    grid.append(built.section);
+  }
+
+  function enhanceOrderFormLayout() {
+    const form = document.getElementById('orderForm');
+    if (!form) return;
+
+    const grid = getDirectGrid(form);
+    if (!grid || grid.classList.contains('order-form-enhanced')) return;
+
+    const actionRows = Array.from(form.children).filter(child => child.classList && child.classList.contains('modal-actions'));
+    if (actionRows[0]) actionRows[0].classList.add('order-print-actions');
+    if (actionRows[actionRows.length - 1]) actionRows[actionRows.length - 1].classList.add('order-save-actions');
+
+    grid.classList.add('order-form-enhanced');
+    sections.forEach(config => {
+      const built = createSection(config.key, config.title);
+      config.fields.forEach(id => {
+        const field = wrapControl(id);
+        if (field) built.body.append(field);
+      });
+      grid.append(built.section);
+    });
+
+    appendPanel(grid, 'extra', 'Дополнительно', document.getElementById('customFieldsPanel'));
+    appendPanel(grid, 'services', 'Услуги', document.getElementById('serviceSelect')?.closest('.mini-panel'));
+    appendPanel(grid, 'parts', 'Запчасти', document.getElementById('partSelect')?.closest('.mini-panel'));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enhanceOrderFormLayout);
+  } else {
+    enhanceOrderFormLayout();
+  }
+
+  window.enhanceOrderFormLayout = enhanceOrderFormLayout;
+})();
+</script>
 
 
 <script id="release-orders-quick-filters">
