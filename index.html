@@ -8960,6 +8960,7 @@ document.addEventListener('DOMContentLoaded', function(){
     salaryPercent: '',
     isAdmin: true
   };
+  const MAX_MASTER_PROFILES = 10;
   const ACCESS_ROLES = [
     { key: 'orders', label: 'Заказы', menuId: 'ordersBtn' },
     { key: 'clients', label: 'Клиенты', menuId: 'clientsBtn' },
@@ -9117,6 +9118,10 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         return { ...profile, login };
       });
+    if (normalized.length > MAX_MASTER_PROFILES) {
+      window.alert(`Можно добавить максимум ${MAX_MASTER_PROFILES} мастеров.`);
+      return false;
+    }
     const saved = writeSettings({
       masterProfiles: normalized,
       masters: normalized.map(profile => profile.name)
@@ -9405,11 +9410,12 @@ document.addEventListener('DOMContentLoaded', function(){
     section.innerHTML = `
       <h4>Мастера и доступ</h4>
       <p class="section-note">Нажмите на имя мастера, чтобы изменить логин, пароль, права доступа и процент зарплаты.</p>
-      <div class="master-access-panel">
-        <div class="master-access-toolbar">
-          <div class="inline-actions">
-            <button class="btn btn-primary" id="addMasterProfileBtn" type="button">Добавить мастера</button>
-          </div>
+        <div class="master-access-panel">
+          <div class="master-access-toolbar">
+            <div class="section-note" id="masterProfilesCounter"></div>
+            <div class="inline-actions">
+              <button class="btn btn-primary" id="addMasterProfileBtn" type="button">Добавить мастера</button>
+            </div>
         </div>
         <div class="master-profiles-list" id="masterProfilesList"></div>
         <div class="settings-hidden-sync">
@@ -9463,6 +9469,14 @@ document.addEventListener('DOMContentLoaded', function(){
     const list = document.getElementById('masterProfilesList');
     if (!list) return;
     const profiles = getMasterProfiles();
+    const counter = document.getElementById('masterProfilesCounter');
+    const addButton = document.getElementById('addMasterProfileBtn');
+    if (counter) counter.textContent = `${profiles.length} из ${MAX_MASTER_PROFILES} мастеров`;
+    if (addButton) {
+      const atLimit = profiles.length >= MAX_MASTER_PROFILES;
+      addButton.disabled = atLimit;
+      addButton.title = atLimit ? `Лимит ${MAX_MASTER_PROFILES} мастеров уже заполнен` : '';
+    }
     list.innerHTML = profiles.length ? profiles.map(profile => `
       <button class="master-profile-row" type="button" data-open-master-profile="${html(profile.id)}">
         <div>
@@ -9490,6 +9504,10 @@ document.addEventListener('DOMContentLoaded', function(){
     ensureMasterEditorModal();
     const settings = readSettings();
     const profiles = getMasterProfiles();
+    if (!id && profiles.length >= MAX_MASTER_PROFILES) {
+      window.alert(`Можно добавить максимум ${MAX_MASTER_PROFILES} мастеров.`);
+      return;
+    }
     const profile = id ? profiles.find(item => item.id === id) : {
       id: makeId('master'),
       name: '',
@@ -9540,7 +9558,12 @@ document.addEventListener('DOMContentLoaded', function(){
     };
     const index = profiles.findIndex(profile => profile.id === payload.id);
     if (index >= 0) profiles[index] = payload;
-    else profiles.unshift(payload);
+    else {
+      if (profiles.length >= MAX_MASTER_PROFILES) {
+        return window.alert(`Можно добавить максимум ${MAX_MASTER_PROFILES} мастеров.`);
+      }
+      profiles.unshift(payload);
+    }
     if (saveMasterProfiles(profiles, `Сохранен мастер "${name}"`)) {
       closeMasterEditor();
     }
@@ -9565,7 +9588,7 @@ document.addEventListener('DOMContentLoaded', function(){
         if (profile) return { ...profile, password: '', isAdmin: false };
       }
     } catch (error) {}
-    return { ...ADMIN_USER, password: '' };
+    return null;
   }
   function setCurrentUser(user, remember) {
     activeUser = user ? { ...user, password: '' } : null;
@@ -9590,6 +9613,32 @@ document.addEventListener('DOMContentLoaded', function(){
       return { ...profile, isAdmin: false };
     }
     return null;
+  }
+  function authenticateAfterCloudSync(login, password, timeout = 2200) {
+    return new Promise(resolve => {
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        document.removeEventListener('crm:cloud-sync-applied', onSync);
+        resolve(authenticate(login, password));
+      };
+      const onSync = () => finish();
+      document.addEventListener('crm:cloud-sync-applied', onSync);
+      setTimeout(finish, timeout);
+    });
+  }
+  function refreshActiveUserFromProfiles() {
+    if (!activeUser || activeUser.isAdmin) return;
+    const profile = getMasterProfiles().find(item => item.id === activeUser.id || (item.login && item.login === activeUser.login));
+    if (!profile) return;
+    activeUser = { ...profile, password: '', isAdmin: false };
+    window.crmCurrentUser = activeUser;
+    if (localStorage.getItem(AUTH_REMEMBER_KEY) === '1') {
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(activeUser));
+    }
+    updateCurrentUserChip();
+    applyRoleAccess();
   }
   function userHasRole(key) {
     if (!activeUser) return false;
@@ -9691,10 +9740,16 @@ document.addEventListener('DOMContentLoaded', function(){
     } else {
       showAuthLocal();
     }
-    form.addEventListener('submit', event => {
+    form.addEventListener('submit', async event => {
       event.preventDefault();
       clearError();
-      const user = authenticate(loginInput?.value, passwordInput?.value || '');
+      const loginValue = loginInput?.value || '';
+      const passwordValue = passwordInput?.value || '';
+      let user = authenticate(loginValue, passwordValue);
+      if (!user) {
+        showError('Проверяю синхронизацию доступа...');
+        user = await authenticateAfterCloudSync(loginValue, passwordValue);
+      }
       if (!user) {
         showError('Неверный логин или пароль');
         passwordInput?.focus();
@@ -9815,6 +9870,12 @@ document.addEventListener('DOMContentLoaded', function(){
         renderMasterProfilesList();
         applyRoleAccess();
       }, 80);
+    });
+    document.addEventListener('crm:cloud-sync-applied', () => {
+      syncMasterHiddenInputs();
+      renderMasterProfilesList();
+      refreshActiveUserFromProfiles();
+      applyRoleAccess();
     });
   }
 
