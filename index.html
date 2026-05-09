@@ -4596,18 +4596,18 @@ body[data-ui-theme="dark"] td{
     border-top: 1px solid rgba(148, 163, 184, 0.2);
   }
 
-  body.dark #orderModalOverlay .modal {
+  body[data-ui-theme="dark"] #orderModalOverlay .modal {
     background: #1a1817;
     border-color: rgba(255, 138, 42, 0.16);
   }
 
-  body.dark #orderForm .order-form-section {
+  body[data-ui-theme="dark"] #orderForm .order-form-section {
     background: rgba(28, 25, 23, 0.94);
     border-color: rgba(255, 138, 42, 0.16);
     box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
   }
 
-  body.dark #orderForm .order-save-actions {
+  body[data-ui-theme="dark"] #orderForm .order-save-actions {
     background: linear-gradient(180deg, rgba(26, 24, 23, 0.84), #1a1817 42%);
     border-top-color: rgba(255, 138, 42, 0.18);
   }
@@ -8062,7 +8062,6 @@ body[data-ui-theme="dark"] td{
         timezone: getFormValue('timezoneInput') || DEFAULT_SETTINGS.timezone,
         dateFormat: getFormValue('dateFormatInput') || DEFAULT_SETTINGS.dateFormat,
         timeFormat: getFormValue('timeFormatInput') || DEFAULT_SETTINGS.timeFormat,
-        interfaceTheme: getFormValue('interfaceThemeInput') || DEFAULT_SETTINGS.interfaceTheme,
         ordersPerPage: getFormValue('ordersPerPageInput') || DEFAULT_SETTINGS.ordersPerPage,
         orderPrefix: getFormValue('orderPrefixInput'),
         orderStartNumber: getFormValue('orderStartNumberInput') || DEFAULT_SETTINGS.orderStartNumber,
@@ -9843,6 +9842,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <script id="release-interface-settings-pagination">
 (function(){
   const SETTINGS_KEY = 'one_service_settings';
+  const DEVICE_THEME_KEY = 'one_service_device_theme';
   const PER_PAGE_OPTIONS = Array.from({ length: 16 }, (_, index) => 25 + (index * 5));
 
   function readRawSettings() {
@@ -9870,15 +9870,35 @@ document.addEventListener('DOMContentLoaded', function(){
   function normalizeTheme(value) {
     return value === 'dark' ? 'dark' : 'light';
   }
+  function readDeviceTheme() {
+    try {
+      return normalizeTheme(localStorage.getItem(DEVICE_THEME_KEY));
+    } catch (error) {
+      return 'light';
+    }
+  }
+  function writeDeviceTheme(theme) {
+    const normalized = normalizeTheme(theme);
+    try {
+      localStorage.setItem(DEVICE_THEME_KEY, normalized);
+    } catch (error) {}
+    return normalized;
+  }
   function normalizePerPage(value) {
     const raw = Number(value) || 25;
     return String(Math.min(100, Math.max(25, Math.round(raw / 5) * 5)));
   }
-  function applyTheme(theme = readSettingsSafe().interfaceTheme) {
+  function applyTheme(theme = readDeviceTheme()) {
     const normalized = normalizeTheme(theme);
     document.body.dataset.uiTheme = normalized;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', normalized === 'dark' ? '#0f172a' : '#2563eb');
   }
+  window.applyLocalInterfaceTheme = function() {
+    const theme = readDeviceTheme();
+    applyTheme(theme);
+    const input = document.getElementById('interfaceThemeInput');
+    if (input) input.value = theme;
+  };
   function perPageOptionsHtml(value) {
     const current = normalizePerPage(value);
     return PER_PAGE_OPTIONS.map(number => `<option value="${number}" ${String(number) === current ? 'selected' : ''}>${number} заказов</option>`).join('');
@@ -9910,7 +9930,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <h4>Интерфейс</h4>
         <div class="interface-settings-panel">
           <div class="form-grid">
-            <label class="field-label">Тема CRM
+            <label class="field-label">Тема этого устройства
               <select id="interfaceThemeInput">
                 <option value="light">Светлая</option>
                 <option value="dark">Темная</option>
@@ -9941,7 +9961,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const settings = readSettingsSafe();
     const themeInput = document.getElementById('interfaceThemeInput');
     const perPageInput = document.getElementById('ordersPerPageInput');
-    if (themeInput) themeInput.value = normalizeTheme(settings.interfaceTheme);
+    if (themeInput) themeInput.value = readDeviceTheme();
     if (perPageInput) {
       perPageInput.innerHTML = perPageOptionsHtml(settings.ordersPerPage);
       perPageInput.value = normalizePerPage(settings.ordersPerPage);
@@ -9950,7 +9970,8 @@ document.addEventListener('DOMContentLoaded', function(){
   function saveInterfaceSettingsSilently() {
     const theme = normalizeTheme(document.getElementById('interfaceThemeInput')?.value);
     const perPage = normalizePerPage(document.getElementById('ordersPerPageInput')?.value);
-    writeRawSettings({ interfaceTheme: theme, ordersPerPage: perPage });
+    writeRawSettings({ ordersPerPage: perPage });
+    writeDeviceTheme(theme);
     applyTheme(theme);
     try {
       if (typeof renderOrders === 'function') {
@@ -9980,7 +10001,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function init() {
     ensureInterfaceSettingsSection();
     fillInterfaceSettings();
-    applyTheme(readSettingsSafe().interfaceTheme);
+    applyTheme(readDeviceTheme());
     wireInterfaceEvents();
   }
 
@@ -10488,10 +10509,13 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       try { if (typeof window.renderAll === 'function') window.renderAll(); } catch (error) {}
       try { if (typeof window.fillSettingsForm === 'function') window.fillSettingsForm(); } catch (error) {}
       try {
-        const settings = safeJson(localStorage.getItem('one_service_settings'), {}) || {};
-        const theme = settings.interfaceTheme === 'dark' ? 'dark' : 'light';
-        document.body.dataset.uiTheme = theme;
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0f172a' : '#2563eb');
+        if (typeof window.applyLocalInterfaceTheme === 'function') {
+          window.applyLocalInterfaceTheme();
+        } else {
+          const theme = localStorage.getItem('one_service_device_theme') === 'dark' ? 'dark' : 'light';
+          document.body.dataset.uiTheme = theme;
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0f172a' : '#2563eb');
+        }
       } catch (error) {}
       document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied'));
     }, 180);
