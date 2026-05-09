@@ -4082,6 +4082,309 @@ body[data-ui-theme="dark"] .orders-quick-filter.active{
 }
 </style>
 
+<style id="release-dark-theme-modernized">
+body[data-ui-theme="dark"]{
+  color-scheme:dark;
+  --bg:#11100f;
+  --surface:#1a1817;
+  --surface-2:#211f1d;
+  --surface-3:#292622;
+  --text:#f4f1ed;
+  --muted:#b7aea4;
+  --line:rgba(92,84,76,.88);
+  --accent:#ff8a2a;
+  --accent-dark:#f97316;
+  --accent-soft:rgba(255,138,42,.16);
+  --shadow:0 16px 38px rgba(0,0,0,.34);
+  --shadow-hover:0 20px 46px rgba(255,138,42,.18);
+  background:
+    linear-gradient(180deg,#11100f 0%,#171412 46%,#12110f 100%) !important;
+  color:var(--text) !important;
+}
+
+body[data-ui-theme="dark"] .blob{
+  display:none !important;
+}
+
+body[data-ui-theme="dark"] header{
+  background:rgba(25,23,21,.94) !important;
+  border-bottom-color:rgba(255,138,42,.55) !important;
+  box-shadow:0 8px 24px rgba(0,0,0,.28) !important;
+}
+
+body[data-ui-theme="dark"] .card,
+body[data-ui-theme="dark"] .panel,
+body[data-ui-theme="dark"] .table-card,
+body[data-ui-theme="dark"] .sidebar-card,
+body[data-ui-theme="dark"] .modal,
+body[data-ui-theme="dark"] .data-card,
+body[data-ui-theme="dark"] .mini-panel,
+body[data-ui-theme="dark"] .settings-section,
+body[data-ui-theme="dark"] .settings-nav,
+body[data-ui-theme="dark"] .orders-pagination,
+body[data-ui-theme="dark"] .orders-tools-menu,
+body[data-ui-theme="dark"] .docs-basic-card,
+body[data-ui-theme="dark"] .docs-simple-card,
+body[data-ui-theme="dark"] .docs-preview-card,
+body[data-ui-theme="dark"] .docs-preview-stage,
+body[data-ui-theme="dark"] .template-card,
+body[data-ui-theme="dark"] .template-empty,
+body[data-ui-theme="dark"] .theme-preview-card,
+body[data-ui-theme="dark"] .settings-service-editor,
+body[data-ui-theme="dark"] .settings-service-row,
+body[data-ui-theme="dark"] .master-profile-row,
+body[data-ui-theme="dark"] .master-access-toolbar,
+body[data-ui-theme="dark"] .role-check-grid label,
+body[data-ui-theme="dark"] .auth-card{
+  background:linear-gradient(180deg,rgba(32,30,28,.98),rgba(25,23,21,.98)) !important;
+  border-color:var(--line) !important;
+  color:var(--text) !important;
+  box-shadow:var(--shadow) !important;
+}
+
+body[data-ui-theme="dark"] .table-scroll,
+body[data-ui-theme="dark"] .workspace-page-overlay .table-scroll{
+  background:transparent !important;
+  border-color:var(--line) !important;
+}
+
+body[data-ui-theme="dark"] input,
+body[data-ui-theme="dark"] select,
+body[data-ui-theme="dark"] textarea{
+  background:#141312 !important;
+  border-color:#4a423b !important;
+  color:var(--text) !important;
+  box-shadow:none !important;
+}
+
+body[data-ui-theme="dark"] input:focus,
+body[data-ui-theme="dark"] select:focus,
+body[data-ui-theme="dark"] textarea:focus{
+  border-color:rgba(255,138,42,.75) !important;
+  box-shadow:0 0 0 3px rgba(255,138,42,.16) !important;
+}
+
+body[data-ui-theme="dark"] input::placeholder,
+body[data-ui-theme="dark"] textarea::placeholder{
+  color:#8f857b !important;
+  opacity:1 !important;
+}
+
+body[data-ui-theme="dark"] .btn-secondary,
+body[data-ui-theme="dark"] .small-btn,
+body[data-ui-theme="dark"] .orders-page-btn,
+body[data-ui-theme="dark"] .settings-tab,
+body[data-ui-theme="dark"] .docs-token,
+body[data-ui-theme="dark"] .role-badge,
+body[data-ui-theme="dark"] .mobile-filters-toggle,
+body[data-ui-theme="dark"] .orders-quick-filter,
+body[data-ui-theme="dark"] .gear-tools-btn{
+  background:#201d1a !important;
+  border-color:#4a423b !important;
+  color:#f4f1ed !important;
+}
+
+body[data-ui-theme="dark"] .btn-secondary:hover,
+body[data-ui-theme="dark"] .small-btn:hover,
+body[data-ui-theme="dark"] .orders-page-btn:hover,
+body[data-ui-theme="dark"] .settings-tab:hover,
+body[data-ui-theme="dark"] .orders-quick-filter:hover{
+  background:#2a2521 !important;
+  border-color:rgba(255,138,42,.45) !important;
+  color:#fff7ed !important;
+}
+
+body[data-ui-theme="dark"] .btn-primary,
+body[data-ui-theme="dark"] .orders-page-btn.active,
+body[data-ui-theme="dark"] .settings-tab.active,
+body[data-ui-theme="dark"] .orders-quick-filter.active,
+body[data-ui-theme="dark"] .mobile-filters-toggle.active{
+  background:linear-gradient(180deg,#ff9b45,#f97316) !important;
+  border-color:#fb923c !important;
+  color:#11100f !important;
+  box-shadow:0 9px 18px rgba(249,115,22,.22) !important;
+}
+
+body[data-ui-theme="dark"] .modal-close{
+  background:#24211e !important;
+  border-color:#554b43 !important;
+  color:#fff7ed !important;
+}
+
+body[data-ui-theme="dark"] .modal h3,
+body[data-ui-theme="dark"] .modal h4,
+body[data-ui-theme="dark"] .auth-title,
+body[data-ui-theme="dark"] .hero-card h1,
+body[data-ui-theme="dark"] .stat b,
+body[data-ui-theme="dark"] #orderModalTitle,
+body[data-ui-theme="dark"] #orderActionsTitle,
+body[data-ui-theme="dark"] .settings-section h4,
+body[data-ui-theme="dark"] .section-title,
+body[data-ui-theme="dark"] .data-card h4,
+body[data-ui-theme="dark"] .docs-simple-card h5,
+body[data-ui-theme="dark"] .theme-preview-card b,
+body[data-ui-theme="dark"] .settings-service-row b,
+body[data-ui-theme="dark"] .master-profile-row b,
+body[data-ui-theme="dark"] .mini-row b,
+body[data-ui-theme="dark"] .doc-text-card summary,
+body[data-ui-theme="dark"] .template-card-title,
+body[data-ui-theme="dark"] .order-list-primary,
+body[data-ui-theme="dark"] .order-list-money{
+  color:#fff7ed !important;
+}
+
+body[data-ui-theme="dark"] .modal p,
+body[data-ui-theme="dark"] .section-note,
+body[data-ui-theme="dark"] .field-label,
+body[data-ui-theme="dark"] .settings-hint,
+body[data-ui-theme="dark"] .sidebar-title,
+body[data-ui-theme="dark"] .stat span,
+body[data-ui-theme="dark"] .data-card p,
+body[data-ui-theme="dark"] .docs-help,
+body[data-ui-theme="dark"] .theme-preview-card span,
+body[data-ui-theme="dark"] .settings-service-row span,
+body[data-ui-theme="dark"] .master-profile-row span,
+body[data-ui-theme="dark"] .mini-row span,
+body[data-ui-theme="dark"] .orders-pagination-info,
+body[data-ui-theme="dark"] .current-user-chip,
+body[data-ui-theme="dark"] .empty-state,
+body[data-ui-theme="dark"] .order-list-secondary{
+  color:var(--muted) !important;
+}
+
+body[data-ui-theme="dark"] #ordersMainTable thead th{
+  color:#c8bdb2 !important;
+}
+
+body[data-ui-theme="dark"] #ordersMainTable tbody td{
+  background:#1f1c19 !important;
+  border-color:#403832 !important;
+  color:#f4f1ed !important;
+}
+
+body[data-ui-theme="dark"] #ordersMainTable tbody td:nth-child(1){
+  background:#261d16 !important;
+}
+
+body[data-ui-theme="dark"] #ordersMainTable tbody tr:hover td{
+  background:#27231f !important;
+  border-color:#66584d !important;
+}
+
+body[data-ui-theme="dark"] #ordersMainTable tbody tr:hover td:nth-child(1){
+  background:#302216 !important;
+}
+
+body[data-ui-theme="dark"] #ordersTableBody tr{
+  border-color:#4b433b !important;
+  background:linear-gradient(180deg,#211e1b,#181614) !important;
+  box-shadow:0 10px 22px rgba(0,0,0,.30) !important;
+}
+
+body[data-ui-theme="dark"] #ordersTableBody td{
+  background:rgba(20,19,18,.78) !important;
+  border-color:#403832 !important;
+  color:#f4f1ed !important;
+}
+
+body[data-ui-theme="dark"] #ordersTableBody td:nth-child(1){
+  background:rgba(128,65,25,.26) !important;
+  border-color:rgba(255,138,42,.38) !important;
+}
+
+body[data-ui-theme="dark"] #ordersTableBody td:nth-child(3){
+  background:rgba(34,31,28,.88) !important;
+}
+
+body[data-ui-theme="dark"] .toolbar-extended.with-gear-tools{
+  background:#1c1917 !important;
+  border-color:#4a423b !important;
+}
+
+body[data-ui-theme="dark"] .badge{
+  background:#24211e !important;
+  border-color:#5a5149 !important;
+  color:#e8ded4 !important;
+}
+
+body[data-ui-theme="dark"] .badge-good{
+  background:rgba(34,197,94,.16) !important;
+  border-color:rgba(74,222,128,.55) !important;
+  color:#bbf7d0 !important;
+}
+
+body[data-ui-theme="dark"] .badge-bad{
+  background:rgba(244,63,94,.16) !important;
+  border-color:rgba(251,113,133,.56) !important;
+  color:#fecdd3 !important;
+}
+
+body[data-ui-theme="dark"] .status-select[data-status="new"]{background:rgba(59,130,246,.18) !important;color:#bfdbfe !important;border-color:rgba(96,165,250,.62) !important}
+body[data-ui-theme="dark"] .status-select[data-status="diagnostics"]{background:rgba(129,140,248,.18) !important;color:#c7d2fe !important;border-color:rgba(165,180,252,.62) !important}
+body[data-ui-theme="dark"] .status-select[data-status="in_progress"]{background:rgba(249,115,22,.20) !important;color:#fed7aa !important;border-color:rgba(251,146,60,.72) !important}
+body[data-ui-theme="dark"] .status-select[data-status="awaiting_parts"]{background:rgba(217,119,6,.20) !important;color:#fde68a !important;border-color:rgba(245,158,11,.70) !important}
+body[data-ui-theme="dark"] .status-select[data-status="issued"]{background:rgba(22,163,74,.18) !important;color:#bbf7d0 !important;border-color:rgba(74,222,128,.62) !important}
+body[data-ui-theme="dark"] .status-select[data-status="awaiting_approval"]{background:rgba(8,145,178,.18) !important;color:#a5f3fc !important;border-color:rgba(34,211,238,.56) !important}
+body[data-ui-theme="dark"] .status-select[data-status="client_declined"],
+body[data-ui-theme="dark"] .status-select[data-status="repair_declined"]{background:rgba(225,29,72,.18) !important;color:#fecdd3 !important;border-color:rgba(251,113,133,.62) !important}
+body[data-ui-theme="dark"] .status-select[data-status="issued_without_repair"]{background:rgba(139,92,246,.18) !important;color:#ddd6fe !important;border-color:rgba(167,139,250,.62) !important}
+body[data-ui-theme="dark"] .status-select[data-status="donor"]{background:rgba(100,116,139,.22) !important;color:#e2e8f0 !important;border-color:rgba(148,163,184,.58) !important}
+
+body[data-ui-theme="dark"] .auth-shell{
+  background:
+    linear-gradient(180deg,#11100f 0%,#171412 100%) !important;
+}
+
+body[data-ui-theme="dark"] .auth-error.show{
+  background:rgba(244,63,94,.16) !important;
+  border-color:rgba(251,113,133,.56) !important;
+  color:#fecdd3 !important;
+}
+
+body[data-ui-theme="dark"] .simple-table th,
+body[data-ui-theme="dark"] .simple-table td,
+body[data-ui-theme="dark"] th,
+body[data-ui-theme="dark"] td{
+  border-color:#403832 !important;
+}
+</style>
+
+<style id="release-mobile-phone-actions">
+.order-phone-link{
+  color:inherit;
+  text-decoration:none;
+  font-weight:800;
+}
+
+@media (max-width: 768px){
+  #ordersTableBody .order-phone-link{
+    display:inline-flex;
+    align-items:center;
+    min-height:22px;
+    padding:2px 7px;
+    border:1px solid #bfdbfe;
+    border-radius:999px;
+    background:#eff6ff;
+    color:#1d4ed8;
+    font-size:11px;
+    line-height:1.1;
+  }
+
+  #ordersTableBody .order-phone-link::before{
+    content:"☎";
+    margin-right:4px;
+    font-size:10px;
+    line-height:1;
+  }
+
+  body[data-ui-theme="dark"] #ordersTableBody .order-phone-link{
+    border-color:rgba(96,165,250,.62);
+    background:rgba(59,130,246,.18);
+    color:#bfdbfe;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="blob blob-1"></div>
@@ -5141,6 +5444,31 @@ body[data-ui-theme="dark"] .orders-quick-filter.active{
       return String(phone || '').replace(/\D/g, '');
     }
 
+    function normalizeInternationalPhone(phone) {
+      const raw = String(phone || '').trim();
+      let digits = normalizePhone(raw);
+      if (!digits) return '';
+      if (raw.startsWith('+')) return digits;
+      if (digits.startsWith('00')) digits = digits.slice(2);
+      if (digits.startsWith('995') || digits.startsWith('380')) return digits;
+      if (digits.length === 9 && digits.startsWith('5')) return `995${digits}`;
+      if (digits.length === 10 && digits.startsWith('0')) return `38${digits}`;
+      if (digits.length >= 11) return digits;
+      return '';
+    }
+
+    function getPhoneHref(phone) {
+      const international = normalizeInternationalPhone(phone);
+      if (international) return `tel:+${international}`;
+      const local = normalizePhone(phone);
+      return local ? `tel:${local}` : '';
+    }
+
+    function openExternalLink(url) {
+      const opened = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!opened) window.location.href = url;
+    }
+
     function toDateInput(value) {
       const timestamp = Date.parse(value);
       if (!Number.isFinite(timestamp)) return '';
@@ -5778,6 +6106,7 @@ body[data-ui-theme="dark"] .orders-quick-filter.active{
         const safeStatus = STATUS_CONFIG[item.status] ? item.status : 'new';
         const deadlineState = getDeadlineState(item) || 'normal';
         const paymentState = getPaymentState(item);
+        const phoneHref = getPhoneHref(item.clientPhone);
         tr.dataset.rowStatus = safeStatus;
         tr.dataset.deadlineState = deadlineState;
         tr.dataset.paymentState = paymentState;
@@ -5800,7 +6129,9 @@ body[data-ui-theme="dark"] .orders-quick-filter.active{
           <td data-label="Модель">${escapeHtml(item.deviceModel || '—')}</td>
           <td data-label="Клиент" class="order-client-cell">
             <div class="order-list-primary">${escapeHtml(item.clientName || '—')}</div>
-            <div class="order-list-secondary">${escapeHtml(item.clientPhone || '—')}</div>
+            <div class="order-list-secondary">
+              ${phoneHref ? `<a class="order-phone-link" href="${escapeHtml(phoneHref)}" aria-label="Позвонить клиенту">${escapeHtml(item.clientPhone || '—')}</a>` : escapeHtml(item.clientPhone || '—')}
+            </div>
           </td>
           <td data-label="Телефон">${escapeHtml(item.clientPhone)}</td>
           <td data-label="Мастер">${escapeHtml(item.masterName || '—')}</td>
@@ -6707,16 +7038,18 @@ body[data-ui-theme="dark"] .orders-quick-filter.active{
 
     function openNotification(order, channel) {
       const text = buildNotificationText(order);
-      const phone = normalizePhone(order.clientPhone);
+      const phone = normalizeInternationalPhone(order.clientPhone);
 
       if (channel === 'whatsapp') {
-        if (!phone) return window.alert('У клиента не указан телефон.');
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+        if (!phone) return window.alert('У клиента нужен номер с кодом страны. Например: +995XXXXXXXXX или +380XXXXXXXXX.');
+        openExternalLink(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`);
       } else if (channel === 'sms') {
-        if (!phone) return window.alert('У клиента не указан телефон.');
-        window.location.href = `sms:+${phone}?body=${encodeURIComponent(text)}`;
+        const smsPhone = phone || normalizePhone(order.clientPhone);
+        if (!smsPhone) return window.alert('У клиента не указан телефон.');
+        window.location.href = `${phone ? `sms:+${phone}` : `sms:${smsPhone}`}?body=${encodeURIComponent(text)}`;
       } else {
-        window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+        const shareUrl = window.location.href.split('#')[0] || 'https://t.me/';
+        openExternalLink(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(text)}`);
       }
     }
 
