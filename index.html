@@ -4385,6 +4385,17 @@ body[data-ui-theme="dark"] td{
 }
 </style>
 
+<style id="release-clean-visible-hints">
+  #settingsModalOverlay .settings-section > .section-note,
+  #settingsModalOverlay .settings-section .docs-basic-card > .section-note,
+  #settingsModalOverlay .template-builder-head .section-note,
+  #settingsModalOverlay .docs-help,
+  #settingsModalOverlay .settings-hint:not(#cloudSyncStatus),
+  #orderActionsModalOverlay .order-row-hint {
+    display: none !important;
+  }
+</style>
+
 <style id="release-order-modal-responsive-form">
   #orderModalOverlay {
     align-items: center;
@@ -5124,8 +5135,17 @@ body[data-ui-theme="dark"] td{
                 <label class="field-label">Телефон сервиса
                   <input type="tel" id="settingsServicePhoneInput" placeholder="+380...">
                 </label>
+                <label class="field-label">Телефон сервиса 2
+                  <input type="tel" id="settingsServicePhone2Input" placeholder="+995...">
+                </label>
+                <label class="field-label">Телефон сервиса 3
+                  <input type="tel" id="settingsServicePhone3Input" placeholder="+995...">
+                </label>
                 <label class="field-label full">Адрес сервиса
                   <input type="text" id="settingsServiceAddressInput" placeholder="Город, улица, офис">
+                </label>
+                <label class="field-label full">Адрес сервиса 2
+                  <input type="text" id="settingsServiceAddress2Input" placeholder="Город, улица, офис">
                 </label>
                 <label class="field-label">Email
                   <input type="email" id="companyEmailInput" placeholder="service@example.com">
@@ -5628,7 +5648,10 @@ body[data-ui-theme="dark"] td{
     const DEFAULT_SETTINGS = {
       serviceName: '1ONE service',
       servicePhone: '+380509906265',
+      servicePhone2: '',
+      servicePhone3: '',
       serviceAddress: 'Харьков, ул. Харьковских Дивизий, 14/2',
+      serviceAddress2: '',
       companyEmail: '',
       companyLegalName: '',
       companyTaxId: '',
@@ -6967,7 +6990,10 @@ body[data-ui-theme="dark"] td{
       const settings = getSettings();
       setFormValue('settingsServiceNameInput', settings.serviceName);
       setFormValue('settingsServicePhoneInput', settings.servicePhone);
+      setFormValue('settingsServicePhone2Input', settings.servicePhone2);
+      setFormValue('settingsServicePhone3Input', settings.servicePhone3);
       setFormValue('settingsServiceAddressInput', settings.serviceAddress);
+      setFormValue('settingsServiceAddress2Input', settings.serviceAddress2);
       setFormValue('companyEmailInput', settings.companyEmail);
       setFormValue('companyLegalNameInput', settings.companyLegalName);
       setFormValue('companyTaxIdInput', settings.companyTaxId);
@@ -7051,8 +7077,10 @@ body[data-ui-theme="dark"] td{
 
     function templateContext(order = {}) {
       const settings = getSettings();
+      const servicePhones = [settings.servicePhone, settings.servicePhone2, settings.servicePhone3].map(item => String(item || '').trim()).filter(Boolean).join(', ');
+      const serviceAddresses = [settings.serviceAddress, settings.serviceAddress2].map(item => String(item || '').trim()).filter(Boolean).join('; ');
       return {
-        serviceName: settings.serviceName || '', servicePhone: settings.servicePhone || '', serviceAddress: settings.serviceAddress || '',
+        serviceName: settings.serviceName || '', servicePhone: servicePhones || settings.servicePhone || '', serviceAddress: serviceAddresses || settings.serviceAddress || '',
         legalName: settings.companyLegalName || '', taxId: settings.companyTaxId || '', email: settings.companyEmail || '',
         order: order.orderNumber || '', date: formatDate(order.createdAt || new Date().toISOString()), client: order.clientName || '',
         clientPhone: order.clientPhone || '', device: order.deviceType || '', model: order.deviceModel || '', master: order.masterName || '',
@@ -7425,7 +7453,8 @@ body[data-ui-theme="dark"] td{
     function buildNotificationText(order, settingsOverride = null) {
 
       const settings = getSettings();
-      return applyTemplate(settings.notificationTemplate || DEFAULT_SETTINGS.notificationTemplate, order, DEFAULT_SETTINGS.notificationTemplate).replaceAll('{service}', settings.serviceName).replaceAll('{phone}', settings.servicePhone);
+      const phones = [settings.servicePhone, settings.servicePhone2, settings.servicePhone3].map(item => String(item || '').trim()).filter(Boolean).join(', ');
+      return applyTemplate(settings.notificationTemplate || DEFAULT_SETTINGS.notificationTemplate, order, DEFAULT_SETTINGS.notificationTemplate).replaceAll('{service}', settings.serviceName).replaceAll('{phone}', phones || settings.servicePhone);
     }
 
     function openNotification(order, channel) {
@@ -8053,7 +8082,10 @@ body[data-ui-theme="dark"] td{
       const saved = saveSettings({
         serviceName: getFormValue('settingsServiceNameInput') || DEFAULT_SETTINGS.serviceName,
         servicePhone: getFormValue('settingsServicePhoneInput') || DEFAULT_SETTINGS.servicePhone,
+        servicePhone2: getFormValue('settingsServicePhone2Input'),
+        servicePhone3: getFormValue('settingsServicePhone3Input'),
         serviceAddress: getFormValue('settingsServiceAddressInput') || DEFAULT_SETTINGS.serviceAddress,
+        serviceAddress2: getFormValue('settingsServiceAddress2Input'),
         companyEmail: getFormValue('companyEmailInput'),
         companyLegalName: getFormValue('companyLegalNameInput'),
         companyTaxId: getFormValue('companyTaxIdInput'),
@@ -10375,6 +10407,325 @@ document.addEventListener('DOMContentLoaded', function(){
     document.addEventListener('DOMContentLoaded', init, { once:true });
   } else {
     init();
+  }
+})();
+</script>
+
+<script id="release-georgia-legal-a4-documents">
+(function(){
+  function esc(value) {
+    try {
+      return typeof escapeHtml === 'function'
+        ? escapeHtml(value ?? '')
+        : String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+    } catch (error) {
+      return String(value ?? '');
+    }
+  }
+  function txt(value, fallback = '—') {
+    const text = String(value || fallback || '—').trim();
+    return esc(text).replace(/\n/g, '<br>');
+  }
+  function moneySafe(value) {
+    try { return typeof money === 'function' ? money(value) : String(value || 0); }
+    catch (error) { return String(value || 0); }
+  }
+  function dateSafe(value, only = false) {
+    try {
+      if (only && typeof formatDateOnly === 'function') return formatDateOnly(value);
+      if (!only && typeof formatDate === 'function') return formatDate(value);
+    } catch (error) {}
+    return String(value || '—');
+  }
+  function debtSafe(order) {
+    try { return typeof getDebt === 'function' ? getDebt(order) : 0; }
+    catch (error) { return 0; }
+  }
+  function settingsFor(order) {
+    try {
+      if (typeof resolveDocumentSettings === 'function') return resolveDocumentSettings(order, false);
+    } catch (error) {}
+    try {
+      if (typeof getSettings === 'function') return getSettings();
+    } catch (error) {}
+    return {};
+  }
+  function servicesSafe(order) {
+    try {
+      if (typeof summarizeServices === 'function') return summarizeServices(order.servicesUsed);
+    } catch (error) {}
+    const items = Array.isArray(order.servicesUsed) ? order.servicesUsed : [];
+    return items.length ? items.map(item => `${esc(item.name)} · ${esc(item.qty || 1)} · ${esc(moneySafe(item.price))}`).join('<br>') : '—';
+  }
+  function partsSafe(order) {
+    try {
+      if (typeof summarizeParts === 'function') return summarizeParts(order.partsUsed);
+    } catch (error) {}
+    const items = Array.isArray(order.partsUsed) ? order.partsUsed : [];
+    return items.length ? items.map(item => `${esc(item.name)} · ${esc(item.qty || 1)}`).join('<br>') : '—';
+  }
+  function field(labelRu, labelKa, value, className = '') {
+    return `
+      <div class="ga4-field ${className}">
+        <div class="ga4-label"><span>${labelRu}</span><span>${labelKa}</span></div>
+        <div class="ga4-value">${value || '—'}</div>
+      </div>
+    `;
+  }
+  function notice(titleRu, titleKa, ru, ka, className = '') {
+    return `
+      <section class="ga4-notice ${className}">
+        <b>${titleRu} / ${titleKa}</b>
+        <div class="ga4-two">
+          <p>${ru}</p>
+          <p>${ka}</p>
+        </div>
+      </section>
+    `;
+  }
+  function legalRows(settings) {
+    const legal = [
+      settings.companyLegalName ? `Юр. лицо / იურ. პირი: ${esc(settings.companyLegalName)}` : '',
+      settings.companyTaxId ? `ИНН / საიდ. კოდი: ${esc(settings.companyTaxId)}` : '',
+      settings.companyEmail ? `Email: ${esc(settings.companyEmail)}` : ''
+    ].filter(Boolean);
+    return legal.length ? `<br>${legal.join('<br>')}` : '';
+  }
+  function joinFilled(values, separator = ', ') {
+    return values.map(item => String(item || '').trim()).filter(Boolean).join(separator);
+  }
+  function companyPhones(settings) {
+    return joinFilled([settings.servicePhone, settings.servicePhone2, settings.servicePhone3]) || settings.servicePhone || '';
+  }
+  function companyAddresses(settings) {
+    return joinFilled([settings.serviceAddress, settings.serviceAddress2], '; ') || settings.serviceAddress || '';
+  }
+  function head(settings, order, ru, ka) {
+    const number = esc(order.orderNumber || '');
+    const titleNumber = number ? ` № ${number}` : '';
+    return `
+      <header class="ga4-head">
+        <div>
+          <div class="ga4-brand">${esc(settings.serviceName || '1ONE service')}</div>
+          <div class="ga4-sub">
+            ${esc(settings.printBrandText || 'Сервисный центр')} / სერვის ცენტრი<br>
+            Исполнитель / შემსრულებელი: ${esc(settings.serviceName || '1ONE service')}<br>
+            Тел. / ტელ.: ${esc(companyPhones(settings))}<br>
+            Адрес / მისამართი: ${esc(companyAddresses(settings))}${legalRows(settings)}
+          </div>
+        </div>
+        <div class="ga4-meta">
+          Дата / თარიღი: ${esc(dateSafe(order.createdAt || new Date().toISOString()))}<br>
+          Юрисдикция / იურისდიქცია: Грузия / საქართველო
+        </div>
+      </header>
+      <h1><span>${ru}${titleNumber}</span><small>${ka}${titleNumber}</small></h1>
+    `;
+  }
+  function signatures(settings, reverse = false) {
+    if (settings.printShowSignatures === 'no') return '';
+    const client = `${esc(settings.signatureClientLabel || 'Подпись клиента')} / კლიენტის ხელმოწერა`;
+    const master = `${esc(settings.signatureMasterLabel || 'Подпись мастера')} / ოსტატის ხელმოწერა`;
+    return `
+      <section class="ga4-signatures">
+        <div>${reverse ? master : client}</div>
+        <div>${reverse ? client : master}</div>
+      </section>
+    `;
+  }
+  function partyFields(settings, order) {
+    return `
+      ${settings.printShowClientBlock === 'no' ? '' : `
+        ${field('Клиент', 'კლიენტი', esc(order.clientName || '—'))}
+        ${field('Телефон', 'ტელეფონი', esc(order.clientPhone || '—'))}
+      `}
+      ${settings.printShowDeviceBlock === 'no' ? '' : `
+        ${field('Устройство', 'მოწყობილობა', esc(order.deviceType || '—'))}
+        ${field('Модель', 'მოდელი', esc(order.deviceModel || '—'))}
+      `}
+    `;
+  }
+  function renderAcceptanceGeorgia(order = {}) {
+    const settings = settingsFor(order);
+    return `
+      <article class="ga4-doc">
+        ${head(settings, order, 'Акт приема техники', 'ტექნიკის მიღების აქტი')}
+        <section class="ga4-grid">
+          ${partyFields(settings, order)}
+          ${field('Мастер', 'ოსტატი', esc(order.masterName || '—'))}
+          ${field('Тип / срок', 'ტიპი / ვადა', `${esc(order.orderType || '—')} · ${esc(dateSafe(order.deadlineAt, true))}`)}
+        </section>
+        <section class="ga4-stack">
+          ${field('Заявленная неисправность', 'აღწერილი გაუმართაობა', txt(order.problemDescription), 'ga4-full ga4-clamp-mid')}
+          ${field('Комплектация / внешний вид / комментарий', 'კომპლექტაცია / გარეგნული მდგომარეობა / კომენტარი', txt(order.masterNotes, 'Без дополнительных комментариев'), 'ga4-full ga4-clamp-mid')}
+          ${notice(
+            'Прием устройства',
+            'მოწყობილობის მიღება',
+            'Устройство принято в сервисный центр. Диагностика, сроки и стоимость ремонта согласуются с клиентом отдельно.',
+            'მოწყობილობა მიღებულია სერვის ცენტრში. დიაგნოსტიკა, ვადები და შეკეთების ღირებულება კლიენტთან შეთანხმდება ცალკე.'
+          )}
+        </section>
+        ${signatures(settings)}
+      </article>
+    `;
+  }
+  function renderCompletedGeorgia(order = {}) {
+    const settings = settingsFor(order);
+    const priceRows = settings.printShowPriceBlock === 'no' ? '' : `
+      <tr><td>Стоимость деталей<br><span>ნაწილების ღირებულება</span></td><td>${esc(moneySafe(order.partsCost))}</td></tr>
+      <tr><td>Скидка<br><span>ფასდაკლება</span></td><td>${esc(moneySafe(order.discountAmount))}</td></tr>
+      <tr><td>Итого<br><span>ჯამი</span></td><td>${esc(moneySafe(order.totalCost))}</td></tr>
+      <tr><td>Оплачено<br><span>გადახდილია</span></td><td>${esc(moneySafe(order.paidAmount))}</td></tr>
+      <tr><td>Долг<br><span>დავალიანება</span></td><td>${esc(moneySafe(debtSafe(order)))}</td></tr>
+    `;
+    return `
+      <article class="ga4-doc">
+        ${head(settings, order, 'Акт выполненных работ', 'შესრულებული სამუშაოების აქტი')}
+        <section class="ga4-grid">${partyFields(settings, order)}</section>
+        <section class="ga4-stack">
+          ${field('Неисправность', 'გაუმართაობა', txt(order.problemDescription), 'ga4-full ga4-clamp-small')}
+          ${field('Выполненные работы', 'შესრულებული სამუშაოები', txt(order.completedWorks || order.masterNotes || 'Работы выполнены согласно заказу.'), 'ga4-full ga4-clamp-mid')}
+          <table class="ga4-table">
+            <tbody>
+              <tr><td>Услуги<br><span>მომსახურება</span></td><td>${servicesSafe(order)}</td></tr>
+              <tr><td>Использованные детали<br><span>გამოყენებული ნაწილები</span></td><td>${partsSafe(order)}</td></tr>
+              ${priceRows}
+            </tbody>
+          </table>
+          ${notice(
+            'Подтверждение',
+            'დადასტურება',
+            'Клиент получил устройство и подтверждает выполнение указанных работ.',
+            'კლიენტმა მიიღო მოწყობილობა და ადასტურებს მითითებული სამუშაოების შესრულებას.'
+          )}
+        </section>
+        ${signatures(settings)}
+      </article>
+    `;
+  }
+  function renderWarrantyGeorgia(order = {}) {
+    const settings = settingsFor(order);
+    return `
+      <article class="ga4-doc">
+        ${head(settings, order, 'Гарантийный талон', 'საგარანტიო ტალონი')}
+        <section class="ga4-grid">
+          ${partyFields(settings, order)}
+          ${field('Срок гарантии', 'გარანტიის ვადა', `${esc(order.warrantyDays || '—')} дней / დღე`)}
+          ${field('Гарантия до', 'გარანტია მოქმედებს', esc(dateSafe(order.warrantyUntil, true)))}
+        </section>
+        <section class="ga4-stack">
+          ${field('Работы / неисправность', 'სამუშაოები / გაუმართაობა', txt(order.completedWorks || order.problemDescription), 'ga4-full ga4-clamp-mid')}
+          ${settings.printShowPriceBlock === 'no' ? '' : field('Стоимость заказа', 'შეკვეთის ღირებულება', esc(moneySafe(order.totalCost)), 'ga4-full')}
+          ${notice(
+            'Условия гарантии',
+            'კომერციული გარანტიის პირობები',
+            'Гарантия действует на выполненные работы и установленные детали при соблюдении правил эксплуатации. Для обращения по гарантии используйте контакты исполнителя, указанные в документе.',
+            'გარანტია ვრცელდება შესრულებულ სამუშაოებსა და დამონტაჟებულ ნაწილებზე ექსპლუატაციის წესების დაცვის შემთხვევაში. საგარანტიო მიმართვისთვის გამოიყენეთ დოკუმენტში მითითებული შემსრულებლის საკონტაქტო ინფორმაცია.'
+          )}
+        </section>
+        ${signatures(settings, true)}
+      </article>
+    `;
+  }
+  function renderLabelGeorgia(order = {}) {
+    const settings = settingsFor(order);
+    return `
+      <article class="ga4-doc ga4-label-doc">
+        ${head(settings, order, 'Сервисная наклейка', 'სერვისული ეტიკეტი')}
+        <section class="ga4-label-card">
+          ${field('Заказ', 'შეკვეთა', esc(order.orderNumber || '—'))}
+          ${field('Клиент / телефон', 'კლიენტი / ტელეფონი', `${esc(order.clientName || '—')}<br>${esc(order.clientPhone || '—')}`)}
+          ${field('Устройство', 'მოწყობილობა', `${esc(order.deviceType || '—')} ${esc(order.deviceModel || '')}`)}
+          ${field('Статус', 'სტატუსი', esc(typeof getStatusLabel === 'function' ? getStatusLabel(order.status) : (order.status || '—')))}
+        </section>
+      </article>
+    `;
+  }
+  function a4Style() {
+    return `
+      @page{size:A4;margin:7mm}
+      html,body{width:210mm;height:297mm;margin:0;padding:0;overflow:hidden;background:#fff;color:#111;font-family:Arial,"Noto Sans Georgian","DejaVu Sans",sans-serif}
+      *{box-sizing:border-box}
+      .doc{width:196mm;height:283mm;margin:0 auto;overflow:hidden;background:#fff}
+      .ga4-doc{width:196mm;height:283mm;overflow:hidden;display:flex;flex-direction:column;gap:2.6mm;font-size:9.6px;line-height:1.18;color:#111}
+      .ga4-head{display:grid;grid-template-columns:minmax(0,1fr) 55mm;gap:5mm;align-items:start;border-bottom:1px solid #111;padding-bottom:2.6mm}
+      .ga4-brand{font-size:17px;font-weight:900;line-height:1;margin-bottom:1.6mm}
+      .ga4-sub,.ga4-meta{font-size:8.6px;line-height:1.25;color:#333;overflow-wrap:anywhere}
+      .ga4-meta{text-align:right}
+      h1{margin:0;text-align:center;font-size:14px;line-height:1.08;font-weight:900}
+      h1 small{display:block;font-size:11px;margin-top:.8mm}
+      .ga4-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.8mm}
+      .ga4-stack{display:grid;gap:1.8mm;min-height:0}
+      .ga4-field{border:1px solid #222;border-radius:1.6mm;padding:1.35mm 1.7mm;min-height:10.5mm;overflow:hidden;break-inside:avoid}
+      .ga4-full{grid-column:1/-1}
+      .ga4-label{display:flex;justify-content:space-between;gap:3mm;color:#4b5563;font-size:7.7px;line-height:1.08;font-weight:900;text-transform:uppercase}
+      .ga4-value{margin-top:.75mm;font-size:9.7px;line-height:1.2;overflow-wrap:anywhere;word-break:break-word}
+      .ga4-clamp-small .ga4-value{max-height:10mm;overflow:hidden}
+      .ga4-clamp-mid .ga4-value{max-height:17mm;overflow:hidden}
+      .ga4-notice{border:1px dashed #555;border-radius:1.6mm;padding:1.5mm 1.8mm;overflow:hidden;break-inside:avoid}
+      .ga4-notice b{display:block;font-size:8.8px;margin-bottom:.8mm}
+      .ga4-two{display:grid;grid-template-columns:1fr 1fr;gap:2.6mm}
+      .ga4-two p{margin:0;font-size:8.1px;line-height:1.18;color:#333}
+      .ga4-table{width:100%;border-collapse:collapse;table-layout:fixed}
+      .ga4-table td{border:1px solid #222;padding:1.1mm 1.5mm;vertical-align:top;font-size:8.8px;line-height:1.15;overflow-wrap:anywhere}
+      .ga4-table td:first-child{width:43mm;font-weight:900}
+      .ga4-table span{font-size:7.5px;color:#555;font-weight:700}
+      .ga4-signatures{display:grid;grid-template-columns:1fr 1fr;gap:14mm;margin-top:auto;padding-top:5mm}
+      .ga4-signatures div{border-top:1px solid #111;padding-top:1.4mm;font-size:8.8px;font-weight:800;text-align:center}
+      .ga4-label-card{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-top:8mm}
+      .ga4-label-note{margin-top:auto}
+      .doc-footer{display:none}
+      @media screen{body{padding:12px;background:#e5e7eb}.doc{box-shadow:0 18px 44px rgba(0,0,0,.16)}}
+      @media print{html,body{overflow:hidden}.doc{page-break-after:avoid;break-after:avoid}.ga4-doc{page-break-inside:avoid;break-inside:avoid}}
+    `;
+  }
+  function printA4(title, body) {
+    const printWindow = window.open('', '_blank', 'width=980,height=900');
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html lang="ru">
+        <head>
+          <meta charset="UTF-8">
+          <title>${esc(title)}</title>
+          <style>${a4Style()}</style>
+        </head>
+        <body>
+          <div class="doc">${body}</div>
+          <script>
+            (function(){
+              function fit(){
+                var doc=document.querySelector('.ga4-doc');
+                if(!doc) return;
+                var scale=1;
+                doc.style.zoom='1';
+                while(doc.scrollHeight > doc.clientHeight + 1 && scale > .72){
+                  scale=Math.round((scale-.02)*100)/100;
+                  doc.style.zoom=String(scale);
+                }
+              }
+              window.addEventListener('load', function(){fit(); setTimeout(function(){window.focus(); window.print();}, 120);});
+            })();
+          <\/script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  }
+  function install() {
+    window.renderAcceptanceAct = renderAcceptanceGeorgia;
+    window.renderCompletedAct = renderCompletedGeorgia;
+    window.renderWarranty = renderWarrantyGeorgia;
+    window.renderLabelHtml = renderLabelGeorgia;
+    window.renderLabel = renderLabelGeorgia;
+    window.printAcceptanceAct = function(order){ printA4(`Акт приема / მიღების აქტი № ${order?.orderNumber || ''}`, renderAcceptanceGeorgia(order || {})); };
+    window.printCompletedAct = function(order){ printA4(`Акт выполненных работ / შესრულებული სამუშაოები № ${order?.orderNumber || ''}`, renderCompletedGeorgia(order || {})); };
+    window.printWarranty = function(order){ printA4(`Гарантия / გარანტია № ${order?.orderNumber || ''}`, renderWarrantyGeorgia(order || {})); };
+    window.printLabel = function(order){ printA4(`Сервисная наклейка / სერვისული ეტიკეტი № ${order?.orderNumber || ''}`, renderLabelGeorgia(order || {})); };
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install, { once:true });
+  } else {
+    install();
   }
 })();
 </script>
