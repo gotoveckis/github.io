@@ -10433,6 +10433,7 @@ document.addEventListener('DOMContentLoaded', function(){
   document.addEventListener('click', function(event){
     const button = event.target.closest('#ordersBtn,#registrationRequestsBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn');
     if (!button) return;
+    if (button.id === 'registrationRequestsBtn' && !(window.crmCurrentUser?.isAdmin && !window.crmCurrentUser?.serviceAdmin)) return;
 
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -10468,6 +10469,19 @@ document.addEventListener('DOMContentLoaded', function(){
   const AUTH_USER_KEY = 'crm_current_user';
   const AUTH_PENDING_USER_KEY = 'crm_pending_user';
   const REGISTRATION_SEEN_KEY = 'one_service_seen_registration_request_ids';
+  const WORKSPACE_DATA_KEYS = [
+    'one_service_settings',
+    'one_service_orders',
+    'one_service_inventory',
+    'one_service_services',
+    'one_service_expenses',
+    'one_service_tasks',
+    'one_service_suppliers',
+    'one_service_clients',
+    'one_service_activity',
+    'one_service_registration_requests',
+    'one_service_service_registry'
+  ];
   const ADMIN_USER = {
     id: 'admin',
     name: 'Администратор',
@@ -10654,6 +10668,33 @@ document.addEventListener('DOMContentLoaded', function(){
   function ownerWorkspaceId() {
     return serviceSlug(window.CRM_RELEASE_CLOUD_CONFIG?.workspaceId || 'one-service');
   }
+  function serviceWorkspaceIdForUser(user) {
+    return serviceSlug(user?.workspaceId || user?.serviceId || '');
+  }
+  function isMainAdminUser(user = activeUser) {
+    return Boolean(user?.isAdmin && !user?.serviceAdmin && currentWorkspaceId() === ownerWorkspaceId());
+  }
+  function isValidServiceAdminUser(user) {
+    const target = serviceWorkspaceIdForUser(user);
+    return Boolean(user?.serviceAdmin && target && target !== ownerWorkspaceId());
+  }
+  function serviceRecordFromUser(user) {
+    const serviceId = serviceWorkspaceIdForUser(user);
+    return {
+      ...(user?.serviceRecord || {}),
+      id: serviceId,
+      serviceId,
+      workspaceId: serviceId,
+      serviceName: user?.serviceName || user?.serviceRecord?.serviceName || 'Новый сервис',
+      adminName: user?.name || user?.serviceRecord?.adminName || 'Администратор сервиса',
+      login: user?.login || user?.serviceRecord?.login || user?.serviceRecord?.adminLogin || '',
+      adminLogin: user?.login || user?.serviceRecord?.adminLogin || user?.serviceRecord?.login || '',
+      adminPassword: user?.serviceRecord?.adminPassword || '',
+      phone: user?.serviceRecord?.phone || '',
+      limits: user?.serviceRecord?.limits || DEFAULT_SERVICE_LIMITS,
+      status: 'active'
+    };
+  }
   function saveAuthForReload(user, remember) {
     const cleanUser = user ? { ...user, password: '' } : null;
     try {
@@ -10725,14 +10766,60 @@ document.addEventListener('DOMContentLoaded', function(){
       }]
     };
   }
+  function writeWorkspaceBootstrapData(bootstrap) {
+    const values = {
+      one_service_settings: bootstrap.settings || {},
+      one_service_orders: [],
+      one_service_inventory: [],
+      one_service_services: [],
+      one_service_expenses: [],
+      one_service_tasks: [],
+      one_service_suppliers: [],
+      one_service_clients: [],
+      one_service_activity: [],
+      one_service_registration_requests: [],
+      one_service_service_registry: Array.isArray(bootstrap.serviceRegistry) ? bootstrap.serviceRegistry : []
+    };
+    WORKSPACE_DATA_KEYS.forEach(key => {
+      const value = Object.prototype.hasOwnProperty.call(values, key) ? values[key] : [];
+      localStorage.setItem(key, JSON.stringify(value));
+    });
+  }
+  function applyPendingWorkspaceBootstrapLocal() {
+    try {
+      const pending = JSON.parse(localStorage.getItem(WORKSPACE_BOOTSTRAP_KEY) || 'null');
+      if (!pending || pending.workspaceId !== currentWorkspaceId()) return false;
+      writeWorkspaceBootstrapData(pending.bootstrap || {});
+      localStorage.removeItem(WORKSPACE_BOOTSTRAP_KEY);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  function cleanLeakedOwnerDataForService(user) {
+    if (!isValidServiceAdminUser(user)) return false;
+    const target = serviceWorkspaceIdForUser(user);
+    if (currentWorkspaceId() !== target) return false;
+    const registry = getServiceRegistry();
+    const hasTargetRecord = registry.some(item => String(item.serviceId || item.id || '') === target);
+    const hasOwnerRecord = registry.some(item => item?.isOwnerService || String(item.serviceId || item.id || '') === ownerWorkspaceId());
+    const settings = readSettings();
+    const serviceName = String(user.serviceName || user.serviceRecord?.serviceName || '').trim();
+    const settingsName = String(settings.serviceName || '').trim();
+    const looksLikeOwnerSettings = settingsName && serviceName && settingsName !== serviceName && /one service|1one service/i.test(settingsName);
+    if (!hasOwnerRecord && hasTargetRecord && !looksLikeOwnerSettings) return false;
+    writeWorkspaceBootstrapData(buildServiceWorkspaceBootstrap(serviceRecordFromUser(user), user));
+    return true;
+  }
   function prepareWorkspaceSwitch(user, remember, service = null) {
     const targetWorkspace = serviceSlug(user.workspaceId || user.serviceId || ownerWorkspaceId());
     if (currentWorkspaceId() === targetWorkspace) return false;
-    if (service) {
+    const serviceForBootstrap = service || (user?.serviceAdmin ? serviceRecordFromUser(user) : null);
+    if (serviceForBootstrap) {
       try {
         localStorage.setItem(WORKSPACE_BOOTSTRAP_KEY, JSON.stringify({
           workspaceId: targetWorkspace,
-          bootstrap: buildServiceWorkspaceBootstrap(service, user),
+          bootstrap: buildServiceWorkspaceBootstrap(serviceForBootstrap, user),
           createdAt: new Date().toISOString()
         }));
       } catch (error) {}
@@ -10842,7 +10929,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
   function notifyNewRegistrationRequests(requests) {
-    if (!activeUser?.isAdmin) return;
+    if (!isMainAdminUser()) return;
     const pending = (Array.isArray(requests) ? requests : []).filter(item => (item.status || 'pending') === 'pending');
     const seen = getSeenRegistrationIds();
     const fresh = pending.filter(item => item.id && !seen.has(String(item.id)));
@@ -10970,6 +11057,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     if (!service) return null;
     const serviceId = service.serviceId || service.workspaceId || serviceSlug(service.serviceName);
+    if (!serviceId || serviceSlug(serviceId) === ownerWorkspaceId()) return null;
     return {
       id: `service_admin_${serviceId}`,
       name: service.adminName || service.serviceName || 'Администратор сервиса',
@@ -11483,7 +11571,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function renderServiceManagement() {
     const launcher = document.getElementById('serviceManagementCard');
-    const isMainAdmin = Boolean(activeUser?.isAdmin);
+    const isMainAdmin = isMainAdminUser();
     if (launcher) launcher.hidden = !isMainAdmin;
 
     const overlay = document.getElementById('serviceManagementOverlay');
@@ -11574,7 +11662,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function openServiceManagement() {
-    if (!activeUser?.isAdmin) return window.alert('Управление сервисами доступно только главному администратору.');
+    if (!isMainAdminUser()) return window.alert('Управление сервисами доступно только главному администратору.');
     ensureServiceManagementModal();
     renderServiceManagement();
     document.getElementById('serviceManagementOverlay')?.classList.add('open');
@@ -11669,7 +11757,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const counter = document.getElementById('registrationRequestsCounter');
     if (!card || !list) return;
 
-    const isMainAdmin = Boolean(activeUser?.isAdmin);
+    const isMainAdmin = isMainAdminUser();
     const managementCard = document.getElementById('serviceManagementCard');
     if (managementCard) managementCard.hidden = !isMainAdmin;
     card.hidden = !isMainAdmin;
@@ -12067,7 +12155,8 @@ document.addEventListener('DOMContentLoaded', function(){
     if (localStorage.getItem(AUTH_REMEMBER_KEY) !== '1') return null;
     try {
       const stored = JSON.parse(localStorage.getItem(AUTH_USER_KEY) || 'null');
-      if (stored?.isAdmin) return { ...ADMIN_USER, password: '' };
+      if (stored?.isAdmin && stored.login === ADMIN_USER.login) return { ...ADMIN_USER, password: '' };
+      if (stored?.isAdmin && stored.login !== ADMIN_USER.login) return null;
       if (stored?.serviceAdmin) return stored;
       if (stored?.id) {
         const profile = getMasterProfiles().find(item => item.id === stored.id);
@@ -12077,7 +12166,8 @@ document.addEventListener('DOMContentLoaded', function(){
     return null;
   }
   function setCurrentUser(user, remember) {
-    activeUser = user ? { ...user, password: '' } : null;
+    const normalizedUser = user?.serviceAdmin ? { ...user, isAdmin: false } : user;
+    activeUser = normalizedUser ? { ...normalizedUser, password: '' } : null;
     window.crmCurrentUser = activeUser;
     if (activeUser && remember) {
       localStorage.setItem(AUTH_REMEMBER_KEY, '1');
@@ -12098,12 +12188,12 @@ document.addEventListener('DOMContentLoaded', function(){
     if (cleanLogin === ADMIN_USER.login && password === ADMIN_USER.password) {
       return { ...ADMIN_USER };
     }
+    const serviceAdmin = authenticateServiceAdmin(login, password);
+    if (serviceAdmin) return serviceAdmin;
     const profile = findMasterByLogin(cleanLogin);
     if (profile && profile.password && password === profile.password) {
       return { ...profile, isAdmin: false };
     }
-    const serviceAdmin = authenticateServiceAdmin(login, password);
-    if (serviceAdmin) return serviceAdmin;
     return null;
   }
   function authenticateAfterCloudSync(login, password, timeout = 2200) {
@@ -12121,7 +12211,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
   function refreshActiveUserFromProfiles() {
-    if (!activeUser || activeUser.isAdmin) return;
+    if (!activeUser || activeUser.isAdmin || activeUser.serviceAdmin) return;
     const profile = getMasterProfiles().find(item => item.id === activeUser.id || (item.login && item.login === activeUser.login));
     if (!profile) return;
     activeUser = { ...profile, password: '', isAdmin: false };
@@ -12134,12 +12224,12 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   function userHasRole(key) {
     if (!activeUser) return false;
-    if (activeUser.isAdmin || activeUser.roles?.includes('all')) return true;
+    if (isMainAdminUser() || activeUser.roles?.includes('all')) return true;
     return normalizeRoles(activeUser.roles, []).includes(key);
   }
   function allowedSection(sectionName) {
     const key = SETTINGS_SECTION_ACCESS[sectionName] || 'settings';
-    if (activeUser?.isAdmin) return true;
+    if (isMainAdminUser()) return true;
     if (sectionName === 'company' || sectionName === 'localization') return userHasRole('settings');
     return userHasRole(key) || userHasRole('settings');
   }
@@ -12160,7 +12250,7 @@ document.addEventListener('DOMContentLoaded', function(){
     ACCESS_ROLES.forEach(role => {
       if (!role.menuId) return;
       const settingsAllowed = role.key === 'settings' && (userHasRole('settings') || userHasRole('documents') || userHasRole('staff'));
-      const allowed = signedIn && (activeUser?.isAdmin || settingsAllowed || userHasRole(role.key) || role.key === 'orders');
+      const allowed = signedIn && (isMainAdminUser() || settingsAllowed || userHasRole(role.key) || role.key === 'orders');
       const button = document.getElementById(role.menuId);
       if (button) {
         button.hidden = !allowed;
@@ -12183,10 +12273,30 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     const registrationButton = document.getElementById('registrationRequestsBtn');
     if (registrationButton) {
-      const allowed = Boolean(activeUser?.isAdmin);
+      const allowed = isMainAdminUser();
       registrationButton.hidden = !allowed;
       registrationButton.disabled = !allowed;
     }
+  }
+  function guardWorkspaceForUser(user, remember = false) {
+    if (!user) return { ok: false, message: 'Пользователь не найден.' };
+    if (user.serviceAdmin) {
+      if (!isValidServiceAdminUser(user)) {
+        return { ok: false, message: 'У этого сервисного центра не задан отдельный workspace. Вход заблокирован, чтобы не открыть чужую базу.' };
+      }
+      const targetWorkspace = serviceWorkspaceIdForUser(user);
+      if (currentWorkspaceId() !== targetWorkspace) {
+        prepareWorkspaceSwitch(user, remember, user.serviceRecord || serviceRecordFromUser(user));
+        return { ok: false, switching: true };
+      }
+      cleanLeakedOwnerDataForService(user);
+      return { ok: true };
+    }
+    if (user.isAdmin && currentWorkspaceId() !== ownerWorkspaceId()) {
+      prepareWorkspaceSwitch(user, remember);
+      return { ok: false, switching: true };
+    }
+    return { ok: true };
   }
   function setupAuth() {
     const oldForm = document.getElementById('authForm');
@@ -12211,6 +12321,14 @@ document.addEventListener('DOMContentLoaded', function(){
       errorNode.classList.add('show');
     };
     const showAppLocal = () => {
+      const guard = guardWorkspaceForUser(activeUser, localStorage.getItem(AUTH_REMEMBER_KEY) === '1');
+      if (!guard.ok) {
+        if (!guard.switching) {
+          setCurrentUser(null, false);
+          showError(guard.message || 'Доступ к workspace заблокирован.');
+        }
+        return;
+      }
       if (authShell) authShell.style.display = 'none';
       if (appShell) {
         appShell.classList.add('is-authenticated');
@@ -12233,16 +12351,16 @@ document.addEventListener('DOMContentLoaded', function(){
     const remembered = getUserFromStorage();
     if (rememberInput) rememberInput.checked = localStorage.getItem(AUTH_REMEMBER_KEY) === '1';
     if (remembered) {
-      if (remembered.isAdmin && currentWorkspaceId() !== ownerWorkspaceId()) {
-        prepareWorkspaceSwitch(remembered, true);
-        return;
-      }
-      if (remembered.serviceAdmin && currentWorkspaceId() !== serviceSlug(remembered.workspaceId || remembered.serviceId)) {
-        prepareWorkspaceSwitch(remembered, localStorage.getItem(AUTH_REMEMBER_KEY) === '1', remembered.serviceRecord || null);
-        return;
-      }
-      activeUser = remembered;
+      activeUser = remembered?.serviceAdmin ? { ...remembered, isAdmin: false } : remembered;
       window.crmCurrentUser = activeUser;
+      const guard = guardWorkspaceForUser(activeUser, localStorage.getItem(AUTH_REMEMBER_KEY) === '1');
+      if (guard.switching) return;
+      if (!guard.ok) {
+        setCurrentUser(null, false);
+        showAuthLocal();
+        showError(guard.message || 'Доступ к workspace заблокирован.');
+        return;
+      }
       showAppLocal();
       updateCurrentUserChip();
     } else {
@@ -12264,14 +12382,13 @@ document.addEventListener('DOMContentLoaded', function(){
         passwordInput?.select();
         return;
       }
-      if (user.isAdmin && currentWorkspaceId() !== ownerWorkspaceId()) {
-        showError('Открываю основной workspace...');
-        prepareWorkspaceSwitch(user, Boolean(rememberInput?.checked));
+      const guard = guardWorkspaceForUser(user, Boolean(rememberInput?.checked));
+      if (guard.switching) {
+        showError(user.serviceAdmin ? 'Открываю workspace сервиса...' : 'Открываю основной workspace...');
         return;
       }
-      if (user.serviceAdmin && currentWorkspaceId() !== serviceSlug(user.workspaceId || user.serviceId)) {
-        showError('Открываю workspace сервиса...');
-        prepareWorkspaceSwitch(user, Boolean(rememberInput?.checked), user.serviceRecord);
+      if (!guard.ok) {
+        showError(guard.message || 'Доступ к workspace заблокирован.');
         return;
       }
       setCurrentUser(user, Boolean(rememberInput?.checked));
@@ -12463,6 +12580,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function init() {
+    applyPendingWorkspaceBootstrapLocal();
     ensureDocumentsWithoutPreview();
     ensureSettingsServicesUi();
     ensureMasterAccessUi();
