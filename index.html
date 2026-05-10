@@ -2924,6 +2924,9 @@
     font-weight:900;
     line-height:1;
   }
+  .registration-menu-badge[hidden]{
+    display:none !important;
+  }
   .admin-registration-dashboard{
     margin-top:14px;
   }
@@ -5631,6 +5634,7 @@ body[data-ui-theme="dark"] .client-order-row em{
           <button class="btn btn-secondary" id="reportsBtn" type="button">Отчеты</button>
           <button class="btn btn-secondary" id="suppliersBtn" type="button">Поставщики</button>
           <button class="btn btn-secondary" id="activityBtn" type="button">Журнал</button>
+          <button class="btn btn-secondary" id="registrationRequestsBtn" type="button" hidden>Заявки</button>
           <button class="btn btn-secondary" id="settingsBtn" type="button">Настройки</button>
           <button class="btn btn-secondary" id="exportJsonBtn" type="button">Экспорт</button>
           <button class="btn btn-secondary" id="importDataBtn" type="button">Импорт</button>
@@ -5865,6 +5869,16 @@ body[data-ui-theme="dark"] .client-order-row em{
       <p>База собирается автоматически по телефонам из заказов. В карточке видно всю историю ремонтов клиента.</p>
       <input type="search" id="clientSearchInput" placeholder="Поиск клиента по имени или телефону">
       <div class="mini-list" id="clientsList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="registrationRequestsModalOverlay">
+    <div class="modal wide-modal">
+      <button class="modal-close" id="closeRegistrationRequestsPageModal" type="button" aria-label="Close">×</button>
+      <h3>Заявки на подключение</h3>
+      <p>Входящие заявки от сервисных центров, которые хотят подключиться к CRM.</p>
+      <div class="manage-counter" id="mainRegistrationRequestsCounter"></div>
+      <div class="registration-requests-list" id="mainRegistrationRequestsList"></div>
     </div>
   </div>
 
@@ -10361,6 +10375,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <script id="release-workspace-pages-auth-ui">
 (function(){
   const workspacePages = {
+    registrationRequestsBtn: { overlay: 'registrationRequestsModalOverlay', prepare: () => safeCall('renderRegistrationRequestsPage') },
     clientsBtn: { overlay: 'clientsModalOverlay', prepare: () => safeCall('renderClients') },
     inventoryBtn: { overlay: 'inventoryModalOverlay', prepare: () => { safeCall('setInventoryForm'); safeCall('renderInventory'); } },
     servicesBtn: { overlay: 'servicesModalOverlay', prepare: () => { safeCall('setServiceForm'); safeCall('renderServices'); } },
@@ -10430,7 +10445,7 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   document.addEventListener('click', function(event){
-    const button = event.target.closest('#ordersBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn');
+    const button = event.target.closest('#ordersBtn,#registrationRequestsBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn');
     if (!button) return;
 
     event.preventDefault();
@@ -10439,6 +10454,12 @@ document.addEventListener('DOMContentLoaded', function(){
     if (button.id === 'ordersBtn') closeWorkspacePages();
     else openWorkspacePage(button.id);
   }, true);
+
+  document.addEventListener('click', function(event){
+    if (event.target.closest('.workspace-page-overlay .modal-close') || event.target.classList?.contains('workspace-page-overlay')) {
+      closeWorkspacePages();
+    }
+  });
 
   document.addEventListener('keydown', function(event){
     if (event.key === 'Escape' && document.body.classList.contains('workspace-page-open')) {
@@ -10819,17 +10840,20 @@ document.addEventListener('DOMContentLoaded', function(){
     } catch (error) {}
   }
   function updateRegistrationRequestsBadge(count = 0) {
-    const settingsButton = document.getElementById('settingsBtn');
-    if (!settingsButton) return;
-    let badge = document.getElementById('registrationRequestsMenuBadge');
-    if (!badge) {
-      badge = document.createElement('span');
-      badge.id = 'registrationRequestsMenuBadge';
-      badge.className = 'registration-menu-badge';
-      settingsButton.appendChild(badge);
-    }
-    badge.textContent = String(count);
-    badge.hidden = !count;
+    ['registrationRequestsBtn', 'settingsBtn'].forEach(buttonId => {
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      const badgeId = `${buttonId}RegistrationBadge`;
+      let badge = document.getElementById(badgeId);
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.id = badgeId;
+        badge.className = 'registration-menu-badge';
+        button.appendChild(badge);
+      }
+      badge.textContent = String(count);
+      badge.hidden = !count;
+    });
   }
   function notifyNewRegistrationRequests(requests) {
     if (!activeUser?.isAdmin) return;
@@ -11371,6 +11395,21 @@ document.addEventListener('DOMContentLoaded', function(){
       : '<div class="section-note">Заявок пока нет.</div>';
   }
 
+  function renderRegistrationRequestsPage(requests = getRegistrationRequests()) {
+    const counter = document.getElementById('mainRegistrationRequestsCounter');
+    const list = document.getElementById('mainRegistrationRequestsList');
+    if (!list) return;
+    const sorted = (Array.isArray(requests) ? requests : []).slice().sort((a, b) => {
+      const rank = status => status === 'pending' ? 0 : status === 'approved' ? 1 : 2;
+      return rank(a.status || 'pending') - rank(b.status || 'pending') || (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0);
+    });
+    const pendingCount = sorted.filter(item => (item.status || 'pending') === 'pending').length;
+    if (counter) counter.textContent = pendingCount ? `Ожидают решения: ${pendingCount} · всего заявок: ${sorted.length}` : `Ожидающих заявок нет · всего заявок: ${sorted.length}`;
+    list.innerHTML = sorted.length
+      ? sorted.map(request => registrationRequestRowHtml(request)).join('')
+      : '<div class="section-note">Заявок пока нет.</div>';
+  }
+
   function ensureServiceManagementModal() {
     if (document.getElementById('serviceManagementOverlay')) return;
     const overlay = document.createElement('div');
@@ -11681,6 +11720,7 @@ document.addEventListener('DOMContentLoaded', function(){
     updateRegistrationRequestsBadge(pendingCount);
     notifyNewRegistrationRequests(requests);
     renderDashboardRegistrationRequests(requests);
+    renderRegistrationRequestsPage(requests);
     renderServiceManagement();
 
     if (!requests.length) {
@@ -11783,6 +11823,7 @@ document.addEventListener('DOMContentLoaded', function(){
     };
     if (saveServiceRegistry(registry) && saveRegistrationRequests(requests)) {
       try { if (typeof logActivity === 'function') logActivity('Регистрация сервиса', `Одобрена заявка "${request.serviceName}"`); } catch (error) {}
+      try { window.crmUpdateRegistrationRequest?.(requests[requestIndex]); } catch (error) {}
       renderRegistrationRequests();
     }
   }
@@ -11803,6 +11844,7 @@ document.addEventListener('DOMContentLoaded', function(){
     };
     if (saveRegistrationRequests(requests)) {
       try { if (typeof logActivity === 'function') logActivity('Регистрация сервиса', `Отклонена заявка "${request.serviceName || request.login}"`); } catch (error) {}
+      try { window.crmUpdateRegistrationRequest?.(requests[requestIndex]); } catch (error) {}
       renderRegistrationRequests();
     }
   }
@@ -12166,6 +12208,12 @@ document.addEventListener('DOMContentLoaded', function(){
       const first = document.querySelector('[data-settings-target]:not([hidden])');
       if (first && typeof openSettingsSection === 'function') openSettingsSection(first.dataset.settingsTarget);
     }
+    const registrationButton = document.getElementById('registrationRequestsBtn');
+    if (registrationButton) {
+      const allowed = Boolean(activeUser?.isAdmin);
+      registrationButton.hidden = !allowed;
+      registrationButton.disabled = !allowed;
+    }
   }
   function setupAuth() {
     const oldForm = document.getElementById('authForm');
@@ -12460,6 +12508,7 @@ document.addEventListener('DOMContentLoaded', function(){
     overrideSalaryCalculation();
     applyRoleAccess();
     wireEvents();
+    window.renderRegistrationRequestsPage = renderRegistrationRequestsPage;
   }
 
   if (document.readyState === 'loading') {
@@ -14500,6 +14549,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       createdAt: now,
       updatedAt: now
     };
+    let remoteError = '';
     if (typeof window.crmSubmitRegistrationRequest === 'function') {
       try {
         const result = await window.crmSubmitRegistrationRequest(request);
@@ -14514,14 +14564,17 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
           window.alert('Заявка отправлена главному администратору. После одобрения он передаст логин и пароль.');
           return;
         }
-      } catch (error) {}
+        remoteError = result?.reason || '';
+      } catch (error) {
+        remoteError = error?.code || error?.message || 'firebase-write-failed';
+      }
     }
     requests.unshift(request);
     if (!saveRequests(requests)) return;
     document.dispatchEvent(new CustomEvent('crm:registration-request-created'));
     resetForm();
     closeOverlay();
-    window.alert('Заявка сохранена на этом устройстве, но прямую отправку в Firebase выполнить не удалось. Проверьте синхронизацию Firebase.');
+    window.alert(`Заявка сохранена на этом устройстве, но прямую отправку в Firebase выполнить не удалось.${remoteError ? ` Причина: ${remoteError}.` : ''} Проверьте Firestore rules и Anonymous Authentication.`);
   }
 
   function install() {
@@ -14777,6 +14830,55 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   function firebaseDocRef(key) {
     return firebaseApi.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
   }
+  function publicRegistrationDocRef(api, targetDb, id) {
+    return api.doc(targetDb, 'crmPublicRegistrationRequests', String(id || '').trim());
+  }
+  function cleanRegistrationRequest(request) {
+    const now = new Date().toISOString();
+    return {
+      id: String(request?.id || `${Date.now()}-${Math.random().toString(36).slice(2)}`).slice(0, 120),
+      serviceId: String(request?.serviceId || '').slice(0, 80),
+      serviceName: String(request?.serviceName || '').slice(0, 160),
+      adminName: String(request?.adminName || '').slice(0, 120),
+      phone: String(request?.phone || '').slice(0, 80),
+      login: String(request?.login || '').slice(0, 140),
+      note: String(request?.note || '').slice(0, 800),
+      status: ['pending', 'approved', 'rejected'].includes(request?.status) ? request.status : 'pending',
+      limits: request?.limits && typeof request.limits === 'object' ? request.limits : null,
+      approvedAccess: request?.approvedAccess && typeof request.approvedAccess === 'object' ? request.approvedAccess : null,
+      createdAt: request?.createdAt || now,
+      updatedAt: request?.updatedAt || now,
+      ownerWorkspaceId: ownerWorkspaceId()
+    };
+  }
+  function mergePublicRegistrationRequests(publicItems) {
+    const remote = Array.isArray(publicItems) ? publicItems.map(cleanRegistrationRequest).filter(item => item.id) : [];
+    const local = readLocalJson('one_service_registration_requests', []);
+    const merged = new Map();
+    local.forEach(item => {
+      if (item?.id) merged.set(String(item.id), item);
+    });
+    remote.forEach(item => {
+      const current = merged.get(String(item.id));
+      if (!current) {
+        merged.set(String(item.id), item);
+        return;
+      }
+      const currentTime = Date.parse(current.updatedAt || '') || 0;
+      const remoteTime = Date.parse(item.updatedAt || '') || 0;
+      merged.set(String(item.id), remoteTime > currentTime ? { ...current, ...item } : current);
+    });
+    const next = [...merged.values()].sort((a, b) => (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0));
+    const raw = JSON.stringify(next);
+    if (localStorage.getItem('one_service_registration_requests') === raw) return;
+    applyingRemote = true;
+    try {
+      localStorage.setItem('one_service_registration_requests', raw);
+    } finally {
+      applyingRemote = false;
+    }
+    scheduleRefresh();
+  }
   async function firebaseDbForWorkspace(targetWorkspace) {
     const api = await importFirebase();
     const firebaseConfig = cleanObject(config.firebase);
@@ -14791,30 +14893,37 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     const targetWorkspace = ownerWorkspaceId();
     const api = await importFirebase();
     const targetDb = await firebaseDbForWorkspace(targetWorkspace);
-    const ref = api.doc(targetDb, 'crmWorkspaces', targetWorkspace, 'data', 'one_service_registration_requests');
-    const snap = await api.getDoc(ref);
-    const current = snap.exists() ? safeJson(snap.data()?.raw, []) : [];
-    const list = Array.isArray(current) ? current : [];
-    const requestLogin = String(request?.login || '').trim().toLowerCase();
-    const requestPhone = String(request?.phone || '').trim();
-    const duplicate = list.find(item => (item.status || 'pending') === 'pending' && (
-      (requestLogin && String(item.login || '').trim().toLowerCase() === requestLogin) ||
-      (requestPhone && String(item.phone || '').trim() === requestPhone)
-    ));
-    if (duplicate && duplicate.id !== request.id) return { ok: false, duplicate: true };
-    const next = [
-      {
-        ...request,
-        status: request.status || 'pending',
-        updatedAt: new Date().toISOString()
-      },
-      ...list.filter(item => item.id !== request.id)
-    ];
-    await api.setDoc(ref, {
-      raw: JSON.stringify(next),
-      updatedAt: api.serverTimestamp(),
-      updatedAtIso: new Date().toISOString(),
+    const payload = cleanRegistrationRequest(request);
+    await api.setDoc(publicRegistrationDocRef(api, targetDb, payload.id), {
+      ...payload,
+      updatedAt: new Date().toISOString(),
       updatedBy: `registration-${clientId}`
+    }, { merge: true });
+    const ref = api.doc(targetDb, 'crmWorkspaces', targetWorkspace, 'data', 'one_service_registration_requests');
+    try {
+      const snap = await api.getDoc(ref);
+      const current = snap.exists() ? safeJson(snap.data()?.raw, []) : [];
+      const list = Array.isArray(current) ? current : [];
+      const next = [payload, ...list.filter(item => item.id !== payload.id)];
+      await api.setDoc(ref, {
+        raw: JSON.stringify(next),
+        updatedAt: api.serverTimestamp(),
+        updatedAtIso: new Date().toISOString(),
+        updatedBy: `registration-${clientId}`
+      }, { merge: true });
+    } catch (error) {}
+    return { ok: true };
+  }
+  async function updatePublicRegistrationRequest(request) {
+    config = readConfig();
+    if (!firebaseConfigured() || !request?.id) return { ok: false };
+    const targetWorkspace = ownerWorkspaceId();
+    const api = await importFirebase();
+    const targetDb = await firebaseDbForWorkspace(targetWorkspace);
+    await api.setDoc(publicRegistrationDocRef(api, targetDb, request.id), {
+      ...cleanRegistrationRequest(request),
+      updatedAt: new Date().toISOString(),
+      updatedBy: clientId
     }, { merge: true });
     return { ok: true };
   }
@@ -14836,6 +14945,17 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   async function pushFirebaseAll() {
     if (!firebaseReady) return;
     await Promise.all(DATA_KEYS.map(key => writeFirebaseKey(key)));
+  }
+  async function initializePublicRegistrationRequests(currentToken) {
+    if (!firebaseReady || workspaceId() !== ownerWorkspaceId()) return;
+    const collectionRef = firebaseApi.collection(db, 'crmPublicRegistrationRequests');
+    const snap = await firebaseApi.getDocs(collectionRef);
+    if (currentToken !== initToken) return;
+    mergePublicRegistrationRequests(snap.docs.map(docSnap => docSnap.data()));
+    const unsubscribe = firebaseApi.onSnapshot(collectionRef, next => {
+      mergePublicRegistrationRequests(next.docs.map(docSnap => docSnap.data()));
+    });
+    firebaseUnsubscribes.push(unsubscribe);
   }
   function applyFirebaseDoc(key, data) {
     if (!data || data.updatedBy === clientId || typeof data.raw !== 'string') return;
@@ -14872,6 +14992,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       });
       firebaseUnsubscribes.push(unsubscribe);
     }
+    try { await initializePublicRegistrationRequests(currentToken); } catch (error) {}
     setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
     return true;
   }
@@ -14994,6 +15115,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
   fillCloudForm();
   window.crmSubmitRegistrationRequest = submitRegistrationRequestToOwner;
+  window.crmUpdateRegistrationRequest = updatePublicRegistrationRequest;
   await initializeCloudSync();
 })();
 </script>
