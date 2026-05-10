@@ -2907,6 +2907,21 @@
     grid-template-columns:minmax(0,1fr) auto;
     align-items:center;
   }
+  .registration-menu-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:20px;
+    height:20px;
+    margin-left:8px;
+    padding:0 6px;
+    border-radius:999px;
+    background:#ef4444;
+    color:#fff;
+    font-size:11px;
+    font-weight:900;
+    line-height:1;
+  }
   .service-management-overlay{
     z-index:1210 !important;
   }
@@ -10409,6 +10424,7 @@ document.addEventListener('DOMContentLoaded', function(){
   const AUTH_REMEMBER_KEY = 'crm_auth';
   const AUTH_USER_KEY = 'crm_current_user';
   const AUTH_PENDING_USER_KEY = 'crm_pending_user';
+  const REGISTRATION_SEEN_KEY = 'one_service_seen_registration_request_ids';
   const ADMIN_USER = {
     id: 'admin',
     name: 'Администратор',
@@ -10752,6 +10768,46 @@ document.addEventListener('DOMContentLoaded', function(){
       updatedAt: now
     };
     saveRegistrationRequests(requests);
+  }
+  function getSeenRegistrationIds() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(REGISTRATION_SEEN_KEY) || '[]');
+      return new Set(Array.isArray(parsed) ? parsed.map(String) : []);
+    } catch (error) {
+      return new Set();
+    }
+  }
+  function saveSeenRegistrationIds(ids) {
+    try {
+      localStorage.setItem(REGISTRATION_SEEN_KEY, JSON.stringify([...ids].slice(-500)));
+    } catch (error) {}
+  }
+  function updateRegistrationRequestsBadge(count = 0) {
+    const settingsButton = document.getElementById('settingsBtn');
+    if (!settingsButton) return;
+    let badge = document.getElementById('registrationRequestsMenuBadge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'registrationRequestsMenuBadge';
+      badge.className = 'registration-menu-badge';
+      settingsButton.appendChild(badge);
+    }
+    badge.textContent = String(count);
+    badge.hidden = !count;
+  }
+  function notifyNewRegistrationRequests(requests) {
+    if (!activeUser?.isAdmin) return;
+    const pending = (Array.isArray(requests) ? requests : []).filter(item => (item.status || 'pending') === 'pending');
+    const seen = getSeenRegistrationIds();
+    const fresh = pending.filter(item => item.id && !seen.has(String(item.id)));
+    pending.forEach(item => {
+      if (item.id) seen.add(String(item.id));
+    });
+    saveSeenRegistrationIds(seen);
+    if (!fresh.length) return;
+    const first = fresh[0];
+    const suffix = fresh.length > 1 ? ` и еще ${fresh.length - 1}` : '';
+    window.alert(`Новая заявка на регистрацию: ${first.serviceName || first.login || 'сервис'}${suffix}. Откройте Настройки → Доступ.`);
   }
   function writeSettings(patch) {
     const payload = { ...readSettings(), ...patch };
@@ -11505,6 +11561,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if (!isMainAdmin) {
       list.innerHTML = '';
       if (counter) counter.textContent = '';
+      updateRegistrationRequestsBadge(0);
       closeServiceManagement();
       return;
     }
@@ -11517,6 +11574,8 @@ document.addEventListener('DOMContentLoaded', function(){
     const registry = getServiceRegistry();
     const pendingCount = requests.filter(item => (item.status || 'pending') === 'pending').length;
     if (counter) counter.textContent = `Ожидают: ${pendingCount} · всего заявок: ${requests.length} · сервисов в реестре: ${registry.length}`;
+    updateRegistrationRequestsBadge(pendingCount);
+    notifyNewRegistrationRequests(requests);
     renderServiceManagement();
 
     if (!requests.length) {
@@ -14296,7 +14355,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     document.getElementById('registrationRequestForm')?.reset();
   }
 
-  function submitRequest(event) {
+  async function submitRequest(event) {
     event.preventDefault();
     const serviceName = document.getElementById('registrationServiceNameInput')?.value.trim() || '';
     const adminName = document.getElementById('registrationAdminNameInput')?.value.trim() || '';
@@ -14317,7 +14376,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       window.alert('Такая заявка уже ожидает одобрения.');
       return;
     }
-    requests.unshift({
+    const request = {
       id: makeId(),
       serviceId: serviceSlug(serviceName),
       serviceName,
@@ -14328,12 +14387,29 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       status: 'pending',
       createdAt: now,
       updatedAt: now
-    });
+    };
+    if (typeof window.crmSubmitRegistrationRequest === 'function') {
+      try {
+        const result = await window.crmSubmitRegistrationRequest(request);
+        if (result?.duplicate) {
+          window.alert('Такая заявка уже ожидает одобрения у главного администратора.');
+          return;
+        }
+        if (result?.ok) {
+          document.dispatchEvent(new CustomEvent('crm:registration-request-created'));
+          resetForm();
+          closeOverlay();
+          window.alert('Заявка отправлена главному администратору. После одобрения он передаст логин и пароль.');
+          return;
+        }
+      } catch (error) {}
+    }
+    requests.unshift(request);
     if (!saveRequests(requests)) return;
     document.dispatchEvent(new CustomEvent('crm:registration-request-created'));
     resetForm();
     closeOverlay();
-    window.alert('Заявка отправлена. После одобрения главный администратор выдаст доступ.');
+    window.alert('Заявка сохранена на этом устройстве, но прямую отправку в Firebase выполнить не удалось. Проверьте синхронизацию Firebase.');
   }
 
   function install() {
@@ -14444,6 +14520,10 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   function workspaceId() {
     return String(config.workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
+  }
+  function ownerWorkspaceId() {
+    const releaseConfig = window.CRM_RELEASE_CLOUD_CONFIG || {};
+    return String(releaseConfig.workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
   }
   function applyPendingWorkspaceBootstrap() {
     const pending = readLocalJson(WORKSPACE_BOOTSTRAP_KEY, null);
@@ -14584,6 +14664,47 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   function firebaseDocRef(key) {
     return firebaseApi.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
+  }
+  async function firebaseDbForWorkspace(targetWorkspace) {
+    const api = await importFirebase();
+    const firebaseConfig = cleanObject(config.firebase);
+    const appName = `crm-${firebaseConfig.projectId || 'project'}-${targetWorkspace}`.replace(/[^a-z0-9-]/gi, '-');
+    const app = api.getApps().find(item => item.name === appName) || api.initializeApp(firebaseConfig, appName);
+    try { await api.signInAnonymously(api.getAuth(app)); } catch (error) {}
+    return api.getFirestore(app);
+  }
+  async function submitRegistrationRequestToOwner(request) {
+    config = readConfig();
+    if (!firebaseConfigured()) return { ok: false, reason: 'firebase-not-configured' };
+    const targetWorkspace = ownerWorkspaceId();
+    const api = await importFirebase();
+    const targetDb = await firebaseDbForWorkspace(targetWorkspace);
+    const ref = api.doc(targetDb, 'crmWorkspaces', targetWorkspace, 'data', 'one_service_registration_requests');
+    const snap = await api.getDoc(ref);
+    const current = snap.exists() ? safeJson(snap.data()?.raw, []) : [];
+    const list = Array.isArray(current) ? current : [];
+    const requestLogin = String(request?.login || '').trim().toLowerCase();
+    const requestPhone = String(request?.phone || '').trim();
+    const duplicate = list.find(item => (item.status || 'pending') === 'pending' && (
+      (requestLogin && String(item.login || '').trim().toLowerCase() === requestLogin) ||
+      (requestPhone && String(item.phone || '').trim() === requestPhone)
+    ));
+    if (duplicate && duplicate.id !== request.id) return { ok: false, duplicate: true };
+    const next = [
+      {
+        ...request,
+        status: request.status || 'pending',
+        updatedAt: new Date().toISOString()
+      },
+      ...list.filter(item => item.id !== request.id)
+    ];
+    await api.setDoc(ref, {
+      raw: JSON.stringify(next),
+      updatedAt: api.serverTimestamp(),
+      updatedAtIso: new Date().toISOString(),
+      updatedBy: `registration-${clientId}`
+    }, { merge: true });
+    return { ok: true };
   }
   async function writeFirebaseKey(key) {
     if (!firebaseReady || applyingRemote || !DATA_KEY_SET.has(key)) return;
@@ -14760,6 +14881,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
   fillCloudForm();
+  window.crmSubmitRegistrationRequest = submitRegistrationRequestToOwner;
   await initializeCloudSync();
 })();
 </script>
