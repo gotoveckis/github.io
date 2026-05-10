@@ -756,20 +756,6 @@
       display:grid;
       gap:14px;
     }
-    .auth-secondary-action{
-      width:100%;
-      margin-top:-4px;
-    }
-    .registration-modal{
-      width:min(100%, 560px);
-    }
-    .registration-note{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size:13px;
-      font-weight:700;
-      line-height:1.45;
-    }
     .field-label{
       display:block;
       margin:0 0 6px;
@@ -2872,168 +2858,17 @@
 <style id="release-master-service-settings-polish">
   .settings-services-panel,
   .master-access-panel,
-  .service-management-card,
-  .admin-registration-dashboard,
-  .registration-requests-card,
   .docs-no-preview-panel{
     display:grid;
     gap:14px;
   }
   .settings-service-editor,
   .master-access-toolbar,
-  .service-limits-card,
-  .service-management-card,
-  .registration-requests-card,
-  .admin-registration-dashboard,
-  .service-management-row,
-  .registration-request-row,
   .docs-basic-card{
     border:1px solid var(--border);
     background:#fff;
     border-radius:14px;
     padding:14px;
-  }
-  .service-limits-card{
-    display:grid;
-    gap:12px;
-  }
-  .service-limits-grid{
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:10px;
-  }
-  .service-limits-card .section-title{
-    margin:0;
-  }
-  .service-management-card{
-    grid-template-columns:minmax(0,1fr) auto;
-    align-items:center;
-  }
-  .registration-menu-badge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:20px;
-    height:20px;
-    margin-left:8px;
-    padding:0 6px;
-    border-radius:999px;
-    background:#ef4444;
-    color:#fff;
-    font-size:11px;
-    font-weight:900;
-    line-height:1;
-  }
-  .registration-menu-badge[hidden]{
-    display:none !important;
-  }
-  .admin-registration-dashboard{
-    margin-top:14px;
-  }
-  .admin-registration-dashboard-head{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:14px;
-  }
-  .admin-registration-dashboard-head h3{
-    margin:0 0 4px;
-    font-size:18px;
-    color:var(--text);
-  }
-  .admin-registration-dashboard-list{
-    display:grid;
-    gap:10px;
-  }
-  .service-management-overlay{
-    z-index:1210 !important;
-  }
-  .service-management-modal{
-    width:min(1040px,calc(100vw - 28px));
-    max-width:1040px !important;
-    max-height:min(88vh,920px);
-    overflow:auto;
-  }
-  .service-management-list{
-    display:grid;
-    gap:12px;
-    margin-top:12px;
-  }
-  .service-management-row{
-    display:grid;
-    gap:12px;
-  }
-  .service-management-head{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-  }
-  .service-management-title{
-    display:grid;
-    gap:4px;
-  }
-  .service-management-title b{
-    color:var(--text);
-    font-size:15px;
-  }
-  .service-management-title span{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.45;
-  }
-  .service-management-grid{
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:10px;
-  }
-  .service-management-limits{
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:8px;
-  }
-  .service-management-actions{
-    justify-content:flex-end;
-  }
-  .service-management-row .field-label{
-    margin:0;
-  }
-  .registration-requests-list{
-    display:grid;
-    gap:10px;
-  }
-  .registration-request-row{
-    display:grid;
-    grid-template-columns:minmax(0,1.4fr) minmax(280px,.9fr) auto;
-    gap:12px;
-    align-items:start;
-  }
-  .registration-request-row b{
-    color:var(--text);
-    font-size:14px;
-  }
-  .registration-request-row span{
-    display:block;
-    margin-top:4px;
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.45;
-  }
-  .registration-request-limits{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
-  }
-  .registration-request-access{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:8px;
-    margin-top:10px;
-    padding-top:10px;
-    border-top:1px dashed var(--border);
-  }
-  .registration-request-limits .field-label{
-    margin:0;
   }
   .settings-service-list,
   .master-profiles-list{
@@ -3153,13 +2988,6 @@
   @media (max-width:768px){
     .settings-service-row,
     .master-profile-row,
-    .service-management-card,
-    .admin-registration-dashboard-head,
-    .service-limits-grid,
-    .service-management-grid,
-    .service-management-limits,
-    .registration-request-row,
-    .registration-request-limits,
     .master-editor-grid,
     .role-check-grid{
       grid-template-columns:1fr;
@@ -3266,12 +3094,6 @@
   body[data-ui-theme="dark"] .mini-panel,
   body[data-ui-theme="dark"] .settings-service-editor,
   body[data-ui-theme="dark"] .master-access-toolbar,
-  body[data-ui-theme="dark"] .service-limits-card,
-  body[data-ui-theme="dark"] .service-management-card,
-  body[data-ui-theme="dark"] .admin-registration-dashboard,
-  body[data-ui-theme="dark"] .registration-requests-card,
-  body[data-ui-theme="dark"] .service-management-row,
-  body[data-ui-theme="dark"] .registration-request-row,
   body[data-ui-theme="dark"] .docs-basic-card,
   body[data-ui-theme="dark"] .settings-service-row,
   body[data-ui-theme="dark"] .master-profile-row,
@@ -5566,42 +5388,9 @@ body[data-ui-theme="dark"] .client-order-row em{
           <span>Запомнить меня</span>
         </label>
         <button class="btn btn-primary" type="submit">Войти</button>
-        <button class="btn btn-secondary auth-secondary-action" id="openRegistrationRequestBtn" type="button">Регистрация сервиса</button>
       </form>
     </div>
   </section>
-
-  <div class="modal-overlay" id="registrationRequestOverlay">
-    <div class="modal registration-modal">
-      <button class="modal-close" id="closeRegistrationRequestBtn" type="button" aria-label="Закрыть">×</button>
-      <h3>Регистрация сервиса</h3>
-      <p>Заявка попадет главному администратору. После одобрения сервис получит отдельный доступ и собственную базу CRM.</p>
-      <form id="registrationRequestForm">
-        <div class="form-grid">
-          <label class="field-label">Название сервиса
-            <input type="text" id="registrationServiceNameInput" placeholder="Service Batumi" required>
-          </label>
-          <label class="field-label">Имя администратора
-            <input type="text" id="registrationAdminNameInput" placeholder="Имя администратора" required>
-          </label>
-          <label class="field-label">Телефон
-            <input type="tel" id="registrationPhoneInput" placeholder="+995..." required>
-          </label>
-          <label class="field-label">Логин / email
-            <input type="text" id="registrationLoginInput" placeholder="admin@example.com" required>
-          </label>
-          <label class="field-label full">Комментарий
-            <textarea id="registrationNoteInput" placeholder="Город, адрес или короткое описание сервиса"></textarea>
-          </label>
-        </div>
-        <p class="registration-note">Пароль на этом шаге не сохраняется. Его безопаснее выдать после одобрения заявки.</p>
-        <div class="modal-actions">
-          <button class="btn btn-secondary" id="cancelRegistrationRequestBtn" type="button">Отмена</button>
-          <button class="btn btn-primary" type="submit">Отправить заявку</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <div class="app-shell" id="appShell">
 
@@ -5634,7 +5423,6 @@ body[data-ui-theme="dark"] .client-order-row em{
           <button class="btn btn-secondary" id="reportsBtn" type="button">Отчеты</button>
           <button class="btn btn-secondary" id="suppliersBtn" type="button">Поставщики</button>
           <button class="btn btn-secondary" id="activityBtn" type="button">Журнал</button>
-          <button class="btn btn-secondary" id="registrationRequestsBtn" type="button" hidden>Заявки</button>
           <button class="btn btn-secondary" id="settingsBtn" type="button">Настройки</button>
           <button class="btn btn-secondary" id="exportJsonBtn" type="button">Экспорт</button>
           <button class="btn btn-secondary" id="importDataBtn" type="button">Импорт</button>
@@ -5855,16 +5643,6 @@ body[data-ui-theme="dark"] .client-order-row em{
       <p>База собирается автоматически по телефонам из заказов. В карточке видно всю историю ремонтов клиента.</p>
       <input type="search" id="clientSearchInput" placeholder="Поиск клиента по имени или телефону">
       <div class="mini-list" id="clientsList"></div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="registrationRequestsModalOverlay">
-    <div class="modal wide-modal">
-      <button class="modal-close" id="closeRegistrationRequestsPageModal" type="button" aria-label="Close">×</button>
-      <h3>Заявки на подключение</h3>
-      <p>Входящие заявки от сервисных центров, которые хотят подключиться к CRM.</p>
-      <div class="manage-counter" id="mainRegistrationRequestsCounter"></div>
-      <div class="registration-requests-list" id="mainRegistrationRequestsList"></div>
     </div>
   </div>
 
@@ -6451,7 +6229,6 @@ body[data-ui-theme="dark"] .client-order-row em{
       servicePhone3: '',
       serviceAddress: 'Харьков, ул. Харьковских Дивизий, 14/2',
       serviceAddress2: '',
-      serviceLimits: { maxMasters: 10, maxAddresses: 2, maxPhones: 3, maxLocations: 2 },
       companyEmail: '',
       companyLegalName: '',
       companyTaxId: '',
@@ -6732,15 +6509,6 @@ body[data-ui-theme="dark"] .client-order-row em{
       settings.timeFormat = ['24', '12'].includes(String(settings.timeFormat)) ? String(settings.timeFormat) : DEFAULT_SETTINGS.timeFormat;
       settings.interfaceTheme = ['light', 'dark'].includes(String(settings.interfaceTheme)) ? String(settings.interfaceTheme) : DEFAULT_SETTINGS.interfaceTheme;
       settings.ordersPerPage = String(Math.min(100, Math.max(25, Math.round((Number(settings.ordersPerPage) || 25) / 5) * 5)));
-      const defaultLimits = DEFAULT_SETTINGS.serviceLimits;
-      const rawLimits = settings.serviceLimits && typeof settings.serviceLimits === 'object' ? settings.serviceLimits : {};
-      const limitNumber = (value, fallback, min = 2, max = 999) => Math.min(max, Math.max(min, Math.round(Number(value) || fallback)));
-      settings.serviceLimits = {
-        maxMasters: limitNumber(rawLimits.maxMasters, defaultLimits.maxMasters, 2, 999),
-        maxAddresses: limitNumber(rawLimits.maxAddresses, defaultLimits.maxAddresses, 2, 999),
-        maxPhones: limitNumber(rawLimits.maxPhones, defaultLimits.maxPhones, 2, 999),
-        maxLocations: limitNumber(rawLimits.maxLocations, defaultLimits.maxLocations, 2, 999)
-      };
       settings.salaryMode = ['percent', 'fixed', 'mixed'].includes(settings.salaryMode) ? settings.salaryMode : DEFAULT_SETTINGS.salaryMode;
       settings.autoBackupEnabled = settings.autoBackupEnabled === 'off' ? 'off' : 'on';
       settings.orderStartNumber = String(settings.orderStartNumber || DEFAULT_SETTINGS.orderStartNumber);
@@ -10361,7 +10129,6 @@ document.addEventListener('DOMContentLoaded', function(){
 <script id="release-workspace-pages-auth-ui">
 (function(){
   const workspacePages = {
-    registrationRequestsBtn: { overlay: 'registrationRequestsModalOverlay', prepare: () => safeCall('renderRegistrationRequestsPage') },
     clientsBtn: { overlay: 'clientsModalOverlay', prepare: () => safeCall('renderClients') },
     inventoryBtn: { overlay: 'inventoryModalOverlay', prepare: () => { safeCall('setInventoryForm'); safeCall('renderInventory'); } },
     servicesBtn: { overlay: 'servicesModalOverlay', prepare: () => { safeCall('setServiceForm'); safeCall('renderServices'); } },
@@ -10431,9 +10198,8 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   document.addEventListener('click', function(event){
-    const button = event.target.closest('#ordersBtn,#registrationRequestsBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn');
+    const button = event.target.closest('#ordersBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn');
     if (!button) return;
-    if (button.id === 'registrationRequestsBtn' && !(window.crmCurrentUser?.isAdmin && !window.crmCurrentUser?.serviceAdmin)) return;
 
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -10441,12 +10207,6 @@ document.addEventListener('DOMContentLoaded', function(){
     if (button.id === 'ordersBtn') closeWorkspacePages();
     else openWorkspacePage(button.id);
   }, true);
-
-  document.addEventListener('click', function(event){
-    if (event.target.closest('.workspace-page-overlay .modal-close') || event.target.classList?.contains('workspace-page-overlay')) {
-      closeWorkspacePages();
-    }
-  });
 
   document.addEventListener('keydown', function(event){
     if (event.key === 'Escape' && document.body.classList.contains('workspace-page-open')) {
@@ -10461,27 +10221,8 @@ document.addEventListener('DOMContentLoaded', function(){
 <script id="release-settings-services-masters-roles">
 (function(){
   const SETTINGS_STORAGE_KEY = 'one_service_settings';
-  const REGISTRATION_REQUESTS_KEY = 'one_service_registration_requests';
-  const SERVICE_REGISTRY_KEY = 'one_service_service_registry';
-  const CLOUD_CONFIG_KEY = 'one_service_cloud_config';
-  const WORKSPACE_BOOTSTRAP_KEY = 'one_service_pending_workspace_bootstrap';
   const AUTH_REMEMBER_KEY = 'crm_auth';
   const AUTH_USER_KEY = 'crm_current_user';
-  const AUTH_PENDING_USER_KEY = 'crm_pending_user';
-  const REGISTRATION_SEEN_KEY = 'one_service_seen_registration_request_ids';
-  const WORKSPACE_DATA_KEYS = [
-    'one_service_settings',
-    'one_service_orders',
-    'one_service_inventory',
-    'one_service_services',
-    'one_service_expenses',
-    'one_service_tasks',
-    'one_service_suppliers',
-    'one_service_clients',
-    'one_service_activity',
-    'one_service_registration_requests',
-    'one_service_service_registry'
-  ];
   const ADMIN_USER = {
     id: 'admin',
     name: 'Администратор',
@@ -10491,7 +10232,7 @@ document.addEventListener('DOMContentLoaded', function(){
     salaryPercent: '',
     isAdmin: true
   };
-  const DEFAULT_SERVICE_LIMITS = { maxMasters: 10, maxAddresses: 2, maxPhones: 3, maxLocations: 2 };
+  const MAX_MASTER_PROFILES = 10;
   const ACCESS_ROLES = [
     { key: 'orders', label: 'Заказы', menuId: 'ordersBtn' },
     { key: 'clients', label: 'Клиенты', menuId: 'clientsBtn' },
@@ -10568,379 +10309,6 @@ document.addEventListener('DOMContentLoaded', function(){
     } catch (error) {
       return {};
     }
-  }
-  function readListKey(key) {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(key) || '[]');
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (error) {
-      return [];
-    }
-  }
-  function writeListKey(key, items, errorMessage = 'Не удалось сохранить данные.') {
-    try {
-      localStorage.setItem(key, JSON.stringify(Array.isArray(items) ? items : []));
-      return true;
-    } catch (error) {
-      window.alert(errorMessage);
-      return false;
-    }
-  }
-  function getRegistrationRequests() {
-    return readListKey(REGISTRATION_REQUESTS_KEY);
-  }
-  function saveRegistrationRequests(items) {
-    return writeListKey(REGISTRATION_REQUESTS_KEY, items, 'Не удалось сохранить заявки.');
-  }
-  function getServiceRegistry() {
-    return readListKey(SERVICE_REGISTRY_KEY);
-  }
-  function saveServiceRegistry(items) {
-    return writeListKey(SERVICE_REGISTRY_KEY, items, 'Не удалось сохранить реестр сервисов.');
-  }
-  function normalizeLimit(value, fallback, min = 2, max = 999) {
-    return Math.min(max, Math.max(min, Math.round(Number(value) || fallback)));
-  }
-  function getServiceLimits(settings = readSettings()) {
-    const source = settings.serviceLimits && typeof settings.serviceLimits === 'object' ? settings.serviceLimits : {};
-    return {
-      maxMasters: normalizeLimit(source.maxMasters, DEFAULT_SERVICE_LIMITS.maxMasters, 2, 999),
-      maxAddresses: normalizeLimit(source.maxAddresses, DEFAULT_SERVICE_LIMITS.maxAddresses, 2, 999),
-      maxPhones: normalizeLimit(source.maxPhones, DEFAULT_SERVICE_LIMITS.maxPhones, 2, 999),
-      maxLocations: normalizeLimit(source.maxLocations, DEFAULT_SERVICE_LIMITS.maxLocations, 2, 999)
-    };
-  }
-  function maxMasterProfiles() {
-    return getServiceLimits().maxMasters;
-  }
-  function serviceSlug(value) {
-    return String(value || '')
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9а-яё]+/gi, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 48) || `service-${Date.now()}`;
-  }
-  function uniqueServiceId(base, registry, requestId = '') {
-    const cleanBase = serviceSlug(base);
-    const used = new Set((registry || []).map(item => String(item.serviceId || item.id || '').toLowerCase()).filter(Boolean));
-    let candidate = cleanBase;
-    let suffix = 2;
-    while (used.has(candidate.toLowerCase())) {
-      candidate = `${cleanBase}-${suffix++}`;
-    }
-    return candidate || serviceSlug(requestId);
-  }
-  function makeTemporaryPassword() {
-    const random = window.crypto?.getRandomValues ? window.crypto.getRandomValues(new Uint32Array(2)) : [Date.now(), Math.floor(Math.random() * 999999)];
-    return `svc-${Array.from(random).map(item => item.toString(36).slice(0, 4)).join('-')}`;
-  }
-  function passwordForRequest(request) {
-    if (request?.adminPassword) return request.adminPassword;
-    const seed = String(request?.id || request?.login || request?.serviceName || Date.now());
-    let hash = 0;
-    for (let index = 0; index < seed.length; index += 1) {
-      hash = ((hash << 5) - hash) + seed.charCodeAt(index);
-      hash |= 0;
-    }
-    return `svc-${Math.abs(hash).toString(36).padStart(6, '0').slice(0, 6)}`;
-  }
-  function requestAccessFromRow(row, request, registry) {
-    const requestedServiceId = row?.querySelector('[data-request-access="serviceId"]')?.value || request?.serviceId || request?.serviceName || '';
-    const existing = registry.find(item => item.sourceRequestId === request?.id || item.login === request?.login);
-    const serviceId = existing?.serviceId || uniqueServiceId(requestedServiceId, registry, request?.id);
-    const adminLogin = String(row?.querySelector('[data-request-access="login"]')?.value || request?.login || '').trim();
-    const adminPassword = String(row?.querySelector('[data-request-access="password"]')?.value || passwordForRequest(request) || makeTemporaryPassword()).trim();
-    return { serviceId, adminLogin, adminPassword };
-  }
-  function formatShortDate(value) {
-    const time = Date.parse(value);
-    if (!Number.isFinite(time)) return '—';
-    return new Date(time).toLocaleString('ru-RU');
-  }
-  function currentWorkspaceId() {
-    try {
-      const stored = JSON.parse(localStorage.getItem('one_service_cloud_config') || '{}');
-      if (stored?.workspaceId) return serviceSlug(stored.workspaceId);
-    } catch (error) {}
-    return 'one-service';
-  }
-  function ownerWorkspaceId() {
-    return serviceSlug(window.CRM_RELEASE_CLOUD_CONFIG?.workspaceId || 'one-service');
-  }
-  function serviceWorkspaceIdForUser(user) {
-    return serviceSlug(user?.workspaceId || user?.serviceId || '');
-  }
-  function isMainAdminUser(user = activeUser) {
-    return Boolean(user?.isAdmin && !user?.serviceAdmin && currentWorkspaceId() === ownerWorkspaceId());
-  }
-  function isValidServiceAdminUser(user) {
-    const target = serviceWorkspaceIdForUser(user);
-    return Boolean(user?.serviceAdmin && target && target !== ownerWorkspaceId());
-  }
-  function serviceRecordFromUser(user) {
-    const serviceId = serviceWorkspaceIdForUser(user);
-    return {
-      ...(user?.serviceRecord || {}),
-      id: serviceId,
-      serviceId,
-      workspaceId: serviceId,
-      serviceName: user?.serviceName || user?.serviceRecord?.serviceName || 'Новый сервис',
-      adminName: user?.name || user?.serviceRecord?.adminName || 'Администратор сервиса',
-      login: user?.login || user?.serviceRecord?.login || user?.serviceRecord?.adminLogin || '',
-      adminLogin: user?.login || user?.serviceRecord?.adminLogin || user?.serviceRecord?.login || '',
-      adminPassword: user?.serviceRecord?.adminPassword || '',
-      phone: user?.serviceRecord?.phone || '',
-      limits: user?.serviceRecord?.limits || DEFAULT_SERVICE_LIMITS,
-      status: 'active'
-    };
-  }
-  function saveAuthForReload(user, remember) {
-    const cleanUser = user ? { ...user, password: '' } : null;
-    try {
-      if (remember && cleanUser) {
-        localStorage.setItem(AUTH_REMEMBER_KEY, '1');
-        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(cleanUser));
-        sessionStorage.removeItem(AUTH_PENDING_USER_KEY);
-      } else if (cleanUser) {
-        localStorage.removeItem(AUTH_REMEMBER_KEY);
-        localStorage.removeItem(AUTH_USER_KEY);
-        sessionStorage.setItem(AUTH_PENDING_USER_KEY, JSON.stringify(cleanUser));
-      }
-    } catch (error) {}
-  }
-  function updateCloudWorkspaceConfig(workspaceId) {
-    try {
-      const current = JSON.parse(localStorage.getItem(CLOUD_CONFIG_KEY) || '{}') || {};
-      const next = {
-        ...current,
-        workspaceId
-      };
-      if (next.github && typeof next.github === 'object') {
-        next.github = {
-          ...next.github,
-          path: next.github.path ? `crm-data/${workspaceId}.json` : next.github.path
-        };
-      }
-      localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify(next));
-    } catch (error) {
-      localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify({ workspaceId }));
-    }
-  }
-  function buildServiceWorkspaceBootstrap(service, user) {
-    const defaults = typeof DEFAULT_SETTINGS !== 'undefined' ? DEFAULT_SETTINGS : {};
-    const limits = service.limits || DEFAULT_SERVICE_LIMITS;
-    const adminProfile = {
-      id: user.id,
-      name: service.adminName || user.name || 'Администратор',
-      login: service.adminLogin || service.login || user.login,
-      password: service.adminPassword || '',
-      roles: ['all'],
-      salaryPercent: '',
-      updatedAt: new Date().toISOString()
-    };
-    return {
-      settings: {
-        ...defaults,
-        serviceName: service.serviceName || user.serviceName || 'Новый сервис',
-        servicePhone: service.phone || '',
-        servicePhone2: '',
-        servicePhone3: '',
-        serviceAddress: '',
-        serviceAddress2: '',
-        companyEmail: '',
-        companyLegalName: '',
-        companyTaxId: '',
-        currency: (defaults.currency || 'GEL'),
-        serviceLimits: limits,
-        masters: [adminProfile.name],
-        masterProfiles: [adminProfile]
-      },
-      serviceRegistry: [{
-        ...service,
-        id: service.serviceId,
-        serviceId: service.serviceId,
-        workspaceId: service.workspaceId || service.serviceId,
-        limits,
-        status: 'active'
-      }]
-    };
-  }
-  function writeWorkspaceBootstrapData(bootstrap) {
-    const values = {
-      one_service_settings: bootstrap.settings || {},
-      one_service_orders: [],
-      one_service_inventory: [],
-      one_service_services: [],
-      one_service_expenses: [],
-      one_service_tasks: [],
-      one_service_suppliers: [],
-      one_service_clients: [],
-      one_service_activity: [],
-      one_service_registration_requests: [],
-      one_service_service_registry: Array.isArray(bootstrap.serviceRegistry) ? bootstrap.serviceRegistry : []
-    };
-    WORKSPACE_DATA_KEYS.forEach(key => {
-      const value = Object.prototype.hasOwnProperty.call(values, key) ? values[key] : [];
-      localStorage.setItem(key, JSON.stringify(value));
-    });
-  }
-  function applyPendingWorkspaceBootstrapLocal() {
-    try {
-      const pending = JSON.parse(localStorage.getItem(WORKSPACE_BOOTSTRAP_KEY) || 'null');
-      if (!pending || pending.workspaceId !== currentWorkspaceId()) return false;
-      writeWorkspaceBootstrapData(pending.bootstrap || {});
-      localStorage.removeItem(WORKSPACE_BOOTSTRAP_KEY);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-  function cleanLeakedOwnerDataForService(user) {
-    if (!isValidServiceAdminUser(user)) return false;
-    const target = serviceWorkspaceIdForUser(user);
-    if (currentWorkspaceId() !== target) return false;
-    const registry = getServiceRegistry();
-    const hasTargetRecord = registry.some(item => String(item.serviceId || item.id || '') === target);
-    const hasOwnerRecord = registry.some(item => item?.isOwnerService || String(item.serviceId || item.id || '') === ownerWorkspaceId());
-    const settings = readSettings();
-    const serviceName = String(user.serviceName || user.serviceRecord?.serviceName || '').trim();
-    const settingsName = String(settings.serviceName || '').trim();
-    const looksLikeOwnerSettings = settingsName && serviceName && settingsName !== serviceName && /one service|1one service/i.test(settingsName);
-    if (!hasOwnerRecord && hasTargetRecord && !looksLikeOwnerSettings) return false;
-    writeWorkspaceBootstrapData(buildServiceWorkspaceBootstrap(serviceRecordFromUser(user), user));
-    return true;
-  }
-  function prepareWorkspaceSwitch(user, remember, service = null) {
-    const targetWorkspace = serviceSlug(user.workspaceId || user.serviceId || ownerWorkspaceId());
-    if (currentWorkspaceId() === targetWorkspace) return false;
-    const serviceForBootstrap = service || (user?.serviceAdmin ? serviceRecordFromUser(user) : null);
-    if (serviceForBootstrap) {
-      try {
-        localStorage.setItem(WORKSPACE_BOOTSTRAP_KEY, JSON.stringify({
-          workspaceId: targetWorkspace,
-          bootstrap: buildServiceWorkspaceBootstrap(serviceForBootstrap, user),
-          createdAt: new Date().toISOString()
-        }));
-      } catch (error) {}
-    }
-    saveAuthForReload(user, remember);
-    updateCloudWorkspaceConfig(targetWorkspace);
-    window.location.reload();
-    return true;
-  }
-  function ensureCurrentServiceInRegistry(forceUpdate = false) {
-    const registry = getServiceRegistry();
-    const settings = readSettings();
-    const serviceId = currentWorkspaceId();
-    const now = new Date().toISOString();
-    const index = registry.findIndex(item => item.serviceId === serviceId || item.isOwnerService);
-    const payload = {
-      ...(index >= 0 ? registry[index] : {}),
-      id: serviceId,
-      serviceId,
-      serviceName: settings.serviceName || '1ONE service',
-      adminName: ADMIN_USER.name,
-      login: ADMIN_USER.login,
-      phone: settings.servicePhone || '',
-      limits: getServiceLimits(settings),
-      status: 'active',
-      isOwnerService: true,
-      createdAt: index >= 0 ? registry[index].createdAt || now : now,
-      updatedAt: now
-    };
-    if (index >= 0) {
-      if (!forceUpdate) return registry[index];
-      registry[index] = payload;
-    } else {
-      registry.unshift(payload);
-    }
-    saveServiceRegistry(registry);
-    return payload;
-  }
-  function serviceStatusLabel(status) {
-    return status === 'blocked' ? 'Заблокирован' : 'Активен';
-  }
-  function serviceStatusBadgeClass(status) {
-    return status === 'blocked' ? 'badge-bad' : 'badge-good';
-  }
-  function isOwnerService(service) {
-    const serviceId = String(service?.serviceId || service?.id || '').trim();
-    return Boolean(service?.isOwnerService || serviceId === ownerWorkspaceId());
-  }
-  function sortedServiceRegistry() {
-    return getServiceRegistry().slice().sort((a, b) => {
-      const ownerRank = Number(!isOwnerService(a)) - Number(!isOwnerService(b));
-      if (ownerRank) return ownerRank;
-      return String(a.serviceName || a.adminName || a.serviceId || '').localeCompare(String(b.serviceName || b.adminName || b.serviceId || ''), 'ru');
-    });
-  }
-  function syncRegistrationRequestFromService(service) {
-    if (!service?.sourceRequestId) return;
-    const requests = getRegistrationRequests();
-    const index = requests.findIndex(item => item.id === service.sourceRequestId);
-    if (index < 0) return;
-    const now = new Date().toISOString();
-    requests[index] = {
-      ...requests[index],
-      serviceName: service.serviceName || requests[index].serviceName,
-      adminName: service.adminName || requests[index].adminName,
-      phone: service.phone || requests[index].phone,
-      login: service.adminLogin || service.login || requests[index].login,
-      adminPassword: service.adminPassword || requests[index].adminPassword,
-      serviceId: service.serviceId || requests[index].serviceId,
-      limits: service.limits || requests[index].limits,
-      approvedAccess: {
-        serviceId: service.serviceId || requests[index].serviceId,
-        adminLogin: service.adminLogin || service.login || requests[index].login,
-        adminPassword: service.adminPassword || requests[index].adminPassword
-      },
-      updatedAt: now
-    };
-    saveRegistrationRequests(requests);
-  }
-  function getSeenRegistrationIds() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(REGISTRATION_SEEN_KEY) || '[]');
-      return new Set(Array.isArray(parsed) ? parsed.map(String) : []);
-    } catch (error) {
-      return new Set();
-    }
-  }
-  function saveSeenRegistrationIds(ids) {
-    try {
-      localStorage.setItem(REGISTRATION_SEEN_KEY, JSON.stringify([...ids].slice(-500)));
-    } catch (error) {}
-  }
-  function updateRegistrationRequestsBadge(count = 0) {
-    ['registrationRequestsBtn', 'settingsBtn'].forEach(buttonId => {
-      const button = document.getElementById(buttonId);
-      if (!button) return;
-      const badgeId = `${buttonId}RegistrationBadge`;
-      let badge = document.getElementById(badgeId);
-      if (!badge) {
-        badge = document.createElement('span');
-        badge.id = badgeId;
-        badge.className = 'registration-menu-badge';
-        button.appendChild(badge);
-      }
-      badge.textContent = String(count);
-      badge.hidden = !count;
-    });
-  }
-  function notifyNewRegistrationRequests(requests) {
-    if (!isMainAdminUser()) return;
-    const pending = (Array.isArray(requests) ? requests : []).filter(item => (item.status || 'pending') === 'pending');
-    const seen = getSeenRegistrationIds();
-    const fresh = pending.filter(item => item.id && !seen.has(String(item.id)));
-    pending.forEach(item => {
-      if (item.id) seen.add(String(item.id));
-    });
-    saveSeenRegistrationIds(seen);
-    if (!fresh.length) return;
-    const first = fresh[0];
-    const suffix = fresh.length > 1 ? ` и еще ${fresh.length - 1}` : '';
-    window.alert(`Новая заявка на регистрацию: ${first.serviceName || first.login || 'сервис'}${suffix}. Откройте Настройки → Доступ.`);
   }
   function writeSettings(patch) {
     const payload = { ...readSettings(), ...patch };
@@ -11024,6 +10392,10 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         return { ...profile, login };
       });
+    if (normalized.length > MAX_MASTER_PROFILES) {
+      window.alert(`Можно добавить максимум ${MAX_MASTER_PROFILES} мастеров.`);
+      return false;
+    }
     const saved = writeSettings({
       masterProfiles: normalized,
       masters: normalized.map(profile => profile.name)
@@ -11046,31 +10418,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   function findMasterByName(name) {
     return getMasterProfiles().find(profile => profile.name === name);
-  }
-  function authenticateServiceAdmin(login, password) {
-    const cleanLogin = String(login || '').trim().toLowerCase();
-    const registry = getServiceRegistry();
-    const service = registry.find(item => {
-      if (!item || item.status !== 'active' || item.isOwnerService) return false;
-      const adminLogin = String(item.adminLogin || item.login || '').trim().toLowerCase();
-      return adminLogin && adminLogin === cleanLogin && String(item.adminPassword || '') === String(password || '');
-    });
-    if (!service) return null;
-    const serviceId = service.serviceId || service.workspaceId || serviceSlug(service.serviceName);
-    if (!serviceId || serviceSlug(serviceId) === ownerWorkspaceId()) return null;
-    return {
-      id: `service_admin_${serviceId}`,
-      name: service.adminName || service.serviceName || 'Администратор сервиса',
-      login: service.adminLogin || service.login,
-      roles: ['all'],
-      salaryPercent: '',
-      isAdmin: false,
-      serviceAdmin: true,
-      serviceId,
-      workspaceId: service.workspaceId || serviceId,
-      serviceName: service.serviceName,
-      serviceRecord: service
-    };
   }
 
   function ensureDocumentsWithoutPreview() {
@@ -11359,557 +10706,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 
-  function syncServiceLimitsUi() {
-    const limits = getServiceLimits();
-    const map = {
-      serviceLimitMastersInput: limits.maxMasters,
-      serviceLimitAddressesInput: limits.maxAddresses,
-      serviceLimitPhonesInput: limits.maxPhones,
-      serviceLimitLocationsInput: limits.maxLocations
-    };
-    Object.entries(map).forEach(([id, value]) => {
-      const input = document.getElementById(id);
-      if (input) input.value = value;
-    });
-  }
-
-  function saveServiceLimits() {
-    const current = getServiceLimits();
-    const next = {
-      maxMasters: normalizeLimit(document.getElementById('serviceLimitMastersInput')?.value, current.maxMasters, 2, 999),
-      maxAddresses: normalizeLimit(document.getElementById('serviceLimitAddressesInput')?.value, current.maxAddresses, 2, 999),
-      maxPhones: normalizeLimit(document.getElementById('serviceLimitPhonesInput')?.value, current.maxPhones, 2, 999),
-      maxLocations: normalizeLimit(document.getElementById('serviceLimitLocationsInput')?.value, current.maxLocations, 2, 999)
-    };
-    if (writeSettings({ serviceLimits: next })) {
-      try { if (typeof logActivity === 'function') logActivity('Лимиты сервиса', `Обновлены лимиты: мастера ${next.maxMasters}, адреса ${next.maxAddresses}, телефоны ${next.maxPhones}, точки ${next.maxLocations}`); } catch (error) {}
-      ensureCurrentServiceInRegistry(true);
-      syncServiceLimitsUi();
-      renderMasterProfilesList();
-      renderRegistrationRequests();
-      renderServiceManagement();
-      try { if (typeof fillSettingsForm === 'function') fillSettingsForm(); } catch (error) {}
-    }
-  }
-
-  function requestLimitsFromRow(row, fallback = getServiceLimits()) {
-    const read = field => normalizeLimit(row?.querySelector(`[data-request-limit="${field}"]`)?.value, fallback[field], 2, 999);
-    return {
-      maxMasters: read('maxMasters'),
-      maxAddresses: read('maxAddresses'),
-      maxPhones: read('maxPhones'),
-      maxLocations: read('maxLocations')
-    };
-  }
-
-  function registrationRequestRowHtml(request, options = {}) {
-    const status = request.status || 'pending';
-    const isPending = status === 'pending';
-    const limits = { ...getServiceLimits(), ...(request.limits && typeof request.limits === 'object' ? request.limits : {}) };
-    const access = request.approvedAccess || {};
-    const serviceIdValue = request.serviceId || serviceSlug(request.serviceName);
-    const passwordValue = passwordForRequest(request);
-    const badgeClass = status === 'approved' ? 'badge-good' : status === 'rejected' ? 'badge-bad' : '';
-    const statusText = status === 'approved' ? 'Одобрено' : status === 'rejected' ? 'Отклонено' : 'Ожидает';
-    const limitsHtml = isPending ? `
-      <div class="registration-request-limits">
-        <label class="field-label">Мастеров<input type="number" min="2" max="999" step="1" value="${html(limits.maxMasters)}" data-request-limit="maxMasters"></label>
-        <label class="field-label">Адресов<input type="number" min="2" max="999" step="1" value="${html(limits.maxAddresses)}" data-request-limit="maxAddresses"></label>
-        <label class="field-label">Телефонов<input type="number" min="2" max="999" step="1" value="${html(limits.maxPhones)}" data-request-limit="maxPhones"></label>
-        <label class="field-label">Точек<input type="number" min="2" max="999" step="1" value="${html(limits.maxLocations)}" data-request-limit="maxLocations"></label>
-      </div>
-      <div class="registration-request-access">
-        <label class="field-label">serviceId / workspaceId<input type="text" value="${html(serviceIdValue)}" data-request-access="serviceId"></label>
-        <label class="field-label">Логин администратора<input type="text" value="${html(request.login || '')}" data-request-access="login"></label>
-        <label class="field-label">Временный пароль<input type="text" value="${html(passwordValue)}" data-request-access="password"></label>
-      </div>
-    ` : `
-      <div class="section-note">Лимиты: мастера ${html(limits.maxMasters)}, адреса ${html(limits.maxAddresses)}, телефоны ${html(limits.maxPhones)}, точки ${html(limits.maxLocations)}</div>
-      ${status === 'approved' ? `<div class="section-note">Доступ: workspaceId ${html(access.serviceId || request.serviceId || '—')} · логин ${html(access.adminLogin || request.login || '—')} · пароль ${html(access.adminPassword || request.adminPassword || '—')}</div>` : ''}
-    `;
-    return `
-      <div class="registration-request-row" data-registration-request-row="${html(request.id)}">
-        <div>
-          <b>${html(request.serviceName || 'Без названия')}</b>
-          <span>Администратор: ${html(request.adminName || '—')} · телефон: ${html(request.phone || '—')} · логин: ${html(request.login || '—')}</span>
-          <span>serviceId: ${html(request.serviceId || serviceSlug(request.serviceName))} · создано: ${html(formatShortDate(request.createdAt))}</span>
-          ${request.note ? `<span>Комментарий: ${html(request.note)}</span>` : ''}
-          ${request.statusNote ? `<span>${html(request.statusNote)}</span>` : ''}
-        </div>
-        <div>${limitsHtml}</div>
-        <div class="inline-actions manage-actions">
-          <span class="badge ${badgeClass}">${statusText}</span>
-          ${status === 'approved' ? `<button class="small-btn" type="button" data-copy-registration-access="${html(request.id)}">Скопировать доступ</button>` : ''}
-          ${isPending ? `<button class="small-btn" type="button" data-approve-registration="${html(request.id)}">Одобрить</button><button class="small-btn manage-danger" type="button" data-reject-registration="${html(request.id)}">Отклонить</button>` : ''}
-        </div>
-      </div>
-    `;
-  }
-
-  function renderDashboardRegistrationRequests(requests = getRegistrationRequests()) {
-    const card = document.getElementById('dashboardRegistrationRequestsCard');
-    const counter = document.getElementById('dashboardRegistrationRequestsCounter');
-    const list = document.getElementById('dashboardRegistrationRequestsList');
-    if (!card || !list) return;
-    card.hidden = true;
-    list.innerHTML = '';
-    if (counter) counter.textContent = '';
-  }
-
-  function renderRegistrationRequestsPage(requests = getRegistrationRequests()) {
-    const counter = document.getElementById('mainRegistrationRequestsCounter');
-    const list = document.getElementById('mainRegistrationRequestsList');
-    if (!list) return;
-    const sorted = (Array.isArray(requests) ? requests : []).slice().sort((a, b) => {
-      const rank = status => status === 'pending' ? 0 : status === 'approved' ? 1 : 2;
-      return rank(a.status || 'pending') - rank(b.status || 'pending') || (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0);
-    });
-    const pendingCount = sorted.filter(item => (item.status || 'pending') === 'pending').length;
-    if (counter) counter.textContent = pendingCount ? `Ожидают решения: ${pendingCount} · всего заявок: ${sorted.length}` : `Ожидающих заявок нет · всего заявок: ${sorted.length}`;
-    list.innerHTML = sorted.length
-      ? sorted.map(request => registrationRequestRowHtml(request)).join('')
-      : '<div class="section-note">Заявок пока нет.</div>';
-  }
-
-  function ensureServiceManagementModal() {
-    if (document.getElementById('serviceManagementOverlay')) return;
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay service-management-overlay';
-    overlay.id = 'serviceManagementOverlay';
-    overlay.innerHTML = `
-      <div class="modal service-management-modal">
-        <button class="modal-close" id="closeServiceManagementBtn" type="button" aria-label="Закрыть">&times;</button>
-        <h3>Управление сервисами</h3>
-        <p class="section-note">Здесь главный администратор управляет другими сервисными центрами: доступом, статусом, лимитами мастеров, адресов и телефонов.</p>
-        <div class="manage-counter" id="serviceManagementCounter"></div>
-        <div class="service-management-list" id="serviceManagementList"></div>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-  }
-
-  function crmAccessUrl() {
-    const url = String(window.location.href || '').split('#')[0];
-    return /^file:/i.test(url) ? 'откройте опубликованную ссылку CRM' : url;
-  }
-
-  function serviceAccessMessage(service) {
-    const serviceId = service?.serviceId || service?.workspaceId || serviceSlug(service?.serviceName);
-    const login = service?.adminLogin || service?.login || '';
-    const password = service?.adminPassword || '';
-    return [
-      'Ваша заявка на подключение к CRM одобрена.',
-      `Сервис: ${service?.serviceName || serviceId}`,
-      `Ссылка: ${crmAccessUrl()}`,
-      `Логин: ${login}`,
-      `Пароль: ${password}`,
-      `workspaceId: ${serviceId}`,
-      'После входа CRM автоматически откроет ваш сервисный центр.'
-    ].join('\n');
-  }
-
-  function serviceFromApprovedRequest(request) {
-    const access = request?.approvedAccess || {};
-    return {
-      serviceId: access.serviceId || request?.serviceId || serviceSlug(request?.serviceName),
-      workspaceId: access.serviceId || request?.serviceId || serviceSlug(request?.serviceName),
-      serviceName: request?.serviceName || '',
-      adminName: request?.adminName || '',
-      adminLogin: access.adminLogin || request?.login || '',
-      login: access.adminLogin || request?.login || '',
-      adminPassword: access.adminPassword || request?.adminPassword || ''
-    };
-  }
-
-  function copyAccessText(text) {
-    const fallback = () => {
-      const area = document.createElement('textarea');
-      area.value = text;
-      area.setAttribute('readonly', 'readonly');
-      area.style.position = 'fixed';
-      area.style.left = '-9999px';
-      document.body.appendChild(area);
-      area.select();
-      const copied = document.execCommand('copy');
-      area.remove();
-      if (!copied) throw new Error('copy-failed');
-    };
-    if (navigator.clipboard?.writeText && window.isSecureContext) {
-      navigator.clipboard.writeText(text)
-        .then(() => window.alert('Доступ скопирован. Теперь можно отправить его сервисному центру.'))
-        .catch(() => {
-          try {
-            fallback();
-            window.alert('Доступ скопирован. Теперь можно отправить его сервисному центру.');
-          } catch (error) {
-            window.prompt('Скопируйте доступ вручную:', text);
-          }
-        });
-      return;
-    }
-    try {
-      fallback();
-      window.alert('Доступ скопирован. Теперь можно отправить его сервисному центру.');
-    } catch (error) {
-      window.prompt('Скопируйте доступ вручную:', text);
-    }
-  }
-
-  function copyManagedServiceAccess(button) {
-    const serviceId = button?.dataset.copyServiceAccess || '';
-    const service = getServiceRegistry().find(item => String(item.serviceId || item.id || '') === serviceId);
-    if (!service) return;
-    copyAccessText(serviceAccessMessage(service));
-  }
-
-  function copyRegistrationAccess(button) {
-    const requestId = button?.dataset.copyRegistrationAccess || '';
-    const request = getRegistrationRequests().find(item => item.id === requestId);
-    if (!request) return;
-    copyAccessText(serviceAccessMessage(serviceFromApprovedRequest(request)));
-  }
-
-  function renderServiceManagement() {
-    const launcher = document.getElementById('serviceManagementCard');
-    const isMainAdmin = isMainAdminUser();
-    if (launcher) launcher.hidden = !isMainAdmin;
-
-    const overlay = document.getElementById('serviceManagementOverlay');
-    const list = document.getElementById('serviceManagementList');
-    const counter = document.getElementById('serviceManagementCounter');
-    if (!list) return;
-
-    if (!isMainAdmin) {
-      list.innerHTML = '';
-      if (counter) counter.textContent = '';
-      if (overlay) overlay.classList.remove('open');
-      return;
-    }
-
-    ensureCurrentServiceInRegistry();
-    const services = sortedServiceRegistry();
-    const external = services.filter(service => !isOwnerService(service));
-    const activeExternal = external.filter(service => (service.status || 'active') === 'active').length;
-    if (counter) {
-      counter.textContent = `Всего сервисов: ${services.length} · внешних: ${external.length} · активных внешних: ${activeExternal}`;
-    }
-
-    if (!services.length) {
-      list.innerHTML = '<div class="section-note">Сервисов пока нет.</div>';
-      return;
-    }
-
-    list.innerHTML = services.map(service => {
-      const serviceId = String(service.serviceId || service.id || serviceSlug(service.serviceName)).trim();
-      const limits = { ...DEFAULT_SERVICE_LIMITS, ...(service.limits && typeof service.limits === 'object' ? service.limits : {}) };
-      const owner = isOwnerService(service);
-      const disabled = owner ? 'disabled' : '';
-      const status = service.status === 'blocked' ? 'blocked' : 'active';
-      const statusOptions = `
-        <option value="active" ${status === 'active' ? 'selected' : ''}>Активен</option>
-        <option value="blocked" ${status === 'blocked' ? 'selected' : ''}>Заблокирован</option>
-      `;
-      return `
-        <div class="service-management-row" data-service-management-id="${html(serviceId)}">
-          <div class="service-management-head">
-            <div class="service-management-title">
-              <b>${html(service.serviceName || serviceId || 'Сервис')}</b>
-              <span>workspaceId: ${html(service.workspaceId || serviceId)} · создано: ${html(formatShortDate(service.createdAt))} · обновлено: ${html(formatShortDate(service.updatedAt))}</span>
-              ${owner ? '<span>Это основной сервис. Его лимиты меняются в блоке выше.</span>' : ''}
-            </div>
-            <span class="badge ${serviceStatusBadgeClass(status)}">${owner ? 'Основной' : serviceStatusLabel(status)}</span>
-          </div>
-          <div class="service-management-grid">
-            <label class="field-label">Название сервиса
-              <input type="text" value="${html(service.serviceName || '')}" data-service-field="serviceName" ${disabled}>
-            </label>
-            <label class="field-label">Администратор
-              <input type="text" value="${html(service.adminName || '')}" data-service-field="adminName" ${disabled}>
-            </label>
-            <label class="field-label">Телефон
-              <input type="tel" value="${html(service.phone || '')}" data-service-field="phone" ${disabled}>
-            </label>
-            <label class="field-label">Логин администратора
-              <input type="text" value="${html(service.adminLogin || service.login || '')}" data-service-field="adminLogin" ${disabled}>
-            </label>
-            <label class="field-label">Пароль администратора
-              <input type="text" value="${html(service.adminPassword || '')}" data-service-field="adminPassword" ${disabled}>
-            </label>
-            <label class="field-label">Статус
-              <select data-service-field="status" ${disabled}>${statusOptions}</select>
-            </label>
-          </div>
-          <div class="service-management-limits">
-            <label class="field-label">Мастеров
-              <input type="number" min="2" max="999" step="1" value="${html(limits.maxMasters)}" data-service-limit="maxMasters" ${disabled}>
-            </label>
-            <label class="field-label">Адресов
-              <input type="number" min="2" max="999" step="1" value="${html(limits.maxAddresses)}" data-service-limit="maxAddresses" ${disabled}>
-            </label>
-            <label class="field-label">Телефонов
-              <input type="number" min="2" max="999" step="1" value="${html(limits.maxPhones)}" data-service-limit="maxPhones" ${disabled}>
-            </label>
-            <label class="field-label">Точек
-              <input type="number" min="2" max="999" step="1" value="${html(limits.maxLocations)}" data-service-limit="maxLocations" ${disabled}>
-            </label>
-          </div>
-          <div class="inline-actions service-management-actions">
-            ${owner ? '' : `<button class="small-btn" type="button" data-copy-service-access="${html(serviceId)}">Скопировать доступ</button><button class="small-btn" type="button" data-save-managed-service="${html(serviceId)}">Сохранить</button><button class="small-btn manage-danger" type="button" data-toggle-managed-service="${html(serviceId)}">${status === 'active' ? 'Заблокировать' : 'Активировать'}</button>`}
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function openServiceManagement() {
-    if (!isMainAdminUser()) return window.alert('Управление сервисами доступно только главному администратору.');
-    ensureServiceManagementModal();
-    renderServiceManagement();
-    document.getElementById('serviceManagementOverlay')?.classList.add('open');
-  }
-
-  function closeServiceManagement() {
-    document.getElementById('serviceManagementOverlay')?.classList.remove('open');
-  }
-
-  function limitsFromManagedServiceRow(row, fallback = DEFAULT_SERVICE_LIMITS) {
-    const read = field => normalizeLimit(row?.querySelector(`[data-service-limit="${field}"]`)?.value, fallback[field], 2, 999);
-    return {
-      maxMasters: read('maxMasters'),
-      maxAddresses: read('maxAddresses'),
-      maxPhones: read('maxPhones'),
-      maxLocations: read('maxLocations')
-    };
-  }
-
-  function saveManagedService(button) {
-    const serviceId = button?.dataset.saveManagedService || '';
-    const row = button?.closest('[data-service-management-id]');
-    const registry = getServiceRegistry();
-    const index = registry.findIndex(item => String(item.serviceId || item.id || '') === serviceId);
-    if (index < 0 || isOwnerService(registry[index])) return;
-
-    const current = registry[index];
-    const serviceName = String(row?.querySelector('[data-service-field="serviceName"]')?.value || '').trim();
-    const adminName = String(row?.querySelector('[data-service-field="adminName"]')?.value || '').trim();
-    const phone = String(row?.querySelector('[data-service-field="phone"]')?.value || '').trim();
-    const adminLogin = String(row?.querySelector('[data-service-field="adminLogin"]')?.value || '').trim();
-    const adminPassword = String(row?.querySelector('[data-service-field="adminPassword"]')?.value || '').trim();
-    const statusValue = row?.querySelector('[data-service-field="status"]')?.value === 'blocked' ? 'blocked' : 'active';
-    if (!serviceName) return window.alert('Укажите название сервиса.');
-    if (!adminLogin || !adminPassword) return window.alert('Укажите логин и пароль администратора сервиса.');
-
-    const duplicateLogin = registry.find((item, itemIndex) => {
-      if (itemIndex === index) return false;
-      const login = String(item.adminLogin || item.login || '').trim().toLowerCase();
-      return login && login === adminLogin.toLowerCase();
-    });
-    if (duplicateLogin || adminLogin.toLowerCase() === ADMIN_USER.login.toLowerCase() || findMasterByLogin(adminLogin)) {
-      return window.alert('Такой логин уже используется.');
-    }
-
-    const now = new Date().toISOString();
-    const updated = {
-      ...current,
-      serviceName,
-      adminName,
-      phone,
-      login: adminLogin,
-      adminLogin,
-      adminPassword,
-      status: statusValue,
-      limits: limitsFromManagedServiceRow(row, current.limits || DEFAULT_SERVICE_LIMITS),
-      updatedAt: now
-    };
-    registry[index] = updated;
-    if (saveServiceRegistry(registry)) {
-      syncRegistrationRequestFromService(updated);
-      try { if (typeof logActivity === 'function') logActivity('Сервисы', `Обновлен сервис "${serviceName}"`); } catch (error) {}
-      renderServiceManagement();
-      renderRegistrationRequests();
-    }
-  }
-
-  function toggleManagedService(button) {
-    const serviceId = button?.dataset.toggleManagedService || '';
-    const registry = getServiceRegistry();
-    const index = registry.findIndex(item => String(item.serviceId || item.id || '') === serviceId);
-    if (index < 0 || isOwnerService(registry[index])) return;
-    const current = registry[index];
-    const nextStatus = current.status === 'blocked' ? 'active' : 'blocked';
-    registry[index] = {
-      ...current,
-      status: nextStatus,
-      updatedAt: new Date().toISOString()
-    };
-    if (saveServiceRegistry(registry)) {
-      syncRegistrationRequestFromService(registry[index]);
-      try { if (typeof logActivity === 'function') logActivity('Сервисы', `${serviceStatusLabel(nextStatus)} сервис "${current.serviceName || serviceId}"`); } catch (error) {}
-      renderServiceManagement();
-      renderRegistrationRequests();
-    }
-  }
-
-  function renderRegistrationRequests() {
-    ensureMasterAccessUi();
-    const card = document.getElementById('registrationRequestsCard');
-    const list = document.getElementById('registrationRequestsList');
-    const counter = document.getElementById('registrationRequestsCounter');
-    if (!card || !list) return;
-
-    const isMainAdmin = isMainAdminUser();
-    const managementCard = document.getElementById('serviceManagementCard');
-    if (managementCard) managementCard.hidden = !isMainAdmin;
-    card.hidden = !isMainAdmin;
-    if (!isMainAdmin) {
-      list.innerHTML = '';
-      if (counter) counter.textContent = '';
-      updateRegistrationRequestsBadge(0);
-      renderDashboardRegistrationRequests([]);
-      closeServiceManagement();
-      return;
-    }
-
-    ensureCurrentServiceInRegistry();
-    const requests = getRegistrationRequests().slice().sort((a, b) => {
-      const rank = status => status === 'pending' ? 0 : status === 'approved' ? 1 : 2;
-      return rank(a.status || 'pending') - rank(b.status || 'pending') || (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0);
-    });
-    const registry = getServiceRegistry();
-    const pendingCount = requests.filter(item => (item.status || 'pending') === 'pending').length;
-    if (counter) counter.textContent = `Ожидают: ${pendingCount} · всего заявок: ${requests.length} · сервисов в реестре: ${registry.length}`;
-    updateRegistrationRequestsBadge(pendingCount);
-    notifyNewRegistrationRequests(requests);
-    renderDashboardRegistrationRequests(requests);
-    renderRegistrationRequestsPage(requests);
-    renderServiceManagement();
-
-    if (!requests.length) {
-      list.innerHTML = '<div class="section-note">Заявок пока нет.</div>';
-      return;
-    }
-
-    list.innerHTML = requests.map(request => {
-      const status = request.status || 'pending';
-      const isPending = status === 'pending';
-      const limits = { ...getServiceLimits(), ...(request.limits && typeof request.limits === 'object' ? request.limits : {}) };
-      const access = request.approvedAccess || {};
-      const serviceIdValue = request.serviceId || serviceSlug(request.serviceName);
-      const passwordValue = passwordForRequest(request);
-      const badgeClass = status === 'approved' ? 'badge-good' : status === 'rejected' ? 'badge-bad' : '';
-      const statusText = status === 'approved' ? 'Одобрено' : status === 'rejected' ? 'Отклонено' : 'Ожидает';
-      const limitsHtml = isPending ? `
-        <div class="registration-request-limits">
-          <label class="field-label">Мастеров<input type="number" min="2" max="999" step="1" value="${html(limits.maxMasters)}" data-request-limit="maxMasters"></label>
-          <label class="field-label">Адресов<input type="number" min="2" max="999" step="1" value="${html(limits.maxAddresses)}" data-request-limit="maxAddresses"></label>
-          <label class="field-label">Телефонов<input type="number" min="2" max="999" step="1" value="${html(limits.maxPhones)}" data-request-limit="maxPhones"></label>
-          <label class="field-label">Точек<input type="number" min="2" max="999" step="1" value="${html(limits.maxLocations)}" data-request-limit="maxLocations"></label>
-        </div>
-        <div class="registration-request-access">
-          <label class="field-label">serviceId / workspaceId<input type="text" value="${html(serviceIdValue)}" data-request-access="serviceId"></label>
-          <label class="field-label">Логин администратора<input type="text" value="${html(request.login || '')}" data-request-access="login"></label>
-          <label class="field-label">Временный пароль<input type="text" value="${html(passwordValue)}" data-request-access="password"></label>
-        </div>
-      ` : `
-        <div class="section-note">Лимиты: мастера ${html(limits.maxMasters)}, адреса ${html(limits.maxAddresses)}, телефоны ${html(limits.maxPhones)}, точки ${html(limits.maxLocations)}</div>
-        ${status === 'approved' ? `<div class="section-note">Доступ: workspaceId ${html(access.serviceId || request.serviceId || '—')} · логин ${html(access.adminLogin || request.login || '—')} · пароль ${html(access.adminPassword || request.adminPassword || '—')}</div>` : ''}
-      `;
-      return `
-        <div class="registration-request-row" data-registration-request-row="${html(request.id)}">
-          <div>
-            <b>${html(request.serviceName || 'Без названия')}</b>
-            <span>Администратор: ${html(request.adminName || '—')} · телефон: ${html(request.phone || '—')} · логин: ${html(request.login || '—')}</span>
-            <span>serviceId: ${html(request.serviceId || serviceSlug(request.serviceName))} · создано: ${html(formatShortDate(request.createdAt))}</span>
-            ${request.note ? `<span>Комментарий: ${html(request.note)}</span>` : ''}
-            ${request.statusNote ? `<span>${html(request.statusNote)}</span>` : ''}
-          </div>
-          <div>${limitsHtml}</div>
-          <div class="inline-actions manage-actions">
-            <span class="badge ${badgeClass}">${statusText}</span>
-            ${status === 'approved' ? `<button class="small-btn" type="button" data-copy-registration-access="${html(request.id)}">Скопировать доступ</button>` : ''}
-            ${isPending ? `<button class="small-btn" type="button" data-approve-registration="${html(request.id)}">Одобрить</button><button class="small-btn manage-danger" type="button" data-reject-registration="${html(request.id)}">Отклонить</button>` : ''}
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function approveRegistrationRequest(button) {
-    const id = button?.dataset.approveRegistration || '';
-    const row = button?.closest('[data-registration-request-row]');
-    const requests = getRegistrationRequests();
-    const requestIndex = requests.findIndex(item => item.id === id);
-    const request = requests[requestIndex];
-    if (!request || (request.status && request.status !== 'pending')) return;
-    const limits = requestLimitsFromRow(row, getServiceLimits());
-    const registry = getServiceRegistry();
-    const now = new Date().toISOString();
-    const existingIndex = registry.findIndex(item => item.sourceRequestId === request.id || item.login === request.login);
-    const access = requestAccessFromRow(row, request, registry);
-    const serviceId = access.serviceId;
-    if (!access.adminLogin || !access.adminPassword) {
-      return window.alert('Укажите логин и временный пароль администратора сервиса.');
-    }
-    const serviceRecord = {
-      ...(existingIndex >= 0 ? registry[existingIndex] : {}),
-      id: serviceId,
-      serviceId,
-      workspaceId: serviceId,
-      serviceName: request.serviceName,
-      adminName: request.adminName,
-      login: access.adminLogin,
-      adminLogin: access.adminLogin,
-      adminPassword: access.adminPassword,
-      phone: request.phone,
-      note: request.note || '',
-      limits,
-      status: 'active',
-      sourceRequestId: request.id,
-      createdAt: existingIndex >= 0 ? registry[existingIndex].createdAt || now : now,
-      updatedAt: now
-    };
-    if (existingIndex >= 0) registry[existingIndex] = serviceRecord;
-    else registry.unshift(serviceRecord);
-    requests[requestIndex] = {
-      ...request,
-      serviceId,
-      limits,
-      login: access.adminLogin,
-      adminPassword: access.adminPassword,
-      approvedAccess: access,
-      status: 'approved',
-      approvedAt: now,
-      updatedAt: now,
-      statusNote: `Одобрено главным администратором ${formatShortDate(now)}`
-    };
-    if (saveServiceRegistry(registry) && saveRegistrationRequests(requests)) {
-      try { if (typeof logActivity === 'function') logActivity('Регистрация сервиса', `Одобрена заявка "${request.serviceName}"`); } catch (error) {}
-      try { window.crmUpdateRegistrationRequest?.(requests[requestIndex]); } catch (error) {}
-      renderRegistrationRequests();
-    }
-  }
-
-  function rejectRegistrationRequest(id) {
-    const requests = getRegistrationRequests();
-    const requestIndex = requests.findIndex(item => item.id === id);
-    const request = requests[requestIndex];
-    if (!request || (request.status && request.status !== 'pending')) return;
-    if (!window.confirm(`Отклонить заявку "${request.serviceName || request.login}"?`)) return;
-    const now = new Date().toISOString();
-    requests[requestIndex] = {
-      ...request,
-      status: 'rejected',
-      rejectedAt: now,
-      updatedAt: now,
-      statusNote: `Отклонено главным администратором ${formatShortDate(now)}`
-    };
-    if (saveRegistrationRequests(requests)) {
-      try { if (typeof logActivity === 'function') logActivity('Регистрация сервиса', `Отклонена заявка "${request.serviceName || request.login}"`); } catch (error) {}
-      try { window.crmUpdateRegistrationRequest?.(requests[requestIndex]); } catch (error) {}
-      renderRegistrationRequests();
-    }
-  }
-
   function syncMasterHiddenInputs() {
     const settings = readSettings();
     const profiles = getMasterProfiles();
@@ -11929,46 +10725,6 @@ document.addEventListener('DOMContentLoaded', function(){
     section.innerHTML = `
       <h4>Мастера и доступ</h4>
       <p class="section-note">Нажмите на имя мастера, чтобы изменить логин, пароль, права доступа и процент зарплаты.</p>
-      <div class="service-limits-card">
-        <div>
-          <h4 class="section-title">Лимиты этого сервиса</h4>
-          <p class="section-note">Эти значения будут использоваться для текущего сервисного центра. Для новых сервисов такие же лимиты позже будут задаваться при одобрении заявки.</p>
-        </div>
-        <div class="service-limits-grid">
-          <label class="field-label">Мастеров
-            <input type="number" id="serviceLimitMastersInput" min="2" max="999" step="1">
-          </label>
-          <label class="field-label">Рабочих адресов
-            <input type="number" id="serviceLimitAddressesInput" min="2" max="999" step="1">
-          </label>
-          <label class="field-label">Рабочих телефонов
-            <input type="number" id="serviceLimitPhonesInput" min="2" max="999" step="1">
-          </label>
-          <label class="field-label">Точек / филиалов
-            <input type="number" id="serviceLimitLocationsInput" min="2" max="999" step="1">
-          </label>
-        </div>
-        <div class="inline-actions">
-          <button class="btn btn-primary" id="saveServiceLimitsBtn" type="button">Сохранить лимиты</button>
-        </div>
-      </div>
-      <div class="service-management-card" id="serviceManagementCard" hidden>
-        <div>
-          <h4 class="section-title">Управление другими сервисами</h4>
-          <p class="section-note">Отдельное окно для сервисных центров, их администраторов, статуса и лимитов.</p>
-        </div>
-        <div class="inline-actions">
-          <button class="btn btn-secondary" id="openServiceManagementBtn" type="button">Открыть управление</button>
-        </div>
-      </div>
-      <div class="registration-requests-card" id="registrationRequestsCard">
-        <div>
-          <h4 class="section-title">Заявки на регистрацию</h4>
-          <p class="section-note">Главный администратор одобряет новый сервисный центр, задаёт лимиты и создаёт запись в реестре сервисов.</p>
-        </div>
-        <div class="manage-counter" id="registrationRequestsCounter"></div>
-        <div class="registration-requests-list" id="registrationRequestsList"></div>
-      </div>
         <div class="master-access-panel">
           <div class="master-access-toolbar">
             <div class="section-note" id="masterProfilesCounter"></div>
@@ -11985,9 +10741,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
       </div>
     `;
-    syncServiceLimitsUi();
     ensureMasterEditorModal();
-    ensureServiceManagementModal();
   }
   function ensureMasterEditorModal() {
     if (document.getElementById('masterEditorOverlay')) return;
@@ -12029,20 +10783,14 @@ document.addEventListener('DOMContentLoaded', function(){
     ensureMasterAccessUi();
     const list = document.getElementById('masterProfilesList');
     if (!list) return;
-    syncServiceLimitsUi();
     const profiles = getMasterProfiles();
     const counter = document.getElementById('masterProfilesCounter');
     const addButton = document.getElementById('addMasterProfileBtn');
-    const masterLimit = maxMasterProfiles();
-    if (counter) {
-      counter.textContent = profiles.length > masterLimit
-        ? `Создано: ${profiles.length}. Текущий лимит: ${masterLimit}`
-        : `${profiles.length} из ${masterLimit} мастеров`;
-    }
+    if (counter) counter.textContent = `${profiles.length} из ${MAX_MASTER_PROFILES} мастеров`;
     if (addButton) {
-      const atLimit = profiles.length >= masterLimit;
+      const atLimit = profiles.length >= MAX_MASTER_PROFILES;
       addButton.disabled = atLimit;
-      addButton.title = atLimit ? `Лимит ${masterLimit} мастеров уже заполнен` : '';
+      addButton.title = atLimit ? `Лимит ${MAX_MASTER_PROFILES} мастеров уже заполнен` : '';
     }
     list.innerHTML = profiles.length ? profiles.map(profile => `
       <button class="master-profile-row" type="button" data-open-master-profile="${html(profile.id)}">
@@ -12071,9 +10819,8 @@ document.addEventListener('DOMContentLoaded', function(){
     ensureMasterEditorModal();
     const settings = readSettings();
     const profiles = getMasterProfiles();
-    const masterLimit = maxMasterProfiles();
-    if (!id && profiles.length >= masterLimit) {
-      window.alert(`Можно добавить максимум ${masterLimit} мастеров.`);
+    if (!id && profiles.length >= MAX_MASTER_PROFILES) {
+      window.alert(`Можно добавить максимум ${MAX_MASTER_PROFILES} мастеров.`);
       return;
     }
     const profile = id ? profiles.find(item => item.id === id) : {
@@ -12127,9 +10874,8 @@ document.addEventListener('DOMContentLoaded', function(){
     const index = profiles.findIndex(profile => profile.id === payload.id);
     if (index >= 0) profiles[index] = payload;
     else {
-      const masterLimit = maxMasterProfiles();
-      if (profiles.length >= masterLimit) {
-        return window.alert(`Можно добавить максимум ${masterLimit} мастеров.`);
+      if (profiles.length >= MAX_MASTER_PROFILES) {
+        return window.alert(`Можно добавить максимум ${MAX_MASTER_PROFILES} мастеров.`);
       }
       profiles.unshift(payload);
     }
@@ -12148,16 +10894,10 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function getUserFromStorage() {
-    try {
-      const pending = JSON.parse(sessionStorage.getItem(AUTH_PENDING_USER_KEY) || 'null');
-      if (pending?.serviceAdmin || pending?.id) return pending;
-    } catch (error) {}
     if (localStorage.getItem(AUTH_REMEMBER_KEY) !== '1') return null;
     try {
       const stored = JSON.parse(localStorage.getItem(AUTH_USER_KEY) || 'null');
-      if (stored?.isAdmin && stored.login === ADMIN_USER.login) return { ...ADMIN_USER, password: '' };
-      if (stored?.isAdmin && stored.login !== ADMIN_USER.login) return null;
-      if (stored?.serviceAdmin) return stored;
+      if (stored?.isAdmin) return { ...ADMIN_USER, password: '' };
       if (stored?.id) {
         const profile = getMasterProfiles().find(item => item.id === stored.id);
         if (profile) return { ...profile, password: '', isAdmin: false };
@@ -12166,19 +10906,14 @@ document.addEventListener('DOMContentLoaded', function(){
     return null;
   }
   function setCurrentUser(user, remember) {
-    const normalizedUser = user?.serviceAdmin ? { ...user, isAdmin: false } : user;
-    activeUser = normalizedUser ? { ...normalizedUser, password: '' } : null;
+    activeUser = user ? { ...user, password: '' } : null;
     window.crmCurrentUser = activeUser;
     if (activeUser && remember) {
       localStorage.setItem(AUTH_REMEMBER_KEY, '1');
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(activeUser));
-      try { sessionStorage.removeItem(AUTH_PENDING_USER_KEY); } catch (error) {}
     } else {
       localStorage.removeItem(AUTH_REMEMBER_KEY);
       localStorage.removeItem(AUTH_USER_KEY);
-      if (!activeUser) {
-        try { sessionStorage.removeItem(AUTH_PENDING_USER_KEY); } catch (error) {}
-      }
     }
     updateCurrentUserChip();
     applyRoleAccess();
@@ -12188,8 +10923,6 @@ document.addEventListener('DOMContentLoaded', function(){
     if (cleanLogin === ADMIN_USER.login && password === ADMIN_USER.password) {
       return { ...ADMIN_USER };
     }
-    const serviceAdmin = authenticateServiceAdmin(login, password);
-    if (serviceAdmin) return serviceAdmin;
     const profile = findMasterByLogin(cleanLogin);
     if (profile && profile.password && password === profile.password) {
       return { ...profile, isAdmin: false };
@@ -12211,7 +10944,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
   function refreshActiveUserFromProfiles() {
-    if (!activeUser || activeUser.isAdmin || activeUser.serviceAdmin) return;
+    if (!activeUser || activeUser.isAdmin) return;
     const profile = getMasterProfiles().find(item => item.id === activeUser.id || (item.login && item.login === activeUser.login));
     if (!profile) return;
     activeUser = { ...profile, password: '', isAdmin: false };
@@ -12224,12 +10957,12 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   function userHasRole(key) {
     if (!activeUser) return false;
-    if (isMainAdminUser() || activeUser.roles?.includes('all')) return true;
+    if (activeUser.isAdmin || activeUser.roles?.includes('all')) return true;
     return normalizeRoles(activeUser.roles, []).includes(key);
   }
   function allowedSection(sectionName) {
     const key = SETTINGS_SECTION_ACCESS[sectionName] || 'settings';
-    if (isMainAdminUser()) return true;
+    if (activeUser?.isAdmin) return true;
     if (sectionName === 'company' || sectionName === 'localization') return userHasRole('settings');
     return userHasRole(key) || userHasRole('settings');
   }
@@ -12250,7 +10983,7 @@ document.addEventListener('DOMContentLoaded', function(){
     ACCESS_ROLES.forEach(role => {
       if (!role.menuId) return;
       const settingsAllowed = role.key === 'settings' && (userHasRole('settings') || userHasRole('documents') || userHasRole('staff'));
-      const allowed = signedIn && (isMainAdminUser() || settingsAllowed || userHasRole(role.key) || role.key === 'orders');
+      const allowed = signedIn && (activeUser?.isAdmin || settingsAllowed || userHasRole(role.key) || role.key === 'orders');
       const button = document.getElementById(role.menuId);
       if (button) {
         button.hidden = !allowed;
@@ -12271,32 +11004,6 @@ document.addEventListener('DOMContentLoaded', function(){
       const first = document.querySelector('[data-settings-target]:not([hidden])');
       if (first && typeof openSettingsSection === 'function') openSettingsSection(first.dataset.settingsTarget);
     }
-    const registrationButton = document.getElementById('registrationRequestsBtn');
-    if (registrationButton) {
-      const allowed = isMainAdminUser();
-      registrationButton.hidden = !allowed;
-      registrationButton.disabled = !allowed;
-    }
-  }
-  function guardWorkspaceForUser(user, remember = false) {
-    if (!user) return { ok: false, message: 'Пользователь не найден.' };
-    if (user.serviceAdmin) {
-      if (!isValidServiceAdminUser(user)) {
-        return { ok: false, message: 'У этого сервисного центра не задан отдельный workspace. Вход заблокирован, чтобы не открыть чужую базу.' };
-      }
-      const targetWorkspace = serviceWorkspaceIdForUser(user);
-      if (currentWorkspaceId() !== targetWorkspace) {
-        prepareWorkspaceSwitch(user, remember, user.serviceRecord || serviceRecordFromUser(user));
-        return { ok: false, switching: true };
-      }
-      cleanLeakedOwnerDataForService(user);
-      return { ok: true };
-    }
-    if (user.isAdmin && currentWorkspaceId() !== ownerWorkspaceId()) {
-      prepareWorkspaceSwitch(user, remember);
-      return { ok: false, switching: true };
-    }
-    return { ok: true };
   }
   function setupAuth() {
     const oldForm = document.getElementById('authForm');
@@ -12321,21 +11028,12 @@ document.addEventListener('DOMContentLoaded', function(){
       errorNode.classList.add('show');
     };
     const showAppLocal = () => {
-      const guard = guardWorkspaceForUser(activeUser, localStorage.getItem(AUTH_REMEMBER_KEY) === '1');
-      if (!guard.ok) {
-        if (!guard.switching) {
-          setCurrentUser(null, false);
-          showError(guard.message || 'Доступ к workspace заблокирован.');
-        }
-        return;
-      }
       if (authShell) authShell.style.display = 'none';
       if (appShell) {
         appShell.classList.add('is-authenticated');
         appShell.style.display = 'block';
       }
       applyRoleAccess();
-      renderRegistrationRequests();
     };
     const showAuthLocal = () => {
       activeUser = null;
@@ -12346,21 +11044,12 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       updateCurrentUserChip();
       clearError();
-      renderRegistrationRequests();
     };
     const remembered = getUserFromStorage();
-    if (rememberInput) rememberInput.checked = localStorage.getItem(AUTH_REMEMBER_KEY) === '1';
+    if (rememberInput) rememberInput.checked = Boolean(remembered);
     if (remembered) {
-      activeUser = remembered?.serviceAdmin ? { ...remembered, isAdmin: false } : remembered;
+      activeUser = remembered;
       window.crmCurrentUser = activeUser;
-      const guard = guardWorkspaceForUser(activeUser, localStorage.getItem(AUTH_REMEMBER_KEY) === '1');
-      if (guard.switching) return;
-      if (!guard.ok) {
-        setCurrentUser(null, false);
-        showAuthLocal();
-        showError(guard.message || 'Доступ к workspace заблокирован.');
-        return;
-      }
       showAppLocal();
       updateCurrentUserChip();
     } else {
@@ -12380,15 +11069,6 @@ document.addEventListener('DOMContentLoaded', function(){
         showError('Неверный логин или пароль');
         passwordInput?.focus();
         passwordInput?.select();
-        return;
-      }
-      const guard = guardWorkspaceForUser(user, Boolean(rememberInput?.checked));
-      if (guard.switching) {
-        showError(user.serviceAdmin ? 'Открываю workspace сервиса...' : 'Открываю основной workspace...');
-        return;
-      }
-      if (!guard.ok) {
-        showError(guard.message || 'Доступ к workspace заблокирован.');
         return;
       }
       setCurrentUser(user, Boolean(rememberInput?.checked));
@@ -12466,59 +11146,12 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       const overlay = document.getElementById('masterEditorOverlay');
       if (overlay && event.target === overlay) closeMasterEditor();
-      if (event.target.closest('#openServiceManagementBtn')) {
-        openServiceManagement();
-        return;
-      }
-      if (event.target.closest('#closeServiceManagementBtn')) {
-        closeServiceManagement();
-        return;
-      }
-      const serviceManagementOverlay = document.getElementById('serviceManagementOverlay');
-      if (serviceManagementOverlay && event.target === serviceManagementOverlay) {
-        closeServiceManagement();
-        return;
-      }
-      const copyManagedServiceButton = event.target.closest('[data-copy-service-access]');
-      if (copyManagedServiceButton) {
-        copyManagedServiceAccess(copyManagedServiceButton);
-        return;
-      }
-      const copyRegistrationAccessButton = event.target.closest('[data-copy-registration-access]');
-      if (copyRegistrationAccessButton) {
-        copyRegistrationAccess(copyRegistrationAccessButton);
-        return;
-      }
-      const saveManagedServiceButton = event.target.closest('[data-save-managed-service]');
-      if (saveManagedServiceButton) {
-        saveManagedService(saveManagedServiceButton);
-        return;
-      }
-      const toggleManagedServiceButton = event.target.closest('[data-toggle-managed-service]');
-      if (toggleManagedServiceButton) {
-        toggleManagedService(toggleManagedServiceButton);
-        return;
-      }
       if (event.target.closest('#settingsSaveServiceBtn')) {
         saveSettingsServiceFromForm();
         return;
       }
       if (event.target.closest('#settingsResetServiceBtn')) {
         resetSettingsServiceForm();
-        return;
-      }
-      if (event.target.closest('#saveServiceLimitsBtn')) {
-        saveServiceLimits();
-        return;
-      }
-      const approveRegistration = event.target.closest('[data-approve-registration]');
-      if (approveRegistration) {
-        approveRegistrationRequest(approveRegistration);
-        return;
-      }
-      const rejectRegistration = event.target.closest('[data-reject-registration]');
-      if (rejectRegistration) {
-        rejectRegistrationRequest(rejectRegistration.dataset.rejectRegistration);
         return;
       }
       if (event.target.closest('#addOrderTypeTemplateBtn') && typeof addTemplateDraft === 'function') {
@@ -12530,10 +11163,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
     });
     document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') {
-        closeMasterEditor();
-        closeServiceManagement();
-      }
+      if (event.key === 'Escape') closeMasterEditor();
     });
     document.getElementById('settingsForm')?.addEventListener('submit', () => {
       syncMasterHiddenInputs();
@@ -12550,11 +11180,7 @@ document.addEventListener('DOMContentLoaded', function(){
       tab.addEventListener('click', () => {
         setTimeout(() => {
           if (tab.dataset.settingsTarget === 'settingsServices') renderSettingsServicesList();
-          if (tab.dataset.settingsTarget === 'access') {
-            syncServiceLimitsUi();
-            renderMasterProfilesList();
-            renderRegistrationRequests();
-          }
+          if (tab.dataset.settingsTarget === 'access') renderMasterProfilesList();
           applyRoleAccess();
         }, 0);
       });
@@ -12562,37 +11188,29 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('settingsBtn')?.addEventListener('click', () => {
       setTimeout(() => {
         renderSettingsServicesList();
-        syncServiceLimitsUi();
         renderMasterProfilesList();
-        renderRegistrationRequests();
         applyRoleAccess();
       }, 80);
     });
     document.addEventListener('crm:cloud-sync-applied', () => {
-      syncServiceLimitsUi();
       syncMasterHiddenInputs();
       renderMasterProfilesList();
-      renderRegistrationRequests();
       refreshActiveUserFromProfiles();
       applyRoleAccess();
     });
-    document.addEventListener('crm:registration-request-created', renderRegistrationRequests);
   }
 
   function init() {
-    applyPendingWorkspaceBootstrapLocal();
     ensureDocumentsWithoutPreview();
     ensureSettingsServicesUi();
     ensureMasterAccessUi();
     syncMasterHiddenInputs();
     renderSettingsServicesList();
     renderMasterProfilesList();
-    renderRegistrationRequests();
     setupAuth();
     overrideSalaryCalculation();
     applyRoleAccess();
     wireEvents();
-    window.renderRegistrationRequestsPage = renderRegistrationRequestsPage;
   }
 
   if (document.readyState === 'loading') {
@@ -14543,145 +13161,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 };
 </script>
 
-<script id="release-registration-requests-step1">
-(function(){
-  const REQUESTS_KEY = 'one_service_registration_requests';
-
-  function safeJson(value, fallback = []) {
-    try {
-      const parsed = JSON.parse(value);
-      return Array.isArray(parsed) ? parsed : fallback;
-    } catch (error) {
-      return fallback;
-    }
-  }
-
-  function getRequests() {
-    try {
-      return safeJson(localStorage.getItem(REQUESTS_KEY), []);
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function saveRequests(items) {
-    try {
-      localStorage.setItem(REQUESTS_KEY, JSON.stringify(Array.isArray(items) ? items : []));
-      return true;
-    } catch (error) {
-      window.alert('Не удалось сохранить заявку. Проверьте доступ к хранилищу браузера.');
-      return false;
-    }
-  }
-
-  function makeId(prefix = 'request') {
-    return window.crypto?.randomUUID ? window.crypto.randomUUID() : `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-  }
-
-  function serviceSlug(value) {
-    return String(value || '')
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9а-яё]+/gi, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 48) || `service-${Date.now()}`;
-  }
-
-  function openOverlay() {
-    document.getElementById('registrationRequestOverlay')?.classList.add('open');
-    setTimeout(() => document.getElementById('registrationServiceNameInput')?.focus(), 0);
-  }
-
-  function closeOverlay() {
-    document.getElementById('registrationRequestOverlay')?.classList.remove('open');
-  }
-
-  function resetForm() {
-    document.getElementById('registrationRequestForm')?.reset();
-  }
-
-  async function submitRequest(event) {
-    event.preventDefault();
-    const serviceName = document.getElementById('registrationServiceNameInput')?.value.trim() || '';
-    const adminName = document.getElementById('registrationAdminNameInput')?.value.trim() || '';
-    const phone = document.getElementById('registrationPhoneInput')?.value.trim() || '';
-    const login = document.getElementById('registrationLoginInput')?.value.trim() || '';
-    const note = document.getElementById('registrationNoteInput')?.value.trim() || '';
-    if (!serviceName || !adminName || !phone || !login) {
-      window.alert('Заполните название сервиса, администратора, телефон и логин.');
-      return;
-    }
-    const now = new Date().toISOString();
-    const requests = getRequests();
-    const duplicate = requests.find(item => item.status === 'pending' && (
-      String(item.login || '').toLowerCase() === login.toLowerCase() ||
-      String(item.phone || '') === phone
-    ));
-    if (duplicate) {
-      window.alert('Такая заявка уже ожидает одобрения.');
-      return;
-    }
-    const request = {
-      id: makeId(),
-      serviceId: serviceSlug(serviceName),
-      serviceName,
-      adminName,
-      phone,
-      login,
-      note,
-      status: 'pending',
-      createdAt: now,
-      updatedAt: now
-    };
-    let remoteError = '';
-    if (typeof window.crmSubmitRegistrationRequest === 'function') {
-      try {
-        const result = await window.crmSubmitRegistrationRequest(request);
-        if (result?.duplicate) {
-          window.alert('Такая заявка уже ожидает одобрения у главного администратора.');
-          return;
-        }
-        if (result?.ok) {
-          document.dispatchEvent(new CustomEvent('crm:registration-request-created'));
-          resetForm();
-          closeOverlay();
-          window.alert('Заявка отправлена главному администратору. После одобрения он передаст логин и пароль.');
-          return;
-        }
-        remoteError = result?.reason || '';
-      } catch (error) {
-        remoteError = error?.code || error?.message || 'firebase-write-failed';
-      }
-    }
-    requests.unshift(request);
-    if (!saveRequests(requests)) return;
-    document.dispatchEvent(new CustomEvent('crm:registration-request-created'));
-    resetForm();
-    closeOverlay();
-    window.alert(`Заявка сохранена на этом устройстве, но прямую отправку в Firebase выполнить не удалось.${remoteError ? ` Причина: ${remoteError}.` : ''} Проверьте Firestore rules и Anonymous Authentication.`);
-  }
-
-  function install() {
-    document.getElementById('openRegistrationRequestBtn')?.addEventListener('click', openOverlay);
-    document.getElementById('closeRegistrationRequestBtn')?.addEventListener('click', closeOverlay);
-    document.getElementById('cancelRegistrationRequestBtn')?.addEventListener('click', () => {
-      resetForm();
-      closeOverlay();
-    });
-    document.getElementById('registrationRequestOverlay')?.addEventListener('click', event => {
-      if (event.target === event.currentTarget) closeOverlay();
-    });
-    document.getElementById('registrationRequestForm')?.addEventListener('submit', submitRequest);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', install, { once: true });
-  } else {
-    install();
-  }
-})();
-</script>
-
 <script type="module" id="release-cloud-sync">
 (async function(){
   const DATA_KEYS = [
@@ -14693,13 +13172,10 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     'one_service_tasks',
     'one_service_suppliers',
     'one_service_clients',
-    'one_service_activity',
-    'one_service_registration_requests',
-    'one_service_service_registry'
+    'one_service_activity'
   ];
   const CONFIG_KEY = 'one_service_cloud_config';
   const CLIENT_KEY = 'one_service_cloud_client_id';
-  const WORKSPACE_BOOTSTRAP_KEY = 'one_service_pending_workspace_bootstrap';
   const DATA_KEY_SET = new Set(DATA_KEYS);
   const firebaseVersion = '10.12.5';
   let config = readConfig();
@@ -14769,40 +13245,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   function workspaceId() {
     return String(config.workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
-  }
-  function ownerWorkspaceId() {
-    const releaseConfig = window.CRM_RELEASE_CLOUD_CONFIG || {};
-    return String(releaseConfig.workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
-  }
-  function applyPendingWorkspaceBootstrap() {
-    const pending = readLocalJson(WORKSPACE_BOOTSTRAP_KEY, null);
-    if (!pending || pending.workspaceId !== workspaceId()) return false;
-    const bootstrap = pending.bootstrap || {};
-    const values = {
-      one_service_settings: bootstrap.settings || {},
-      one_service_orders: [],
-      one_service_inventory: [],
-      one_service_services: [],
-      one_service_expenses: [],
-      one_service_tasks: [],
-      one_service_suppliers: [],
-      one_service_clients: [],
-      one_service_activity: [],
-      one_service_registration_requests: [],
-      one_service_service_registry: Array.isArray(bootstrap.serviceRegistry) ? bootstrap.serviceRegistry : []
-    };
-    applyingRemote = true;
-    try {
-      DATA_KEYS.forEach(key => {
-        const value = Object.prototype.hasOwnProperty.call(values, key) ? values[key] : [];
-        localStorage.setItem(key, JSON.stringify(value));
-      });
-      localStorage.removeItem(WORKSPACE_BOOTSTRAP_KEY);
-    } finally {
-      applyingRemote = false;
-    }
-    document.dispatchEvent(new CustomEvent('crm:workspace-bootstrap-applied', { detail: { workspaceId: workspaceId() } }));
-    return true;
   }
   function fillCloudForm() {
     config = readConfig();
@@ -14914,103 +13356,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   function firebaseDocRef(key) {
     return firebaseApi.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
   }
-  function publicRegistrationDocRef(api, targetDb, id) {
-    return api.doc(targetDb, 'crmPublicRegistrationRequests', String(id || '').trim());
-  }
-  function cleanRegistrationRequest(request) {
-    const now = new Date().toISOString();
-    return {
-      id: String(request?.id || `${Date.now()}-${Math.random().toString(36).slice(2)}`).slice(0, 120),
-      serviceId: String(request?.serviceId || '').slice(0, 80),
-      serviceName: String(request?.serviceName || '').slice(0, 160),
-      adminName: String(request?.adminName || '').slice(0, 120),
-      phone: String(request?.phone || '').slice(0, 80),
-      login: String(request?.login || '').slice(0, 140),
-      note: String(request?.note || '').slice(0, 800),
-      status: ['pending', 'approved', 'rejected'].includes(request?.status) ? request.status : 'pending',
-      limits: request?.limits && typeof request.limits === 'object' ? request.limits : null,
-      approvedAccess: request?.approvedAccess && typeof request.approvedAccess === 'object' ? request.approvedAccess : null,
-      createdAt: request?.createdAt || now,
-      updatedAt: request?.updatedAt || now,
-      ownerWorkspaceId: ownerWorkspaceId()
-    };
-  }
-  function mergePublicRegistrationRequests(publicItems) {
-    const remote = Array.isArray(publicItems) ? publicItems.map(cleanRegistrationRequest).filter(item => item.id) : [];
-    const local = readLocalJson('one_service_registration_requests', []);
-    const merged = new Map();
-    local.forEach(item => {
-      if (item?.id) merged.set(String(item.id), item);
-    });
-    remote.forEach(item => {
-      const current = merged.get(String(item.id));
-      if (!current) {
-        merged.set(String(item.id), item);
-        return;
-      }
-      const currentTime = Date.parse(current.updatedAt || '') || 0;
-      const remoteTime = Date.parse(item.updatedAt || '') || 0;
-      merged.set(String(item.id), remoteTime > currentTime ? { ...current, ...item } : current);
-    });
-    const next = [...merged.values()].sort((a, b) => (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0));
-    const raw = JSON.stringify(next);
-    if (localStorage.getItem('one_service_registration_requests') === raw) return;
-    applyingRemote = true;
-    try {
-      localStorage.setItem('one_service_registration_requests', raw);
-    } finally {
-      applyingRemote = false;
-    }
-    scheduleRefresh();
-  }
-  async function firebaseDbForWorkspace(targetWorkspace) {
-    const api = await importFirebase();
-    const firebaseConfig = cleanObject(config.firebase);
-    const appName = `crm-${firebaseConfig.projectId || 'project'}-${targetWorkspace}`.replace(/[^a-z0-9-]/gi, '-');
-    const app = api.getApps().find(item => item.name === appName) || api.initializeApp(firebaseConfig, appName);
-    try { await api.signInAnonymously(api.getAuth(app)); } catch (error) {}
-    return api.getFirestore(app);
-  }
-  async function submitRegistrationRequestToOwner(request) {
-    config = readConfig();
-    if (!firebaseConfigured()) return { ok: false, reason: 'firebase-not-configured' };
-    const targetWorkspace = ownerWorkspaceId();
-    const api = await importFirebase();
-    const targetDb = await firebaseDbForWorkspace(targetWorkspace);
-    const payload = cleanRegistrationRequest(request);
-    await api.setDoc(publicRegistrationDocRef(api, targetDb, payload.id), {
-      ...payload,
-      updatedAt: new Date().toISOString(),
-      updatedBy: `registration-${clientId}`
-    }, { merge: true });
-    const ref = api.doc(targetDb, 'crmWorkspaces', targetWorkspace, 'data', 'one_service_registration_requests');
-    try {
-      const snap = await api.getDoc(ref);
-      const current = snap.exists() ? safeJson(snap.data()?.raw, []) : [];
-      const list = Array.isArray(current) ? current : [];
-      const next = [payload, ...list.filter(item => item.id !== payload.id)];
-      await api.setDoc(ref, {
-        raw: JSON.stringify(next),
-        updatedAt: api.serverTimestamp(),
-        updatedAtIso: new Date().toISOString(),
-        updatedBy: `registration-${clientId}`
-      }, { merge: true });
-    } catch (error) {}
-    return { ok: true };
-  }
-  async function updatePublicRegistrationRequest(request) {
-    config = readConfig();
-    if (!firebaseConfigured() || !request?.id) return { ok: false };
-    const targetWorkspace = ownerWorkspaceId();
-    const api = await importFirebase();
-    const targetDb = await firebaseDbForWorkspace(targetWorkspace);
-    await api.setDoc(publicRegistrationDocRef(api, targetDb, request.id), {
-      ...cleanRegistrationRequest(request),
-      updatedAt: new Date().toISOString(),
-      updatedBy: clientId
-    }, { merge: true });
-    return { ok: true };
-  }
   async function writeFirebaseKey(key) {
     if (!firebaseReady || applyingRemote || !DATA_KEY_SET.has(key)) return;
     const raw = localStorage.getItem(key);
@@ -15029,17 +13374,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   async function pushFirebaseAll() {
     if (!firebaseReady) return;
     await Promise.all(DATA_KEYS.map(key => writeFirebaseKey(key)));
-  }
-  async function initializePublicRegistrationRequests(currentToken) {
-    if (!firebaseReady || workspaceId() !== ownerWorkspaceId()) return;
-    const collectionRef = firebaseApi.collection(db, 'crmPublicRegistrationRequests');
-    const snap = await firebaseApi.getDocs(collectionRef);
-    if (currentToken !== initToken) return;
-    mergePublicRegistrationRequests(snap.docs.map(docSnap => docSnap.data()));
-    const unsubscribe = firebaseApi.onSnapshot(collectionRef, next => {
-      mergePublicRegistrationRequests(next.docs.map(docSnap => docSnap.data()));
-    });
-    firebaseUnsubscribes.push(unsubscribe);
   }
   function applyFirebaseDoc(key, data) {
     if (!data || data.updatedBy === clientId || typeof data.raw !== 'string') return;
@@ -15076,7 +13410,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       });
       firebaseUnsubscribes.push(unsubscribe);
     }
-    try { await initializePublicRegistrationRequests(currentToken); } catch (error) {}
     setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
     return true;
   }
@@ -15157,7 +13490,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   async function initializeCloudSync() {
     config = readConfig();
-    applyPendingWorkspaceBootstrap();
     updateInitialStatus();
     initToken += 1;
     const currentToken = initToken;
@@ -15198,8 +13530,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
   fillCloudForm();
-  window.crmSubmitRegistrationRequest = submitRegistrationRequestToOwner;
-  window.crmUpdateRegistrationRequest = updatePublicRegistrationRequest;
   await initializeCloudSync();
 })();
 </script>
