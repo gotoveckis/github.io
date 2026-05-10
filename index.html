@@ -11229,6 +11229,87 @@ document.addEventListener('DOMContentLoaded', function(){
     document.body.appendChild(overlay);
   }
 
+  function crmAccessUrl() {
+    const url = String(window.location.href || '').split('#')[0];
+    return /^file:/i.test(url) ? 'откройте опубликованную ссылку CRM' : url;
+  }
+
+  function serviceAccessMessage(service) {
+    const serviceId = service?.serviceId || service?.workspaceId || serviceSlug(service?.serviceName);
+    const login = service?.adminLogin || service?.login || '';
+    const password = service?.adminPassword || '';
+    return [
+      'Ваша заявка на подключение к CRM одобрена.',
+      `Сервис: ${service?.serviceName || serviceId}`,
+      `Ссылка: ${crmAccessUrl()}`,
+      `Логин: ${login}`,
+      `Пароль: ${password}`,
+      `workspaceId: ${serviceId}`,
+      'После входа CRM автоматически откроет ваш сервисный центр.'
+    ].join('\n');
+  }
+
+  function serviceFromApprovedRequest(request) {
+    const access = request?.approvedAccess || {};
+    return {
+      serviceId: access.serviceId || request?.serviceId || serviceSlug(request?.serviceName),
+      workspaceId: access.serviceId || request?.serviceId || serviceSlug(request?.serviceName),
+      serviceName: request?.serviceName || '',
+      adminName: request?.adminName || '',
+      adminLogin: access.adminLogin || request?.login || '',
+      login: access.adminLogin || request?.login || '',
+      adminPassword: access.adminPassword || request?.adminPassword || ''
+    };
+  }
+
+  function copyAccessText(text) {
+    const fallback = () => {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', 'readonly');
+      area.style.position = 'fixed';
+      area.style.left = '-9999px';
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand('copy');
+      area.remove();
+      if (!copied) throw new Error('copy-failed');
+    };
+    if (navigator.clipboard?.writeText && window.isSecureContext) {
+      navigator.clipboard.writeText(text)
+        .then(() => window.alert('Доступ скопирован. Теперь можно отправить его сервисному центру.'))
+        .catch(() => {
+          try {
+            fallback();
+            window.alert('Доступ скопирован. Теперь можно отправить его сервисному центру.');
+          } catch (error) {
+            window.prompt('Скопируйте доступ вручную:', text);
+          }
+        });
+      return;
+    }
+    try {
+      fallback();
+      window.alert('Доступ скопирован. Теперь можно отправить его сервисному центру.');
+    } catch (error) {
+      window.prompt('Скопируйте доступ вручную:', text);
+    }
+  }
+
+  function copyManagedServiceAccess(button) {
+    const serviceId = button?.dataset.copyServiceAccess || '';
+    const service = getServiceRegistry().find(item => String(item.serviceId || item.id || '') === serviceId);
+    if (!service) return;
+    copyAccessText(serviceAccessMessage(service));
+  }
+
+  function copyRegistrationAccess(button) {
+    const requestId = button?.dataset.copyRegistrationAccess || '';
+    const request = getRegistrationRequests().find(item => item.id === requestId);
+    if (!request) return;
+    copyAccessText(serviceAccessMessage(serviceFromApprovedRequest(request)));
+  }
+
   function renderServiceManagement() {
     const launcher = document.getElementById('serviceManagementCard');
     const isMainAdmin = Boolean(activeUser?.isAdmin);
@@ -11314,7 +11395,7 @@ document.addEventListener('DOMContentLoaded', function(){
             </label>
           </div>
           <div class="inline-actions service-management-actions">
-            ${owner ? '' : `<button class="small-btn" type="button" data-save-managed-service="${html(serviceId)}">Сохранить</button><button class="small-btn manage-danger" type="button" data-toggle-managed-service="${html(serviceId)}">${status === 'active' ? 'Заблокировать' : 'Активировать'}</button>`}
+            ${owner ? '' : `<button class="small-btn" type="button" data-copy-service-access="${html(serviceId)}">Скопировать доступ</button><button class="small-btn" type="button" data-save-managed-service="${html(serviceId)}">Сохранить</button><button class="small-btn manage-danger" type="button" data-toggle-managed-service="${html(serviceId)}">${status === 'active' ? 'Заблокировать' : 'Активировать'}</button>`}
           </div>
         </div>
       `;
@@ -11480,6 +11561,7 @@ document.addEventListener('DOMContentLoaded', function(){
           <div>${limitsHtml}</div>
           <div class="inline-actions manage-actions">
             <span class="badge ${badgeClass}">${statusText}</span>
+            ${status === 'approved' ? `<button class="small-btn" type="button" data-copy-registration-access="${html(request.id)}">Скопировать доступ</button>` : ''}
             ${isPending ? `<button class="small-btn" type="button" data-approve-registration="${html(request.id)}">Одобрить</button><button class="small-btn manage-danger" type="button" data-reject-registration="${html(request.id)}">Отклонить</button>` : ''}
           </div>
         </div>
@@ -12093,6 +12175,16 @@ document.addEventListener('DOMContentLoaded', function(){
       const serviceManagementOverlay = document.getElementById('serviceManagementOverlay');
       if (serviceManagementOverlay && event.target === serviceManagementOverlay) {
         closeServiceManagement();
+        return;
+      }
+      const copyManagedServiceButton = event.target.closest('[data-copy-service-access]');
+      if (copyManagedServiceButton) {
+        copyManagedServiceAccess(copyManagedServiceButton);
+        return;
+      }
+      const copyRegistrationAccessButton = event.target.closest('[data-copy-registration-access]');
+      if (copyRegistrationAccessButton) {
+        copyRegistrationAccess(copyRegistrationAccessButton);
         return;
       }
       const saveManagedServiceButton = event.target.closest('[data-save-managed-service]');
