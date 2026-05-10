@@ -2927,52 +2927,6 @@
   .registration-menu-badge[hidden]{
     display:none !important;
   }
-  .service-blocked-overlay{
-    position:fixed;
-    inset:0;
-    z-index:5000;
-    display:none;
-    align-items:flex-start;
-    justify-content:center;
-    padding:72px 18px 18px;
-    background:rgba(15,23,42,.74);
-    backdrop-filter:blur(10px);
-  }
-  body.service-access-blocked .service-blocked-overlay{
-    display:flex;
-  }
-  .service-blocked-card{
-    width:min(560px,100%);
-    border:1px solid rgba(248,113,113,.45);
-    border-radius:18px;
-    background:#fff;
-    box-shadow:0 22px 60px rgba(15,23,42,.32);
-    padding:22px;
-    display:grid;
-    gap:12px;
-  }
-  .service-blocked-status{
-    display:inline-flex;
-    align-items:center;
-    width:max-content;
-    min-height:30px;
-    border-radius:999px;
-    padding:0 12px;
-    background:#fee2e2;
-    color:#991b1b;
-    font-size:13px;
-    font-weight:900;
-  }
-  .service-blocked-card h3{
-    margin:0;
-    color:#111827;
-    font-size:22px;
-  }
-  .service-blocked-card p{
-    margin:0;
-    color:#475569;
-    line-height:1.55;
-  }
   .admin-registration-dashboard{
     margin-top:14px;
   }
@@ -3350,16 +3304,6 @@
     background:var(--accent) !important;
     border-color:var(--accent) !important;
     color:#fff !important;
-  }
-  body[data-ui-theme="dark"] .service-blocked-card{
-    background:#111827;
-    border-color:rgba(248,113,113,.45);
-  }
-  body[data-ui-theme="dark"] .service-blocked-card h3{
-    color:var(--text);
-  }
-  body[data-ui-theme="dark"] .service-blocked-card p{
-    color:var(--muted);
   }
   body[data-ui-theme="dark"] th,
   body[data-ui-theme="dark"] td{
@@ -10525,7 +10469,6 @@ document.addEventListener('DOMContentLoaded', function(){
   const AUTH_USER_KEY = 'crm_current_user';
   const AUTH_PENDING_USER_KEY = 'crm_pending_user';
   const REGISTRATION_SEEN_KEY = 'one_service_seen_registration_request_ids';
-  const SERVICE_ACCESS_KEY = 'one_service_current_service_access';
   const WORKSPACE_DATA_KEYS = [
     'one_service_settings',
     'one_service_orders',
@@ -10752,78 +10695,6 @@ document.addEventListener('DOMContentLoaded', function(){
       status: 'active'
     };
   }
-  function readServiceAccess() {
-    try {
-      return JSON.parse(localStorage.getItem(SERVICE_ACCESS_KEY) || 'null');
-    } catch (error) {
-      return null;
-    }
-  }
-  function serviceAccessForCurrentUser(user = activeUser) {
-    if (!user?.serviceAdmin) return { state: 'active' };
-    const serviceId = serviceWorkspaceIdForUser(user);
-    const stored = readServiceAccess();
-    const record = user.serviceRecord || {};
-    const localStatus = stored && String(stored.serviceId || stored.workspaceId || '') === serviceId
-      ? (stored.status || 'active')
-      : '';
-    const recordStatus = record.status || '';
-    const status = localStatus || recordStatus || 'checking';
-    if (status === 'active') return { state: 'active', access: stored };
-    if (status === 'checking') return { state: 'checking', access: stored };
-    return { state: 'blocked', status, access: stored };
-  }
-  function serviceAccessBlocked() {
-    const state = serviceAccessForCurrentUser();
-    return state.state === 'blocked' || state.state === 'checking';
-  }
-  function ensureServiceBlockedOverlay() {
-    if (document.getElementById('serviceBlockedOverlay')) return;
-    const overlay = document.createElement('div');
-    overlay.id = 'serviceBlockedOverlay';
-    overlay.className = 'service-blocked-overlay';
-    overlay.innerHTML = `
-      <div class="service-blocked-card">
-        <span class="service-blocked-status" id="serviceBlockedStatusText">Не оплачено</span>
-        <h3 id="serviceBlockedTitle">Доступ к CRM заблокирован</h3>
-        <p id="serviceBlockedMessage">Свяжитесь с главным администратором, чтобы восстановить доступ к сервису.</p>
-        <div class="inline-actions">
-          <button class="btn btn-secondary" id="serviceBlockedLogoutBtn" type="button">Выйти</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-    document.getElementById('serviceBlockedLogoutBtn')?.addEventListener('click', () => {
-      try {
-        localStorage.removeItem(AUTH_REMEMBER_KEY);
-        localStorage.removeItem(AUTH_USER_KEY);
-        sessionStorage.removeItem(AUTH_PENDING_USER_KEY);
-      } catch (error) {}
-      window.location.reload();
-    });
-  }
-  function applyServiceAccessBlock() {
-    ensureServiceBlockedOverlay();
-    const state = serviceAccessForCurrentUser();
-    const blocked = Boolean(activeUser?.serviceAdmin && state.state !== 'active');
-    document.body.classList.toggle('service-access-blocked', blocked);
-    const statusNode = document.getElementById('serviceBlockedStatusText');
-    const titleNode = document.getElementById('serviceBlockedTitle');
-    const messageNode = document.getElementById('serviceBlockedMessage');
-    if (!blocked) return;
-    if (state.state === 'checking') {
-      if (statusNode) statusNode.textContent = 'Проверка доступа';
-      if (titleNode) titleNode.textContent = 'Проверяем оплату и статус сервиса';
-      if (messageNode) messageNode.textContent = 'Подождите несколько секунд. До проверки CRM заблокирована, чтобы не открыть чужую базу.';
-      return;
-    }
-    const deleted = state.status === 'deleted';
-    if (statusNode) statusNode.textContent = deleted ? 'Сервис удален' : 'Не оплачено';
-    if (titleNode) titleNode.textContent = deleted ? 'Сервис удален главным администратором' : 'Доступ к CRM заблокирован';
-    if (messageNode) messageNode.textContent = deleted
-      ? 'Этот сервис больше не активен. Вход и работа в CRM остановлены.'
-      : 'Оплата или доступ не подтверждены. CRM заблокирована: нельзя создавать заказы, смотреть клиентов и пользоваться базой.';
-  }
   function saveAuthForReload(user, remember) {
     const cleanUser = user ? { ...user, password: '' } : null;
     try {
@@ -10988,11 +10859,10 @@ document.addEventListener('DOMContentLoaded', function(){
     return payload;
   }
   function serviceStatusLabel(status) {
-    if (status === 'deleted') return 'Удален';
-    return status === 'blocked' ? 'Не оплачено' : 'Активен';
+    return status === 'blocked' ? 'Заблокирован' : 'Активен';
   }
   function serviceStatusBadgeClass(status) {
-    return status === 'blocked' || status === 'deleted' ? 'badge-bad' : 'badge-good';
+    return status === 'blocked' ? 'badge-bad' : 'badge-good';
   }
   function isOwnerService(service) {
     const serviceId = String(service?.serviceId || service?.id || '').trim();
@@ -11188,9 +11058,6 @@ document.addEventListener('DOMContentLoaded', function(){
     if (!service) return null;
     const serviceId = service.serviceId || service.workspaceId || serviceSlug(service.serviceName);
     if (!serviceId || serviceSlug(serviceId) === ownerWorkspaceId()) return null;
-    const access = readServiceAccess();
-    const accessId = String(access?.serviceId || access?.workspaceId || '').trim();
-    if (accessId === serviceSlug(serviceId) && access.status && access.status !== 'active') return null;
     return {
       id: `service_admin_${serviceId}`,
       name: service.adminName || service.serviceName || 'Администратор сервиса',
@@ -11787,7 +11654,7 @@ document.addEventListener('DOMContentLoaded', function(){
             </label>
           </div>
           <div class="inline-actions service-management-actions">
-            ${owner ? '' : `<button class="small-btn" type="button" data-copy-service-access="${html(serviceId)}">Скопировать доступ</button><button class="small-btn" type="button" data-save-managed-service="${html(serviceId)}">Сохранить</button><button class="small-btn manage-danger" type="button" data-toggle-managed-service="${html(serviceId)}">${status === 'active' ? 'Не оплачено / блок' : 'Активировать'}</button><button class="small-btn manage-danger" type="button" data-delete-managed-service="${html(serviceId)}">Удалить сервис</button>`}
+            ${owner ? '' : `<button class="small-btn" type="button" data-copy-service-access="${html(serviceId)}">Скопировать доступ</button><button class="small-btn" type="button" data-save-managed-service="${html(serviceId)}">Сохранить</button><button class="small-btn manage-danger" type="button" data-toggle-managed-service="${html(serviceId)}">${status === 'active' ? 'Заблокировать' : 'Активировать'}</button>`}
           </div>
         </div>
       `;
@@ -11857,7 +11724,6 @@ document.addEventListener('DOMContentLoaded', function(){
     registry[index] = updated;
     if (saveServiceRegistry(registry)) {
       syncRegistrationRequestFromService(updated);
-      try { window.crmUpdatePublicService?.(updated); } catch (error) {}
       try { if (typeof logActivity === 'function') logActivity('Сервисы', `Обновлен сервис "${serviceName}"`); } catch (error) {}
       renderServiceManagement();
       renderRegistrationRequests();
@@ -11878,42 +11744,7 @@ document.addEventListener('DOMContentLoaded', function(){
     };
     if (saveServiceRegistry(registry)) {
       syncRegistrationRequestFromService(registry[index]);
-      try { window.crmUpdatePublicService?.(registry[index]); } catch (error) {}
       try { if (typeof logActivity === 'function') logActivity('Сервисы', `${serviceStatusLabel(nextStatus)} сервис "${current.serviceName || serviceId}"`); } catch (error) {}
-      renderServiceManagement();
-      renderRegistrationRequests();
-    }
-  }
-
-  function deleteManagedService(button) {
-    const serviceId = button?.dataset.deleteManagedService || '';
-    const registry = getServiceRegistry();
-    const index = registry.findIndex(item => String(item.serviceId || item.id || '') === serviceId);
-    const service = registry[index];
-    if (index < 0 || !service || isOwnerService(service)) return;
-    if (!window.confirm(`Удалить сервис "${service.serviceName || serviceId}"? Его администратор больше не сможет войти и работать в CRM.`)) return;
-    const now = new Date().toISOString();
-    const deletedRecord = {
-      ...service,
-      status: 'deleted',
-      deletedAt: now,
-      updatedAt: now
-    };
-    registry.splice(index, 1);
-    const requests = getRegistrationRequests();
-    const requestIndex = requests.findIndex(item => item.id === service.sourceRequestId || item.serviceId === serviceId);
-    if (requestIndex >= 0) {
-      requests[requestIndex] = {
-        ...requests[requestIndex],
-        status: 'deleted',
-        updatedAt: now,
-        statusNote: `Сервис удален главным администратором ${formatShortDate(now)}`
-      };
-      saveRegistrationRequests(requests);
-    }
-    if (saveServiceRegistry(registry)) {
-      try { window.crmDeletePublicService?.(deletedRecord); } catch (error) {}
-      try { if (typeof logActivity === 'function') logActivity('Сервисы', `Удален сервис "${service.serviceName || serviceId}"`); } catch (error) {}
       renderServiceManagement();
       renderRegistrationRequests();
     }
@@ -12052,7 +11883,6 @@ document.addEventListener('DOMContentLoaded', function(){
       statusNote: `Одобрено главным администратором ${formatShortDate(now)}`
     };
     if (saveServiceRegistry(registry) && saveRegistrationRequests(requests)) {
-      try { window.crmUpdatePublicService?.(serviceRecord); } catch (error) {}
       try { if (typeof logActivity === 'function') logActivity('Регистрация сервиса', `Одобрена заявка "${request.serviceName}"`); } catch (error) {}
       try { window.crmUpdateRegistrationRequest?.(requests[requestIndex]); } catch (error) {}
       renderRegistrationRequests();
@@ -12451,11 +12281,6 @@ document.addEventListener('DOMContentLoaded', function(){
   function guardWorkspaceForUser(user, remember = false) {
     if (!user) return { ok: false, message: 'Пользователь не найден.' };
     if (user.serviceAdmin) {
-      const access = serviceAccessForCurrentUser(user);
-      if (access.state === 'blocked') {
-        applyServiceAccessBlock();
-        return { ok: false, message: access.status === 'deleted' ? 'Сервис удален главным администратором.' : 'Доступ заблокирован: не оплачено.' };
-      }
       if (!isValidServiceAdminUser(user)) {
         return { ok: false, message: 'У этого сервисного центра не задан отдельный workspace. Вход заблокирован, чтобы не открыть чужую базу.' };
       }
@@ -12497,7 +12322,7 @@ document.addEventListener('DOMContentLoaded', function(){
     };
     const showAppLocal = () => {
       const guard = guardWorkspaceForUser(activeUser, localStorage.getItem(AUTH_REMEMBER_KEY) === '1');
-      if (!guard.ok && !activeUser?.serviceAdmin) {
+      if (!guard.ok) {
         if (!guard.switching) {
           setCurrentUser(null, false);
           showError(guard.message || 'Доступ к workspace заблокирован.');
@@ -12511,16 +12336,6 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       applyRoleAccess();
       renderRegistrationRequests();
-      applyServiceAccessBlock();
-      if (activeUser?.serviceAdmin && typeof window.crmCheckServiceAccess === 'function') {
-        window.crmCheckServiceAccess(activeUser).then(result => {
-          if (result?.serviceRecord) {
-            activeUser.serviceRecord = { ...(activeUser.serviceRecord || {}), ...result.serviceRecord };
-            window.crmCurrentUser = activeUser;
-          }
-          applyServiceAccessBlock();
-        }).catch(() => applyServiceAccessBlock());
-      }
     };
     const showAuthLocal = () => {
       activeUser = null;
@@ -12566,23 +12381,6 @@ document.addEventListener('DOMContentLoaded', function(){
         passwordInput?.focus();
         passwordInput?.select();
         return;
-      }
-      if (user.serviceAdmin && typeof window.crmCheckServiceAccess === 'function') {
-        showError('Проверяю оплату и статус сервиса...');
-        const accessResult = await window.crmCheckServiceAccess(user, passwordValue).catch(error => ({ ok: false, status: 'checking', message: error?.message || 'Не удалось проверить доступ.' }));
-        if (accessResult?.serviceRecord) {
-          user.serviceRecord = { ...(user.serviceRecord || {}), ...accessResult.serviceRecord };
-          user.workspaceId = accessResult.serviceRecord.workspaceId || user.workspaceId;
-          user.serviceId = accessResult.serviceRecord.serviceId || user.serviceId;
-          user.serviceName = accessResult.serviceRecord.serviceName || user.serviceName;
-        }
-        if (!accessResult?.ok) {
-          setCurrentUser(user, Boolean(rememberInput?.checked));
-          if (passwordInput) passwordInput.value = '';
-          showAppLocal();
-          return;
-        }
-        clearError();
       }
       const guard = guardWorkspaceForUser(user, Boolean(rememberInput?.checked));
       if (guard.switching) {
@@ -12701,11 +12499,6 @@ document.addEventListener('DOMContentLoaded', function(){
         toggleManagedService(toggleManagedServiceButton);
         return;
       }
-      const deleteManagedServiceButton = event.target.closest('[data-delete-managed-service]');
-      if (deleteManagedServiceButton) {
-        deleteManagedService(deleteManagedServiceButton);
-        return;
-      }
       if (event.target.closest('#settingsSaveServiceBtn')) {
         saveSettingsServiceFromForm();
         return;
@@ -12742,20 +12535,6 @@ document.addEventListener('DOMContentLoaded', function(){
         closeServiceManagement();
       }
     });
-    document.addEventListener('crm:service-access-updated', applyServiceAccessBlock);
-    document.addEventListener('click', event => {
-      if (!serviceAccessBlocked()) return;
-      if (event.target.closest('#serviceBlockedOverlay')) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      applyServiceAccessBlock();
-    }, true);
-    document.addEventListener('submit', event => {
-      if (!serviceAccessBlocked()) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      applyServiceAccessBlock();
-    }, true);
     document.getElementById('settingsForm')?.addEventListener('submit', () => {
       syncMasterHiddenInputs();
       const profiles = getMasterProfiles();
@@ -14921,8 +14700,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   const CONFIG_KEY = 'one_service_cloud_config';
   const CLIENT_KEY = 'one_service_cloud_client_id';
   const WORKSPACE_BOOTSTRAP_KEY = 'one_service_pending_workspace_bootstrap';
-  const SERVICE_ACCESS_KEY = 'one_service_current_service_access';
-  const PUBLIC_SERVICES_COLLECTION = 'crmPublicServices';
   const DATA_KEY_SET = new Set(DATA_KEYS);
   const firebaseVersion = '10.12.5';
   let config = readConfig();
@@ -15140,41 +14917,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   function publicRegistrationDocRef(api, targetDb, id) {
     return api.doc(targetDb, 'crmPublicRegistrationRequests', String(id || '').trim());
   }
-  function publicServiceDocRef(api, targetDb, serviceId) {
-    return api.doc(targetDb, PUBLIC_SERVICES_COLLECTION, String(serviceId || '').trim());
-  }
-  function cleanPublicServiceRecord(service, statusOverride = '') {
-    const serviceId = String(service?.serviceId || service?.workspaceId || service?.id || '').trim();
-    const now = new Date().toISOString();
-    return {
-      id: serviceId,
-      serviceId,
-      workspaceId: String(service?.workspaceId || serviceId).trim(),
-      serviceName: String(service?.serviceName || '').slice(0, 160),
-      adminName: String(service?.adminName || '').slice(0, 120),
-      phone: String(service?.phone || '').slice(0, 80),
-      adminLogin: String(service?.adminLogin || service?.login || '').slice(0, 140),
-      login: String(service?.adminLogin || service?.login || '').slice(0, 140),
-      adminPassword: String(service?.adminPassword || '').slice(0, 160),
-      status: statusOverride || service?.status || 'active',
-      limits: service?.limits && typeof service.limits === 'object' ? service.limits : null,
-      sourceRequestId: service?.sourceRequestId || '',
-      ownerWorkspaceId: ownerWorkspaceId(),
-      createdAt: service?.createdAt || now,
-      updatedAt: now
-    };
-  }
-  function writeServiceAccess(access) {
-    try {
-      if (access) localStorage.setItem(SERVICE_ACCESS_KEY, JSON.stringify(access));
-      else localStorage.removeItem(SERVICE_ACCESS_KEY);
-    } catch (error) {}
-    document.dispatchEvent(new CustomEvent('crm:service-access-updated', { detail: access || null }));
-  }
-  function applyPublicServiceAccess(data) {
-    if (!data || typeof data !== 'object') return;
-    writeServiceAccess(cleanPublicServiceRecord(data, data.status || 'active'));
-  }
   function cleanRegistrationRequest(request) {
     const now = new Date().toISOString();
     return {
@@ -15269,67 +15011,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     }, { merge: true });
     return { ok: true };
   }
-  async function updatePublicServiceRecord(service, statusOverride = '') {
-    config = readConfig();
-    if (!firebaseConfigured()) return { ok: false, reason: 'firebase-not-configured' };
-    const payload = cleanPublicServiceRecord(service, statusOverride);
-    if (!payload.serviceId) return { ok: false, reason: 'missing-service-id' };
-    const targetWorkspace = ownerWorkspaceId();
-    const api = await importFirebase();
-    const targetDb = await firebaseDbForWorkspace(targetWorkspace);
-    await api.setDoc(publicServiceDocRef(api, targetDb, payload.serviceId), {
-      ...payload,
-      updatedAt: new Date().toISOString(),
-      updatedBy: clientId
-    }, { merge: true });
-    return { ok: true, serviceRecord: payload };
-  }
-  async function markPublicServiceDeleted(service) {
-    return updatePublicServiceRecord(service, 'deleted');
-  }
-  async function checkPublicServiceAccess(user, password = '') {
-    config = readConfig();
-    if (!firebaseConfigured()) return { ok: true, reason: 'firebase-not-configured' };
-    const serviceId = String(user?.workspaceId || user?.serviceId || user?.serviceRecord?.serviceId || '').trim();
-    if (!serviceId) return { ok: false, status: 'blocked', message: 'Сервису не назначен workspace.' };
-    const targetWorkspace = ownerWorkspaceId();
-    const api = await importFirebase();
-    const targetDb = await firebaseDbForWorkspace(targetWorkspace);
-    const snap = await api.getDoc(publicServiceDocRef(api, targetDb, serviceId));
-    if (!snap.exists()) {
-      const fallback = cleanPublicServiceRecord({
-        ...(user?.serviceRecord || {}),
-        serviceId,
-        workspaceId: serviceId,
-        serviceName: user?.serviceName || user?.serviceRecord?.serviceName || '',
-        adminName: user?.name || user?.serviceRecord?.adminName || '',
-        adminLogin: user?.login || user?.serviceRecord?.adminLogin || user?.serviceRecord?.login || '',
-        login: user?.login || user?.serviceRecord?.login || user?.serviceRecord?.adminLogin || '',
-        status: 'active'
-      }, 'active');
-      writeServiceAccess(fallback);
-      return { ok: true, reason: 'public-service-not-created', serviceRecord: fallback };
-    }
-    const record = cleanPublicServiceRecord(snap.data(), snap.data()?.status || 'active');
-    writeServiceAccess(record);
-    if (record.status !== 'active') {
-      return {
-        ok: false,
-        status: record.status,
-        serviceRecord: record,
-        message: record.status === 'deleted' ? 'Сервис удален главным администратором.' : 'Доступ заблокирован: не оплачено.'
-      };
-    }
-    const login = String(user?.login || '').trim().toLowerCase();
-    const expectedLogin = String(record.adminLogin || record.login || '').trim().toLowerCase();
-    if (expectedLogin && login && expectedLogin !== login) {
-      return { ok: false, status: 'blocked', serviceRecord: record, message: 'Логин не относится к этому сервису.' };
-    }
-    if (password && record.adminPassword && String(record.adminPassword) !== String(password)) {
-      return { ok: false, status: 'blocked', serviceRecord: record, message: 'Неверный пароль сервиса.' };
-    }
-    return { ok: true, serviceRecord: record };
-  }
   async function writeFirebaseKey(key) {
     if (!firebaseReady || applyingRemote || !DATA_KEY_SET.has(key)) return;
     const raw = localStorage.getItem(key);
@@ -15357,26 +15038,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     mergePublicRegistrationRequests(snap.docs.map(docSnap => docSnap.data()));
     const unsubscribe = firebaseApi.onSnapshot(collectionRef, next => {
       mergePublicRegistrationRequests(next.docs.map(docSnap => docSnap.data()));
-    });
-    firebaseUnsubscribes.push(unsubscribe);
-  }
-  async function syncOwnerServicesToPublic() {
-    if (!firebaseReady || workspaceId() !== ownerWorkspaceId()) return;
-    const registry = readLocalJson('one_service_service_registry', []);
-    const services = Array.isArray(registry) ? registry.filter(item => item && !item.isOwnerService && item.serviceId && item.status !== 'deleted') : [];
-    await Promise.all(services.map(service => updatePublicServiceRecord(service).catch(() => null)));
-  }
-  async function initializeCurrentServiceAccess(currentToken) {
-    if (!firebaseReady || workspaceId() === ownerWorkspaceId()) return;
-    const api = firebaseApi;
-    const ref = publicServiceDocRef(api, db, workspaceId());
-    const snap = await api.getDoc(ref);
-    if (currentToken !== initToken) return;
-    if (snap.exists()) applyPublicServiceAccess(snap.data());
-    else writeServiceAccess({ serviceId: workspaceId(), workspaceId: workspaceId(), status: 'checking', updatedAt: new Date().toISOString() });
-    const unsubscribe = api.onSnapshot(ref, next => {
-      if (next.exists()) applyPublicServiceAccess(next.data());
-      else writeServiceAccess({ serviceId: workspaceId(), workspaceId: workspaceId(), status: 'checking', updatedAt: new Date().toISOString() });
     });
     firebaseUnsubscribes.push(unsubscribe);
   }
@@ -15416,8 +15077,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       firebaseUnsubscribes.push(unsubscribe);
     }
     try { await initializePublicRegistrationRequests(currentToken); } catch (error) {}
-    try { await syncOwnerServicesToPublic(); } catch (error) {}
-    try { await initializeCurrentServiceAccess(currentToken); } catch (error) {}
     setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
     return true;
   }
@@ -15541,9 +15200,6 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   fillCloudForm();
   window.crmSubmitRegistrationRequest = submitRegistrationRequestToOwner;
   window.crmUpdateRegistrationRequest = updatePublicRegistrationRequest;
-  window.crmUpdatePublicService = updatePublicServiceRecord;
-  window.crmDeletePublicService = markPublicServiceDeleted;
-  window.crmCheckServiceAccess = checkPublicServiceAccess;
   await initializeCloudSync();
 })();
 </script>
