@@ -5694,20 +5694,6 @@ body[data-ui-theme="dark"] .client-order-row em{
         </div>
       </section>
 
-      <section class="card admin-registration-dashboard" id="dashboardRegistrationRequestsCard" hidden>
-        <div class="admin-registration-dashboard-head">
-          <div>
-            <h3>Заявки на подключение</h3>
-            <p class="section-note">Новые сервисные центры, которые хотят подключиться к CRM.</p>
-          </div>
-          <div class="inline-actions">
-            <button class="btn btn-secondary" id="openRegistrationSettingsBtn" type="button">Открыть в настройках</button>
-          </div>
-        </div>
-        <div class="manage-counter" id="dashboardRegistrationRequestsCounter"></div>
-        <div class="admin-registration-dashboard-list" id="dashboardRegistrationRequestsList"></div>
-      </section>
-
       <section class="card table-card">
         <div class="table-scroll">
           <table>
@@ -11377,22 +11363,9 @@ document.addEventListener('DOMContentLoaded', function(){
     const counter = document.getElementById('dashboardRegistrationRequestsCounter');
     const list = document.getElementById('dashboardRegistrationRequestsList');
     if (!card || !list) return;
-    const isMainAdmin = Boolean(activeUser?.isAdmin);
-    card.hidden = !isMainAdmin;
-    if (!isMainAdmin) {
-      list.innerHTML = '';
-      if (counter) counter.textContent = '';
-      return;
-    }
-    const sorted = (Array.isArray(requests) ? requests : []).slice().sort((a, b) => {
-      const rank = status => status === 'pending' ? 0 : status === 'approved' ? 1 : 2;
-      return rank(a.status || 'pending') - rank(b.status || 'pending') || (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0);
-    });
-    const pendingCount = sorted.filter(item => (item.status || 'pending') === 'pending').length;
-    if (counter) counter.textContent = pendingCount ? `Ожидают решения: ${pendingCount} · всего заявок: ${sorted.length}` : `Ожидающих заявок нет · всего заявок: ${sorted.length}`;
-    list.innerHTML = sorted.length
-      ? sorted.slice(0, 6).map(request => registrationRequestRowHtml(request, { compact: true })).join('')
-      : '<div class="section-note">Заявок пока нет.</div>';
+    card.hidden = true;
+    list.innerHTML = '';
+    if (counter) counter.textContent = '';
   }
 
   function renderRegistrationRequestsPage(requests = getRegistrationRequests()) {
@@ -12378,13 +12351,6 @@ document.addEventListener('DOMContentLoaded', function(){
       if (overlay && event.target === overlay) closeMasterEditor();
       if (event.target.closest('#openServiceManagementBtn')) {
         openServiceManagement();
-        return;
-      }
-      if (event.target.closest('#openRegistrationSettingsBtn')) {
-        document.getElementById('settingsBtn')?.click();
-        setTimeout(() => {
-          document.querySelector('[data-settings-target="access"]')?.click();
-        }, 80);
         return;
       }
       if (event.target.closest('#closeServiceManagementBtn')) {
