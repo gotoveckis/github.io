@@ -6372,6 +6372,10 @@ body[data-ui-theme="dark"] .client-order-row em{
     let editingExpenseId = null;
     const CLIENTS_PAGE_SIZE = 25;
     let clientsCurrentPage = 1;
+    const TASKS_PAGE_SIZE = 25;
+    let tasksCurrentPage = 1;
+    const SUPPLIERS_PAGE_SIZE = 10;
+    let suppliersCurrentPage = 1;
     const ACTIVITY_PAGE_SIZE = 25;
     let activityCurrentPage = 1;
 
@@ -8226,9 +8230,43 @@ body[data-ui-theme="dark"] .client-order-row em{
       document.getElementById('saveTaskBtn').textContent = task ? 'Обновить задачу' : 'Сохранить задачу';
     }
 
+    function ensureTasksUi() {
+      const list = document.getElementById('tasksList');
+      if (!list) return;
+      if (!document.getElementById('tasksListTools')) {
+        const tools = document.createElement('div');
+        tools.className = 'manage-tools manage-tools-single';
+        tools.id = 'tasksListTools';
+        tools.innerHTML = '<div class="manage-counter" id="tasksListCounter"></div>';
+        list.before(tools);
+      }
+      if (!document.getElementById('tasksPager')) {
+        const pager = document.createElement('div');
+        pager.className = 'manage-pager';
+        pager.id = 'tasksPager';
+        list.after(pager);
+      }
+    }
+
+    function tasksPagerHtml(total, page) {
+      const totalPages = Math.max(1, Math.ceil(total / TASKS_PAGE_SIZE));
+      if (total <= TASKS_PAGE_SIZE) return '';
+      const start = total ? ((page - 1) * TASKS_PAGE_SIZE) + 1 : 0;
+      const end = Math.min(total, page * TASKS_PAGE_SIZE);
+      return `
+        <div class="manage-page-info">${total ? `Показано ${start}-${end} из ${total}` : 'Задач нет'}</div>
+        <div class="manage-page-controls">
+          <button class="manage-page-btn" type="button" data-tasks-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Назад</button>
+          <span class="manage-page-current">${page} / ${totalPages}</span>
+          <button class="manage-page-btn" type="button" data-tasks-page="${page + 1}" ${page >= totalPages ? 'disabled' : ''}>Вперед</button>
+        </div>
+      `;
+    }
+
     function renderTasks() {
       const list = document.getElementById('tasksList');
       if (!list) return;
+      ensureTasksUi();
       const orders = getOrders();
       const orderDeadlines = orders
         .filter(order => order.deadlineAt && !isClosedStatus(order.status))
@@ -8242,7 +8280,13 @@ body[data-ui-theme="dark"] .client-order-row em{
           virtual: true
         }));
       const tasks = [...getTasks(), ...orderDeadlines].sort((a, b) => String(a.done).localeCompare(String(b.done)) || String(a.dueDate).localeCompare(String(b.dueDate)));
-      list.innerHTML = tasks.map(task => {
+      const totalPages = Math.max(1, Math.ceil(tasks.length / TASKS_PAGE_SIZE));
+      tasksCurrentPage = Math.min(Math.max(tasksCurrentPage, 1), totalPages);
+      const pageStart = (tasksCurrentPage - 1) * TASKS_PAGE_SIZE;
+      const pageItems = tasks.slice(pageStart, pageStart + TASKS_PAGE_SIZE);
+      const counter = document.getElementById('tasksListCounter');
+      if (counter) counter.textContent = `Всего задач: ${tasks.length}`;
+      list.innerHTML = pageItems.map(task => {
         const order = orders.find(item => item.id === task.orderId);
         const overdue = task.dueDate && !task.done && task.dueDate < toDateInput(new Date().toISOString());
         return `
@@ -8255,6 +8299,8 @@ body[data-ui-theme="dark"] .client-order-row em{
           </div>
         `;
       }).join('') || '<div class="section-note">Задач пока нет.</div>';
+      const pager = document.getElementById('tasksPager');
+      if (pager) pager.innerHTML = tasksPagerHtml(tasks.length, tasksCurrentPage);
     }
 
     function setExpenseForm(expense = null) {
@@ -8366,14 +8412,53 @@ body[data-ui-theme="dark"] .client-order-row em{
       document.getElementById('saveSupplierBtn').textContent = supplier ? 'Обновить поставщика' : 'Сохранить поставщика';
     }
 
+    function ensureSuppliersUi() {
+      const list = document.getElementById('suppliersList');
+      if (!list) return;
+      if (!document.getElementById('suppliersListCounter')) {
+        const counter = document.createElement('div');
+        counter.className = 'manage-counter';
+        counter.id = 'suppliersListCounter';
+        list.before(counter);
+      }
+      if (!document.getElementById('suppliersPager')) {
+        const pager = document.createElement('div');
+        pager.className = 'manage-pager';
+        pager.id = 'suppliersPager';
+        list.after(pager);
+      }
+    }
+
+    function suppliersPagerHtml(total, page) {
+      const totalPages = Math.max(1, Math.ceil(total / SUPPLIERS_PAGE_SIZE));
+      if (total <= SUPPLIERS_PAGE_SIZE) return '';
+      const start = total ? ((page - 1) * SUPPLIERS_PAGE_SIZE) + 1 : 0;
+      const end = Math.min(total, page * SUPPLIERS_PAGE_SIZE);
+      return `
+        <div class="manage-page-info">${total ? `Показано ${start}-${end} из ${total}` : 'Поставщиков нет'}</div>
+        <div class="manage-page-controls">
+          <button class="manage-page-btn" type="button" data-suppliers-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Назад</button>
+          <span class="manage-page-current">${page} / ${totalPages}</span>
+          <button class="manage-page-btn" type="button" data-suppliers-page="${page + 1}" ${page >= totalPages ? 'disabled' : ''}>Вперед</button>
+        </div>
+      `;
+    }
+
     function renderSuppliers() {
       const list = document.getElementById('suppliersList');
       if (!list) return;
+      ensureSuppliersUi();
       const suppliers = getSuppliers();
       const inventory = getInventory();
       document.getElementById('receiptSupplierInput').innerHTML = '<option value="">Поставщик</option>' + suppliers.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join('');
       document.getElementById('receiptPartInput').innerHTML = '<option value="">Деталь</option>' + inventory.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)} · ${item.stock} шт.</option>`).join('');
-      list.innerHTML = suppliers.map(supplier => `
+      const totalPages = Math.max(1, Math.ceil(suppliers.length / SUPPLIERS_PAGE_SIZE));
+      suppliersCurrentPage = Math.min(Math.max(suppliersCurrentPage, 1), totalPages);
+      const pageStart = (suppliersCurrentPage - 1) * SUPPLIERS_PAGE_SIZE;
+      const pageItems = suppliers.slice(pageStart, pageStart + SUPPLIERS_PAGE_SIZE);
+      const counter = document.getElementById('suppliersListCounter');
+      if (counter) counter.textContent = `Всего поставщиков: ${suppliers.length}`;
+      list.innerHTML = pageItems.map(supplier => `
         <div class="mini-row">
           <div><b>${escapeHtml(supplier.name)}</b><br><span>${escapeHtml(supplier.phone || 'Телефон не указан')} · ${escapeHtml(supplier.note)}</span></div>
           <span>${escapeHtml(formatDateOnly(supplier.createdAt))}</span>
@@ -8383,6 +8468,8 @@ body[data-ui-theme="dark"] .client-order-row em{
           </div>
         </div>
       `).join('') || '<div class="section-note">Поставщиков пока нет.</div>';
+      const pager = document.getElementById('suppliersPager');
+      if (pager) pager.innerHTML = suppliersPagerHtml(suppliers.length, suppliersCurrentPage);
     }
 
     function renderActivity() {
@@ -9059,6 +9146,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       if (saveTasks(items)) {
         document.getElementById('taskForm').reset();
         setTaskForm();
+        tasksCurrentPage = 1;
         renderAll();
       }
     });
@@ -9141,6 +9229,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       if (saveSuppliers(items)) {
         document.getElementById('supplierForm').reset();
         setSupplierForm();
+        suppliersCurrentPage = 1;
         renderAll();
       }
     });
@@ -9304,6 +9393,18 @@ body[data-ui-theme="dark"] .client-order-row em{
       if (!pageButton || pageButton.disabled) return;
       clientsCurrentPage = Number(pageButton.dataset.clientsPage) || 1;
       renderClients();
+    });
+    document.addEventListener('click', event => {
+      const pageButton = event.target.closest('[data-tasks-page]');
+      if (!pageButton || pageButton.disabled) return;
+      tasksCurrentPage = Number(pageButton.dataset.tasksPage) || 1;
+      renderTasks();
+    });
+    document.addEventListener('click', event => {
+      const pageButton = event.target.closest('[data-suppliers-page]');
+      if (!pageButton || pageButton.disabled) return;
+      suppliersCurrentPage = Number(pageButton.dataset.suppliersPage) || 1;
+      renderSuppliers();
     });
     document.addEventListener('click', event => {
       const pageButton = event.target.closest('[data-activity-page]');
@@ -11500,6 +11601,13 @@ document.addEventListener('DOMContentLoaded', function(){
     setValue(`${kind}StatusEditor`, parts[2] || '');
   }
 
+  function readEditorIndex(id) {
+    const raw = $(id)?.value ?? '';
+    if (raw === '') return -1;
+    const index = Number(raw);
+    return Number.isInteger(index) && index >= 0 ? index : -1;
+  }
+
   function saveEditor(kind) {
     const s = settings();
     if (kind === 'orderTypes') {
@@ -11512,7 +11620,7 @@ document.addEventListener('DOMContentLoaded', function(){
         warrantyDays: filled($('orderTypeWarrantyEditor')?.value),
         deadlineDays: filled($('orderTypeDeadlineEditor')?.value)
       };
-      const index = Number($('orderTypeEditIndex')?.value);
+      const index = readEditorIndex('orderTypeEditIndex');
       if (Number.isInteger(index) && index >= 0) items[index] = payload;
       else items.unshift(payload);
       if (patchSettings({ orderTypes: items }, `Обновлены типы заказов`)) {
@@ -11533,7 +11641,7 @@ document.addEventListener('DOMContentLoaded', function(){
         required: $('customFieldRequiredEditor')?.value === 'yes',
         options: filled($('customFieldOptionsEditor')?.value).split(',').map(item => item.trim()).filter(Boolean)
       };
-      const index = Number($('customFieldEditIndex')?.value);
+      const index = readEditorIndex('customFieldEditIndex');
       if (Number.isInteger(index) && index >= 0) items[index] = payload;
       else items.unshift(payload);
       if (patchSettings({ customOrderFields: items }, `Обновлены дополнительные поля заказов`)) {
@@ -11548,7 +11656,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const line = (kind === 'cashRegisters' || kind === 'warehouses')
       ? lineFromParts([name, $(`${kind}MetaEditor`)?.value, $(`${kind}StatusEditor`)?.value])
       : simpleLine(name);
-    const index = Number($(`${kind}EditIndex`)?.value);
+    const index = readEditorIndex(`${kind}EditIndex`);
     if (Number.isInteger(index) && index >= 0) items[index] = line;
     else items.unshift(line);
     if (patchSettings({ [kind]: items }, `Обновлен справочник "${kind}"`)) {
