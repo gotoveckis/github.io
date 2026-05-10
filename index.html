@@ -2873,6 +2873,7 @@
   .settings-services-panel,
   .master-access-panel,
   .service-management-card,
+  .admin-registration-dashboard,
   .registration-requests-card,
   .docs-no-preview-panel{
     display:grid;
@@ -2883,6 +2884,7 @@
   .service-limits-card,
   .service-management-card,
   .registration-requests-card,
+  .admin-registration-dashboard,
   .service-management-row,
   .registration-request-row,
   .docs-basic-card{
@@ -2921,6 +2923,24 @@
     font-size:11px;
     font-weight:900;
     line-height:1;
+  }
+  .admin-registration-dashboard{
+    margin-top:14px;
+  }
+  .admin-registration-dashboard-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+  }
+  .admin-registration-dashboard-head h3{
+    margin:0 0 4px;
+    font-size:18px;
+    color:var(--text);
+  }
+  .admin-registration-dashboard-list{
+    display:grid;
+    gap:10px;
   }
   .service-management-overlay{
     z-index:1210 !important;
@@ -3131,6 +3151,7 @@
     .settings-service-row,
     .master-profile-row,
     .service-management-card,
+    .admin-registration-dashboard-head,
     .service-limits-grid,
     .service-management-grid,
     .service-management-limits,
@@ -3244,6 +3265,7 @@
   body[data-ui-theme="dark"] .master-access-toolbar,
   body[data-ui-theme="dark"] .service-limits-card,
   body[data-ui-theme="dark"] .service-management-card,
+  body[data-ui-theme="dark"] .admin-registration-dashboard,
   body[data-ui-theme="dark"] .registration-requests-card,
   body[data-ui-theme="dark"] .service-management-row,
   body[data-ui-theme="dark"] .registration-request-row,
@@ -5666,6 +5688,20 @@ body[data-ui-theme="dark"] .client-order-row em{
             <option value="week">7 дней</option>
           </select>
         </div>
+      </section>
+
+      <section class="card admin-registration-dashboard" id="dashboardRegistrationRequestsCard" hidden>
+        <div class="admin-registration-dashboard-head">
+          <div>
+            <h3>Заявки на подключение</h3>
+            <p class="section-note">Новые сервисные центры, которые хотят подключиться к CRM.</p>
+          </div>
+          <div class="inline-actions">
+            <button class="btn btn-secondary" id="openRegistrationSettingsBtn" type="button">Открыть в настройках</button>
+          </div>
+        </div>
+        <div class="manage-counter" id="dashboardRegistrationRequestsCounter"></div>
+        <div class="admin-registration-dashboard-list" id="dashboardRegistrationRequestsList"></div>
       </section>
 
       <section class="card table-card">
@@ -11268,6 +11304,73 @@ document.addEventListener('DOMContentLoaded', function(){
     };
   }
 
+  function registrationRequestRowHtml(request, options = {}) {
+    const status = request.status || 'pending';
+    const isPending = status === 'pending';
+    const limits = { ...getServiceLimits(), ...(request.limits && typeof request.limits === 'object' ? request.limits : {}) };
+    const access = request.approvedAccess || {};
+    const serviceIdValue = request.serviceId || serviceSlug(request.serviceName);
+    const passwordValue = passwordForRequest(request);
+    const badgeClass = status === 'approved' ? 'badge-good' : status === 'rejected' ? 'badge-bad' : '';
+    const statusText = status === 'approved' ? 'Одобрено' : status === 'rejected' ? 'Отклонено' : 'Ожидает';
+    const limitsHtml = isPending ? `
+      <div class="registration-request-limits">
+        <label class="field-label">Мастеров<input type="number" min="2" max="999" step="1" value="${html(limits.maxMasters)}" data-request-limit="maxMasters"></label>
+        <label class="field-label">Адресов<input type="number" min="2" max="999" step="1" value="${html(limits.maxAddresses)}" data-request-limit="maxAddresses"></label>
+        <label class="field-label">Телефонов<input type="number" min="2" max="999" step="1" value="${html(limits.maxPhones)}" data-request-limit="maxPhones"></label>
+        <label class="field-label">Точек<input type="number" min="2" max="999" step="1" value="${html(limits.maxLocations)}" data-request-limit="maxLocations"></label>
+      </div>
+      <div class="registration-request-access">
+        <label class="field-label">serviceId / workspaceId<input type="text" value="${html(serviceIdValue)}" data-request-access="serviceId"></label>
+        <label class="field-label">Логин администратора<input type="text" value="${html(request.login || '')}" data-request-access="login"></label>
+        <label class="field-label">Временный пароль<input type="text" value="${html(passwordValue)}" data-request-access="password"></label>
+      </div>
+    ` : `
+      <div class="section-note">Лимиты: мастера ${html(limits.maxMasters)}, адреса ${html(limits.maxAddresses)}, телефоны ${html(limits.maxPhones)}, точки ${html(limits.maxLocations)}</div>
+      ${status === 'approved' ? `<div class="section-note">Доступ: workspaceId ${html(access.serviceId || request.serviceId || '—')} · логин ${html(access.adminLogin || request.login || '—')} · пароль ${html(access.adminPassword || request.adminPassword || '—')}</div>` : ''}
+    `;
+    return `
+      <div class="registration-request-row" data-registration-request-row="${html(request.id)}">
+        <div>
+          <b>${html(request.serviceName || 'Без названия')}</b>
+          <span>Администратор: ${html(request.adminName || '—')} · телефон: ${html(request.phone || '—')} · логин: ${html(request.login || '—')}</span>
+          <span>serviceId: ${html(request.serviceId || serviceSlug(request.serviceName))} · создано: ${html(formatShortDate(request.createdAt))}</span>
+          ${request.note ? `<span>Комментарий: ${html(request.note)}</span>` : ''}
+          ${request.statusNote ? `<span>${html(request.statusNote)}</span>` : ''}
+        </div>
+        <div>${limitsHtml}</div>
+        <div class="inline-actions manage-actions">
+          <span class="badge ${badgeClass}">${statusText}</span>
+          ${status === 'approved' ? `<button class="small-btn" type="button" data-copy-registration-access="${html(request.id)}">Скопировать доступ</button>` : ''}
+          ${isPending ? `<button class="small-btn" type="button" data-approve-registration="${html(request.id)}">Одобрить</button><button class="small-btn manage-danger" type="button" data-reject-registration="${html(request.id)}">Отклонить</button>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDashboardRegistrationRequests(requests = getRegistrationRequests()) {
+    const card = document.getElementById('dashboardRegistrationRequestsCard');
+    const counter = document.getElementById('dashboardRegistrationRequestsCounter');
+    const list = document.getElementById('dashboardRegistrationRequestsList');
+    if (!card || !list) return;
+    const isMainAdmin = Boolean(activeUser?.isAdmin);
+    card.hidden = !isMainAdmin;
+    if (!isMainAdmin) {
+      list.innerHTML = '';
+      if (counter) counter.textContent = '';
+      return;
+    }
+    const sorted = (Array.isArray(requests) ? requests : []).slice().sort((a, b) => {
+      const rank = status => status === 'pending' ? 0 : status === 'approved' ? 1 : 2;
+      return rank(a.status || 'pending') - rank(b.status || 'pending') || (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0);
+    });
+    const pendingCount = sorted.filter(item => (item.status || 'pending') === 'pending').length;
+    if (counter) counter.textContent = pendingCount ? `Ожидают решения: ${pendingCount} · всего заявок: ${sorted.length}` : `Ожидающих заявок нет · всего заявок: ${sorted.length}`;
+    list.innerHTML = sorted.length
+      ? sorted.slice(0, 6).map(request => registrationRequestRowHtml(request, { compact: true })).join('')
+      : '<div class="section-note">Заявок пока нет.</div>';
+  }
+
   function ensureServiceManagementModal() {
     if (document.getElementById('serviceManagementOverlay')) return;
     const overlay = document.createElement('div');
@@ -11562,6 +11665,7 @@ document.addEventListener('DOMContentLoaded', function(){
       list.innerHTML = '';
       if (counter) counter.textContent = '';
       updateRegistrationRequestsBadge(0);
+      renderDashboardRegistrationRequests([]);
       closeServiceManagement();
       return;
     }
@@ -11576,6 +11680,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if (counter) counter.textContent = `Ожидают: ${pendingCount} · всего заявок: ${requests.length} · сервисов в реестре: ${registry.length}`;
     updateRegistrationRequestsBadge(pendingCount);
     notifyNewRegistrationRequests(requests);
+    renderDashboardRegistrationRequests(requests);
     renderServiceManagement();
 
     if (!requests.length) {
@@ -12225,6 +12330,13 @@ document.addEventListener('DOMContentLoaded', function(){
       if (overlay && event.target === overlay) closeMasterEditor();
       if (event.target.closest('#openServiceManagementBtn')) {
         openServiceManagement();
+        return;
+      }
+      if (event.target.closest('#openRegistrationSettingsBtn')) {
+        document.getElementById('settingsBtn')?.click();
+        setTimeout(() => {
+          document.querySelector('[data-settings-target="access"]')?.click();
+        }, 80);
         return;
       }
       if (event.target.closest('#closeServiceManagementBtn')) {
