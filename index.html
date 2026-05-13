@@ -10334,6 +10334,16 @@ document.addEventListener('DOMContentLoaded', function(){
     const result = [...new Set(source.map(item => String(item || '').trim()).filter(item => known.includes(item)))];
     return result.length ? result : fallback;
   }
+  function normalizeCredential(value) {
+    return String(value ?? '')
+      .normalize('NFKC')
+      .replace(/[\u200B-\u200D\uFEFF]/g, '')
+      .replace(/\u00A0/g, ' ')
+      .trim();
+  }
+  function normalizeCredentialKey(value) {
+    return normalizeCredential(value).toLowerCase();
+  }
   function transliterate(value) {
     const map = {
       а:'a', б:'b', в:'v', г:'g', д:'d', е:'e', ё:'e', ж:'zh', з:'z', и:'i', й:'y',
@@ -10349,15 +10359,15 @@ document.addEventListener('DOMContentLoaded', function(){
       .replace(/^\.+|\.+$/g, '');
   }
   function normalizeMasterProfile(raw, index = 0, settings = readSettings()) {
-    const name = typeof raw === 'string' ? raw : String(raw?.name || '').trim();
+    const name = typeof raw === 'string' ? normalizeCredential(raw) : normalizeCredential(raw?.name);
     const cleanName = name || `Мастер ${index + 1}`;
-    const login = typeof raw === 'object' ? String(raw.login || '').trim() : '';
+    const login = typeof raw === 'object' ? normalizeCredential(raw.login) : '';
     const salary = typeof raw === 'object' && raw.salaryPercent !== undefined ? String(raw.salaryPercent).trim() : String(settings.defaultSalaryPercent || '20');
     return {
       id: typeof raw === 'object' && raw.id ? String(raw.id) : `master_${transliterate(cleanName) || index + 1}`,
       name: cleanName,
       login,
-      password: typeof raw === 'object' ? String(raw.password || '') : '',
+      password: typeof raw === 'object' ? normalizeCredential(raw.password) : '',
       roles: normalizeRoles(typeof raw === 'object' ? (raw.roles || raw.permissions) : [], ['orders', 'tasks']),
       salaryPercent: salary,
       updatedAt: typeof raw === 'object' && raw.updatedAt ? raw.updatedAt : new Date().toISOString()
@@ -10413,8 +10423,13 @@ document.addEventListener('DOMContentLoaded', function(){
     return saved;
   }
   function findMasterByLogin(login) {
-    const needle = String(login || '').trim().toLowerCase();
-    return getMasterProfiles().find(profile => profile.login && profile.login.toLowerCase() === needle);
+    const needle = normalizeCredentialKey(login);
+    if (!needle) return null;
+    return getMasterProfiles().find(profile => {
+      const loginKey = normalizeCredentialKey(profile.login);
+      const nameKey = normalizeCredentialKey(profile.name);
+      return loginKey === needle || nameKey === needle;
+    });
   }
   function findMasterByName(name) {
     return getMasterProfiles().find(profile => profile.name === name);
@@ -10848,10 +10863,10 @@ document.addEventListener('DOMContentLoaded', function(){
     editingMasterId = null;
   }
   function saveMasterEditor() {
-    const name = document.getElementById('masterProfileNameInput')?.value.trim() || '';
-    const login = document.getElementById('masterProfileLoginInput')?.value.trim() || '';
-    const password = document.getElementById('masterProfilePasswordInput')?.value || '';
-    const salaryPercent = document.getElementById('masterProfileSalaryInput')?.value.trim() || '';
+    const name = normalizeCredential(document.getElementById('masterProfileNameInput')?.value || '');
+    const login = normalizeCredential(document.getElementById('masterProfileLoginInput')?.value || '');
+    const password = normalizeCredential(document.getElementById('masterProfilePasswordInput')?.value || '');
+    const salaryPercent = normalizeCredential(document.getElementById('masterProfileSalaryInput')?.value || '');
     const roles = [...document.querySelectorAll('#masterRoleCheckGrid input:checked')].map(input => input.value);
     if (!name) return window.alert('Введите имя мастера.');
     if (!login) return window.alert('Введите логин мастера.');
@@ -10919,27 +10934,37 @@ document.addEventListener('DOMContentLoaded', function(){
     applyRoleAccess();
   }
   function authenticate(login, password) {
-    const cleanLogin = String(login || '').trim();
-    if (cleanLogin === ADMIN_USER.login && password === ADMIN_USER.password) {
+    const cleanLogin = normalizeCredential(login);
+    const cleanPassword = normalizeCredential(password);
+    if (normalizeCredentialKey(cleanLogin) === normalizeCredentialKey(ADMIN_USER.login) && cleanPassword === normalizeCredential(ADMIN_USER.password)) {
       return { ...ADMIN_USER };
     }
     const profile = findMasterByLogin(cleanLogin);
-    if (profile && profile.password && password === profile.password) {
+    if (profile && normalizeCredential(profile.password) && cleanPassword === normalizeCredential(profile.password)) {
       return { ...profile, isAdmin: false };
     }
     return null;
   }
-  function authenticateAfterCloudSync(login, password, timeout = 2200) {
+  function authenticateAfterCloudSync(login, password, timeout = 8000) {
     return new Promise(resolve => {
       let finished = false;
-      const finish = () => {
+      let interval = null;
+      const finish = (user = authenticate(login, password)) => {
         if (finished) return;
         finished = true;
         document.removeEventListener('crm:cloud-sync-applied', onSync);
-        resolve(authenticate(login, password));
+        if (interval) clearInterval(interval);
+        resolve(user);
       };
-      const onSync = () => finish();
+      const onSync = () => {
+        const user = authenticate(login, password);
+        if (user) finish(user);
+      };
       document.addEventListener('crm:cloud-sync-applied', onSync);
+      interval = setInterval(() => {
+        const user = authenticate(login, password);
+        if (user) finish(user);
+      }, 250);
       setTimeout(finish, timeout);
     });
   }
@@ -11201,13 +11226,13 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function init() {
+    setupAuth();
     ensureDocumentsWithoutPreview();
     ensureSettingsServicesUi();
     ensureMasterAccessUi();
     syncMasterHiddenInputs();
     renderSettingsServicesList();
     renderMasterProfilesList();
-    setupAuth();
     overrideSalaryCalculation();
     applyRoleAccess();
     wireEvents();
