@@ -8715,26 +8715,24 @@ body[data-ui-theme="dark"] .client-order-row em{
     }
 
     authForm.addEventListener('submit', event => {
-      event.preventDefault();
-      clearAuthError();
-
-      if (authLogin.value.trim() !== AUTH_LOGIN) {
-        showAuthError('Неверный логин');
-        authLogin.focus();
-        return;
-      }
-
-      if (authPassword.value !== AUTH_PASSWORD) {
-        showAuthError('Неверный пароль');
-        authPassword.focus();
-        authPassword.select();
-        return;
-      }
-
-      setStorageItem(AUTH_STORAGE_KEY, '1');
-      authPassword.value = '';
-      showApp();
-    });
+    event.preventDefault();
+    clearAuthError();
+    
+    const loginValue = authLogin.value.trim();
+    const passwordValue = authPassword.value.trim();
+    
+    const user = authenticate(loginValue, passwordValue);
+    
+    if (!user) {
+      showAuthError('Неверный логин или пароль');
+      authLogin.focus();
+      return;
+    }
+    
+    setCurrentUser(user, document.getElementById('rememberMe')?.checked);
+    showApp();
+    renderAll();
+  });
 
     authLogin.addEventListener('input', clearAuthError);
     authPassword.addEventListener('input', clearAuthError);
@@ -9282,73 +9280,41 @@ body[data-ui-theme="dark"] .client-order-row em{
       const warehouseAccess = parseListTextarea(getFormValue('warehouseAccessInput'));
 
       const saved = saveSettings({
-        serviceName: getFormValue('settingsServiceNameInput') || DEFAULT_SETTINGS.serviceName,
-        servicePhone: getFormValue('settingsServicePhoneInput') || DEFAULT_SETTINGS.servicePhone,
-        servicePhone2: getFormValue('settingsServicePhone2Input'),
-        servicePhone3: getFormValue('settingsServicePhone3Input'),
-        serviceAddress: getFormValue('settingsServiceAddressInput') || DEFAULT_SETTINGS.serviceAddress,
-        serviceAddress2: getFormValue('settingsServiceAddress2Input'),
-        companyEmail: getFormValue('companyEmailInput'),
-        companyLegalName: getFormValue('companyLegalNameInput'),
-        companyTaxId: getFormValue('companyTaxIdInput'),
-        currency: getFormValue('financeCurrencySelect') || getFormValue('currencySelect') || DEFAULT_SETTINGS.currency,
-        interfaceLanguage: getFormValue('interfaceLanguageInput') || DEFAULT_SETTINGS.interfaceLanguage,
-        timezone: getFormValue('timezoneInput') || DEFAULT_SETTINGS.timezone,
-        dateFormat: getFormValue('dateFormatInput') || DEFAULT_SETTINGS.dateFormat,
-        timeFormat: getFormValue('timeFormatInput') || DEFAULT_SETTINGS.timeFormat,
-        ordersPerPage: getFormValue('ordersPerPageInput') || DEFAULT_SETTINGS.ordersPerPage,
-        orderPrefix: getFormValue('orderPrefixInput'),
-        orderStartNumber: getFormValue('orderStartNumberInput') || DEFAULT_SETTINGS.orderStartNumber,
-        defaultWarrantyDays: getFormValue('defaultWarrantyDaysInput'),
-        defaultDeadlineDays: getFormValue('defaultDeadlineDaysInput'),
-        defaultSalaryPercent: getFormValue('defaultSalaryPercentInput'),
-        orderTypes: parseOrderTypes(getFormValue('orderTypesInput')),
-        paymentMethods: paymentMethods.length ? paymentMethods : DEFAULT_SETTINGS.paymentMethods,
-        expenseCategories: expenseCategories.length ? expenseCategories : DEFAULT_SETTINGS.expenseCategories,
-        inventoryCategories: inventoryCategories.length ? inventoryCategories : DEFAULT_SETTINGS.inventoryCategories,
-        cashRegisters: cashRegisters.length ? cashRegisters : DEFAULT_SETTINGS.cashRegisters,
-        salaryMode: getFormValue('salaryModeInput') || DEFAULT_SETTINGS.salaryMode,
-        clientDebtLimit: getFormValue('clientDebtLimitInput'),
-        warehouses: warehouses.length ? warehouses : DEFAULT_SETTINGS.warehouses,
-        warehouseTypes: warehouseTypes.length ? warehouseTypes : DEFAULT_SETTINGS.warehouseTypes,
-        roles: roles.length ? roles : DEFAULT_SETTINGS.roles,
-        cashRegisterAccess: cashRegisterAccess.length ? cashRegisterAccess : DEFAULT_SETTINGS.cashRegisterAccess,
-        warehouseAccess: warehouseAccess.length ? warehouseAccess : DEFAULT_SETTINGS.warehouseAccess,
-        customOrderFields: parseCustomOrderFields(getFormValue('customOrderFieldsInput')),
-        masters: masters.length ? masters : DEFAULT_SETTINGS.masters,
-        autoBackupEnabled: getFormValue('autoBackupInput') === 'off' ? 'off' : 'on',
-        documentNumbering: getFormValue('documentNumberingInput') || DEFAULT_SETTINGS.documentNumbering,
-        printPrimaryColor: getFormValue('printPrimaryColorInput') || DEFAULT_SETTINGS.printPrimaryColor,
-        printBrandText: getFormValue('printBrandTextInput') || DEFAULT_SETTINGS.printBrandText,
-        printPageSize: getFormValue('printPageSizeInput') || DEFAULT_SETTINGS.printPageSize,
-        printBaseFontSize: getFormValue('printBaseFontSizeInput') || DEFAULT_SETTINGS.printBaseFontSize,
-        printShowLegal: getFormValue('printShowLegalInput') || DEFAULT_SETTINGS.printShowLegal,
-        printShowClientBlock: getFormValue('printShowClientBlockInput') || DEFAULT_SETTINGS.printShowClientBlock,
-        printShowDeviceBlock: getFormValue('printShowDeviceBlockInput') || DEFAULT_SETTINGS.printShowDeviceBlock,
-        printShowPriceBlock: getFormValue('printShowPriceBlockInput') || DEFAULT_SETTINGS.printShowPriceBlock,
-        printShowSignatures: getFormValue('printShowSignaturesInput') || DEFAULT_SETTINGS.printShowSignatures,
-        printShowFooter: getFormValue('printShowFooterInput') || DEFAULT_SETTINGS.printShowFooter,
-        printHeaderNote: getFormValue('printHeaderNoteInput'),
-        printStampText: getFormValue('printStampTextInput'),
-        signatureClientLabel: getFormValue('signatureClientLabelInput') || DEFAULT_SETTINGS.signatureClientLabel,
-        signatureMasterLabel: getFormValue('signatureMasterLabelInput') || DEFAULT_SETTINGS.signatureMasterLabel,
-        acceptanceTitle: getFormValue('acceptanceTitleInput') || DEFAULT_SETTINGS.acceptanceTitle,
-        acceptanceIntro: getFormValue('acceptanceIntroInput') || DEFAULT_SETTINGS.acceptanceIntro,
-        acceptanceNotice: getFormValue('acceptanceNoticeInput') || DEFAULT_SETTINGS.acceptanceNotice,
-        completedTitle: getFormValue('completedTitleInput') || DEFAULT_SETTINGS.completedTitle,
-        completedIntro: getFormValue('completedIntroInput') || DEFAULT_SETTINGS.completedIntro,
-        completedNotice: getFormValue('completedNoticeInput') || DEFAULT_SETTINGS.completedNotice,
-        warrantyTitle: getFormValue('warrantyTitleInput') || DEFAULT_SETTINGS.warrantyTitle,
-        warrantyIntro: getFormValue('warrantyIntroInput') || DEFAULT_SETTINGS.warrantyIntro,
-        warrantyNotice: getFormValue('warrantyNoticeInput') || DEFAULT_SETTINGS.warrantyNotice,
-        labelTitle: getFormValue('labelTitleInput') || DEFAULT_SETTINGS.labelTitle,
-        labelFooter: getFormValue('labelFooterInput') || DEFAULT_SETTINGS.labelFooter,
-        labelShowQr: getFormValue('labelShowQrInput') || DEFAULT_SETTINGS.labelShowQr,
-        printFooter: getFormValue('printFooterInput'),
-        notificationTemplate: getFormValue('notificationTemplateInput') || DEFAULT_SETTINGS.notificationTemplate,
-        orderTypeDocBuilders: orderTypeDocBuildersDraft,
-        statusDocBuilders: statusDocBuildersDraft
-      });
+ 
+      ...getSettings(), 
+      serviceName: getFormValue('settingsServiceNameInput') || DEFAULT_SETTINGS.serviceName,
+      servicePhone: getFormValue('settingsServicePhoneInput') || DEFAULT_SETTINGS.servicePhone,
+      servicePhone2: getFormValue('settingsServicePhone2Input'),
+      servicePhone3: getFormValue('settingsServicePhone3Input'),
+      serviceAddress: getFormValue('settingsServiceAddressInput') || DEFAULT_SETTINGS.serviceAddress,
+      serviceAddress2: getFormValue('settingsServiceAddress2Input'),
+      companyEmail: getFormValue('companyEmailInput'),
+      companyLegalName: getFormValue('companyLegalNameInput'),
+      companyTaxId: getFormValue('companyTaxIdInput'),
+      currency: getFormValue('financeCurrencySelect') || getFormValue('currencySelect') || DEFAULT_SETTINGS.currency,
+      interfaceLanguage: getFormValue('interfaceLanguageInput') || DEFAULT_SETTINGS.interfaceLanguage,
+      timezone: getFormValue('timezoneInput') || DEFAULT_SETTINGS.timezone,
+      dateFormat: getFormValue('dateFormatInput') || DEFAULT_SETTINGS.dateFormat,
+      timeFormat: getFormValue('timeFormatInput') || DEFAULT_SETTINGS.timeFormat,
+      ordersPerPage: getFormValue('ordersPerPageInput') || DEFAULT_SETTINGS.ordersPerPage,
+      orderPrefix: getFormValue('orderPrefixInput'),
+      orderStartNumber: getFormValue('orderStartNumberInput'),
+      defaultWarrantyDays: getFormValue('defaultWarrantyDaysInput'),
+      defaultDeadlineDays: getFormValue('defaultDeadlineDaysInput'),
+      defaultSalaryPercent: getFormValue('defaultSalaryPercentInput'),
+      orderTypes: parseOrderTypesTextarea(getFormValue('orderTypesInput')),
+      customOrderFields: parseCustomFieldsTextarea(getFormValue('customOrderFieldsInput')),
+      paymentMethods,
+      expenseCategories,
+      inventoryCategories,
+      cashRegisters,
+      warehouses,
+      warehouseTypes,
+      roles,
+      cashRegisterAccess,
+      warehouseAccess,
+      masters 
+    });
 
       if (saved) {
         logActivity('Настройки', 'Обновлены настройки CRM');
