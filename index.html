@@ -6931,6 +6931,29 @@ body[data-ui-theme="dark"] .client-order-row em{
     }
   }
 </style>
+<style id="one-service-hide-helper-copy">
+  #orderModalOverlay .modal > p,
+  #clientsModalOverlay .modal > p,
+  #inventoryModalOverlay .modal > p,
+  #settingsModalOverlay .modal > p,
+  #reportsModalOverlay .modal > p,
+  #servicesModalOverlay .modal > p,
+  #tasksModalOverlay .modal > p,
+  #financeModalOverlay .modal > p,
+  #suppliersModalOverlay .modal > p,
+  #activityModalOverlay .modal > p,
+  #clientEditorOverlay .modal > p,
+  .client-editor-overlay .modal > p,
+  .master-editor-overlay .modal > p,
+  #settingsModalOverlay .settings-section > p.section-note,
+  #settingsModalOverlay .settings-directory-card > p.section-note,
+  #settingsModalOverlay .docs-simple-card > p.section-note,
+  #settingsModalOverlay .docs-basic-card > p.section-note,
+  #settingsModalOverlay .template-builder-head p.section-note,
+  #settingsModalOverlay .settings-actions-card .data-card p:not(#backupInfo) {
+    display: none !important;
+  }
+</style>
 </head>
 <body>
   <div class="blob blob-1"></div>
@@ -7087,8 +7110,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal">
       <button class="modal-close" id="closeOrderModal" type="button" aria-label="Close">×</button>
       <h3 id="orderModalTitle">Новый заказ</h3>
-      <p>Заполните данные клиента и техники. Номер заказа создаётся автоматически, если оставить поле пустым, но его можно указать и вручную.</p>
-
       <div class="order-modal-summary" id="orderModalSummary">
         <div class="order-modal-summary-item">
           <span class="order-modal-summary-label">Техника</span>
@@ -7207,7 +7228,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeClientsModal" type="button" aria-label="Close">×</button>
       <h3>Клиенты</h3>
-      <p>База собирается автоматически по телефонам из заказов. В карточке видно всю историю ремонтов клиента.</p>
       <input type="search" id="clientSearchInput" placeholder="Поиск клиента по имени или телефону">
       <div class="mini-list" id="clientsList"></div>
     </div>
@@ -7217,7 +7237,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeInventoryModal" type="button" aria-label="Close">×</button>
       <h3>Склад запчастей</h3>
-      <p>Добавляйте детали и остатки. При сохранении заказа выбранные детали списываются со склада.</p>
       <form id="inventoryForm">
         <div class="form-grid">
           <input type="text" id="partNameInput" placeholder="Название детали" required>
@@ -7253,7 +7272,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeSettingsModal" type="button" aria-label="Close">×</button>
       <h3>Настройки</h3>
-      <p>Центр управления CRM: компания, валюта, заказы, кассы, склады, доступ, документы и резервные копии.</p>
       <form id="settingsForm">
         <div class="settings-layout">
           <nav class="settings-nav" aria-label="Разделы настроек">
@@ -7343,7 +7361,6 @@ body[data-ui-theme="dark"] .client-order-row em{
 
             <section class="settings-section" data-settings-section="orders">
               <h4>Заказы</h4>
-              <p class="section-note">Базовые правила создания заказа: номера, сроки, гарантия, типы ремонта и дополнительные поля.</p>
               <div class="form-grid">
                 <label class="field-label">Префикс номера
                   <input type="text" id="orderPrefixInput" placeholder="SR-">
@@ -7372,7 +7389,6 @@ body[data-ui-theme="dark"] .client-order-row em{
 
             <section class="settings-section" data-settings-section="finance">
               <h4>Финансы и кассы</h4>
-              <p class="section-note">По примеру Gincore: отдельные кассы, статьи расходов, способы оплаты и правила зарплаты.</p>
               <div class="form-grid">
                 <label class="field-label">Валюта финансов
                   <select id="financeCurrencySelect">
@@ -7407,7 +7423,6 @@ body[data-ui-theme="dark"] .client-order-row em{
 
             <section class="settings-section" data-settings-section="warehouse">
               <h4>Склад</h4>
-              <p class="section-note">Склады и категории помогают разделять детали, расходники, точки приема и выдачи.</p>
               <div class="form-grid">
                 <label class="field-label full">Склады
                   <textarea id="warehousesInput" placeholder="Основной склад|service_center|активен"></textarea>
@@ -7423,7 +7438,6 @@ body[data-ui-theme="dark"] .client-order-row em{
 
             <section class="settings-section" data-settings-section="access">
               <h4>Сотрудники и доступ</h4>
-              <p class="section-note">Роли и доступы пока сохраняются как справочник; дальше их можно подключить к ограничениям интерфейса.</p>
               <div class="form-grid">
                 <label class="field-label full">Мастера
                   <textarea id="mastersInput" placeholder="Алексей"></textarea>
@@ -7639,7 +7653,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeReportsModal" type="button" aria-label="Close">×</button>
       <h3>Отчеты</h3>
-      <p>Ключевые показатели по заказам, оплатам, задачам, срокам и зарплате мастеров.</p>
       <section class="card stats-card">
         <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
           <div class="stat"><b id="statTotal">0</b><span>Общее количество заказов</span></div>
@@ -7660,7 +7673,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeServicesModal" type="button" aria-label="Close">×</button>
       <h3>Прайс услуг</h3>
-      <p>Услуги можно добавлять в заказ. Цена, гарантия и процент мастеру подтягиваются автоматически.</p>
       <form id="serviceForm">
         <div class="form-grid">
           <input type="text" id="serviceNameInput" placeholder="Название услуги" required>
@@ -7679,7 +7691,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeTasksModal" type="button" aria-label="Close">×</button>
       <h3>Задачи и сроки</h3>
-      <p>Контролируйте дедлайны заказов, закупки, звонки клиентам и внутренние задачи.</p>
       <form id="taskForm">
         <div class="form-grid">
           <input type="text" id="taskTitleInput" placeholder="Задача" required>
@@ -7698,7 +7709,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeFinanceModal" type="button" aria-label="Close">×</button>
       <h3>Финансы и зарплата</h3>
-      <p>Доходы берутся из оплаченных заказов, расходы вводятся вручную, зарплата рассчитывается по услугам и процентам мастеров.</p>
       <div class="data-grid" id="financeSummary"></div>
       <form id="expenseForm" style="margin-top:16px;">
         <div class="form-grid">
@@ -7718,7 +7728,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeSuppliersModal" type="button" aria-label="Close">×</button>
       <h3>Поставщики и приход</h3>
-      <p>Ведите базу поставщиков и быстро добавляйте поступления деталей на склад.</p>
       <form id="supplierForm">
         <div class="form-grid">
           <input type="text" id="supplierNameInput" placeholder="Поставщик" required>
@@ -7744,7 +7753,6 @@ body[data-ui-theme="dark"] .client-order-row em{
     <div class="modal wide-modal">
       <button class="modal-close" id="closeActivityModal" type="button" aria-label="Close">×</button>
       <h3>Журнал действий</h3>
-      <p>Здесь фиксируются изменения заказов, статусов, склада, настроек, расходов и справочников.</p>
       <div class="mini-list" id="activityList"></div>
     </div>
   </div>
@@ -9284,7 +9292,6 @@ body[data-ui-theme="dark"] .client-order-row em{
         <div class="modal">
           <button class="modal-close" id="closeClientEditorBtn" type="button" aria-label="Close">×</button>
           <h3 id="clientEditorTitle">Клиент</h3>
-          <p>Изменение имени и телефона обновит связанные заказы этого клиента. Удаление клиента скрывает его из списка, заказы остаются в CRM.</p>
           <form id="clientEditorForm">
             <input type="hidden" id="clientEditKeyInput">
             <input type="hidden" id="clientEditProfileIdInput">
@@ -15467,6 +15474,267 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     }
     closeOrderActions();
   }, true);
+})();
+</script>
+
+<script id="one-service-remove-helper-copy">
+(function(){
+  const selectors = [
+    '#orderModalOverlay .modal > p',
+    '#clientsModalOverlay .modal > p',
+    '#inventoryModalOverlay .modal > p',
+    '#settingsModalOverlay .modal > p',
+    '#reportsModalOverlay .modal > p',
+    '#servicesModalOverlay .modal > p',
+    '#tasksModalOverlay .modal > p',
+    '#financeModalOverlay .modal > p',
+    '#suppliersModalOverlay .modal > p',
+    '#activityModalOverlay .modal > p',
+    '#clientEditorOverlay .modal > p',
+    '.client-editor-overlay .modal > p',
+    '.master-editor-overlay .modal > p',
+    '#settingsModalOverlay .settings-section > p.section-note',
+    '#settingsModalOverlay .settings-directory-card > p.section-note',
+    '#settingsModalOverlay .docs-simple-card > p.section-note',
+    '#settingsModalOverlay .docs-basic-card > p.section-note',
+    '#settingsModalOverlay .template-builder-head p.section-note',
+    '#settingsModalOverlay .settings-actions-card .data-card p:not(#backupInfo)'
+  ];
+  function clean() {
+    document.querySelectorAll(selectors.join(',')).forEach(node => node.remove());
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', clean, { once: true });
+  } else {
+    clean();
+  }
+  new MutationObserver(clean).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+
+<script id="one-service-order-form-fields-settings">
+(function(){
+  const SETTINGS_KEY = 'one_service_settings';
+  const fields = [
+    { key: 'orderNumber', label: 'Номер заказа', id: 'orderNumber', group: 'Заказ' },
+    { key: 'orderStatus', label: 'Статус', id: 'orderStatus', group: 'Заказ' },
+    { key: 'orderType', label: 'Тип заказа', id: 'orderType', group: 'Заказ' },
+    { key: 'deadlineAt', label: 'Срок выполнения', id: 'deadlineAt', group: 'Заказ' },
+    { key: 'clientName', label: 'ФИО клиента', id: 'clientName', group: 'Клиент' },
+    { key: 'clientPhone', label: 'Телефон клиента', id: 'clientPhone', group: 'Клиент' },
+    { key: 'clientSource', label: 'Источник клиента', id: 'clientSource', group: 'Клиент' },
+    { key: 'deviceType', label: 'Техника', id: 'deviceType', group: 'Устройство' },
+    { key: 'deviceModel', label: 'Модель', id: 'deviceModel', group: 'Устройство' },
+    { key: 'masterName', label: 'Мастер', id: 'masterName', group: 'Устройство' },
+    { key: 'warrantyDays', label: 'Гарантия, дней', id: 'warrantyDays', group: 'Устройство' },
+    { key: 'warrantyUntil', label: 'Гарантия до', id: 'warrantyUntil', group: 'Устройство' },
+    { key: 'totalCost', label: 'Стоимость', id: 'totalCost', group: 'Финансы' },
+    { key: 'partsCost', label: 'Стоимость деталей', id: 'partsCost', group: 'Финансы' },
+    { key: 'paidAmount', label: 'Оплачено', id: 'paidAmount', group: 'Финансы' },
+    { key: 'discountAmount', label: 'Скидка', id: 'discountAmount', group: 'Финансы' },
+    { key: 'paymentMethod', label: 'Способ оплаты', id: 'paymentMethod', group: 'Финансы' },
+    { key: 'problemDescription', label: 'Неисправность', id: 'problemDescription', group: 'Описание' },
+    { key: 'completedWorks', label: 'Выполненные работы', id: 'completedWorks', group: 'Описание' },
+    { key: 'masterNotes', label: 'Заметки мастера', id: 'masterNotes', group: 'Описание' },
+    { key: 'taskNote', label: 'Задача / напоминание', id: 'taskNote', group: 'Описание' },
+    { key: 'customFields', label: 'Дополнительные поля', panel: 'customFieldsPanel', section: 'extra', group: 'Блоки' },
+    { key: 'servicesUsed', label: 'Услуги из прайса', panelSelector: '#serviceSelect', section: 'services', group: 'Блоки' },
+    { key: 'partsUsed', label: 'Запчасти со склада', panelSelector: '#partSelect', section: 'parts', group: 'Блоки' }
+  ];
+
+  function rawSettings() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function visibility() {
+    const saved = rawSettings().orderFormFields || {};
+    return fields.reduce((result, field) => {
+      result[field.key] = saved[field.key] !== false;
+      return result;
+    }, {});
+  }
+
+  function saveVisibility(next) {
+    const settings = rawSettings();
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+      ...settings,
+      orderFormFields: fields.reduce((result, field) => {
+        result[field.key] = next[field.key] !== false;
+        return result;
+      }, {})
+    }));
+  }
+
+  function addStyle() {
+    if (document.getElementById('one-service-order-form-fields-settings-style')) return;
+    const style = document.createElement('style');
+    style.id = 'one-service-order-form-fields-settings-style';
+    style.textContent = `
+      .order-form-fields-card{grid-column:1/-1}
+      .order-form-fields-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+      .order-form-field-toggle{display:flex;align-items:center;gap:9px;min-height:38px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#223044;font-size:12px;font-weight:800;line-height:1.2}
+      .order-form-field-toggle input{width:16px;min-width:16px;height:16px;margin:0;accent-color:#0ea5a0}
+      .order-form-field-toggle span{min-width:0}
+      .order-form-field-group{grid-column:1/-1;margin:8px 0 0;color:#64748b;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+      body[data-ui-theme="dark"] .order-form-field-toggle{background:#162235;border-color:rgba(203,213,225,.18);color:#e5edf7}
+      body[data-ui-theme="dark"] .order-form-field-group{color:#9fb2c7}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureSettingsBlock() {
+    addStyle();
+    const section = document.querySelector('[data-settings-section="orders"]');
+    if (!section) return;
+    let card = document.getElementById('orderFormFieldsSettingsCard');
+    if (!card) {
+      card = document.createElement('div');
+      card.className = 'settings-directory-card order-form-fields-card';
+      card.id = 'orderFormFieldsSettingsCard';
+      card.innerHTML = '<h5>Поля окна заказа</h5><div class="order-form-fields-list" id="orderFormFieldsSettingsList"></div>';
+      const panel = section.querySelector('.settings-directory-panel') || section;
+      const hiddenSync = panel.querySelector('.settings-hidden-sync');
+      if (hiddenSync) panel.insertBefore(card, hiddenSync);
+      else panel.appendChild(card);
+    }
+    renderSettingsList();
+  }
+
+  function renderSettingsList() {
+    const list = document.getElementById('orderFormFieldsSettingsList');
+    if (!list) return;
+    const prefs = visibility();
+    let lastGroup = '';
+    list.innerHTML = fields.map(field => {
+      const group = field.group !== lastGroup ? `<div class="order-form-field-group">${field.group}</div>` : '';
+      lastGroup = field.group;
+      return `${group}<label class="order-form-field-toggle"><input type="checkbox" data-order-form-field="${field.key}" ${prefs[field.key] !== false ? 'checked' : ''}><span>${field.label}</span></label>`;
+    }).join('');
+  }
+
+  function targetFor(field) {
+    if (field.id) {
+      const control = document.getElementById(field.id);
+      return control?.closest('.order-field') || control?.closest('label') || control || null;
+    }
+    if (field.section) {
+      const section = document.querySelector(`#orderForm .order-form-section-${field.section}`);
+      if (section) return section;
+    }
+    if (field.panel) return document.getElementById(field.panel);
+    if (field.panelSelector) return document.querySelector(field.panelSelector)?.closest('.mini-panel');
+    return null;
+  }
+
+  function setControlState(control, hidden) {
+    if (!control || !('disabled' in control)) return;
+    if (!control.dataset.orderFormRequiredSaved) {
+      control.dataset.orderFormRequiredSaved = control.required ? '1' : '0';
+      control.dataset.orderFormDisabledSaved = control.disabled ? '1' : '0';
+    }
+    if (hidden) {
+      if ('required' in control) control.required = false;
+      control.disabled = true;
+    } else {
+      if ('required' in control) control.required = control.dataset.orderFormRequiredSaved === '1';
+      control.disabled = control.dataset.orderFormDisabledSaved === '1';
+    }
+  }
+
+  function controlsInside(target) {
+    if (!target) return [];
+    const own = target.matches?.('input,select,textarea,button') ? [target] : [];
+    return own.concat(Array.from(target.querySelectorAll('input,select,textarea,button')));
+  }
+
+  function refreshSections() {
+    document.querySelectorAll('#orderForm .order-form-section').forEach(section => {
+      const visible = Array.from(section.querySelectorAll('.order-field,.mini-panel')).some(item => !item.hidden);
+      section.hidden = !visible;
+    });
+  }
+
+  function syncSummary(prefs) {
+    const map = {
+      deviceType: 'summaryDeviceType',
+      deviceModel: 'summaryDeviceModel',
+      masterName: 'summaryMasterName'
+    };
+    Object.entries(map).forEach(([key, id]) => {
+      const item = document.getElementById(id)?.closest('.order-modal-summary-item');
+      if (item) item.hidden = prefs[key] === false;
+    });
+    const summary = document.getElementById('orderModalSummary');
+    if (summary) {
+      const visible = Array.from(summary.querySelectorAll('.order-modal-summary-item')).some(item => !item.hidden);
+      summary.hidden = !visible;
+    }
+  }
+
+  function applyOrderFormVisibility() {
+    try { if (typeof window.enhanceOrderFormLayout === 'function') window.enhanceOrderFormLayout(); } catch (error) {}
+    const prefs = visibility();
+    fields.forEach(field => {
+      const target = targetFor(field);
+      const hidden = prefs[field.key] === false;
+      if (target) target.hidden = hidden;
+      controlsInside(target).forEach(control => setControlState(control, hidden));
+    });
+    refreshSections();
+    syncSummary(prefs);
+  }
+
+  function persistFromSettingsList() {
+    const list = document.getElementById('orderFormFieldsSettingsList');
+    if (!list) return;
+    const next = visibility();
+    list.querySelectorAll('input[data-order-form-field]').forEach(input => {
+      next[input.dataset.orderFormField] = input.checked;
+    });
+    saveVisibility(next);
+  }
+
+  function scheduleRefresh(delay = 0) {
+    setTimeout(() => {
+      ensureSettingsBlock();
+      applyOrderFormVisibility();
+    }, delay);
+  }
+
+  function init() {
+    scheduleRefresh(0);
+    document.addEventListener('change', event => {
+      const input = event.target.closest?.('input[data-order-form-field]');
+      if (!input) return;
+      const next = visibility();
+      next[input.dataset.orderFormField] = input.checked;
+      saveVisibility(next);
+      applyOrderFormVisibility();
+    });
+    document.getElementById('settingsForm')?.addEventListener('submit', persistFromSettingsList, true);
+    document.getElementById('settingsBtn')?.addEventListener('click', () => scheduleRefresh(180));
+    document.querySelectorAll('[data-settings-target]').forEach(tab => {
+      tab.addEventListener('click', () => scheduleRefresh(80));
+    });
+    const orderOverlay = document.getElementById('orderModalOverlay');
+    if (orderOverlay) {
+      new MutationObserver(() => {
+        if (orderOverlay.classList.contains('open')) scheduleRefresh(0);
+      }).observe(orderOverlay, { attributes: true, attributeFilter: ['class'] });
+    }
+    document.addEventListener('crm:cloud-sync-applied', () => scheduleRefresh(180));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 })();
 </script>
 
