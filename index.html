@@ -5711,16 +5711,16 @@ body[data-ui-theme="dark"] .client-order-row em{
                 <label class="field-label">Телефон сервиса
                   <input type="tel" id="settingsServicePhoneInput" placeholder="+380...">
                 </label>
-                <label class="field-label">Телефон сервиса 2
+                <label class="field-label" hidden>Телефон сервиса 2
                   <input type="tel" id="settingsServicePhone2Input" placeholder="+995...">
                 </label>
-                <label class="field-label">Телефон сервиса 3
+                <label class="field-label" hidden>Телефон сервиса 3
                   <input type="tel" id="settingsServicePhone3Input" placeholder="+995...">
                 </label>
                 <label class="field-label full">Адрес сервиса
                   <input type="text" id="settingsServiceAddressInput" placeholder="Город, улица, офис">
                 </label>
-                <label class="field-label full">Адрес сервиса 2
+                <label class="field-label full" hidden>Адрес сервиса 2
                   <input type="text" id="settingsServiceAddress2Input" placeholder="Город, улица, офис">
                 </label>
                 <label class="field-label">Email
@@ -5894,7 +5894,7 @@ body[data-ui-theme="dark"] .client-order-row em{
                 <label class="field-label">Firebase messagingSenderId
                   <input type="text" id="firebaseMessagingSenderIdInput" autocomplete="off">
                 </label>
-                <label class="field-label">Workspace ID
+                <label class="field-label fixed-workspace-field" hidden>Workspace ID
                   <input type="text" id="cloudWorkspaceIdInput" autocomplete="off" placeholder="one-service">
                 </label>
                 <label class="field-label">GitHub owner
@@ -5906,7 +5906,7 @@ body[data-ui-theme="dark"] .client-order-row em{
                 <label class="field-label">GitHub branch
                   <input type="text" id="githubBranchInput" autocomplete="off" placeholder="main">
                 </label>
-                <label class="field-label">GitHub path
+                <label class="field-label" hidden>GitHub path
                   <input type="text" id="githubPathInput" autocomplete="off" placeholder="crm-data/one-service.json">
                 </label>
                 <label class="field-label">GitHub token
@@ -6187,8 +6187,8 @@ body[data-ui-theme="dark"] .client-order-row em{
 
   <script>
     const AUTH_LOGIN = 'gotoveckis';
-    const AUTH_PASSWORD = '18101997';
-    const AUTH_STORAGE_KEY = 'crm_auth';
+    const AUTH_PASSWORD = '30031995';
+    const AUTH_STORAGE_KEY = 'one_service_auth';
     const ORDERS_KEY = 'one_service_orders';
     const SETTINGS_KEY = 'one_service_settings';
     const INVENTORY_KEY = 'one_service_inventory';
@@ -6200,6 +6200,7 @@ body[data-ui-theme="dark"] .client-order-row em{
     const SUPPLIERS_KEY = 'one_service_suppliers';
     const CLIENTS_KEY = 'one_service_clients';
     const ACTIVITY_KEY = 'one_service_activity';
+    const MAX_MASTERS = 50;
 
     const STATUS_CONFIG = {
       new: { label: 'Новый', className: 'status-new' },
@@ -6512,7 +6513,10 @@ body[data-ui-theme="dark"] .client-order-row em{
       settings.salaryMode = ['percent', 'fixed', 'mixed'].includes(settings.salaryMode) ? settings.salaryMode : DEFAULT_SETTINGS.salaryMode;
       settings.autoBackupEnabled = settings.autoBackupEnabled === 'off' ? 'off' : 'on';
       settings.orderStartNumber = String(settings.orderStartNumber || DEFAULT_SETTINGS.orderStartNumber);
-      settings.masters = Array.isArray(settings.masters) ? settings.masters.filter(Boolean) : DEFAULT_SETTINGS.masters;
+      settings.servicePhone2 = '';
+      settings.servicePhone3 = '';
+      settings.serviceAddress2 = '';
+      settings.masters = Array.isArray(settings.masters) ? settings.masters.filter(Boolean).slice(0, MAX_MASTERS) : DEFAULT_SETTINGS.masters;
       settings.orderTypes = Array.isArray(settings.orderTypes) && settings.orderTypes.length ? settings.orderTypes : DEFAULT_SETTINGS.orderTypes;
       settings.paymentMethods = Array.isArray(settings.paymentMethods) && settings.paymentMethods.length ? settings.paymentMethods : DEFAULT_SETTINGS.paymentMethods;
       settings.expenseCategories = Array.isArray(settings.expenseCategories) && settings.expenseCategories.length ? settings.expenseCategories : DEFAULT_SETTINGS.expenseCategories;
@@ -9268,7 +9272,7 @@ body[data-ui-theme="dark"] .client-order-row em{
     document.getElementById('settingsForm').addEventListener('submit', event => {
       event.preventDefault();
       syncCurrencySelectors('financeCurrencySelect');
-      const masters = parseListTextarea(getFormValue('mastersInput'));
+      const masters = parseListTextarea(getFormValue('mastersInput')).slice(0, MAX_MASTERS);
       const paymentMethods = parseListTextarea(getFormValue('paymentMethodsInput'));
       const expenseCategories = parseListTextarea(getFormValue('expenseCategoriesInput'));
       const inventoryCategories = parseListTextarea(getFormValue('inventoryCategoriesInput'));
@@ -9284,10 +9288,10 @@ body[data-ui-theme="dark"] .client-order-row em{
       ...getSettings(), 
       serviceName: getFormValue('settingsServiceNameInput') || DEFAULT_SETTINGS.serviceName,
       servicePhone: getFormValue('settingsServicePhoneInput') || DEFAULT_SETTINGS.servicePhone,
-      servicePhone2: getFormValue('settingsServicePhone2Input'),
-      servicePhone3: getFormValue('settingsServicePhone3Input'),
+      servicePhone2: '',
+      servicePhone3: '',
       serviceAddress: getFormValue('settingsServiceAddressInput') || DEFAULT_SETTINGS.serviceAddress,
-      serviceAddress2: getFormValue('settingsServiceAddress2Input'),
+      serviceAddress2: '',
       companyEmail: getFormValue('companyEmailInput'),
       companyLegalName: getFormValue('companyLegalNameInput'),
       companyTaxId: getFormValue('companyTaxIdInput'),
@@ -9680,8 +9684,8 @@ document.addEventListener('DOMContentLoaded', function(){
 <script>
 (function(){
   const AUTH_LOGIN = 'gotoveckis';
-  const AUTH_PASSWORD = '18101997';
-  const AUTH_KEY = 'crm_auth';
+  const AUTH_PASSWORD = '30031995';
+  const AUTH_KEY = 'one_service_auth';
 
   const authShell = document.getElementById('authShell');
   const appShell = document.getElementById('appShell');
@@ -10187,18 +10191,18 @@ document.addEventListener('DOMContentLoaded', function(){
 <script id="release-settings-services-masters-roles">
 (function(){
   const SETTINGS_STORAGE_KEY = 'one_service_settings';
-  const AUTH_REMEMBER_KEY = 'crm_auth';
-  const AUTH_USER_KEY = 'crm_current_user';
+  const AUTH_REMEMBER_KEY = 'one_service_auth';
+  const AUTH_USER_KEY = 'one_service_current_user';
   const ADMIN_USER = {
     id: 'admin',
     name: 'Администратор',
     login: 'gotoveckis',
-    password: '18101997',
+    password: '30031995',
     roles: ['all'],
     salaryPercent: '',
     isAdmin: true
   };
-  const MAX_MASTER_PROFILES = 10;
+  const MAX_MASTER_PROFILES = 50;
   const ACCESS_ROLES = [
     { key: 'orders', label: 'Заказы', menuId: 'ordersBtn' },
     { key: 'clients', label: 'Клиенты', menuId: 'clientsBtn' },
@@ -10349,7 +10353,7 @@ document.addEventListener('DOMContentLoaded', function(){
         profiles.push(normalizeMasterProfile(name, profiles.length + index, settings));
       }
     });
-    return profiles;
+    return profiles.slice(0, MAX_MASTER_PROFILES);
   }
   function saveMasterProfiles(profiles, reason = 'Обновлены мастера') {
     const settings = readSettings();
@@ -13154,6 +13158,8 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 
 <script type="module" id="release-cloud-sync">
 (async function(){
+  const FIXED_WORKSPACE_ID = 'one-service';
+  const FIXED_GITHUB_PATH = 'crm-data/one-service.json';
   const DATA_KEYS = [
     'one_service_settings',
     'one_service_orders',
@@ -13198,16 +13204,16 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     const releaseConfig = window.CRM_RELEASE_CLOUD_CONFIG || {};
     const storedConfig = readLocalJson(CONFIG_KEY, {});
     return {
-      workspaceId: storedConfig.workspaceId || releaseConfig.workspaceId || 'one-service',
+      workspaceId: FIXED_WORKSPACE_ID,
       firebase: {
         ...cleanObject(releaseConfig.firebase),
         ...cleanObject(storedConfig.firebase)
       },
       github: {
         branch: 'main',
-        path: 'crm-data/one-service.json',
         ...cleanObject(releaseConfig.github),
-        ...cleanObject(storedConfig.github)
+        ...cleanObject(storedConfig.github),
+        path: FIXED_GITHUB_PATH
       }
     };
   }
@@ -13235,7 +13241,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     return Boolean(github.owner && github.repo && github.branch && github.path);
   }
   function workspaceId() {
-    return String(config.workspaceId || 'one-service').trim().replace(/[\/#?\[\]]/g, '-') || 'one-service';
+    return FIXED_WORKSPACE_ID;
   }
   function fillCloudForm() {
     config = readConfig();
@@ -13246,22 +13252,34 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       firebaseAppIdInput: config.firebase.appId,
       firebaseStorageBucketInput: config.firebase.storageBucket,
       firebaseMessagingSenderIdInput: config.firebase.messagingSenderId,
-      cloudWorkspaceIdInput: config.workspaceId,
+      cloudWorkspaceIdInput: FIXED_WORKSPACE_ID,
       githubOwnerInput: config.github.owner,
       githubRepoInput: config.github.repo,
       githubBranchInput: config.github.branch || 'main',
-      githubPathInput: config.github.path || 'crm-data/one-service.json',
+      githubPathInput: FIXED_GITHUB_PATH,
       githubTokenInput: config.github.token
     };
     Object.entries(map).forEach(([id, value]) => {
       const input = document.getElementById(id);
       if (input) input.value = value || '';
     });
+    const workspaceInput = document.getElementById('cloudWorkspaceIdInput');
+    if (workspaceInput) {
+      workspaceInput.value = FIXED_WORKSPACE_ID;
+      workspaceInput.readOnly = true;
+      workspaceInput.disabled = true;
+    }
+    const githubPathInput = document.getElementById('githubPathInput');
+    if (githubPathInput) {
+      githubPathInput.value = FIXED_GITHUB_PATH;
+      githubPathInput.readOnly = true;
+      githubPathInput.disabled = true;
+    }
     updateInitialStatus();
   }
   function saveCloudForm() {
     const next = {
-      workspaceId: document.getElementById('cloudWorkspaceIdInput')?.value.trim() || 'one-service',
+      workspaceId: FIXED_WORKSPACE_ID,
       firebase: {
         apiKey: document.getElementById('firebaseApiKeyInput')?.value.trim() || '',
         authDomain: document.getElementById('firebaseAuthDomainInput')?.value.trim() || '',
@@ -13274,7 +13292,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
         owner: document.getElementById('githubOwnerInput')?.value.trim() || '',
         repo: document.getElementById('githubRepoInput')?.value.trim() || '',
         branch: document.getElementById('githubBranchInput')?.value.trim() || 'main',
-        path: document.getElementById('githubPathInput')?.value.trim() || 'crm-data/one-service.json',
+        path: FIXED_GITHUB_PATH,
         token: document.getElementById('githubTokenInput')?.value.trim() || ''
       }
     };
