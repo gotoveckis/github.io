@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ONE service CRM</title>
-  <meta name="theme-color" content="#2563eb">
+  <meta name="theme-color" content="#f97316">
   <style>
     :root{
       --bg:#f4efe9;
@@ -5364,6 +5364,561 @@ body[data-ui-theme="dark"] .client-order-row em{
 }
 </style>
 
+<style id="one-service-site-brand-crm">
+  :root{
+    --bg:#f5f7fb;
+    --surface:#ffffff;
+    --surface-strong:#ffffff;
+    --text:#18202f;
+    --muted:#657386;
+    --line:rgba(104,118,138,.16);
+    --accent:#f97316;
+    --accent-dark:#d85d0b;
+    --accent-soft:#fff3e9;
+    --teal:#0f9f94;
+    --blue:#3867d6;
+    --shadow:0 10px 28px rgba(25,34,52,.075);
+    --shadow-hover:0 18px 42px rgba(25,34,52,.12);
+    --radius:8px;
+  }
+
+  body{
+    color:var(--text);
+    background:
+      linear-gradient(120deg,rgba(15,159,148,.055),transparent 36%),
+      linear-gradient(300deg,rgba(249,115,22,.07),transparent 42%),
+      linear-gradient(180deg,#f8fafc 0%,#f2f7f6 42%,#fff8f2 100%) !important;
+    letter-spacing:0;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg,rgba(56,103,214,.035) 1px,transparent 1px),
+      linear-gradient(180deg,rgba(56,103,214,.035) 1px,transparent 1px);
+    background-size:76px 76px;
+    mask-image:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.14) 60%,transparent 98%);
+  }
+
+  .auth-shell,
+  .app-shell,
+  header,
+  .app-layout,
+  .page,
+  .modal-overlay{
+    position:relative;
+    z-index:1;
+  }
+
+  .blob{opacity:.42;filter:blur(96px)}
+  .blob-1{background:#ffe3cd}
+  .blob-2{background:#e7faf8}
+  .blob-3{background:#fff0df}
+
+  header{
+    background:rgba(255,255,255,.88) !important;
+    border-bottom:1px solid rgba(104,118,138,.14) !important;
+    box-shadow:0 1px 0 rgba(255,255,255,.9),0 12px 32px rgba(25,34,52,.08) !important;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
+
+  header::after,
+  .auth-card::before,
+  .panel::before,
+  .modal::before,
+  .table-card::before{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    height:3px;
+    background:linear-gradient(90deg,var(--accent),var(--teal),var(--blue));
+    opacity:.86;
+    pointer-events:none;
+  }
+
+  .auth-card,
+  .sidebar-card,
+  .card,
+  .panel,
+  .table-card,
+  .modal,
+  .data-card,
+  .mini-panel,
+  .stats-card,
+  .settings-section,
+  .settings-nav,
+  .settings-service-editor,
+  .master-access-toolbar,
+  .docs-basic-card,
+  .template-card,
+  .theme-preview-card,
+  .orders-pagination,
+  .table-scroll,
+  .workspace-page-overlay .modal{
+    background:rgba(255,255,255,.94) !important;
+    border:1px solid var(--line) !important;
+    border-radius:8px !important;
+    box-shadow:var(--shadow) !important;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+
+  .auth-card,
+  .panel,
+  .table-card,
+  .modal{
+    position:relative;
+    overflow:hidden;
+  }
+
+  .logo{
+    align-items:center !important;
+    gap:12px !important;
+    color:#172033 !important;
+  }
+
+  .logo-one{
+    min-width:1.02em !important;
+    height:1.02em !important;
+    border-radius:8px !important;
+    background:linear-gradient(145deg,#f97316 0%,#f47b34 52%,#0f9f94 150%) !important;
+    color:#fff !important;
+    box-shadow:0 9px 20px rgba(249,115,22,.22) !important;
+  }
+
+  .logo-text{
+    color:#172033 !important;
+    display:flex !important;
+    flex-direction:column;
+    gap:4px;
+    line-height:1 !important;
+  }
+
+  .logo-text::first-letter{color:var(--accent)}
+  .logo-text::after{
+    content:"TECH REPAIR BATUMI";
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.11em;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+
+  .auth-title,
+  .hero-card h1,
+  .modal h3,
+  .modal h4,
+  .settings-section h4,
+  .section-title,
+  .data-card h4,
+  .stat b,
+  #orderModalTitle,
+  #orderActionsTitle,
+  .template-card-title{
+    color:#172033 !important;
+    letter-spacing:0 !important;
+  }
+
+  .field-label,
+  .section-note,
+  .settings-hint,
+  .muted,
+  .data-card p,
+  .stat span,
+  .mini-row span,
+  .orders-pagination-info{
+    color:var(--muted) !important;
+  }
+
+  .btn{
+    border-radius:8px !important;
+    letter-spacing:0 !important;
+    transition:transform .22s ease,box-shadow .22s ease,background .22s ease,border-color .22s ease !important;
+  }
+
+  .btn:hover,
+  .small-btn:hover,
+  .orders-page-btn:hover,
+  .settings-tab:hover{
+    transform:translateY(-2px);
+  }
+
+  .btn-primary,
+  .small-btn.manage-primary,
+  .orders-page-btn.active{
+    background:linear-gradient(135deg,#f97316 0%,#ea6a1d 58%,#d85d0b 100%) !important;
+    color:#fff !important;
+    border-color:transparent !important;
+    box-shadow:0 15px 32px rgba(249,115,22,.25) !important;
+  }
+
+  .btn-secondary,
+  .small-btn,
+  .orders-page-btn,
+  .settings-tab,
+  .docs-token,
+  .role-badge{
+    background:#fff !important;
+    color:#3a4657 !important;
+    border:1px solid rgba(104,118,138,.18) !important;
+    box-shadow:0 8px 20px rgba(25,34,52,.06) !important;
+  }
+
+  .sidebar-card{
+    background:rgba(255,255,255,.92) !important;
+  }
+
+  .sidebar-title{
+    color:#657386 !important;
+    letter-spacing:.11em !important;
+  }
+
+  .sidebar-nav .btn{
+    min-height:46px !important;
+    justify-content:flex-start !important;
+    box-shadow:none !important;
+  }
+
+  .sidebar-nav .btn.active,
+  .settings-tab.active,
+  .orders-quick-filter.active{
+    background:linear-gradient(90deg,#fff3e9,#f3fbfa) !important;
+    color:#172033 !important;
+    border-color:rgba(249,115,22,.24) !important;
+    box-shadow:0 10px 24px rgba(25,34,52,.075) !important;
+  }
+
+  input,
+  select,
+  textarea,
+  .actions-select{
+    background:#fbfcfe !important;
+    color:var(--text) !important;
+    border:1px solid rgba(104,118,138,.18) !important;
+    border-radius:8px !important;
+    box-shadow:none !important;
+  }
+
+  input:hover,
+  select:hover,
+  textarea:hover{
+    border-color:rgba(15,159,148,.28) !important;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus{
+    background:#fff !important;
+    border-color:var(--teal) !important;
+    box-shadow:0 0 0 4px rgba(15,159,148,.12) !important;
+  }
+
+  .simple-table,
+  table{
+    background:#fff !important;
+  }
+
+  th{
+    background:#fbfcfe !important;
+    color:#657386 !important;
+    letter-spacing:0 !important;
+  }
+
+  td{
+    color:#263247 !important;
+    border-color:rgba(104,118,138,.12) !important;
+  }
+
+  tbody tr:hover td,
+  #ordersMainTable tbody tr:hover td{
+    background:#fff8f2 !important;
+  }
+
+  .status-badge,
+  .badge,
+  .current-user-chip,
+  .order-list-status,
+  .master-meta-line,
+  .manage-counter{
+    border-radius:8px !important;
+    background:#fff3e9 !important;
+    color:#8a3c08 !important;
+    border:1px solid rgba(249,115,22,.18) !important;
+  }
+
+  .stat,
+  .quick-card,
+  .client-card,
+  .settings-service-row,
+  .master-profile-row,
+  .manage-row,
+  .doc-text-card,
+  .template-empty,
+  .order-actions-meta .data-card{
+    background:#fff !important;
+    border:1px solid var(--line) !important;
+    border-radius:8px !important;
+    box-shadow:var(--shadow) !important;
+  }
+
+  .settings-service-row:hover,
+  .master-profile-row:hover,
+  .client-card:hover,
+  .manage-row:hover,
+  .stat:hover{
+    transform:translateY(-2px);
+    border-color:rgba(15,159,148,.2) !important;
+    box-shadow:var(--shadow-hover) !important;
+  }
+
+  .modal-close{
+    border-radius:8px !important;
+    background:#fff !important;
+    color:#172033 !important;
+    border:1px solid rgba(104,118,138,.18) !important;
+  }
+
+  .auth-shell{
+    background:
+      linear-gradient(120deg,rgba(15,159,148,.08),transparent 40%),
+      linear-gradient(300deg,rgba(249,115,22,.12),transparent 46%),
+      linear-gradient(180deg,#f8fafc,#fff8f2) !important;
+  }
+
+  .auth-card{
+    width:min(430px,calc(100% - 28px)) !important;
+  }
+
+  body[data-ui-theme="dark"]{
+    --bg:#111722;
+    --surface:#172033;
+    --surface-strong:#1d2939;
+    --text:#f8fafc;
+    --muted:#c4cedb;
+    --line:rgba(226,232,240,.16);
+    --accent-soft:rgba(249,115,22,.16);
+    background:
+      linear-gradient(120deg,rgba(15,159,148,.12),transparent 34%),
+      linear-gradient(300deg,rgba(249,115,22,.13),transparent 45%),
+      linear-gradient(180deg,#0f172a,#111827 54%,#1d1b18) !important;
+  }
+
+  body[data-ui-theme="dark"] header,
+  body[data-ui-theme="dark"] .auth-card,
+  body[data-ui-theme="dark"] .sidebar-card,
+  body[data-ui-theme="dark"] .card,
+  body[data-ui-theme="dark"] .panel,
+  body[data-ui-theme="dark"] .table-card,
+  body[data-ui-theme="dark"] .modal,
+  body[data-ui-theme="dark"] .data-card,
+  body[data-ui-theme="dark"] .mini-panel,
+  body[data-ui-theme="dark"] .stats-card,
+  body[data-ui-theme="dark"] .settings-section,
+  body[data-ui-theme="dark"] .settings-nav,
+  body[data-ui-theme="dark"] .settings-service-editor,
+  body[data-ui-theme="dark"] .master-access-toolbar,
+  body[data-ui-theme="dark"] .docs-basic-card,
+  body[data-ui-theme="dark"] .template-card,
+  body[data-ui-theme="dark"] .theme-preview-card,
+  body[data-ui-theme="dark"] .orders-pagination,
+  body[data-ui-theme="dark"] .table-scroll,
+  body[data-ui-theme="dark"] .stat,
+  body[data-ui-theme="dark"] .client-card,
+  body[data-ui-theme="dark"] .settings-service-row,
+  body[data-ui-theme="dark"] .master-profile-row,
+  body[data-ui-theme="dark"] .manage-row,
+  body[data-ui-theme="dark"] .doc-text-card{
+    background:rgba(23,32,51,.94) !important;
+    border-color:rgba(226,232,240,.14) !important;
+    box-shadow:0 18px 42px rgba(0,0,0,.24) !important;
+  }
+
+  body[data-ui-theme="dark"] .logo,
+  body[data-ui-theme="dark"] .logo-text,
+  body[data-ui-theme="dark"] .auth-title,
+  body[data-ui-theme="dark"] .hero-card h1,
+  body[data-ui-theme="dark"] .modal h3,
+  body[data-ui-theme="dark"] .modal h4,
+  body[data-ui-theme="dark"] .settings-section h4,
+  body[data-ui-theme="dark"] .section-title,
+  body[data-ui-theme="dark"] .data-card h4,
+  body[data-ui-theme="dark"] .stat b,
+  body[data-ui-theme="dark"] #orderModalTitle,
+  body[data-ui-theme="dark"] #orderActionsTitle,
+  body[data-ui-theme="dark"] td,
+  body[data-ui-theme="dark"] .template-card-title{
+    color:#f8fafc !important;
+  }
+
+  body[data-ui-theme="dark"] input,
+  body[data-ui-theme="dark"] select,
+  body[data-ui-theme="dark"] textarea,
+  body[data-ui-theme="dark"] .btn-secondary,
+  body[data-ui-theme="dark"] .small-btn,
+  body[data-ui-theme="dark"] .orders-page-btn,
+  body[data-ui-theme="dark"] .settings-tab,
+  body[data-ui-theme="dark"] th{
+    background:#111827 !important;
+    color:#f8fafc !important;
+    border-color:rgba(226,232,240,.16) !important;
+  }
+
+  body[data-ui-theme="dark"] tbody tr:hover td,
+  body[data-ui-theme="dark"] #ordersMainTable tbody tr:hover td{
+    background:rgba(249,115,22,.12) !important;
+  }
+
+  body[data-ui-theme="dark"] .sidebar-nav .btn.active,
+  body[data-ui-theme="dark"] .settings-tab.active,
+  body[data-ui-theme="dark"] .orders-quick-filter.active{
+    background:linear-gradient(90deg,rgba(249,115,22,.2),rgba(15,159,148,.12)) !important;
+    color:#fff !important;
+  }
+
+  @media (max-width:768px){
+    body::before{background:none}
+    .logo-text::after{font-size:9px;letter-spacing:.08em}
+    .auth-card,
+    .card,
+    .panel,
+    .modal,
+    .table-card{
+      border-radius:8px !important;
+    }
+  }
+
+  @media (max-width:520px){
+    .current-user-chip{display:none !important}
+    .topbar-actions{gap:8px !important}
+    .logout-btn{min-width:auto !important;padding:0 18px !important}
+  }
+</style>
+
+<style id="release-modal-navigation-fix">
+  .modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 150 !important;
+  }
+
+  .modal-overlay.open {
+    display: flex !important;
+  }
+
+  .workspace-page-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 140 !important;
+    display: none !important;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    overflow: auto;
+  }
+
+  .workspace-page-overlay.open {
+    display: block !important;
+  }
+
+  #orderModalOverlay,
+  #orderActionsModalOverlay,
+  #masterEditorOverlay {
+    z-index: 260 !important;
+  }
+
+  #orderModalOverlay.open,
+  #orderActionsModalOverlay.open,
+  #masterEditorOverlay.open {
+    display: flex !important;
+  }
+
+  #orderModalOverlay .modal,
+  #orderActionsModalOverlay .modal {
+    max-height: min(92vh, 920px);
+    overflow: auto;
+  }
+
+  .workspace-page-overlay .modal {
+    min-height: 100%;
+    max-height: none;
+    overflow: auto;
+  }
+</style>
+<style id="release-page-navigation-layout">
+  .workspace-page-host {
+    display: none;
+    width: 100%;
+  }
+
+  .app-shell.workspace-page-mode .page > .container:not(.workspace-page-host) {
+    display: none !important;
+  }
+
+  .app-shell.workspace-page-mode .workspace-page-host {
+    display: block !important;
+  }
+
+  .workspace-page-host .workspace-page-overlay {
+    position: static !important;
+    inset: auto !important;
+    z-index: auto !important;
+    display: none !important;
+    width: 100% !important;
+    min-height: auto !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .workspace-page-host .workspace-page-overlay.open {
+    display: block !important;
+  }
+
+  .workspace-page-host .workspace-page-overlay .modal {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border-radius: 8px !important;
+    padding: 24px !important;
+  }
+
+  .workspace-page-host .workspace-page-overlay .modal-close {
+    display: none !important;
+  }
+
+  .app-shell.workspace-page-mode .page {
+    min-width: 0;
+  }
+
+  @media (max-width: 768px) {
+    .app-shell.workspace-page-mode .app-layout {
+      display: block !important;
+    }
+
+    .app-shell.workspace-page-mode .sidebar {
+      position: static !important;
+      width: auto !important;
+      transform: none !important;
+      pointer-events: auto !important;
+      margin: 0 14px 14px !important;
+    }
+
+    .app-shell.workspace-page-mode .page {
+      padding-top: 0 !important;
+    }
+  }
+</style>
 </head>
 <body>
   <div class="blob blob-1"></div>
@@ -5930,7 +6485,7 @@ body[data-ui-theme="dark"] .client-order-row em{
                       <input type="text" id="documentNumberingInput" placeholder="По номеру заказа">
                     </label>
                     <label class="field-label">Основной цвет печати
-                      <input type="text" id="printPrimaryColorInput" placeholder="#2563eb">
+                      <input type="text" id="printPrimaryColorInput" placeholder="#f97316">
                     </label>
                     <label class="field-label">Подзаголовок в шапке
                       <input type="text" id="printBrandTextInput" placeholder="Сервисный центр">
@@ -6263,7 +6818,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       cashRegisterAccess: ['Администратор|все кассы|полный доступ', 'Приемщик|Основная касса|принимать оплату'],
       warehouseAccess: ['Администратор|все склады|полный доступ', 'Мастер|Основной склад|просмотр, списание'],
       documentNumbering: 'По номеру заказа',
-      printPrimaryColor: '#2563eb',
+      printPrimaryColor: '#f97316',
       printBrandText: 'Сервисный центр',
       printPageSize: 'A4',
       printBaseFontSize: '14',
@@ -6570,6 +7125,14 @@ body[data-ui-theme="dark"] .client-order-row em{
       }).filter(item => item.key && item.label);
 
       return fields.length ? fields : DEFAULT_SETTINGS.customOrderFields;
+    }
+
+    function parseOrderTypesTextarea(value) {
+      return parseOrderTypes(value);
+    }
+
+    function parseCustomFieldsTextarea(value) {
+      return parseCustomOrderFields(value);
     }
 
     function formatOrderTypes(value) {
@@ -9947,7 +10510,7 @@ document.addEventListener('DOMContentLoaded', function(){
               <input type="text" id="documentNumberingInput" placeholder="По номеру заказа">
             </label>
             <label class="field-label">Цвет печати
-              <input type="text" id="printPrimaryColorInput" placeholder="#2563eb">
+              <input type="text" id="printPrimaryColorInput" placeholder="#f97316">
             </label>
             <label class="field-label">Подзаголовок
               <input type="text" id="printBrandTextInput" placeholder="Сервисный центр">
@@ -10169,17 +10732,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
   document.addEventListener('click', function(event){
     const button = event.target.closest('#ordersBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn');
-    if (!button) return;
+    if (!button || button.disabled) return;
 
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    if (button.id === 'ordersBtn') closeWorkspacePages();
-    else openWorkspacePage(button.id);
+    setTimeout(function(){
+      if (event.defaultPrevented) return;
+      if (button.id === 'ordersBtn') closeWorkspacePages();
+      else openWorkspacePage(button.id);
+    }, 0);
   }, true);
 
   document.addEventListener('keydown', function(event){
-    if (event.key === 'Escape' && document.body.classList.contains('workspace-page-open')) {
+    if (event.key === 'Escape' && document.body.classList.contains('workspace-page-open') && !document.getElementById('appShell')?.classList.contains('workspace-page-mode')) {
       closeWorkspacePages();
     }
   });
@@ -10423,7 +10986,7 @@ document.addEventListener('DOMContentLoaded', function(){
               <input type="text" id="documentNumberingInput" placeholder="По номеру заказа">
             </label>
             <label class="field-label">Основной цвет печати
-              <input type="text" id="printPrimaryColorInput" placeholder="#2563eb">
+              <input type="text" id="printPrimaryColorInput" placeholder="#f97316">
             </label>
             <label class="field-label">Подзаголовок в шапке
               <input type="text" id="printBrandTextInput" placeholder="Сервисный центр">
@@ -10915,11 +11478,24 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     return null;
   }
-  function authenticateAfterCloudSync(login, password, timeout = 8000) {
+  function getCloudAuthProblemMessage() {
+    const syncStatus = window.crmCloudSyncStatus || {};
+    const message = String(window.crmLastCloudAuthError || syncStatus.error || '').toLowerCase();
+    if (/permission|insufficient|denied|403/.test(message)) {
+      return 'Firebase не дает прочитать базу. Проверьте Firestore Rules для crmWorkspaces/one-service/data: чтение и запись должны быть разрешены для request.auth != null.';
+    }
+    if (/auth|anonymous|firebase|network|failed to fetch/.test(message)) {
+      return 'Firebase сейчас недоступен. Проверьте интернет, Anonymous Auth и правила Firestore.';
+    }
+    return 'Неверный логин или пароль';
+  }
+  function authenticateAfterCloudSync(login, password, timeout = 30000) {
+    window.crmLastCloudAuthError = '';
     return new Promise(resolve => {
       let finished = false;
       let interval = null;
-      const finish = (user = authenticate(login, password)) => {
+      const tryAuthenticate = () => authenticate(login, password);
+      const finish = (user = tryAuthenticate()) => {
         if (finished) return;
         finished = true;
         document.removeEventListener('crm:cloud-sync-applied', onSync);
@@ -10927,12 +11503,21 @@ document.addEventListener('DOMContentLoaded', function(){
         resolve(user);
       };
       const onSync = () => {
-        const user = authenticate(login, password);
+        const user = tryAuthenticate();
         if (user) finish(user);
       };
+      const cloudPull = typeof window.crmPullAccessFromFirebase === 'function' ? window.crmPullAccessFromFirebase : null;
+      if (cloudPull) {
+        cloudPull().then(() => {
+          const user = tryAuthenticate();
+          if (user) finish(user);
+        }).catch(error => {
+          window.crmLastCloudAuthError = error?.message || String(error || 'firebase');
+        });
+      }
       document.addEventListener('crm:cloud-sync-applied', onSync);
       interval = setInterval(() => {
-        const user = authenticate(login, password);
+        const user = tryAuthenticate();
         if (user) finish(user);
       }, 250);
       setTimeout(finish, timeout);
@@ -11061,7 +11646,7 @@ document.addEventListener('DOMContentLoaded', function(){
         user = await authenticateAfterCloudSync(loginValue, passwordValue);
       }
       if (!user) {
-        showError('Неверный логин или пароль');
+        showError(getCloudAuthProblemMessage());
         passwordInput?.focus();
         passwordInput?.select();
         return;
@@ -11806,7 +12391,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function applyTheme(theme = readDeviceTheme()) {
     const normalized = normalizeTheme(theme);
     document.body.dataset.uiTheme = normalized;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', normalized === 'dark' ? '#0f172a' : '#2563eb');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', normalized === 'dark' ? '#111722' : '#f97316');
   }
   window.applyLocalInterfaceTheme = function() {
     const theme = readDeviceTheme();
@@ -13187,6 +13772,12 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   let initToken = 0;
   let firebaseUnsubscribes = [];
   const clientId = ensureClientId();
+  window.crmLastCloudAuthError = window.crmLastCloudAuthError || '';
+  window.crmCloudSyncStatus = {
+    ready: false,
+    error: '',
+    workspaceId: FIXED_WORKSPACE_ID
+  };
 
   function safeJson(value, fallback = null) {
     try { return JSON.parse(value); } catch (error) { return fallback; }
@@ -13231,6 +13822,21 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   function setStatus(message) {
     const node = document.getElementById('cloudSyncStatus');
     if (node) node.textContent = message;
+  }
+  function updateCloudSyncStatus(next = {}) {
+    window.crmCloudSyncStatus = {
+      ...(window.crmCloudSyncStatus || {}),
+      ...next,
+      ready: firebaseReady,
+      workspaceId: FIXED_WORKSPACE_ID,
+      updatedAt: new Date().toISOString()
+    };
+  }
+  function recordFirebaseError(error) {
+    const message = error?.message || error?.code || String(error || 'Firebase error');
+    window.crmLastCloudAuthError = message;
+    updateCloudSyncStatus({ error: message });
+    return message;
   }
   function firebaseConfigured() {
     const firebase = config.firebase || {};
@@ -13346,7 +13952,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
         } else {
           const theme = localStorage.getItem('one_service_device_theme') === 'dark' ? 'dark' : 'light';
           document.body.dataset.uiTheme = theme;
-          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0f172a' : '#2563eb');
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#111722' : '#f97316');
         }
       } catch (error) {}
       document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied'));
@@ -13362,9 +13968,37 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     firebaseApi = { ...appMod, ...firestoreMod, ...authMod };
     return firebaseApi;
   }
+  async function ensureFirebaseConnection() {
+    config = readConfig();
+    if (!firebaseConfigured()) throw new Error('Firebase не настроен');
+    const api = await importFirebase();
+    const firebaseConfig = cleanObject(config.firebase);
+    const appName = `crm-${firebaseConfig.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
+    const app = api.getApps().find(item => item.name === appName) || api.initializeApp(firebaseConfig, appName);
+    await api.signInAnonymously(api.getAuth(app));
+    db = api.getFirestore(app);
+    firebaseReady = true;
+    updateCloudSyncStatus({ error: '' });
+    return api;
+  }
   function firebaseDocRef(key) {
     return firebaseApi.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
   }
+  window.crmPullAccessFromFirebase = async function() {
+    try {
+      const api = await ensureFirebaseConnection();
+      const ref = api.doc(db, 'crmWorkspaces', workspaceId(), 'data', 'one_service_settings');
+      const snap = await api.getDoc(ref);
+      if (!snap.exists()) throw new Error('Firebase: one_service_settings не найден');
+      applyFirebaseDoc('one_service_settings', snap.data());
+      updateCloudSyncStatus({ error: '' });
+      document.dispatchEvent(new CustomEvent('crm:cloud-sync-applied'));
+      return true;
+    } catch (error) {
+      recordFirebaseError(error);
+      throw error;
+    }
+  };
   async function writeFirebaseKey(key) {
     if (!firebaseReady || applyingRemote || !DATA_KEY_SET.has(key)) return;
     const raw = localStorage.getItem(key);
@@ -13401,13 +14035,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
   async function initializeFirebase(currentToken) {
     if (!firebaseConfigured()) return false;
-    const api = await importFirebase();
-    const firebaseConfig = cleanObject(config.firebase);
-    const appName = `crm-${firebaseConfig.projectId || 'project'}-${workspaceId()}`.replace(/[^a-z0-9-]/gi, '-');
-    const app = api.getApps().find(item => item.name === appName) || api.initializeApp(firebaseConfig, appName);
-    try { await api.signInAnonymously(api.getAuth(app)); } catch (error) {}
-    db = api.getFirestore(app);
-    firebaseReady = true;
+    const api = await ensureFirebaseConnection();
     for (const key of DATA_KEYS) {
       if (currentToken !== initToken) return false;
       const ref = api.doc(db, 'crmWorkspaces', workspaceId(), 'data', key);
@@ -13420,6 +14048,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
       firebaseUnsubscribes.push(unsubscribe);
     }
     setStatus(githubConfigured() ? 'Firebase и GitHub подключены.' : 'Firebase подключен.');
+    updateCloudSyncStatus({ error: '' });
     return true;
   }
   function scheduleFirebasePush(key) {
@@ -13427,7 +14056,10 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     clearTimeout(firebasePushTimers.get(key));
     const timer = setTimeout(() => {
       firebasePushTimers.delete(key);
-      writeFirebaseKey(key).catch(() => setStatus('Firebase недоступен.'));
+      writeFirebaseKey(key).catch(error => {
+        recordFirebaseError(error);
+        setStatus('Firebase недоступен.');
+      });
     }, 450);
     firebasePushTimers.set(key, timer);
   }
@@ -13512,6 +14144,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
         await initializeFirebase(currentToken);
         await pushFirebaseAll();
       } catch (error) {
+        recordFirebaseError(error);
         setStatus('Firebase недоступен.');
       }
     }
@@ -13540,6 +14173,294 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   document.getElementById('settingsBtn')?.addEventListener('click', () => setTimeout(fillCloudForm, 0));
   fillCloudForm();
   await initializeCloudSync();
+})();
+</script>
+
+<script id="release-menu-order-open-fallback">
+(function(){
+  const pageMap = {
+    clientsBtn: 'clientsModalOverlay',
+    inventoryBtn: 'inventoryModalOverlay',
+    servicesBtn: 'servicesModalOverlay',
+    tasksBtn: 'tasksModalOverlay',
+    financeBtn: 'financeModalOverlay',
+    reportsBtn: 'reportsModalOverlay',
+    suppliersBtn: 'suppliersModalOverlay',
+    activityBtn: 'activityModalOverlay',
+    settingsBtn: 'settingsModalOverlay'
+  };
+  const menuSelector = '#ordersBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn';
+  const orderFields = ['orderNumber','orderStatus','orderType','deadlineAt','clientName','clientPhone','clientSource','deviceType','deviceModel','masterName','warrantyDays','warrantyUntil','totalCost','partsCost','paidAmount','discountAmount','paymentMethod','problemDescription','completedWorks','masterNotes','taskNote'];
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+  function allWorkspaceOverlays() {
+    return Object.values(pageMap).map(byId).filter(Boolean);
+  }
+  function ensurePageHost() {
+    let host = byId('workspacePageHost');
+    if (host) return host;
+    const page = document.querySelector('.app-layout .page');
+    if (!page) return null;
+    host = document.createElement('section');
+    host.id = 'workspacePageHost';
+    host.className = 'workspace-page-host container';
+    page.appendChild(host);
+    return host;
+  }
+  function setActiveMenu(buttonId) {
+    document.querySelectorAll('.sidebar-nav .btn').forEach(button => {
+      const active = button.id === buttonId;
+      button.classList.toggle('active', active);
+      if (active) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    });
+  }
+  function closeWorkspacePages() {
+    allWorkspaceOverlays().forEach(overlay => overlay.classList.remove('open'));
+    document.body.classList.remove('workspace-page-open');
+    byId('appShell')?.classList.remove('workspace-page-mode');
+    setActiveMenu('ordersBtn');
+  }
+  function safeRun(name, callback) {
+    try {
+      if (typeof callback === 'function') callback();
+    } catch (error) {
+      console.warn('CRM page prepare error:', name, error);
+    }
+  }
+  function prepareWorkspacePage(buttonId) {
+    if (buttonId === 'clientsBtn') {
+      safeRun('renderClients', () => {
+        if (typeof clientsCurrentPage !== 'undefined') clientsCurrentPage = 1;
+        if (typeof renderClients === 'function') renderClients();
+      });
+      return;
+    }
+    if (buttonId === 'inventoryBtn') {
+      safeRun('renderInventory', () => {
+        if (typeof inventoryCurrentPage !== 'undefined') inventoryCurrentPage = 1;
+        if (typeof setInventoryForm === 'function') setInventoryForm();
+        if (typeof renderInventory === 'function') renderInventory();
+      });
+      return;
+    }
+    if (buttonId === 'servicesBtn') {
+      safeRun('renderServices', () => {
+        if (typeof servicesCurrentPage !== 'undefined') servicesCurrentPage = 1;
+        if (typeof setServiceForm === 'function') setServiceForm();
+        if (typeof renderServices === 'function') renderServices();
+      });
+      return;
+    }
+    if (buttonId === 'tasksBtn') {
+      safeRun('renderTasks', () => {
+        if (typeof setTaskForm === 'function') setTaskForm();
+        if (typeof renderTasks === 'function') renderTasks();
+      });
+      return;
+    }
+    if (buttonId === 'financeBtn') {
+      safeRun('renderFinance', () => {
+        if (typeof financeCurrentPage !== 'undefined') financeCurrentPage = 1;
+        const date = byId('expenseDateInput');
+        if (date && typeof toDateInput === 'function') date.value = toDateInput(new Date().toISOString());
+        if (typeof setExpenseForm === 'function') setExpenseForm();
+        if (typeof renderFinance === 'function') renderFinance();
+      });
+      return;
+    }
+    if (buttonId === 'reportsBtn') {
+      safeRun('renderReports', () => {
+        if (typeof updateStats === 'function' && typeof getOrders === 'function') updateStats(getOrders());
+      });
+      return;
+    }
+    if (buttonId === 'suppliersBtn') {
+      safeRun('renderSuppliers', () => {
+        if (typeof setSupplierForm === 'function') setSupplierForm();
+        if (typeof renderSuppliers === 'function') renderSuppliers();
+      });
+      return;
+    }
+    if (buttonId === 'activityBtn') {
+      safeRun('renderActivity', () => {
+        if (typeof activityCurrentPage !== 'undefined') activityCurrentPage = 1;
+        if (typeof renderActivity === 'function') renderActivity();
+      });
+      return;
+    }
+    if (buttonId === 'settingsBtn') {
+      safeRun('renderSettings', () => {
+        if (typeof fillSettingsForm === 'function') fillSettingsForm();
+        if (typeof openSettingsSection === 'function') openSettingsSection('company');
+        if (typeof renderSettingsServicesList === 'function') renderSettingsServicesList();
+        if (typeof renderMasterProfilesList === 'function') renderMasterProfilesList();
+        if (typeof fillCloudForm === 'function') fillCloudForm();
+      });
+    }
+  }
+  function openWorkspacePage(buttonId) {
+    if (buttonId === 'ordersBtn') {
+      closeWorkspacePages();
+      return;
+    }
+    const overlay = byId(pageMap[buttonId]);
+    if (!overlay) return;
+    const host = ensurePageHost();
+    if (!host) return;
+    allWorkspaceOverlays().forEach(item => {
+      item.classList.add('workspace-page-overlay');
+      if (item !== overlay) item.classList.remove('open');
+    });
+    if (overlay.parentElement !== host) host.appendChild(overlay);
+    prepareWorkspacePage(buttonId);
+    overlay.classList.add('workspace-page-overlay', 'open');
+    byId('appShell')?.classList.add('workspace-page-mode');
+    document.body.classList.add('workspace-page-open');
+    setActiveMenu(buttonId);
+  }
+  function readOrders() {
+    try {
+      const data = JSON.parse(localStorage.getItem('one_service_orders') || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      return [];
+    }
+  }
+  function findOrder(id) {
+    return readOrders().find(order => String(order.id) === String(id));
+  }
+  function rowOrder(row) {
+    const direct = row?.querySelector('[data-order-direct-action][data-id]');
+    const status = row?.querySelector('select[data-action="change-status"][data-id]');
+    return findOrder(direct?.dataset.id || status?.dataset.id || '');
+  }
+  function fieldValue(order, id) {
+    const aliases = {
+      orderStatus: 'status'
+    };
+    return order?.[id] ?? order?.[aliases[id]] ?? '';
+  }
+  function openOrderModal(order) {
+    const overlay = byId('orderModalOverlay');
+    const form = byId('orderForm');
+    if (!overlay) return;
+    if (!order && form) form.reset();
+    if (order) {
+      orderFields.forEach(id => {
+        const node = byId(id);
+        if (node) node.value = fieldValue(order, id);
+      });
+    }
+    const title = byId('orderModalTitle');
+    if (title) title.textContent = order ? 'Редактирование заказа' : 'Новый заказ';
+    overlay.classList.add('open');
+  }
+  function ensureActionsModal() {
+    let overlay = byId('orderActionsModalOverlay');
+    if (overlay) return overlay;
+    overlay = document.createElement('div');
+    overlay.className = 'modal-overlay order-actions-modal';
+    overlay.id = 'orderActionsModalOverlay';
+    overlay.innerHTML = '<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">x</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">-</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">-</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-danger" type="button" data-order-action="delete">Удалить заказ</button></div></div>';
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+  function openOrderActions(order) {
+    if (!order) return;
+    const overlay = ensureActionsModal();
+    overlay.dataset.orderId = order.id || '';
+    const number = order.orderNumber || '';
+    const client = `${order.clientName || '-'}${order.clientPhone ? ' - ' + order.clientPhone : ''}`;
+    const device = `${order.deviceType || '-'}${order.deviceModel ? ' - ' + order.deviceModel : ''}`;
+    byId('orderActionsTitle').textContent = `Действия с заказом № ${number}`;
+    byId('orderActionsClient').textContent = client;
+    byId('orderActionsDevice').textContent = device;
+    byId('orderActionsStatusBadge').textContent = order.status || 'Статус';
+    overlay.classList.add('open');
+  }
+  function closeOrderActions() {
+    byId('orderActionsModalOverlay')?.classList.remove('open');
+  }
+  function deleteOrder(order) {
+    if (!order || !window.confirm(`Удалить заказ № ${order.orderNumber || ''}?`)) return;
+    localStorage.setItem('one_service_orders', JSON.stringify(readOrders().filter(item => item.id !== order.id)));
+    closeOrderActions();
+    setTimeout(() => location.reload(), 80);
+  }
+
+  document.addEventListener('click', function(event) {
+    const actionButton = event.target.closest('[data-menu-action]');
+    const targetId = actionButton?.dataset.menuAction || event.target.closest(menuSelector)?.id || '';
+    if (!targetId || targetId === 'sidebarToggleBtn') return;
+    if (targetId === 'ordersBtn' || pageMap[targetId]) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      openWorkspacePage(targetId);
+    }
+  }, true);
+
+  document.addEventListener('click', function(event) {
+    const closeButton = event.target.closest('.workspace-page-overlay .modal-close');
+    if (closeButton) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closeButton.closest('.workspace-page-overlay')?.classList.remove('open');
+      if (!allWorkspaceOverlays().some(overlay => overlay.classList.contains('open'))) {
+        document.body.classList.remove('workspace-page-open');
+        setActiveMenu('ordersBtn');
+      }
+    }
+  }, true);
+
+  document.addEventListener('click', function(event) {
+    const pageOverlay = event.target.closest('.workspace-page-host .workspace-page-overlay');
+    if (pageOverlay && event.target === pageOverlay) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
+
+  document.addEventListener('click', function(event) {
+    const createButton = event.target.closest('#createOrderBtn,#floatingCreateBtn');
+    if (!createButton) return;
+    setTimeout(() => {
+      if (!byId('orderModalOverlay')?.classList.contains('open')) openOrderModal(null);
+    }, 80);
+  }, true);
+
+  document.addEventListener('click', function(event) {
+    const directOpen = event.target.closest('[data-order-direct-action="open"]');
+    const row = directOpen ? directOpen.closest('tr') : event.target.closest('#ordersTableBody tr');
+    if (!row || event.target.closest('select,input,textarea,label')) return;
+    if (!directOpen && event.target.closest('button,a')) return;
+    const order = rowOrder(row);
+    if (!order) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    openOrderActions(order);
+  }, true);
+
+  document.addEventListener('click', function(event) {
+    const overlay = byId('orderActionsModalOverlay');
+    if (!overlay?.classList.contains('open')) return;
+    if (event.target === overlay || event.target.closest('#closeOrderActionsModal')) {
+      closeOrderActions();
+      return;
+    }
+    const action = event.target.closest('[data-order-action]')?.dataset.orderAction;
+    if (!action) return;
+    const order = findOrder(overlay.dataset.orderId);
+    if (action === 'edit') openOrderModal(order);
+    if (action === 'delete') deleteOrder(order);
+    if (action === 'history') {
+      const lines = (order?.statusHistory || []).map(item => `${item.at || ''} ${item.status || ''} ${item.note || ''}`).join('\n');
+      window.alert(lines || 'История пока пустая.');
+    }
+    closeOrderActions();
+  }, true);
 })();
 </script>
 
