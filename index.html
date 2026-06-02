@@ -1186,7 +1186,6 @@
       }
     }
 
-    /* HelloClient-like compact business UI */
     :root{
       --bg:#f6f7fb;
       --surface:#fff;
@@ -1748,7 +1747,6 @@
   max-width:100%;
 }
 
-/* Информационный блок внутри окна заказа */
 .order-modal-summary{
   display:grid !important;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -1783,7 +1781,6 @@
   white-space:nowrap;
 }
 
-/* Окно действий: статус не уходит за крестик */
 .order-actions-head{
   display:grid !important;
   grid-template-columns:minmax(0,1fr);
@@ -1800,7 +1797,6 @@
   min-height:28px;
 }
 
-/* Окно действий: расширенная информация о заказе */
 .order-actions-meta{
   display:grid !important;
   grid-template-columns:repeat(4,minmax(0,1fr));
@@ -7291,7 +7287,7 @@ body[data-ui-theme="dark"] .client-order-row em{
               <p class="section-note">Реквизиты попадают в акты, гарантийные талоны, наклейки и сообщения клиентам.</p>
               <div class="form-grid">
                 <label class="field-label">Название сервиса
-                  <input type="text" id="settingsServiceNameInput" placeholder="1ONE service">
+                  <input type="text" id="settingsServiceNameInput" placeholder="ONE service">
                 </label>
                 <label class="field-label">Телефон сервиса
                   <input type="tel" id="settingsServicePhoneInput" placeholder="+380...">
@@ -7775,7 +7771,7 @@ body[data-ui-theme="dark"] .client-order-row em{
     const SUPPLIERS_KEY = 'one_service_suppliers';
     const CLIENTS_KEY = 'one_service_clients';
     const ACTIVITY_KEY = 'one_service_activity';
-    const MAX_MASTERS = 50;
+    const MAX_MASTERS = 500;
 
     const STATUS_CONFIG = {
       new: { label: 'Новый', className: 'status-new' },
@@ -7799,16 +7795,16 @@ body[data-ui-theme="dark"] .client-order-row em{
     };
 
     const DEFAULT_SETTINGS = {
-      serviceName: '1ONE service',
-      servicePhone: '+380509906265',
+      serviceName: 'ONE service',
+      servicePhone: '+995 555 53 64 14',
       servicePhone2: '',
       servicePhone3: '',
-      serviceAddress: 'Харьков, ул. Харьковских Дивизий, 14/2',
+      serviceAddress: 'Батуми',
       serviceAddress2: '',
       companyEmail: '',
       companyLegalName: '',
       companyTaxId: '',
-      currency: 'UAH',
+      currency: 'Gel',
       interfaceLanguage: 'ru',
       timezone: 'Asia/Tbilisi',
       dateFormat: 'dd.mm.yyyy',
@@ -7820,7 +7816,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       defaultSalaryPercent: '20',
       orderPrefix: '',
       orderStartNumber: '1000',
-      masters: ['Алексей', 'Дмитрий'],
+      masters: ['Алексей', 'Иван'],
       orderTypes: [
         { name: 'Платный ремонт', initialStatus: 'new', warrantyDays: '30', deadlineDays: '3' },
         { name: 'Гарантийный ремонт', initialStatus: 'diagnostics', warrantyDays: '0', deadlineDays: '5' },
@@ -13597,7 +13593,7 @@ document.addEventListener('DOMContentLoaded', function(){
     return `
       <div class="a4-head">
         <div>
-          <div class="a4-brand">${safeText(settings.serviceName || '1ONE service')}</div>
+          <div class="a4-brand">${safeText(settings.serviceName || 'ONE service')}</div>
           <div class="a4-sub">
             ${safeText(settings.printBrandText || 'Сервисный центр')} / სერვის ცენტრი<br>
             Тел. / ტელ.: ${safeText(settings.servicePhone || '')}<br>
@@ -13923,7 +13919,7 @@ document.addEventListener('DOMContentLoaded', function(){
     return `
       <header class="ga4-head">
         <div>
-          <div class="ga4-brand">${esc(settings.serviceName || '1ONE service')}</div>
+          <div class="ga4-brand">${esc(settings.serviceName || 'ONE service')}</div>
           <div class="ga4-sub">
             ${esc(settings.printBrandText || 'Сервисный центр')} / სერვის ცენტრი<br>
             Исполнитель / შემსრულებელი: ${esc(settings.serviceName || '1ONE service')}<br>
