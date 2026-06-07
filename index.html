@@ -7768,8 +7768,10 @@ body[data-ui-theme="dark"] .client-order-row em{
           <input type="text" id="clientName" placeholder="ФИО клиента" required>
           <input type="tel" id="clientPhone" placeholder="Номер телефона" required>
 
-          <input type="text" id="deviceType" placeholder="Название техники" required>
+          <input type="text" id="deviceType" placeholder="Тип техники" required>
+          <input type="text" id="deviceName" placeholder="Название техники">
           <input type="text" id="deviceModel" placeholder="Модель техники">
+          <input type="text" id="deviceKit" placeholder="Комплект">
 
           <select id="masterName">
             <option value="">Мастер не выбран</option>
@@ -8533,7 +8535,9 @@ body[data-ui-theme="dark"] .client-order-row em{
       clientName: document.getElementById('clientName'),
       clientPhone: document.getElementById('clientPhone'),
       deviceType: document.getElementById('deviceType'),
+      deviceName: document.getElementById('deviceName'),
       deviceModel: document.getElementById('deviceModel'),
+      deviceKit: document.getElementById('deviceKit'),
       masterName: document.getElementById('masterName'),
       warrantyDays: document.getElementById('warrantyDays'),
       totalCost: document.getElementById('totalCost'),
@@ -8895,7 +8899,9 @@ body[data-ui-theme="dark"] .client-order-row em{
         clientPhone: String(item.clientPhone || ''),
         clientSource: String(item.clientSource || ''),
         deviceType: String(item.deviceType || ''),
+        deviceName: String(item.deviceName || item.deviceBrand || item.brand || ''),
         deviceModel: String(item.deviceModel || ''),
+        deviceKit: String(item.deviceKit || item.equipment || item.kit || ''),
         masterName: String(item.masterName || ''),
         totalCost: String(item.totalCost ?? ''),
         partsCost: String(item.partsCost ?? ''),
@@ -9264,6 +9270,7 @@ body[data-ui-theme="dark"] .client-order-row em{
           item.orderNumber,
           item.orderType,
           item.deviceType,
+          item.deviceName,
           item.deviceModel,
           item.clientName,
           item.clientPhone,
@@ -9371,9 +9378,9 @@ body[data-ui-theme="dark"] .client-order-row em{
           </td>
           <td data-label="Техника" class="order-device-cell">
             <div class="order-list-primary">${escapeHtml(item.deviceType || '—')}</div>
-            <div class="order-list-secondary">${escapeHtml(item.deviceModel || item.orderType || '—')}</div>
+            <div class="order-list-secondary">${escapeHtml([item.deviceName, item.deviceModel].filter(Boolean).join(' · ') || item.orderType || '—')}</div>
           </td>
-          <td data-label="Модель">${escapeHtml(item.deviceModel || '—')}</td>
+          <td data-label="Модель">${escapeHtml([item.deviceName, item.deviceModel].filter(Boolean).join(' · ') || '—')}</td>
           <td data-label="Клиент" class="order-client-cell">
             <div class="order-list-primary">${escapeHtml(item.clientName || '—')}</div>
             <div class="order-list-secondary">
@@ -9538,7 +9545,9 @@ body[data-ui-theme="dark"] .client-order-row em{
       formFields.clientPhone.value = order?.clientPhone || '';
       formFields.clientSource.value = order?.clientSource || '';
       formFields.deviceType.value = order?.deviceType || '';
+      if (formFields.deviceName) formFields.deviceName.value = order?.deviceName || '';
       formFields.deviceModel.value = order?.deviceModel || '';
+      if (formFields.deviceKit) formFields.deviceKit.value = order?.deviceKit || '';
       formFields.masterName.value = order?.masterName || '';
       formFields.warrantyDays.value = order?.warrantyDays || settings.defaultWarrantyDays || '';
       formFields.totalCost.value = order?.totalCost || '';
@@ -9583,7 +9592,9 @@ body[data-ui-theme="dark"] .client-order-row em{
         clientPhone: formFields.clientPhone.value.trim(),
         clientSource: formFields.clientSource.value.trim(),
         deviceType: formFields.deviceType.value.trim(),
+        deviceName: formFields.deviceName?.value.trim() || '',
         deviceModel: formFields.deviceModel.value.trim(),
+        deviceKit: formFields.deviceKit?.value.trim() || '',
         masterName: formFields.masterName.value,
         warrantyDays,
         warrantyUntil,
@@ -10060,7 +10071,7 @@ body[data-ui-theme="dark"] .client-order-row em{
             ${recentOrders.map(order => `
               <div class="client-order-row">
                 <b>№ ${escapeHtml(order.orderNumber)}</b>
-                <span>${escapeHtml(order.deviceType)} ${escapeHtml(order.deviceModel)} · ${escapeHtml(getStatusLabel(order.status))}</span>
+                <span>${escapeHtml([order.deviceType, order.deviceName, order.deviceModel].filter(Boolean).join(' '))} · ${escapeHtml(getStatusLabel(order.status))}</span>
                 <em>${escapeHtml(formatDateOnly(order.createdAt))}</em>
               </div>
             `).join('') || '<div class="section-note">Заказов пока нет.</div>'}
@@ -10206,7 +10217,7 @@ body[data-ui-theme="dark"] .client-order-row em{
         serviceName: settings.serviceName || '', servicePhone: servicePhones || settings.servicePhone || '', serviceAddress: serviceAddresses || settings.serviceAddress || '',
         legalName: settings.companyLegalName || '', taxId: settings.companyTaxId || '', email: settings.companyEmail || '',
         order: order.orderNumber || '', date: formatDate(order.createdAt || new Date().toISOString()), client: order.clientName || '',
-        clientPhone: order.clientPhone || '', device: order.deviceType || '', model: order.deviceModel || '', master: order.masterName || '',
+        clientPhone: order.clientPhone || '', device: order.deviceType || '', deviceName: order.deviceName || '', model: order.deviceModel || '', master: order.masterName || '',
         status: getStatusLabel(order.status || ''), problem: order.problemDescription || '', works: order.completedWorks || order.masterNotes || '',
         cost: money(order.totalCost), paid: money(order.paidAmount), debt: money(getDebt(order)), warrantyDays: order.warrantyDays || '',
         warrantyUntil: formatDateOnly(order.warrantyUntil), services: summarizeServices(order.servicesUsed), parts: summarizeParts(order.partsUsed)
@@ -10357,7 +10368,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       };
       applyRule(typeRule); applyRule(statusRule); settings._resolvedTypeRule = typeRule?.key || ''; settings._resolvedStatusRule = statusRule?.key || ''; return settings;
     }
-    function getPreviewOrder() { return findOrderById(editingId) || getOrders()[0] || { id:'preview-order', orderNumber:'1001', status:'in_progress', orderType:'Платный ремонт', clientName:'Иван Петров', clientPhone:'+380501234567', deviceType:'Телефон', deviceModel:'iPhone 13', masterName:'Алексей', totalCost:'4500', partsCost:'1800', paidAmount:'2000', discountAmount:'0', completedWorks:'Замена дисплея, чистка, тестирование', problemDescription:'Разбит экран и не работает сенсор', deadlineAt:new Date(Date.now()+3*86400000).toISOString(), warrantyDays:'30', warrantyUntil:new Date(Date.now()+30*86400000).toISOString(), servicesUsed:[{name:'Замена дисплея', price:3000, qty:1}], partsUsed:[{name:'Дисплей iPhone 13', cost:1800, qty:1}], createdAt:new Date().toISOString() }; }
+    function getPreviewOrder() { return findOrderById(editingId) || getOrders()[0] || { id:'preview-order', orderNumber:'1001', status:'in_progress', orderType:'Платный ремонт', clientName:'Иван Петров', clientPhone:'+380501234567', deviceType:'Телефон', deviceName:'Apple', deviceModel:'iPhone 13', masterName:'Алексей', totalCost:'4500', partsCost:'1800', paidAmount:'2000', discountAmount:'0', completedWorks:'Замена дисплея, чистка, тестирование', problemDescription:'Разбит экран и не работает сенсор', deadlineAt:new Date(Date.now()+3*86400000).toISOString(), warrantyDays:'30', warrantyUntil:new Date(Date.now()+30*86400000).toISOString(), servicesUsed:[{name:'Замена дисплея', price:3000, qty:1}], partsUsed:[{name:'Дисплей iPhone 13', cost:1800, qty:1}], createdAt:new Date().toISOString() }; }
     function renderDocVariablesBar() { const bar = document.getElementById('docsVariablesBar'); if (bar) bar.innerHTML = DOC_VARIABLES.map(token => `<button class="docs-token" type="button" data-doc-token="${token}">${token}</button>`).join(''); }
     function insertVariableToActiveField(token) { const active = document.activeElement; if (!active || !['INPUT','TEXTAREA'].includes(active.tagName)) return; const start = active.selectionStart ?? active.value.length; const end = active.selectionEnd ?? active.value.length; active.value = `${active.value.slice(0,start)}${token}${active.value.slice(end)}`; active.focus(); active.selectionStart = active.selectionEnd = start + token.length; active.dispatchEvent(new Event('input',{bubbles:true})); }
     function renderDocumentPreview() { const stage = document.getElementById('docsPreviewStage'); if (!stage) return; const active = document.querySelector('.docs-preview-tab.active')?.dataset.docPreview || 'acceptance'; const order = getPreviewOrder(); const map = { acceptance: renderAcceptanceAct(order, true), completed: renderCompletedAct(order, true), warranty: renderWarranty(order, true), label: renderLabelHtml(order, true) }; stage.innerHTML = `<div class="docs-page ${active === 'label' ? 'label-page' : ''}">${map[active] || ''}</div>`; }
@@ -10476,7 +10487,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       const orderDeadlines = orders
         .filter(order => order.deadlineAt && !isClosedStatus(order.status))
         .map(order => ({
-          title: `Заказ № ${order.orderNumber}: ${order.deviceType} ${order.deviceModel}`.trim(),
+          title: `Заказ № ${order.orderNumber}: ${[order.deviceType, order.deviceName, order.deviceModel].filter(Boolean).join(' ')}`.trim(),
           dueDate: order.deadlineAt,
           responsible: order.masterName,
           orderId: order.id,
@@ -10760,7 +10771,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       return `<div class="head"><div><div class="brand">${escapeHtml(settings.serviceName)}</div><div class="sub">${escapeHtml(settings.printBrandText || 'Сервисный центр')}<br>Тел.: ${escapeHtml(settings.servicePhone)}<br>Адрес: ${escapeHtml(settings.serviceAddress)}${showLegal && legalRows ? `<br>${legalRows}` : ''}</div>${headerNote}${renderHeaderStamp(settings, order)}</div><div class="sub" style="text-align:right">Документ № ${escapeHtml(order.orderNumber)}<br>Дата: ${escapeHtml(formatDate(order.createdAt))}</div></div><h1>${escapeHtml(docTitle)}</h1>`;
     }
     function renderClientBlock(order) { return `<div class="field"><div class="label">ФИО клиента</div><div class="value">${escapeHtml(order.clientName)}</div></div><div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>`; }
-    function renderDeviceBlock(order) { return `<div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div><div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>`; }
+    function renderDeviceBlock(order) { return `<div class="field"><div class="label">Тип техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div><div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceName || '—')}</div></div><div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>`; }
     function renderSignatures(settings, reverse = false) { if (settings.printShowSignatures === 'no') return ''; const first = reverse ? escapeHtml(settings.signatureMasterLabel || 'Подпись мастера') : escapeHtml(settings.signatureClientLabel || 'Подпись клиента'); const second = reverse ? escapeHtml(settings.signatureClientLabel || 'Подпись клиента') : escapeHtml(settings.signatureMasterLabel || 'Подпись мастера'); return `<div class="signatures"><div class="sign-line">${first}</div><div class="sign-line">${second}</div></div>`; }
 
     function renderAcceptanceAct(order, previewMode = false) {
@@ -10785,10 +10796,10 @@ body[data-ui-theme="dark"] .client-order-row em{
     }
     function renderLabelHtml(order, previewMode = false) {
       const settings = resolveDocumentSettings(order, previewMode);
-      const qrText = `${settings.serviceName}; заказ ${order.orderNumber}; ${order.clientName}; ${order.clientPhone}; ${order.deviceType} ${order.deviceModel}`;
+      const qrText = `${settings.serviceName}; заказ ${order.orderNumber}; ${order.clientName}; ${order.clientPhone}; ${[order.deviceType, order.deviceName, order.deviceModel].filter(Boolean).join(' ')}`;
       const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(qrText)}`;
       const qrHtml = settings.labelShowQr === 'no' ? '' : `<img class="qr" src="${escapeHtml(qrSrc)}" alt="QR">`;
-      return `<div class="label-card"><div><div class="brand">${escapeHtml(settings.labelTitle || DEFAULT_SETTINGS.labelTitle)}</div><h1 style="text-align:left;margin:8px 0;">№ ${escapeHtml(order.orderNumber)}</h1><div class="small">${escapeHtml(order.clientName)}<br>${escapeHtml(order.clientPhone)}<br>${escapeHtml(order.deviceType)} ${escapeHtml(order.deviceModel)}<br>${templateToHtml(settings.labelFooter || DEFAULT_SETTINGS.labelFooter, order)}</div></div>${qrHtml}</div>`;
+      return `<div class="label-card"><div><div class="brand">${escapeHtml(settings.labelTitle || DEFAULT_SETTINGS.labelTitle)}</div><h1 style="text-align:left;margin:8px 0;">№ ${escapeHtml(order.orderNumber)}</h1><div class="small">${escapeHtml(order.clientName)}<br>${escapeHtml(order.clientPhone)}<br>${escapeHtml([order.deviceType, order.deviceName, order.deviceModel].filter(Boolean).join(' '))}<br>${templateToHtml(settings.labelFooter || DEFAULT_SETTINGS.labelFooter, order)}</div></div>${qrHtml}</div>`;
     }
     function renderLabel(order, previewMode = false) { return renderLabelHtml(order, previewMode); }
     function printAcceptanceAct(order) { const settings = resolveDocumentSettings(order, false); printDocument(`Акт приёма № ${order.orderNumber}`, renderAcceptanceAct(order), '', settings); }
@@ -10854,7 +10865,7 @@ body[data-ui-theme="dark"] .client-order-row em{
 
     function exportCsv() {
       const rows = [
-        ['Номер', 'Тип', 'Статус', 'Клиент', 'Телефон', 'Техника', 'Модель', 'Мастер', 'Сумма', 'Оплачено', 'Долг', 'Срок', 'Дата']
+        ['Номер', 'Тип', 'Статус', 'Клиент', 'Телефон', 'Техника', 'Название техники', 'Модель', 'Мастер', 'Сумма', 'Оплачено', 'Долг', 'Срок', 'Дата']
       ];
       getOrders().forEach(order => {
         rows.push([
@@ -10864,6 +10875,7 @@ body[data-ui-theme="dark"] .client-order-row em{
           order.clientName,
           order.clientPhone,
           order.deviceType,
+          order.deviceName,
           order.deviceModel,
           order.masterName,
           parseAmount(order.totalCost),
@@ -11610,7 +11622,9 @@ body[data-ui-theme="dark"] .client-order-row em{
     clientPhone: 'Телефон',
     clientSource: 'Источник клиента',
     deviceType: 'Техника',
+    deviceName: 'Название техники',
     deviceModel: 'Модель',
+    deviceKit: 'Комплект',
     masterName: 'Мастер',
     warrantyDays: 'Гарантия, дней',
     warrantyUntil: 'Гарантия до',
@@ -11628,7 +11642,7 @@ body[data-ui-theme="dark"] .client-order-row em{
   const sections = [
     { key: 'basic', title: 'Заказ', fields: ['orderNumber', 'orderStatus', 'orderType', 'deadlineAt'] },
     { key: 'client', title: 'Клиент', fields: ['clientName', 'clientPhone', 'clientSource'] },
-    { key: 'device', title: 'Устройство', fields: ['deviceType', 'deviceModel', 'masterName', 'warrantyDays', 'warrantyUntil'] },
+    { key: 'device', title: 'Устройство', fields: ['deviceType', 'deviceName', 'deviceModel', 'deviceKit', 'masterName', 'warrantyDays', 'warrantyUntil'] },
     { key: 'finance', title: 'Финансы', fields: ['totalCost', 'partsCost', 'paidAmount', 'discountAmount', 'paymentMethod'] },
     { key: 'notes', title: 'Описание', fields: ['problemDescription', 'completedWorks', 'masterNotes', 'taskNote'] }
   ];
@@ -11871,7 +11885,7 @@ document.addEventListener('DOMContentLoaded', function(){
   if (menuBtn && toolsMenu) {menuBtn.addEventListener('click', function(event){event.stopPropagation();toolsMenu.classList.toggle('open');});toolsMenu.addEventListener('click', function(event){const btn=event.target.closest('[data-menu-action]');if(!btn)return;document.getElementById(btn.dataset.menuAction)?.click();toolsMenu.classList.remove('open');});document.addEventListener('click', function(event){if(!toolsMenu.classList.contains('open'))return;if(toolsMenu.contains(event.target)||menuBtn.contains(event.target))return;toolsMenu.classList.remove('open');});}
   if (!document.getElementById('orderActionsModalOverlay')) {const modal=document.createElement('div');modal.className='modal-overlay order-actions-modal';modal.id='orderActionsModalOverlay';modal.innerHTML='<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">×</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для выбранного заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">—</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">—</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-secondary" type="button" data-order-action="acceptance">Печать акта приема</button><button class="btn btn-secondary" type="button" data-order-action="completed">Печать акта выполненных работ</button><button class="btn btn-secondary" type="button" data-order-action="warranty">Печать гарантии</button><button class="btn btn-secondary" type="button" data-order-action="label">Печать наклейки / QR</button><button class="btn btn-secondary" type="button" data-order-action="whatsapp">WhatsApp клиенту</button><button class="btn btn-secondary" type="button" data-order-action="sms">SMS клиенту</button><button class="btn btn-secondary" type="button" data-order-action="telegram">Telegram текст</button><button class="btn btn-danger" type="button" data-order-action="delete">Удалить заказ</button></div></div>';document.body.appendChild(modal);}
   const overlay=document.getElementById('orderActionsModalOverlay'); const titleEl=document.getElementById('orderActionsTitle'); const clientEl=document.getElementById('orderActionsClient'); const deviceEl=document.getElementById('orderActionsDevice'); const statusEl=document.getElementById('orderActionsStatusBadge'); let activeOrderId=null;
-  function openOrderActions(order){if(!order)return;activeOrderId=order.id;titleEl.textContent='Действия с заказом № '+(order.orderNumber||'');clientEl.textContent=(order.clientName||'—')+(order.clientPhone?' • '+order.clientPhone:'');deviceEl.textContent=(order.deviceType||'—')+(order.deviceModel?' • '+order.deviceModel:'');statusEl.textContent=typeof getStatusLabel==='function'?getStatusLabel(order.status):(order.status||'Статус');overlay.classList.add('open');}
+  function openOrderActions(order){if(!order)return;activeOrderId=order.id;titleEl.textContent='Действия с заказом № '+(order.orderNumber||'');clientEl.textContent=(order.clientName||'—')+(order.clientPhone?' • '+order.clientPhone:'');deviceEl.textContent=[order.deviceType,order.deviceName,order.deviceModel].filter(Boolean).join(' • ')||'—';statusEl.textContent=typeof getStatusLabel==='function'?getStatusLabel(order.status):(order.status||'Статус');overlay.classList.add('open');}
   function closeOrderActions(){overlay.classList.remove('open');activeOrderId=null;}
   function currentOrder(){return typeof findOrderById==='function'?findOrderById(activeOrderId):null;}
   function handleOrderAction(action){const order=currentOrder();if(!order)return;closeOrderActions();if(action==='edit'&&typeof openModal==='function')openModal(order);else if(action==='history'&&typeof renderHistory==='function')renderHistory(order);else if(action==='acceptance'&&typeof printAcceptanceAct==='function')printAcceptanceAct(order);else if(action==='completed'&&typeof printCompletedAct==='function')printCompletedAct(order);else if(action==='warranty'&&typeof printWarranty==='function')printWarranty(order);else if(action==='label'&&typeof printLabel==='function')printLabel(order);else if(['whatsapp','sms','telegram'].includes(action)&&typeof openNotification==='function')openNotification(order,action);else if(action==='delete'){if(!window.confirm('Удалить заказ № '+(order.orderNumber||'')+'?'))return;const orders=typeof getOrders==='function'?getOrders().filter(item=>item.id!==order.id):[];const saved=typeof saveOrders==='function'?saveOrders(orders):false;if(saved!==false){if(typeof logActivity==='function')logActivity('Заказ','Удален заказ № '+(order.orderNumber||''));if(typeof renderAll==='function')renderAll();else if(typeof renderOrders==='function')renderOrders();}}}
@@ -11987,6 +12001,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function updateOrderModalSummary(){
     const deviceType = el('deviceType')?.value || '';
+    const deviceName = el('deviceName')?.value || '';
     const deviceModel = el('deviceModel')?.value || '';
     const masterName = el('masterName')?.value || '';
     let createdAt = '';
@@ -11998,12 +12013,12 @@ document.addEventListener('DOMContentLoaded', function(){
     } catch(error) {}
 
     setText('summaryDeviceType', deviceType);
-    setText('summaryDeviceModel', deviceModel);
+    setText('summaryDeviceModel', [deviceName, deviceModel].filter(Boolean).join(' · '));
     setText('summaryMasterName', masterName);
     setText('summaryAcceptedAt', formatSummaryDate(createdAt));
   }
 
-  ['deviceType','deviceModel','masterName'].forEach(function(id){
+  ['deviceType','deviceName','deviceModel','deviceKit','masterName'].forEach(function(id){
     document.addEventListener('input', function(event){
       if (event.target && event.target.id === id) updateOrderModalSummary();
     }, true);
@@ -12057,7 +12072,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function updateOrderModalSummary(){
     const order = getCurrentEditedOrder();
-    setText('summaryDeviceModel', el('deviceModel')?.value || order?.deviceModel || '');
+    const deviceName = el('deviceName')?.value || order?.deviceName || '';
+    const deviceModel = el('deviceModel')?.value || order?.deviceModel || '';
+    setText('summaryDeviceModel', [deviceName, deviceModel].filter(Boolean).join(' · '));
     setText('summaryMasterName', el('masterName')?.value || order?.masterName || '');
     setText('summaryAcceptedAt', formatDateSafe(order?.createdAt || order?.acceptedAt || ''));
   }
@@ -12078,7 +12095,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function updateOrderActionsInfo(order){
     if (!order) return;
     enhanceOrderActionsModal();
-    setText('orderActionsModel', order.deviceModel || '');
+    setText('orderActionsModel', [order.deviceName, order.deviceModel].filter(Boolean).join(' · ') || '');
     setText('orderActionsMaster', order.masterName || '');
     setText('orderActionsAcceptedAt', formatDateSafe(order.createdAt || order.acceptedAt || ''));
     setText('orderActionsClient', `${order.clientName || '—'}${order.clientPhone ? ' • ' + order.clientPhone : ''}`);
@@ -14255,6 +14272,7 @@ document.addEventListener('DOMContentLoaded', function(){
     `;
     const deviceFields = settings.printShowDeviceBlock === 'no' ? '' : `
       ${field('Устройство', 'მოწყობილობა', safeText(order.deviceType || '—'))}
+      ${field('Название', 'დასახელება', safeText(order.deviceName || '—'))}
       ${field('Модель', 'მოდელი', safeText(order.deviceModel || '—'))}
     `;
     return `
@@ -14294,7 +14312,7 @@ document.addEventListener('DOMContentLoaded', function(){
         ${documentHead(settings, order, 'Акт выполненных работ', 'შესრულებული სამუშაოების აქტი')}
         <section class="a4-grid">
           ${settings.printShowClientBlock === 'no' ? '' : `${field('Клиент', 'კლიენტი', safeText(order.clientName || '—'))}${field('Телефон', 'ტელეფონი', safeText(order.clientPhone || '—'))}`}
-          ${settings.printShowDeviceBlock === 'no' ? '' : `${field('Устройство', 'მოწყობილობა', safeText(order.deviceType || '—'))}${field('Модель', 'მოდელი', safeText(order.deviceModel || '—'))}`}
+          ${settings.printShowDeviceBlock === 'no' ? '' : `${field('Устройство', 'მოწყობილობა', safeText(order.deviceType || '—'))}${field('Название', 'დასახელება', safeText(order.deviceName || '—'))}${field('Модель', 'მოდელი', safeText(order.deviceModel || '—'))}`}
         </section>
         <section class="a4-stack">
           ${field('Неисправность', 'გაუმართაობა', compactText(order.problemDescription), 'a4-full a4-clamp-small')}
@@ -14324,7 +14342,7 @@ document.addEventListener('DOMContentLoaded', function(){
         ${documentHead(settings, order, 'Гарантийный талон', 'საგარანტიო ტალონი')}
         <section class="a4-grid">
           ${settings.printShowClientBlock === 'no' ? '' : `${field('Клиент', 'კლიენტი', safeText(order.clientName || '—'))}${field('Телефон', 'ტელეფონი', safeText(order.clientPhone || '—'))}`}
-          ${settings.printShowDeviceBlock === 'no' ? '' : `${field('Устройство', 'მოწყობილობა', safeText(order.deviceType || '—'))}${field('Модель', 'მოდელი', safeText(order.deviceModel || '—'))}`}
+          ${settings.printShowDeviceBlock === 'no' ? '' : `${field('Устройство', 'მოწყობილობა', safeText(order.deviceType || '—'))}${field('Название', 'დასახელება', safeText(order.deviceName || '—'))}${field('Модель', 'მოდელი', safeText(order.deviceModel || '—'))}`}
           ${field('Срок гарантии', 'გარანტიის ვადა', `${safeText(order.warrantyDays || '—')} дней / დღე`)}
           ${field('Гарантия до', 'გარანტია მოქმედებს', safeText(safeDateOnly(order.warrantyUntil)))}
         </section>
@@ -14570,7 +14588,9 @@ document.addEventListener('DOMContentLoaded', function(){
       `}
       ${settings.printShowDeviceBlock === 'no' ? '' : `
         ${field('Устройство', 'მოწყობილობა', esc(order.deviceType || '—'))}
+        ${field('Название', 'დასახელება', esc(order.deviceName || '—'))}
         ${field('Модель', 'მოდელი', esc(order.deviceModel || '—'))}
+        ${field('Комплект', 'კომპლექტი', esc(order.deviceKit || '—'))}
       `}
     `;
   }
@@ -14586,7 +14606,7 @@ document.addEventListener('DOMContentLoaded', function(){
         </section>
         <section class="ga4-stack">
           ${field('Заявленная неисправность', 'აღწერილი გაუმართაობა', txt(order.problemDescription), 'ga4-full ga4-clamp-mid')}
-          ${field('Комплектация / внешний вид / комментарий', 'კომპლექტაცია / გარეგნული მდგომარეობა / კომენტარი', txt(order.masterNotes, 'Без дополнительных комментариев'), 'ga4-full ga4-clamp-mid')}
+          ${field('Внешний вид / комментарий', 'გარეგნული მდგომარეობა / კომენტარი', txt(order.masterNotes, 'Без дополнительных комментариев'), 'ga4-full ga4-clamp-mid')}
           ${notice(
             'Прием устройства',
             'მოწყობილობის მიღება',
@@ -14664,7 +14684,8 @@ document.addEventListener('DOMContentLoaded', function(){
         <section class="ga4-label-card">
           ${field('Заказ', 'შეკვეთა', esc(order.orderNumber || '—'))}
           ${field('Клиент / телефон', 'კლიენტი / ტელეფონი', `${esc(order.clientName || '—')}<br>${esc(order.clientPhone || '—')}`)}
-          ${field('Устройство', 'მოწყობილობა', `${esc(order.deviceType || '—')} ${esc(order.deviceModel || '')}`)}
+          ${field('Устройство', 'მოწყობილობა', `${esc([order.deviceType, order.deviceName, order.deviceModel].filter(Boolean).join(' ') || '—')}`)}
+          ${field('Комплект', 'კომპლექტი', esc(order.deviceKit || '—'))}
           ${field('Статус', 'სტატუსი', esc(typeof getStatusLabel === 'function' ? getStatusLabel(order.status) : (order.status || '—')))}
         </section>
       </article>
@@ -14672,20 +14693,20 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   function a4Style() {
     return `
-      @page{size:A4;margin:7mm}
+      @page{size:A4;margin:5mm}
       html,body{width:210mm;height:297mm;margin:0;padding:0;overflow:hidden;background:#fff;color:#111;font-family:Arial,"Noto Sans Georgian","DejaVu Sans",sans-serif}
       *{box-sizing:border-box}
-      .doc{width:196mm;height:283mm;margin:0 auto;overflow:hidden;background:#fff}
-      .ga4-doc{width:196mm;height:283mm;overflow:hidden;display:flex;flex-direction:column;gap:2.6mm;font-size:9.6px;line-height:1.18;color:#111}
-      .ga4-head{display:grid;grid-template-columns:minmax(0,1fr) 55mm;gap:5mm;align-items:start;border-bottom:1px solid #111;padding-bottom:2.6mm}
+      .doc{width:200mm;height:287mm;margin:0 auto;overflow:hidden;background:#fff}
+      .ga4-doc{width:200mm;height:287mm;overflow:hidden;display:flex;flex-direction:column;gap:1.9mm;font-size:9.7px;line-height:1.16;color:#111}
+      .ga4-head{display:grid;grid-template-columns:minmax(0,1fr) 52mm;gap:4mm;align-items:start;border-bottom:1px solid #111;padding-bottom:2mm}
       .ga4-brand{font-size:17px;font-weight:900;line-height:1;margin-bottom:1.6mm}
       .ga4-sub,.ga4-meta{font-size:8.6px;line-height:1.25;color:#333;overflow-wrap:anywhere}
       .ga4-meta{text-align:right}
       h1{margin:0;text-align:center;font-size:14px;line-height:1.08;font-weight:900}
       h1 small{display:block;font-size:11px;margin-top:.8mm}
-      .ga4-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.8mm}
-      .ga4-stack{display:grid;gap:1.8mm;min-height:0}
-      .ga4-field{border:1px solid #222;border-radius:1.6mm;padding:1.35mm 1.7mm;min-height:10.5mm;overflow:hidden;break-inside:avoid}
+      .ga4-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5mm}
+      .ga4-stack{display:grid;gap:1.5mm;min-height:0}
+      .ga4-field{border:1px solid #222;border-radius:1.4mm;padding:1.1mm 1.35mm;min-height:9mm;overflow:hidden;break-inside:avoid}
       .ga4-full{grid-column:1/-1}
       .ga4-label{display:flex;justify-content:space-between;gap:3mm;color:#4b5563;font-size:7.7px;line-height:1.08;font-weight:900;text-transform:uppercase}
       .ga4-value{margin-top:.75mm;font-size:9.7px;line-height:1.2;overflow-wrap:anywhere;word-break:break-word}
@@ -14699,9 +14720,9 @@ document.addEventListener('DOMContentLoaded', function(){
       .ga4-table td{border:1px solid #222;padding:1.1mm 1.5mm;vertical-align:top;font-size:8.8px;line-height:1.15;overflow-wrap:anywhere}
       .ga4-table td:first-child{width:43mm;font-weight:900}
       .ga4-table span{font-size:7.5px;color:#555;font-weight:700}
-      .ga4-signatures{display:grid;grid-template-columns:1fr 1fr;gap:14mm;margin-top:auto;padding-top:5mm}
-      .ga4-signatures div{border-top:1px solid #111;padding-top:1.4mm;font-size:8.8px;font-weight:800;text-align:center}
-      .ga4-label-card{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-top:8mm}
+      .ga4-signatures{display:grid;grid-template-columns:1fr 1fr;gap:10mm;margin-top:4mm;padding-top:3mm}
+      .ga4-signatures div{border-top:1px solid #111;padding-top:1.2mm;font-size:8.8px;font-weight:800;text-align:center}
+      .ga4-label-card{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-top:4mm}
       .ga4-label-note{margin-top:auto}
       .doc-footer{display:none}
       @media screen{body{padding:12px;background:#e5e7eb}.doc{box-shadow:0 18px 44px rgba(0,0,0,.16)}}
@@ -15812,7 +15833,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     settingsBtn: 'settingsModalOverlay'
   };
   const menuSelector = '#ordersBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn';
-  const orderFields = ['orderNumber','orderStatus','orderType','deadlineAt','clientName','clientPhone','clientSource','deviceType','deviceModel','masterName','warrantyDays','warrantyUntil','totalCost','partsCost','paidAmount','discountAmount','paymentMethod','problemDescription','completedWorks','masterNotes','taskNote'];
+  const orderFields = ['orderNumber','orderStatus','orderType','deadlineAt','clientName','clientPhone','clientSource','deviceType','deviceName','deviceModel','deviceKit','masterName','warrantyDays','warrantyUntil','totalCost','partsCost','paidAmount','discountAmount','paymentMethod','problemDescription','completedWorks','masterNotes','taskNote'];
 
   function byId(id) {
     return document.getElementById(id);
@@ -15999,7 +16020,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     overlay.dataset.orderId = order.id || '';
     const number = order.orderNumber || '';
     const client = `${order.clientName || '-'}${order.clientPhone ? ' - ' + order.clientPhone : ''}`;
-    const device = `${order.deviceType || '-'}${order.deviceModel ? ' - ' + order.deviceModel : ''}`;
+    const device = [order.deviceType, order.deviceName, order.deviceModel].filter(Boolean).join(' - ') || '-';
     byId('orderActionsTitle').textContent = `Действия с заказом № ${number}`;
     byId('orderActionsClient').textContent = client;
     byId('orderActionsDevice').textContent = device;
@@ -16136,7 +16157,9 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     { key: 'clientPhone', label: 'Телефон клиента', id: 'clientPhone', group: 'Клиент' },
     { key: 'clientSource', label: 'Источник клиента', id: 'clientSource', group: 'Клиент' },
     { key: 'deviceType', label: 'Техника', id: 'deviceType', group: 'Устройство' },
+    { key: 'deviceName', label: 'Название техники', id: 'deviceName', group: 'Устройство' },
     { key: 'deviceModel', label: 'Модель', id: 'deviceModel', group: 'Устройство' },
+    { key: 'deviceKit', label: 'Комплект', id: 'deviceKit', group: 'Устройство' },
     { key: 'masterName', label: 'Мастер', id: 'masterName', group: 'Устройство' },
     { key: 'warrantyDays', label: 'Гарантия, дней', id: 'warrantyDays', group: 'Устройство' },
     { key: 'warrantyUntil', label: 'Гарантия до', id: 'warrantyUntil', group: 'Устройство' },
@@ -16231,7 +16254,9 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
 
   function targetFor(field) {
     if (field.id) {
-      const control = document.getElementById(field.id);
+      const control = field.id === 'deviceType'
+        ? (document.getElementById('deviceTypeSelect') || document.getElementById(field.id))
+        : document.getElementById(field.id);
       return control?.closest('.order-field') || control?.closest('label') || control || null;
     }
     if (field.section) {
@@ -16487,6 +16512,852 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     document.addEventListener('DOMContentLoaded', init, { once: true });
   } else {
     init();
+  }
+})();
+</script>
+
+<style id="one-service-release-settings-menu-device-status-final">
+  #exportJsonBtn,
+  #importDataBtn {
+    white-space: nowrap;
+  }
+
+  .sidebar-nav > #exportJsonBtn,
+  .sidebar-nav > #importDataBtn {
+    display: none !important;
+  }
+
+  .one-service-directory-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .one-service-directory-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .one-service-directory-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+  }
+
+  .one-service-directory-row b,
+  .one-service-directory-row span {
+    display: block;
+    min-width: 0;
+  }
+
+  .one-service-directory-row span {
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .one-service-color-dot {
+    display: inline-flex;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    margin-right: 6px;
+    vertical-align: -1px;
+    border: 1px solid rgba(15, 23, 42, .15);
+  }
+
+  #workspacePageHost {
+    display: none;
+  }
+
+  body.workspace-page-open .app-layout .page > .container:not(#workspacePageHost) {
+    display: none !important;
+  }
+
+  body.workspace-page-open #workspacePageHost {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-top: 0 !important;
+  }
+
+  .workspace-page-host .workspace-page-overlay.open {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    z-index: auto !important;
+  }
+
+  .workspace-page-host .workspace-page-overlay.open > .modal {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: calc(100dvh - 88px) !important;
+    margin: 0 !important;
+    transform: none !important;
+    border-radius: 14px !important;
+    overflow: visible !important;
+  }
+
+  .workspace-page-host .workspace-page-overlay.open .modal-close {
+    display: none !important;
+  }
+
+  body[data-ui-theme="dark"] .one-service-directory-row {
+    background: #162235;
+    border-color: rgba(203, 213, 225, .18);
+  }
+
+  body[data-ui-theme="dark"] .one-service-directory-row span {
+    color: #a8b8ca;
+  }
+
+  @media (max-width: 768px) {
+    body.workspace-page-open .app-layout {
+      display: block !important;
+      grid-template-columns: 1fr !important;
+      overflow: auto !important;
+    }
+
+    body.workspace-page-open .sidebar {
+      display: none !important;
+    }
+
+    body.workspace-page-open .page {
+      padding: 8px 0 92px !important;
+      overflow: visible !important;
+    }
+
+    body.workspace-page-open #workspacePageHost {
+      padding: 0 10px !important;
+    }
+
+    .workspace-page-host .workspace-page-overlay.open > .modal {
+      min-height: auto !important;
+      padding: 12px !important;
+      border-radius: 12px !important;
+      box-shadow: none !important;
+    }
+
+    .workspace-page-host .workspace-page-overlay.open .data-grid,
+    .workspace-page-host .workspace-page-overlay.open .form-grid,
+    .workspace-page-host .workspace-page-overlay.open .settings-layout,
+    .workspace-page-host .workspace-page-overlay.open .settings-directory-panel,
+    .workspace-page-host .workspace-page-overlay.open .orders-tools-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .one-service-directory-row {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .one-service-directory-row .inline-actions {
+      width: 100%;
+    }
+  }
+</style>
+
+<script id="one-service-release-settings-menu-device-status-final">
+(function(){
+  const SETTINGS_KEY = 'one_service_settings';
+  const DEFAULT_DEVICE_TYPES = [
+    'Телефон',
+    'Планшет',
+    'Ноутбук',
+    'Системный блок',
+    'Телевизор',
+    'Монитор',
+    'Блютуз колонка',
+    'Блютуз наушники',
+    'Видеокарта',
+    'Игровая консоль',
+    'Контроллер консоли',
+    'Накопитель'
+  ];
+  const DEFAULT_STATUS_COLORS = {
+    new: '#2563eb',
+    diagnostics: '#6366f1',
+    in_progress: '#f97316',
+    awaiting_parts: '#d97706',
+    issued: '#16a34a',
+    awaiting_approval: '#06b6d4',
+    client_declined: '#e11d48',
+    repair_declined: '#e11d48',
+    issued_without_repair: '#8b5cf6',
+    donor: '#64748b'
+  };
+  const DEFAULT_STATUSES = [
+    { key: 'new', label: 'Новый', color: DEFAULT_STATUS_COLORS.new },
+    { key: 'diagnostics', label: 'Диагностика', color: DEFAULT_STATUS_COLORS.diagnostics },
+    { key: 'in_progress', label: 'В работе', color: DEFAULT_STATUS_COLORS.in_progress },
+    { key: 'awaiting_parts', label: 'Ожидает запчасти', color: DEFAULT_STATUS_COLORS.awaiting_parts },
+    { key: 'issued', label: 'Выдан', color: DEFAULT_STATUS_COLORS.issued },
+    { key: 'awaiting_approval', label: 'На согласовании', color: DEFAULT_STATUS_COLORS.awaiting_approval },
+    { key: 'client_declined', label: 'Клиент отказался', color: DEFAULT_STATUS_COLORS.client_declined },
+    { key: 'repair_declined', label: 'Отказано в ремонте', color: DEFAULT_STATUS_COLORS.repair_declined },
+    { key: 'issued_without_repair', label: 'Выдан без ремонта', color: DEFAULT_STATUS_COLORS.issued_without_repair },
+    { key: 'donor', label: 'Переведен в донор', color: DEFAULT_STATUS_COLORS.donor }
+  ];
+  const PAGE_BUTTONS = {
+    clientsBtn: 'clientsModalOverlay',
+    inventoryBtn: 'inventoryModalOverlay',
+    servicesBtn: 'servicesModalOverlay',
+    tasksBtn: 'tasksModalOverlay',
+    financeBtn: 'financeModalOverlay',
+    reportsBtn: 'reportsModalOverlay',
+    suppliersBtn: 'suppliersModalOverlay',
+    activityBtn: 'activityModalOverlay',
+    settingsBtn: 'settingsModalOverlay'
+  };
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function rawSettings() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function writeSettings(patch) {
+    const current = rawSettings();
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...current, ...patch }));
+    try { if (typeof renderAll === 'function') renderAll(); } catch (error) {}
+  }
+
+  function uniqueList(items) {
+    const seen = new Set();
+    return (items || []).map(item => String(item || '').trim()).filter(item => {
+      const key = item.toLowerCase();
+      if (!item || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function slug(value) {
+    const map = {
+      а:'a', б:'b', в:'v', г:'g', д:'d', е:'e', ё:'e', ж:'zh', з:'z', и:'i', й:'y',
+      к:'k', л:'l', м:'m', н:'n', о:'o', п:'p', р:'r', с:'s', т:'t', у:'u', ф:'f',
+      х:'h', ц:'c', ч:'ch', ш:'sh', щ:'sch', ы:'y', э:'e', ю:'yu', я:'ya'
+    };
+    const prepared = String(value || '').toLowerCase()
+      .replace(/[ъь]/g, '')
+      .replace(/[а-яё]/g, char => map[char] || char)
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    return prepared || `status_${Date.now().toString(36)}`;
+  }
+
+  function statusClass(key) {
+    return `status-${String(key || 'custom').replace(/[^a-z0-9_-]/gi, '_')}`;
+  }
+
+  function defaultStatusesFromConfig() {
+    const entries = DEFAULT_STATUSES.map(item => ({ ...item }));
+    try {
+      Object.entries(STATUS_CONFIG || {}).forEach(([key, cfg]) => {
+        if (!entries.some(item => item.key === key)) {
+          entries.push({ key, label: cfg.label || key, color: DEFAULT_STATUS_COLORS[key] || '#64748b' });
+        }
+      });
+    } catch (error) {}
+    return entries;
+  }
+
+  function readStatuses() {
+    const settings = rawSettings();
+    const defaults = defaultStatusesFromConfig();
+    const saved = Array.isArray(settings.orderStatuses) ? settings.orderStatuses : [];
+    const merged = [...defaults, ...saved].map(item => ({
+      key: slug(item.key || item.label),
+      label: String(item.label || item.name || item.key || '').trim(),
+      color: String(item.color || DEFAULT_STATUS_COLORS[item.key] || '#64748b').trim()
+    })).filter(item => item.key && item.label);
+    const result = [];
+    const seen = new Set();
+    merged.forEach(item => {
+      if (seen.has(item.key)) {
+        const index = result.findIndex(existing => existing.key === item.key);
+        if (index >= 0) result[index] = item;
+        return;
+      }
+      seen.add(item.key);
+      result.push(item);
+    });
+    return result;
+  }
+
+  function readDeviceTypes() {
+    const settings = rawSettings();
+    return uniqueList([...(Array.isArray(settings.deviceTypes) ? settings.deviceTypes : []), ...DEFAULT_DEVICE_TYPES]);
+  }
+
+  function ensureDefaults() {
+    const settings = rawSettings();
+    const patch = {};
+    if (!Array.isArray(settings.deviceTypes) || !settings.deviceTypes.length) patch.deviceTypes = DEFAULT_DEVICE_TYPES;
+    if (!Array.isArray(settings.orderStatuses) || !settings.orderStatuses.length) patch.orderStatuses = defaultStatusesFromConfig();
+    if (Object.keys(patch).length) {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...settings, ...patch }));
+    }
+  }
+
+  function applyStatusDirectory() {
+    const statuses = readStatuses();
+    try {
+      statuses.forEach(item => {
+        STATUS_CONFIG[item.key] = {
+          ...(STATUS_CONFIG[item.key] || {}),
+          label: item.label,
+          className: statusClass(item.key)
+        };
+      });
+    } catch (error) {}
+    let style = byId('one-service-dynamic-status-colors');
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'one-service-dynamic-status-colors';
+      document.head.appendChild(style);
+    }
+    style.textContent = statuses.map(item => `
+      .status-select[data-status="${item.key}"], .status-select.${statusClass(item.key)} {
+        background: color-mix(in srgb, ${item.color} 13%, white) !important;
+        color: ${item.color} !important;
+        border-color: color-mix(in srgb, ${item.color} 35%, white) !important;
+      }
+      body[data-ui-theme="dark"] .status-select[data-status="${item.key}"],
+      body[data-ui-theme="dark"] .status-select.${statusClass(item.key)} {
+        background: color-mix(in srgb, ${item.color} 24%, #111827) !important;
+        color: #f8fafc !important;
+        border-color: color-mix(in srgb, ${item.color} 55%, #111827) !important;
+      }
+      #ordersMainTable tbody tr[data-row-status="${item.key}"],
+      #ordersTableBody tr[data-row-status="${item.key}"] {
+        border-left-color: ${item.color} !important;
+      }
+    `).join('\n');
+  }
+
+  function statusOptionsHtml(current = '') {
+    return readStatuses().map(item => `<option value="${esc(item.key)}" ${item.key === current ? 'selected' : ''}>${esc(item.label)}</option>`).join('');
+  }
+
+  function refreshStatusControls() {
+    applyStatusDirectory();
+    const statuses = readStatuses();
+    const statusFilter = byId('statusFilter');
+    if (statusFilter) {
+      const current = statusFilter.value;
+      statusFilter.innerHTML = `<option value="">Все статусы</option>${statusOptionsHtml(current)}`;
+      statusFilter.value = statuses.some(item => item.key === current) ? current : '';
+    }
+    const orderStatus = byId('orderStatus');
+    if (orderStatus) {
+      const current = orderStatus.value || 'new';
+      orderStatus.innerHTML = statusOptionsHtml(current);
+      orderStatus.value = statuses.some(item => item.key === current) ? current : (statuses[0]?.key || 'new');
+      orderStatus.dataset.status = orderStatus.value;
+    }
+    const typeStatus = byId('orderTypeStatusEditor');
+    if (typeStatus) {
+      const current = typeStatus.value || 'new';
+      typeStatus.innerHTML = statusOptionsHtml(current);
+      typeStatus.value = statuses.some(item => item.key === current) ? current : (statuses[0]?.key || 'new');
+    }
+    document.querySelectorAll('.status-select').forEach(select => {
+      select.dataset.status = select.value;
+    });
+  }
+
+  function refreshDeviceTypeList() {
+    const input = byId('deviceType');
+    if (!input) return;
+    const oldDatalist = byId('deviceTypeOptionsList');
+    if (oldDatalist) oldDatalist.remove();
+    let select = byId('deviceTypeSelect');
+    if (!select) {
+      select = document.createElement('select');
+      select.id = 'deviceTypeSelect';
+      select.className = 'one-service-device-type-select';
+      select.required = input.required;
+      input.insertAdjacentElement('beforebegin', select);
+      select.addEventListener('change', () => {
+        input.value = select.value;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      input.addEventListener('input', () => {
+        if (select.value !== input.value) refreshDeviceTypeList();
+      });
+    }
+    input.removeAttribute('list');
+    input.required = false;
+    input.type = 'hidden';
+    input.placeholder = 'Тип техники';
+    const current = input.value || select.value || '';
+    const types = readDeviceTypes();
+    const allTypes = current && !types.some(type => type.toLowerCase() === current.toLowerCase()) ? [current, ...types] : types;
+    select.innerHTML = `<option value="">Тип техники</option>${allTypes.map(type => `<option value="${esc(type)}">${esc(type)}</option>`).join('')}`;
+    select.value = allTypes.find(type => type.toLowerCase() === current.toLowerCase()) || '';
+  }
+
+  function moveDataButtonsToSettings() {
+    const actionsCard = document.querySelector('.settings-actions-card .data-card .inline-actions');
+    if (!actionsCard) return;
+    const exportBtn = byId('exportJsonBtn');
+    const importBtn = byId('importDataBtn');
+    if (exportBtn && exportBtn.parentElement !== actionsCard) {
+      exportBtn.textContent = 'Экспорт JSON';
+      actionsCard.insertBefore(exportBtn, actionsCard.firstChild);
+    }
+    if (importBtn && importBtn.parentElement !== actionsCard) {
+      importBtn.textContent = 'Импорт JSON';
+      actionsCard.insertBefore(importBtn, exportBtn ? exportBtn.nextSibling : actionsCard.firstChild);
+    }
+  }
+
+  function ensureOrdersDirectoryCards() {
+    const section = document.querySelector('[data-settings-section="orders"]');
+    if (!section) return;
+    const panel = section.querySelector('.settings-directory-panel') || section;
+    if (!byId('orderStatusesSettingsCard')) {
+      const card = document.createElement('div');
+      card.className = 'settings-directory-card';
+      card.id = 'orderStatusesSettingsCard';
+      card.innerHTML = `
+        <h5>Статусы заказа</h5>
+        <div class="form-grid">
+          <input type="hidden" id="orderStatusEditKey">
+          <label class="field-label">Название<input type="text" id="orderStatusLabelEditor" placeholder="Например: Ждет клиента"></label>
+          <label class="field-label">Ключ<input type="text" id="orderStatusKeyEditor" placeholder="wait_client"></label>
+          <label class="field-label">Цвет<input type="color" id="orderStatusColorEditor" value="#64748b"></label>
+        </div>
+        <div class="one-service-directory-actions">
+          <button class="btn btn-primary" type="button" data-os-save-status>Сохранить статус</button>
+          <button class="btn btn-secondary" type="button" data-os-reset-status>Очистить</button>
+        </div>
+        <div class="one-service-directory-list" id="orderStatusesList"></div>
+      `;
+      const before = byId('orderFormFieldsSettingsCard') || panel.querySelector('.settings-hidden-sync');
+      if (before) panel.insertBefore(card, before);
+      else panel.appendChild(card);
+    }
+    if (!byId('deviceTypesSettingsCard')) {
+      const card = document.createElement('div');
+      card.className = 'settings-directory-card';
+      card.id = 'deviceTypesSettingsCard';
+      card.innerHTML = `
+        <h5>Типы техники</h5>
+        <div class="form-grid">
+          <input type="hidden" id="deviceTypeEditIndex">
+          <label class="field-label full">Название<input type="text" id="deviceTypeNameEditor" placeholder="Тип техники"></label>
+        </div>
+        <div class="one-service-directory-actions">
+          <button class="btn btn-primary" type="button" data-os-save-device-type>Сохранить тип техники</button>
+          <button class="btn btn-secondary" type="button" data-os-reset-device-type>Очистить</button>
+        </div>
+        <div class="one-service-directory-list" id="deviceTypesList"></div>
+      `;
+      const before = byId('orderFormFieldsSettingsCard') || panel.querySelector('.settings-hidden-sync');
+      if (before) panel.insertBefore(card, before);
+      else panel.appendChild(card);
+    }
+    renderStatusSettingsList();
+    renderDeviceTypeSettingsList();
+  }
+
+  function renderStatusSettingsList() {
+    const list = byId('orderStatusesList');
+    if (!list) return;
+    const core = new Set(DEFAULT_STATUSES.map(item => item.key));
+    list.innerHTML = readStatuses().map(item => `
+      <div class="one-service-directory-row">
+        <div>
+          <b><i class="one-service-color-dot" style="background:${esc(item.color)}"></i>${esc(item.label)}</b>
+          <span>${esc(item.key)}${core.has(item.key) ? ' · системный' : ''}</span>
+        </div>
+        <div class="inline-actions">
+          <button class="small-btn" type="button" data-os-edit-status="${esc(item.key)}">Изменить</button>
+          ${core.has(item.key) ? '' : `<button class="small-btn manage-danger" type="button" data-os-delete-status="${esc(item.key)}">Удалить</button>`}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderDeviceTypeSettingsList() {
+    const list = byId('deviceTypesList');
+    if (!list) return;
+    list.innerHTML = readDeviceTypes().map((type, index) => `
+      <div class="one-service-directory-row">
+        <div><b>${esc(type)}</b></div>
+        <div class="inline-actions">
+          <button class="small-btn" type="button" data-os-edit-device-type="${index}">Изменить</button>
+          <button class="small-btn manage-danger" type="button" data-os-delete-device-type="${index}">Удалить</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function saveStatusFromEditor() {
+    const label = String(byId('orderStatusLabelEditor')?.value || '').trim();
+    if (!label) return window.alert('Введите название статуса.');
+    const editKey = byId('orderStatusEditKey')?.value || '';
+    const key = slug(byId('orderStatusKeyEditor')?.value || label);
+    const color = byId('orderStatusColorEditor')?.value || '#64748b';
+    const statuses = readStatuses().filter(item => item.key !== (editKey || key));
+    statuses.push({ key, label, color });
+    writeSettings({ orderStatuses: statuses });
+    resetStatusEditor();
+    applyStatusDirectory();
+    refreshStatusControls();
+    ensureOrdersDirectoryCards();
+  }
+
+  function resetStatusEditor() {
+    if (byId('orderStatusEditKey')) byId('orderStatusEditKey').value = '';
+    if (byId('orderStatusLabelEditor')) byId('orderStatusLabelEditor').value = '';
+    if (byId('orderStatusKeyEditor')) byId('orderStatusKeyEditor').value = '';
+    if (byId('orderStatusColorEditor')) byId('orderStatusColorEditor').value = '#64748b';
+  }
+
+  function editStatus(key) {
+    const item = readStatuses().find(status => status.key === key);
+    if (!item) return;
+    byId('orderStatusEditKey').value = item.key;
+    byId('orderStatusLabelEditor').value = item.label;
+    byId('orderStatusKeyEditor').value = item.key;
+    byId('orderStatusColorEditor').value = item.color || '#64748b';
+  }
+
+  function deleteStatus(key) {
+    const item = readStatuses().find(status => status.key === key);
+    if (!item || !window.confirm(`Удалить статус "${item.label}"?`)) return;
+    const statuses = readStatuses().filter(status => status.key !== key);
+    writeSettings({ orderStatuses: statuses });
+    applyStatusDirectory();
+    refreshStatusControls();
+    ensureOrdersDirectoryCards();
+  }
+
+  function saveDeviceTypeFromEditor() {
+    const name = String(byId('deviceTypeNameEditor')?.value || '').trim();
+    if (!name) return window.alert('Введите тип техники.');
+    const index = Number(byId('deviceTypeEditIndex')?.value);
+    const items = readDeviceTypes();
+    if (Number.isInteger(index) && index >= 0) items[index] = name;
+    else items.unshift(name);
+    writeSettings({ deviceTypes: uniqueList(items) });
+    resetDeviceTypeEditor();
+    refreshDeviceTypeList();
+    renderDeviceTypeSettingsList();
+  }
+
+  function resetDeviceTypeEditor() {
+    if (byId('deviceTypeEditIndex')) byId('deviceTypeEditIndex').value = '';
+    if (byId('deviceTypeNameEditor')) byId('deviceTypeNameEditor').value = '';
+  }
+
+  function editDeviceType(index) {
+    const items = readDeviceTypes();
+    if (!items[index]) return;
+    byId('deviceTypeEditIndex').value = String(index);
+    byId('deviceTypeNameEditor').value = items[index];
+  }
+
+  function deleteDeviceType(index) {
+    const items = readDeviceTypes();
+    if (!items[index] || !window.confirm(`Удалить тип техники "${items[index]}"?`)) return;
+    items.splice(index, 1);
+    writeSettings({ deviceTypes: uniqueList(items) });
+    refreshDeviceTypeList();
+    renderDeviceTypeSettingsList();
+  }
+
+  function patchRenderFunctions() {
+    try {
+      if (typeof renderOrders === 'function' && !renderOrders.__oneServiceStatusPatched) {
+        const nativeRenderOrders = renderOrders;
+        renderOrders = function() {
+          applyStatusDirectory();
+          const result = nativeRenderOrders.apply(this, arguments);
+          setTimeout(refreshStatusControls, 0);
+          return result;
+        };
+        renderOrders.__oneServiceStatusPatched = true;
+      }
+    } catch (error) {}
+    try {
+      if (typeof renderMasterOptions === 'function' && !renderMasterOptions.__oneServiceDevicePatched) {
+        const nativeRenderMasterOptions = renderMasterOptions;
+        renderMasterOptions = function() {
+          applyStatusDirectory();
+          const result = nativeRenderMasterOptions.apply(this, arguments);
+          refreshStatusControls();
+          refreshDeviceTypeList();
+          return result;
+        };
+        renderMasterOptions.__oneServiceDevicePatched = true;
+      }
+    } catch (error) {}
+  }
+
+  function syncWorkspacePageState() {
+    const overlays = Object.values(PAGE_BUTTONS).map(byId).filter(Boolean);
+    const hasOpen = overlays.some(overlay => overlay.classList.contains('open') && overlay.classList.contains('workspace-page-overlay'));
+    document.body.classList.toggle('workspace-page-open', hasOpen);
+    byId('appShell')?.classList.toggle('workspace-page-mode', hasOpen);
+    if (hasOpen && window.innerWidth <= 768) {
+      byId('appShell')?.classList.add('sidebar-collapsed');
+    }
+  }
+
+  function installWorkspaceObserver() {
+    const observer = new MutationObserver(syncWorkspacePageState);
+    Object.values(PAGE_BUTTONS).map(byId).filter(Boolean).forEach(overlay => {
+      observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+    });
+    document.addEventListener('click', event => {
+      if (event.target.closest('#ordersBtn')) setTimeout(syncWorkspacePageState, 0);
+      if (event.target.closest(Object.keys(PAGE_BUTTONS).map(id => `#${id}`).join(','))) setTimeout(syncWorkspacePageState, 80);
+    }, true);
+    syncWorkspacePageState();
+  }
+
+  function wireEvents() {
+    document.addEventListener('click', event => {
+      if (event.target.closest('[data-os-save-status]')) {
+        event.preventDefault();
+        saveStatusFromEditor();
+      }
+      if (event.target.closest('[data-os-reset-status]')) {
+        event.preventDefault();
+        resetStatusEditor();
+      }
+      const editStatusButton = event.target.closest('[data-os-edit-status]');
+      if (editStatusButton) {
+        event.preventDefault();
+        editStatus(editStatusButton.dataset.osEditStatus);
+      }
+      const deleteStatusButton = event.target.closest('[data-os-delete-status]');
+      if (deleteStatusButton) {
+        event.preventDefault();
+        deleteStatus(deleteStatusButton.dataset.osDeleteStatus);
+      }
+      if (event.target.closest('[data-os-save-device-type]')) {
+        event.preventDefault();
+        saveDeviceTypeFromEditor();
+      }
+      if (event.target.closest('[data-os-reset-device-type]')) {
+        event.preventDefault();
+        resetDeviceTypeEditor();
+      }
+      const editTypeButton = event.target.closest('[data-os-edit-device-type]');
+      if (editTypeButton) {
+        event.preventDefault();
+        editDeviceType(Number(editTypeButton.dataset.osEditDeviceType));
+      }
+      const deleteTypeButton = event.target.closest('[data-os-delete-device-type]');
+      if (deleteTypeButton) {
+        event.preventDefault();
+        deleteDeviceType(Number(deleteTypeButton.dataset.osDeleteDeviceType));
+      }
+    });
+
+    document.addEventListener('input', event => {
+      if (event.target?.id === 'orderStatusLabelEditor' && !byId('orderStatusEditKey')?.value) {
+        const keyInput = byId('orderStatusKeyEditor');
+        if (keyInput) keyInput.value = slug(event.target.value);
+      }
+    });
+
+    document.addEventListener('change', event => {
+      if (event.target?.id === 'orderStatus') event.target.dataset.status = event.target.value;
+    });
+
+    document.querySelectorAll('[data-settings-target], #settingsBtn').forEach(node => {
+      node.addEventListener('click', () => setTimeout(() => {
+        ensureOrdersDirectoryCards();
+        moveDataButtonsToSettings();
+        refreshStatusControls();
+        refreshDeviceTypeList();
+      }, 160));
+    });
+
+    document.addEventListener('crm:cloud-sync-applied', () => setTimeout(() => {
+      applyStatusDirectory();
+      refreshStatusControls();
+      refreshDeviceTypeList();
+      ensureOrdersDirectoryCards();
+    }, 160));
+  }
+
+  function init() {
+    ensureDefaults();
+    applyStatusDirectory();
+    patchRenderFunctions();
+    moveDataButtonsToSettings();
+    refreshStatusControls();
+    refreshDeviceTypeList();
+    ensureOrdersDirectoryCards();
+    installWorkspaceObserver();
+    wireEvents();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+<style id="one-service-device-name-mobile-menu-logo-final">
+  header .logo {
+    cursor: pointer;
+  }
+
+  #deviceType[type="hidden"] {
+    display: none !important;
+  }
+
+  .one-service-device-type-select {
+    width: 100% !important;
+  }
+
+  @media (max-width: 768px) {
+    body.workspace-page-open .app-shell.sidebar-collapsed .sidebar {
+      display: none !important;
+    }
+
+    body.workspace-page-open .app-shell:not(.sidebar-collapsed) .sidebar {
+      display: block !important;
+      position: fixed !important;
+      top: 58px !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: min(82vw, 292px) !important;
+      height: calc(100dvh - 58px) !important;
+      padding: 10px !important;
+      overflow: auto !important;
+      z-index: 180 !important;
+      background: transparent !important;
+    }
+
+    body.workspace-page-open .app-shell:not(.sidebar-collapsed) .sidebar-card {
+      min-height: 100% !important;
+      height: auto !important;
+    }
+
+    body.workspace-page-open .app-shell:not(.sidebar-collapsed) .page {
+      pointer-events: none;
+    }
+
+    body.workspace-page-open .app-shell:not(.sidebar-collapsed) .sidebar {
+      pointer-events: auto;
+    }
+  }
+</style>
+
+<script id="one-service-device-name-mobile-menu-logo-final">
+(function(){
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function syncDeviceTypeSelect() {
+    const input = byId('deviceType');
+    const select = byId('deviceTypeSelect');
+    if (!input || !select) return;
+    const current = input.value || '';
+    if (current && !Array.from(select.options).some(option => option.value === current)) {
+      const option = document.createElement('option');
+      option.value = current;
+      option.textContent = current;
+      select.appendChild(option);
+    }
+    select.value = current;
+  }
+
+  function goToOrders() {
+    const ordersBtn = byId('ordersBtn');
+    if (ordersBtn) {
+      ordersBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+    }
+    byId('appShell')?.classList.add('sidebar-collapsed');
+    document.body.classList.remove('workspace-page-open');
+  }
+
+  document.addEventListener('click', function(event){
+    const logo = event.target.closest('header .logo');
+    if (!logo) return;
+    event.preventDefault();
+    goToOrders();
+  }, true);
+
+  document.addEventListener('click', function(event){
+    if (window.innerWidth > 768) return;
+    if (!event.target.closest('.sidebar-nav .btn')) return;
+    setTimeout(() => byId('appShell')?.classList.add('sidebar-collapsed'), 120);
+  });
+
+  document.addEventListener('change', function(event){
+    if (event.target?.id !== 'deviceTypeSelect') return;
+    const input = byId('deviceType');
+    if (input) {
+      input.value = event.target.value || '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }, true);
+
+  document.addEventListener('input', function(event){
+    if (event.target?.id === 'deviceType') setTimeout(syncDeviceTypeSelect, 0);
+  }, true);
+
+  const orderModal = byId('orderModalOverlay');
+  if (orderModal) {
+    new MutationObserver(() => setTimeout(syncDeviceTypeSelect, 0)).observe(orderModal, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  document.addEventListener('click', function(event){
+    if (event.target.closest('#createOrderBtn,[data-order-modal-action="edit"],#ordersTableBody tr')) {
+      setTimeout(syncDeviceTypeSelect, 100);
+    }
+  }, true);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncDeviceTypeSelect, { once: true });
+  } else {
+    setTimeout(syncDeviceTypeSelect, 0);
   }
 })();
 </script>
