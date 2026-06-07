@@ -5767,7 +5767,7 @@ body[data-ui-theme="dark"] .client-order-row em{
     }
   }
 
-  @media (max-width:144px){
+  @media (max-width:480px){
     .current-user-chip{display:none !important}
     .topbar-actions{gap:8px !important}
     .logout-btn{min-width:auto !important;padding:0 18px !important}
@@ -6948,6 +6948,626 @@ body[data-ui-theme="dark"] .client-order-row em{
   #settingsModalOverlay .template-builder-head p.section-note,
   #settingsModalOverlay .settings-actions-card .data-card p:not(#backupInfo) {
     display: none !important;
+  }
+</style>
+<style id="one-service-mobile-orders-readable-final">
+  @media (max-width: 768px) {
+    html,
+    body {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+    }
+
+    body {
+      min-width: 0 !important;
+      background: #f4f7fb !important;
+      -webkit-text-size-adjust: 100% !important;
+    }
+
+    .app-layout,
+    .page,
+    .page > .container {
+      display: block !important;
+      width: 100% !important;
+      max-width: none !important;
+      min-width: 0 !important;
+    }
+
+    .page {
+      padding: 8px 0 92px !important;
+    }
+
+    header .container.topbar {
+      width: 100% !important;
+      max-width: none !important;
+      min-height: 58px !important;
+      height: 58px !important;
+      padding: 6px 10px !important;
+      gap: 8px !important;
+      flex-wrap: nowrap !important;
+    }
+
+    .topbar-left {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      height: 100% !important;
+      gap: 8px !important;
+      overflow: hidden !important;
+    }
+
+    .topbar-actions {
+      flex: 0 0 auto !important;
+      min-width: 0 !important;
+      height: 100% !important;
+      gap: 8px !important;
+      flex-wrap: nowrap !important;
+    }
+
+    .current-user-chip {
+      display: none !important;
+    }
+
+    header .sidebar-toggle {
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      min-height: 44px !important;
+      border-radius: 12px !important;
+      font-size: 22px !important;
+    }
+
+    header .logout-btn {
+      min-width: 64px !important;
+      height: 44px !important;
+      min-height: 44px !important;
+      padding: 0 12px !important;
+      border-radius: 12px !important;
+      font-size: 14px !important;
+      white-space: nowrap !important;
+    }
+
+    header .logo {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      gap: 8px !important;
+      overflow: hidden !important;
+      font-size: 20px !important;
+      letter-spacing: 0 !important;
+    }
+
+    header .logo-one {
+      flex: 0 0 auto !important;
+    }
+
+    header .logo-text {
+      min-width: 0 !important;
+      max-width: 190px !important;
+      overflow: hidden !important;
+      text-overflow: clip !important;
+      letter-spacing: 0 !important;
+    }
+
+    header .logo-text::after {
+      max-width: 190px !important;
+      overflow: hidden !important;
+      text-overflow: clip !important;
+      white-space: nowrap !important;
+      letter-spacing: 0 !important;
+      font-size: 8px !important;
+    }
+
+    .container,
+    .page > .container {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+    }
+
+    .page > .container > .panel {
+      margin: 0 0 10px !important;
+      padding: 10px !important;
+      border-radius: 12px !important;
+      overflow: visible !important;
+    }
+
+    .page > .container > .panel > .toolbar:not(.toolbar-extended) {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      gap: 8px !important;
+      align-items: stretch !important;
+    }
+
+    #searchInput {
+      grid-column: 1 / -1 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: 44px !important;
+      font-size: 14px !important;
+    }
+
+    #createOrderBtn {
+      min-width: 142px !important;
+      min-height: 44px !important;
+      padding: 0 14px !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      white-space: nowrap !important;
+    }
+
+    .mobile-filters-toggle {
+      min-height: 44px !important;
+      min-width: 0 !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+    }
+
+    .orders-quick-filters {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      gap: 8px !important;
+      width: 100% !important;
+      margin: 8px 0 0 !important;
+      padding: 0 0 2px !important;
+      overflow-x: auto !important;
+      scrollbar-width: none !important;
+    }
+
+    .orders-quick-filters::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    .orders-quick-filter {
+      flex: 0 0 auto !important;
+      min-height: 38px !important;
+      padding: 0 14px !important;
+      border-radius: 999px !important;
+      font-size: 13px !important;
+      white-space: nowrap !important;
+    }
+
+    .toolbar-extended.with-gear-tools {
+      display: none !important;
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+      margin-top: 8px !important;
+      padding: 10px !important;
+      border-radius: 12px !important;
+    }
+
+    .toolbar-extended.with-gear-tools.mobile-filters-open {
+      display: grid !important;
+    }
+
+    .toolbar-extended.with-gear-tools > *,
+    .toolbar-extended.with-gear-tools input,
+    .toolbar-extended.with-gear-tools select,
+    .toolbar-extended.with-gear-tools button {
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .table-card {
+      width: 100% !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+    }
+
+    .table-scroll,
+    .table-card .table-scroll,
+    .table-card .table-scroll:has(#ordersMainTable) {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    #ordersMainTable {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      table-layout: auto !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+      background: transparent !important;
+    }
+
+    #ordersMainTable thead {
+      display: none !important;
+    }
+
+    #ordersMainTable tbody,
+    #ordersTableBody {
+      display: grid !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      gap: 12px !important;
+    }
+
+    #ordersMainTable tbody tr,
+    #ordersTableBody tr {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-areas:
+        "number"
+        "status"
+        "device"
+        "client"
+        "master"
+        "deadline"
+        "cost" !important;
+      gap: 10px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 14px 14px 14px 16px !important;
+      border: 1px solid #dce6f2 !important;
+      border-left: 4px solid #94a3b8 !important;
+      border-radius: 14px !important;
+      background: #ffffff !important;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, .10) !important;
+      overflow: hidden !important;
+      cursor: pointer !important;
+    }
+
+    #ordersMainTable tbody tr::before,
+    #ordersTableBody tr::before {
+      content: none !important;
+      display: none !important;
+    }
+
+    #ordersMainTable tbody tr[data-row-status="new"],
+    #ordersTableBody tr[data-row-status="new"] { border-left-color: #2563eb !important; }
+    #ordersMainTable tbody tr[data-row-status="diagnostics"],
+    #ordersTableBody tr[data-row-status="diagnostics"] { border-left-color: #6366f1 !important; }
+    #ordersMainTable tbody tr[data-row-status="in_progress"],
+    #ordersTableBody tr[data-row-status="in_progress"] { border-left-color: #f97316 !important; }
+    #ordersMainTable tbody tr[data-row-status="awaiting_parts"],
+    #ordersTableBody tr[data-row-status="awaiting_parts"] { border-left-color: #d97706 !important; }
+    #ordersMainTable tbody tr[data-row-status="issued"],
+    #ordersTableBody tr[data-row-status="issued"] { border-left-color: #16a34a !important; }
+    #ordersMainTable tbody tr[data-row-status="awaiting_approval"],
+    #ordersTableBody tr[data-row-status="awaiting_approval"] { border-left-color: #06b6d4 !important; }
+    #ordersMainTable tbody tr[data-row-status="client_declined"],
+    #ordersTableBody tr[data-row-status="client_declined"],
+    #ordersMainTable tbody tr[data-row-status="repair_declined"],
+    #ordersTableBody tr[data-row-status="repair_declined"] { border-left-color: #e11d48 !important; }
+    #ordersMainTable tbody tr[data-row-status="issued_without_repair"],
+    #ordersTableBody tr[data-row-status="issued_without_repair"] { border-left-color: #8b5cf6 !important; }
+    #ordersMainTable tbody tr[data-row-status="donor"],
+    #ordersTableBody tr[data-row-status="donor"] { border-left-color: #64748b !important; }
+    #ordersMainTable tbody tr[data-deadline-state="overdue"],
+    #ordersTableBody tr[data-deadline-state="overdue"] { border-left-color: #dc2626 !important; }
+
+    #ordersMainTable tbody td,
+    #ordersTableBody td {
+      display: block !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #1f2937 !important;
+      font-size: 14px !important;
+      line-height: 1.35 !important;
+      text-align: left !important;
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      box-shadow: none !important;
+    }
+
+    #ordersMainTable tbody td::before,
+    #ordersTableBody td::before {
+      content: attr(data-label) !important;
+      display: block !important;
+      margin: 0 0 5px !important;
+      color: #64748b !important;
+      font-size: 11px !important;
+      font-weight: 900 !important;
+      line-height: 1.15 !important;
+      letter-spacing: 0 !important;
+      text-transform: uppercase !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(1),
+    #ordersTableBody td:nth-child(1) {
+      grid-area: number !important;
+      padding: 0 !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(1)::before,
+    #ordersTableBody td:nth-child(1)::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(3),
+    #ordersTableBody td:nth-child(3) {
+      grid-area: status !important;
+      align-self: start !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(4),
+    #ordersTableBody td:nth-child(4) {
+      grid-area: device !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(6),
+    #ordersTableBody td:nth-child(6) {
+      grid-area: client !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(8),
+    #ordersTableBody td:nth-child(8) {
+      grid-area: master !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(9),
+    #ordersTableBody td:nth-child(9) {
+      grid-area: cost !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(11),
+    #ordersTableBody td:nth-child(11) {
+      grid-area: deadline !important;
+    }
+
+    #ordersMainTable tbody tr > td:nth-child(1),
+    #ordersTableBody tr > td:nth-child(1),
+    #ordersMainTable tbody tr > td:nth-child(3),
+    #ordersTableBody tr > td:nth-child(3),
+    #ordersMainTable tbody tr > td:nth-child(4),
+    #ordersTableBody tr > td:nth-child(4),
+    #ordersMainTable tbody tr > td:nth-child(6),
+    #ordersTableBody tr > td:nth-child(6),
+    #ordersMainTable tbody tr > td:nth-child(8),
+    #ordersTableBody tr > td:nth-child(8),
+    #ordersMainTable tbody tr > td:nth-child(9),
+    #ordersTableBody tr > td:nth-child(9),
+    #ordersMainTable tbody tr > td:nth-child(11),
+    #ordersTableBody tr > td:nth-child(11) {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      justify-self: stretch !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(2),
+    #ordersTableBody td:nth-child(2),
+    #ordersMainTable tbody td:nth-child(5),
+    #ordersTableBody td:nth-child(5),
+    #ordersMainTable tbody td:nth-child(7),
+    #ordersTableBody td:nth-child(7),
+    #ordersMainTable tbody td:nth-child(10),
+    #ordersTableBody td:nth-child(10),
+    #ordersMainTable tbody td:nth-child(12),
+    #ordersTableBody td:nth-child(12),
+    #ordersMainTable tbody td:nth-child(13),
+    #ordersTableBody td:nth-child(13),
+    #ordersMainTable tbody td:nth-child(14),
+    #ordersTableBody td:nth-child(14),
+    #ordersMainTable tbody td:nth-child(15),
+    #ordersTableBody td:nth-child(15) {
+      display: none !important;
+    }
+
+    #ordersMainTable tbody td:nth-child(1) b,
+    #ordersTableBody td:nth-child(1) b {
+      display: block !important;
+      color: #c2410c !important;
+      font-size: 20px !important;
+      line-height: 1.05 !important;
+      font-weight: 900 !important;
+      white-space: nowrap !important;
+    }
+
+    #ordersMainTable .order-list-primary,
+    #ordersTableBody .order-list-primary,
+    #ordersMainTable .order-list-secondary,
+    #ordersTableBody .order-list-secondary,
+    #ordersMainTable .order-list-money,
+    #ordersTableBody .order-list-money,
+    #ordersMainTable .order-list-chipline,
+    #ordersTableBody .order-list-chipline {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      color: inherit !important;
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+
+    #ordersMainTable .order-list-primary,
+    #ordersTableBody .order-list-primary,
+    #ordersMainTable .order-list-money,
+    #ordersTableBody .order-list-money {
+      color: #111827 !important;
+      font-size: 15px !important;
+      font-weight: 850 !important;
+    }
+
+    #ordersMainTable .order-list-secondary,
+    #ordersTableBody .order-list-secondary {
+      margin-top: 2px !important;
+      color: #64748b !important;
+      font-size: 13px !important;
+      line-height: 1.3 !important;
+    }
+
+    #ordersMainTable .order-list-chipline,
+    #ordersTableBody .order-list-chipline {
+      margin-top: 7px !important;
+    }
+
+    #ordersMainTable .status-select,
+    #ordersTableBody .status-select {
+      display: block !important;
+      width: 100% !important;
+      max-width: 190px !important;
+      min-width: 0 !important;
+      min-height: 36px !important;
+      padding: 6px 28px 6px 10px !important;
+      border-radius: 999px !important;
+      font-size: 12px !important;
+      font-weight: 850 !important;
+      line-height: 1.15 !important;
+      white-space: normal !important;
+    }
+
+    #ordersMainTable .badge,
+    #ordersTableBody .badge,
+    #ordersMainTable .order-list-status,
+    #ordersTableBody .order-list-status {
+      display: inline !important;
+      max-width: 100% !important;
+      min-height: 26px !important;
+      padding: 5px 9px !important;
+      border-radius: 999px !important;
+      font-size: 12px !important;
+      line-height: 1.15 !important;
+      white-space: normal !important;
+      overflow-wrap: break-word !important;
+    }
+
+    #ordersMainTable .order-phone-link,
+    #ordersTableBody .order-phone-link {
+      display: inline-flex !important;
+      width: auto !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #2563eb !important;
+      font-size: inherit !important;
+      font-weight: 750 !important;
+      line-height: inherit !important;
+      white-space: normal !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    #ordersMainTable .order-phone-link::before,
+    #ordersTableBody .order-phone-link::before {
+      content: none !important;
+      display: none !important;
+    }
+
+    .orders-pagination {
+      margin: 12px 0 0 !important;
+      padding: 12px !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 12px !important;
+      background: #ffffff !important;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .07) !important;
+    }
+
+    .orders-pagination-info {
+      width: 100% !important;
+      font-size: 13px !important;
+      line-height: 1.3 !important;
+    }
+
+    .orders-pagination-pages {
+      width: 100% !important;
+      justify-content: center !important;
+      gap: 8px !important;
+    }
+
+    .orders-page-btn,
+    .manage-page-current {
+      min-width: 44px !important;
+      min-height: 40px !important;
+      border-radius: 10px !important;
+    }
+
+    body[data-ui-theme="dark"] {
+      background: #0b111d !important;
+    }
+
+    body[data-ui-theme="dark"] .page > .container > .panel,
+    body[data-ui-theme="dark"] .orders-pagination {
+      background: #111827 !important;
+      border-color: rgba(203, 213, 225, .16) !important;
+    }
+
+    body[data-ui-theme="dark"] #ordersMainTable tbody tr,
+    body[data-ui-theme="dark"] #ordersTableBody tr {
+      background: #121a28 !important;
+      border-color: rgba(203, 213, 225, .18) !important;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, .28) !important;
+    }
+
+    body[data-ui-theme="dark"] #ordersMainTable tbody td,
+    body[data-ui-theme="dark"] #ordersTableBody td {
+      background: transparent !important;
+      color: #edf5ff !important;
+    }
+
+    body[data-ui-theme="dark"] #ordersMainTable tbody td::before,
+    body[data-ui-theme="dark"] #ordersTableBody td::before {
+      color: #9fb2c7 !important;
+    }
+
+    body[data-ui-theme="dark"] #ordersMainTable .order-list-primary,
+    body[data-ui-theme="dark"] #ordersTableBody .order-list-primary,
+    body[data-ui-theme="dark"] #ordersMainTable .order-list-money,
+    body[data-ui-theme="dark"] #ordersTableBody .order-list-money {
+      color: #f8fafc !important;
+    }
+
+    body[data-ui-theme="dark"] #ordersMainTable .order-list-secondary,
+    body[data-ui-theme="dark"] #ordersTableBody .order-list-secondary {
+      color: #a8b8ca !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #ordersMainTable tbody tr,
+    #ordersTableBody tr {
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-areas:
+        "number"
+        "status"
+        "device"
+        "client"
+        "master"
+        "deadline"
+        "cost" !important;
+      padding: 14px 12px 14px 15px !important;
+    }
+
+    #ordersMainTable .status-select,
+    #ordersTableBody .status-select {
+      max-width: none !important;
+    }
+
+    #ordersMainTable tbody td,
+    #ordersTableBody td,
+    #ordersMainTable .order-list-primary,
+    #ordersTableBody .order-list-primary,
+    #ordersMainTable .order-list-secondary,
+    #ordersTableBody .order-list-secondary,
+    #ordersMainTable .order-list-money,
+    #ordersTableBody .order-list-money {
+      word-break: normal !important;
+      overflow-wrap: anywhere !important;
+    }
   }
 </style>
 </head>
@@ -11990,7 +12610,6 @@ document.addEventListener('DOMContentLoaded', function(){
     section.dataset.noPreviewReady = '1';
     section.innerHTML = `
       <h4>Документы и печать</h4>
-      <p class="section-note">Предпросмотр убран. Здесь остаются только настройки текста, видимости блоков и шаблонов печати.</p>
       <div class="docs-no-preview-panel">
         <div class="docs-basic-card">
           <h4 class="section-title">Основные параметры</h4>
@@ -12080,7 +12699,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         <div class="docs-basic-card">
           <h4 class="section-title">Переменные</h4>
-          <p class="section-note">Нажмите переменную, чтобы вставить ее в активное поле текста.</p>
           <div class="docs-variables" id="docsVariablesBar"></div>
         </div>
 
@@ -12288,7 +12906,6 @@ document.addEventListener('DOMContentLoaded', function(){
     section.dataset.masterProfilesReady = '1';
     section.innerHTML = `
       <h4>Мастера и доступ</h4>
-      <p class="section-note">Нажмите на имя мастера, чтобы изменить логин, пароль, права доступа и процент зарплаты.</p>
         <div class="master-access-panel">
           <div class="master-access-toolbar">
             <div class="section-note" id="masterProfilesCounter"></div>
@@ -12316,7 +12933,6 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="modal master-editor-modal">
         <button class="modal-close" id="closeMasterEditorBtn" type="button" aria-label="Close">×</button>
         <h3 id="masterEditorTitle">Мастер</h3>
-        <p>Настройте вход в CRM, доступ к разделам и процент зарплаты.</p>
         <div class="master-editor-grid">
           <label class="field-label">Имя мастера
             <input type="text" id="masterProfileNameInput" placeholder="Алексей" required>
