@@ -10205,7 +10205,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       if (sectionName === 'documents') renderDocumentPreview();
     }
 
-    const DOC_VARIABLES = ['{serviceName}','{servicePhone}','{serviceAddress}','{legalName}','{taxId}','{email}','{order}','{date}','{client}','{clientPhone}','{device}','{model}','{master}','{status}','{problem}','{works}','{cost}','{paid}','{debt}','{warrantyDays}','{warrantyUntil}','{services}','{parts}'];
+    const DOC_VARIABLES = ['{serviceName}','{servicePhone}','{serviceAddress}','{legalName}','{taxId}','{email}','{order}','{date}','{client}','{clientPhone}','{device}','{deviceName}','{model}','{master}','{status}','{problem}','{works}','{cost}','{paid}','{debt}','{warrantyDays}','{warrantyUntil}','{services}','{parts}'];
     let orderTypeDocBuildersDraft = [];
     let statusDocBuildersDraft = [];
 
@@ -10227,7 +10227,7 @@ body[data-ui-theme="dark"] .client-order-row em{
     function applyTemplate(template, order = {}, fallback = '') {
       const source = String(template || fallback || '');
       const data = templateContext(order);
-      return source.replace(/\{(serviceName|servicePhone|serviceAddress|legalName|taxId|email|order|date|client|clientPhone|device|model|master|status|problem|works|cost|paid|debt|warrantyDays|warrantyUntil|services|parts)\}/g, (match, key) => String(data[key] ?? ''));
+      return source.replace(/\{(serviceName|servicePhone|serviceAddress|legalName|taxId|email|order|date|client|clientPhone|device|deviceName|model|master|status|problem|works|cost|paid|debt|warrantyDays|warrantyUntil|services|parts)\}/g, (match, key) => String(data[key] ?? ''));
     }
     function templateToHtml(template, order = {}, fallback = '') { return escapeHtml(applyTemplate(template, order, fallback)).replace(/\n/g, '<br>'); }
 
@@ -12600,6 +12600,10 @@ document.addEventListener('DOMContentLoaded', function(){
       try { if (typeof logActivity === 'function') logActivity('Мастера', reason); } catch (error) {}
       syncMasterHiddenInputs();
       renderMasterProfilesList();
+      setTimeout(() => {
+        try { window.crmPushAccessToFirebase?.(); } catch (error) {}
+        try { window.crmPushKeyToCloud?.('one_service_settings'); } catch (error) {}
+      }, 0);
       try { if (typeof renderMasterOptions === 'function') renderMasterOptions(); } catch (error) {}
       try { if (typeof renderTasks === 'function') renderTasks(); } catch (error) {}
       try { if (typeof renderFinance === 'function') renderFinance(); } catch (error) {}
@@ -13143,6 +13147,7 @@ document.addEventListener('DOMContentLoaded', function(){
     return new Promise(resolve => {
       let finished = false;
       let interval = null;
+      let cloudPullStarted = false;
       const tryAuthenticate = () => authenticate(login, password);
       const finish = (user = tryAuthenticate()) => {
         if (finished) return;
@@ -13155,17 +13160,22 @@ document.addEventListener('DOMContentLoaded', function(){
         const user = tryAuthenticate();
         if (user) finish(user);
       };
-      const cloudPull = typeof window.crmPullAccessFromFirebase === 'function' ? window.crmPullAccessFromFirebase : null;
-      if (cloudPull) {
+      const startCloudPull = () => {
+        if (cloudPullStarted) return;
+        const cloudPull = typeof window.crmPullAccessFromFirebase === 'function' ? window.crmPullAccessFromFirebase : null;
+        if (!cloudPull) return;
+        cloudPullStarted = true;
         cloudPull().then(() => {
           const user = tryAuthenticate();
           if (user) finish(user);
         }).catch(error => {
           window.crmLastCloudAuthError = error?.message || String(error || 'firebase');
         });
-      }
+      };
+      startCloudPull();
       document.addEventListener('crm:cloud-sync-applied', onSync);
       interval = setInterval(() => {
+        startCloudPull();
         const user = tryAuthenticate();
         if (user) finish(user);
       }, 250);
@@ -13175,7 +13185,21 @@ document.addEventListener('DOMContentLoaded', function(){
   function refreshActiveUserFromProfiles() {
     if (!activeUser || activeUser.isAdmin) return;
     const profile = getMasterProfiles().find(item => item.id === activeUser.id || (item.login && item.login === activeUser.login));
-    if (!profile) return;
+    if (!profile) {
+      setCurrentUser(null, false);
+      document.getElementById('authShell')?.style.setProperty('display', 'flex');
+      const appShell = document.getElementById('appShell');
+      if (appShell) {
+        appShell.classList.remove('is-authenticated');
+        appShell.style.display = 'none';
+      }
+      const authError = document.getElementById('authError');
+      if (authError) {
+        authError.textContent = 'Доступ отключен администратором.';
+        authError.classList.add('show');
+      }
+      return;
+    }
     activeUser = { ...profile, password: '', isAdmin: false };
     window.crmCurrentUser = activeUser;
     if (localStorage.getItem(AUTH_REMEMBER_KEY) === '1') {
@@ -14530,6 +14554,41 @@ document.addEventListener('DOMContentLoaded', function(){
       </section>
     `;
   }
+  function rules(titleRu, titleKa, items, className = '') {
+    return `
+      <section class="ga4-rules ${className}">
+        <b>${titleRu} / ${titleKa}</b>
+        <ol>
+          ${items.map(item => `<li><span>${item[0]}</span><em>${item[1]}</em></li>`).join('')}
+        </ol>
+      </section>
+    `;
+  }
+  function acceptanceRules() {
+    return rules('Регламент приема и обязанности сторон', 'მიღების რეგლამენტი და მხარეთა ვალდებულებები', [
+      ['Клиент подтверждает комплект, внешний вид и заявленную неисправность устройства на момент передачи.', 'კლიენტი ადასტურებს კომპლექტაციას, გარეგნულ მდგომარეობას და მითითებულ გაუმართაობას გადაცემის მომენტში.'],
+      ['Диагностика, окончательная стоимость, сроки ремонта и перечень работ согласуются до выполнения платного ремонта.', 'დიაგნოსტიკა, საბოლოო ღირებულება, ვადები და სამუშაოების სია შეთანხმდება ფასიანი შეკეთების დაწყებამდე.'],
+      ['Клиент обязан заранее сохранить данные и сообщить пароли, блокировки, следы влаги, ударов или предыдущего ремонта.', 'კლიენტი ვალდებულია წინასწარ შეინახოს მონაცემები და აცნობოს პაროლები, ბლოკირებები, სითხე, დარტყმა ან წინა შეკეთება.'],
+      ['Сервис не отвечает за скрытые дефекты, потерю пользовательских данных и неисправности, не связанные с выполненными работами.', 'სერვისი არ აგებს პასუხს ფარულ დეფექტებზე, მომხმარებლის მონაცემებზე და შეკეთებასთან დაუკავშირებელ გაუმართაობებზე.'],
+      ['Невостребованное устройство хранится 30 дней после уведомления клиента; дальнейшее хранение может быть платным.', 'შეტყობინებიდან 30 დღე მოწყობილობა ინახება უფასოდ; შემდეგი შენახვა შეიძლება იყოს ფასიანი.']
+    ]);
+  }
+  function completedRules() {
+    return rules('Передача результата и расчеты', 'შედეგის გადაცემა და ანგარიშსწორება', [
+      ['Клиент осмотрел устройство, получил результат работ и подтверждает отсутствие претензий на момент выдачи.', 'კლიენტმა შეამოწმა მოწყობილობა, მიიღო სამუშაოს შედეგი და გაცემის მომენტში პრეტენზია არ აქვს.'],
+      ['Оплата производится при выдаче устройства; неоплаченная сумма остается задолженностью клиента.', 'გადახდა ხდება მოწყობილობის გაცემისას; გადაუხდელი თანხა რჩება კლიენტის დავალიანებად.'],
+      ['Переданные старые детали возвращаются по запросу клиента, если они не были утилизированы по согласованию сторон.', 'ძველი დეტალები ბრუნდება კლიენტის მოთხოვნით, თუ მხარეების შეთანხმებით არ მოხდა მათი უტილიზაცია.'],
+      ['Работы, не указанные в документе, не считаются выполненными и не входят в стоимость данного заказа.', 'დოკუმენტში მიუთითებელი სამუშაოები შესრულებულად არ ითვლება და ამ შეკვეთის ღირებულებაში არ შედის.']
+    ]);
+  }
+  function warrantyRules() {
+    return rules('Правила гарантии', 'გარანტიის წესები', [
+      ['Гарантия действует только на выполненные работы и установленные сервисом детали в пределах указанного срока.', 'გარანტია მოქმედებს მხოლოდ შესრულებულ სამუშაოებზე და სერვისის მიერ დამონტაჟებულ ნაწილებზე მითითებულ ვადაში.'],
+      ['Гарантия не действует при влаге, механических повреждениях, скачках напряжения, следах вскрытия или ремонта третьими лицами.', 'გარანტია არ მოქმედებს სითხის, მექანიკური დაზიანების, ძაბვის ცვლილების, გახსნის ან მესამე პირის შეკეთების შემთხვევაში.'],
+      ['Гарантия не распространяется на программное обеспечение, пользовательские данные, расходники и новые неисправности.', 'გარანტია არ ვრცელდება პროგრამულ უზრუნველყოფაზე, მომხმარებლის მონაცემებზე, სახარჯ მასალებზე და ახალ გაუმართაობებზე.'],
+      ['Для гарантийного обращения нужен номер заказа или документ; устройство принимается на проверку причины неисправности.', 'საგარანტიო მიმართვისთვის საჭიროა შეკვეთის ნომერი ან დოკუმენტი; მოწყობილობა მიიღება მიზეზის შესამოწმებლად.']
+    ]);
+  }
   function legalRows(settings) {
     const legal = [
       settings.companyLegalName ? `Юр. лицо / იურ. პირი: ${esc(settings.companyLegalName)}` : '',
@@ -14613,6 +14672,7 @@ document.addEventListener('DOMContentLoaded', function(){
             'Устройство принято в сервисный центр. Диагностика, сроки и стоимость ремонта согласуются с клиентом отдельно.',
             'მოწყობილობა მიღებულია სერვის ცენტრში. დიაგნოსტიკა, ვადები და შეკეთების ღირებულება კლიენტთან შეთანხმდება ცალკე.'
           )}
+          ${acceptanceRules()}
         </section>
         ${signatures(settings)}
       </article>
@@ -14647,6 +14707,7 @@ document.addEventListener('DOMContentLoaded', function(){
             'Клиент получил устройство и подтверждает выполнение указанных работ.',
             'კლიენტმა მიიღო მოწყობილობა და ადასტურებს მითითებული სამუშაოების შესრულებას.'
           )}
+          ${completedRules()}
         </section>
         ${signatures(settings)}
       </article>
@@ -14671,6 +14732,7 @@ document.addEventListener('DOMContentLoaded', function(){
             'Гарантия действует на выполненные работы и установленные детали при соблюдении правил эксплуатации. Для обращения по гарантии используйте контакты исполнителя, указанные в документе.',
             'გარანტია ვრცელდება შესრულებულ სამუშაოებსა და დამონტაჟებულ ნაწილებზე ექსპლუატაციის წესების დაცვის შემთხვევაში. საგარანტიო მიმართვისთვის გამოიყენეთ დოკუმენტში მითითებული შემსრულებლის საკონტაქტო ინფორმაცია.'
           )}
+          ${warrantyRules()}
         </section>
         ${signatures(settings, true)}
       </article>
@@ -14697,30 +14759,34 @@ document.addEventListener('DOMContentLoaded', function(){
       html,body{width:210mm;height:297mm;margin:0;padding:0;overflow:hidden;background:#fff;color:#111;font-family:Arial,"Noto Sans Georgian","DejaVu Sans",sans-serif}
       *{box-sizing:border-box}
       .doc{width:200mm;height:287mm;margin:0 auto;overflow:hidden;background:#fff}
-      .ga4-doc{width:200mm;height:287mm;overflow:hidden;display:flex;flex-direction:column;gap:1.9mm;font-size:9.7px;line-height:1.16;color:#111}
+      .ga4-doc{width:200mm;height:287mm;overflow:hidden;display:flex;flex-direction:column;gap:1.55mm;font-size:9.3px;line-height:1.14;color:#111}
       .ga4-head{display:grid;grid-template-columns:minmax(0,1fr) 52mm;gap:4mm;align-items:start;border-bottom:1px solid #111;padding-bottom:2mm}
       .ga4-brand{font-size:17px;font-weight:900;line-height:1;margin-bottom:1.6mm}
       .ga4-sub,.ga4-meta{font-size:8.6px;line-height:1.25;color:#333;overflow-wrap:anywhere}
       .ga4-meta{text-align:right}
       h1{margin:0;text-align:center;font-size:14px;line-height:1.08;font-weight:900}
       h1 small{display:block;font-size:11px;margin-top:.8mm}
-      .ga4-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5mm}
-      .ga4-stack{display:grid;gap:1.5mm;min-height:0}
-      .ga4-field{border:1px solid #222;border-radius:1.4mm;padding:1.1mm 1.35mm;min-height:9mm;overflow:hidden;break-inside:avoid}
+      .ga4-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25mm}
+      .ga4-stack{display:grid;gap:1.25mm;min-height:0}
+      .ga4-field{border:1px solid #222;border-radius:1.2mm;padding:1mm 1.2mm;min-height:8.4mm;overflow:hidden;break-inside:avoid}
       .ga4-full{grid-column:1/-1}
       .ga4-label{display:flex;justify-content:space-between;gap:3mm;color:#4b5563;font-size:7.7px;line-height:1.08;font-weight:900;text-transform:uppercase}
-      .ga4-value{margin-top:.75mm;font-size:9.7px;line-height:1.2;overflow-wrap:anywhere;word-break:break-word}
-      .ga4-clamp-small .ga4-value{max-height:10mm;overflow:hidden}
-      .ga4-clamp-mid .ga4-value{max-height:17mm;overflow:hidden}
-      .ga4-notice{border:1px dashed #555;border-radius:1.6mm;padding:1.5mm 1.8mm;overflow:hidden;break-inside:avoid}
-      .ga4-notice b{display:block;font-size:8.8px;margin-bottom:.8mm}
+      .ga4-value{margin-top:.65mm;font-size:9.3px;line-height:1.18;overflow-wrap:anywhere;word-break:break-word}
+      .ga4-clamp-small .ga4-value{max-height:9mm;overflow:hidden}
+      .ga4-clamp-mid .ga4-value{max-height:14mm;overflow:hidden}
+      .ga4-notice,.ga4-rules{border:1px dashed #555;border-radius:1.3mm;padding:1.25mm 1.55mm;overflow:hidden;break-inside:avoid}
+      .ga4-notice b,.ga4-rules b{display:block;font-size:8.5px;margin-bottom:.7mm}
       .ga4-two{display:grid;grid-template-columns:1fr 1fr;gap:2.6mm}
-      .ga4-two p{margin:0;font-size:8.1px;line-height:1.18;color:#333}
+      .ga4-two p{margin:0;font-size:7.8px;line-height:1.16;color:#333}
+      .ga4-rules ol{margin:0;padding-left:4.6mm;display:grid;gap:.6mm}
+      .ga4-rules li{padding-left:.6mm}
+      .ga4-rules span,.ga4-rules em{display:block;font-size:7.45px;line-height:1.12;color:#333;font-style:normal}
+      .ga4-rules em{color:#555}
       .ga4-table{width:100%;border-collapse:collapse;table-layout:fixed}
-      .ga4-table td{border:1px solid #222;padding:1.1mm 1.5mm;vertical-align:top;font-size:8.8px;line-height:1.15;overflow-wrap:anywhere}
+      .ga4-table td{border:1px solid #222;padding:1mm 1.3mm;vertical-align:top;font-size:8.4px;line-height:1.13;overflow-wrap:anywhere}
       .ga4-table td:first-child{width:43mm;font-weight:900}
       .ga4-table span{font-size:7.5px;color:#555;font-weight:700}
-      .ga4-signatures{display:grid;grid-template-columns:1fr 1fr;gap:10mm;margin-top:4mm;padding-top:3mm}
+      .ga4-signatures{display:grid;grid-template-columns:1fr 1fr;gap:10mm;margin-top:2mm;padding-top:2.4mm}
       .ga4-signatures div{border-top:1px solid #111;padding-top:1.2mm;font-size:8.8px;font-weight:800;text-align:center}
       .ga4-label-card{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-top:4mm}
       .ga4-label-note{margin-top:auto}
@@ -15661,6 +15727,16 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     if (!firebaseReady) return;
     await Promise.all(DATA_KEYS.map(key => writeFirebaseKey(key)));
   }
+  window.crmPushKeyToCloud = async function(key) {
+    if (!DATA_KEY_SET.has(key)) return false;
+    const api = await ensureFirebaseConnection();
+    await writeFirebaseKey(key);
+    updateCloudSyncStatus({ error: '' });
+    return true;
+  };
+  window.crmPushAccessToFirebase = async function() {
+    return window.crmPushKeyToCloud('one_service_settings');
+  };
   function applyFirebaseDoc(key, data) {
     if (!data || data.updatedBy === clientId || typeof data.raw !== 'string') return;
     const localWriteAt = localWriteTimestamps.get(key) || 0;
@@ -17361,6 +17437,208 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
   }
 })();
 </script>
+
+<style id="one-service-settings-release-layout-final">
+  #settingsModalOverlay.open .modal,
+  .workspace-page-host #settingsModalOverlay.workspace-page-overlay.open > .modal {
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: calc(100dvh - 18px) !important;
+    overflow: hidden !important;
+  }
+
+  #settingsForm {
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #settingsModalOverlay .settings-layout {
+    display: grid !important;
+    grid-template-columns: minmax(180px, 220px) minmax(0, 1fr) !important;
+    gap: 14px !important;
+    min-height: 0 !important;
+    height: min(72dvh, 720px) !important;
+    align-items: stretch !important;
+  }
+
+  #settingsModalOverlay .settings-nav {
+    align-content: start !important;
+    overflow: auto !important;
+    min-height: 0 !important;
+    padding: 8px !important;
+    border-radius: 12px !important;
+  }
+
+  #settingsModalOverlay .settings-tab {
+    min-height: 42px !important;
+    padding: 0 12px !important;
+    white-space: normal !important;
+    text-align: left !important;
+  }
+
+  #settingsModalOverlay .settings-content {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: auto !important;
+    padding-right: 2px !important;
+  }
+
+  #settingsModalOverlay .settings-section.active {
+    display: block !important;
+    min-width: 0 !important;
+  }
+
+  #settingsModalOverlay .settings-section h4 {
+    margin: 0 0 12px !important;
+  }
+
+  #settingsModalOverlay .form-grid,
+  #settingsModalOverlay .settings-directory-panel,
+  #settingsModalOverlay .data-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)) !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+  }
+
+  #settingsModalOverlay .settings-directory-card,
+  #settingsModalOverlay .docs-basic-card,
+  #settingsModalOverlay .data-card,
+  #settingsModalOverlay .interface-settings-panel,
+  #settingsModalOverlay .settings-service-editor,
+  #settingsModalOverlay .master-access-panel {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #settingsModalOverlay input,
+  #settingsModalOverlay select,
+  #settingsModalOverlay textarea {
+    max-width: 100% !important;
+  }
+
+  #settingsModalOverlay textarea {
+    min-height: 92px !important;
+    resize: vertical !important;
+  }
+
+  #settingsModalOverlay .inline-actions,
+  #settingsModalOverlay .one-service-directory-actions,
+  #settingsModalOverlay .settings-directory-row .inline-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  #settingsModalOverlay .settings-directory-row {
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  #settingsModalOverlay .settings-actions-card {
+    margin-top: 12px !important;
+  }
+
+  #masterEditorOverlay.open .modal,
+  .master-editor-overlay.open .modal {
+    width: min(760px, calc(100vw - 24px)) !important;
+    max-height: calc(100dvh - 24px) !important;
+    overflow: auto !important;
+  }
+
+  .master-editor-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)) !important;
+  }
+
+  @media (max-width: 860px) {
+    #settingsModalOverlay.open .modal,
+    .workspace-page-host #settingsModalOverlay.workspace-page-overlay.open > .modal {
+      max-height: none !important;
+      min-height: calc(100dvh - 70px) !important;
+      overflow: visible !important;
+    }
+
+    #settingsForm {
+      overflow: visible !important;
+    }
+
+    #settingsModalOverlay .settings-layout {
+      display: block !important;
+      height: auto !important;
+      min-height: 0 !important;
+    }
+
+    #settingsModalOverlay .settings-nav {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 8 !important;
+      display: flex !important;
+      gap: 8px !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 8px 4px 10px !important;
+      margin: -4px 0 12px !important;
+      border-radius: 0 !important;
+      background: color-mix(in srgb, var(--panel, #fff) 92%, transparent) !important;
+      backdrop-filter: blur(10px);
+      scroll-snap-type: x proximity;
+    }
+
+    #settingsModalOverlay .settings-tab {
+      flex: 0 0 auto !important;
+      min-height: 38px !important;
+      max-width: 170px !important;
+      padding: 0 12px !important;
+      border-radius: 999px !important;
+      scroll-snap-align: start;
+      text-align: center !important;
+      white-space: nowrap !important;
+    }
+
+    #settingsModalOverlay .settings-content {
+      overflow: visible !important;
+      padding: 0 !important;
+    }
+
+    #settingsModalOverlay .settings-section {
+      padding: 12px !important;
+      border-radius: 12px !important;
+    }
+
+    #settingsModalOverlay .form-grid,
+    #settingsModalOverlay .settings-directory-panel,
+    #settingsModalOverlay .data-grid,
+    #settingsModalOverlay .master-editor-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    #settingsModalOverlay .settings-directory-row {
+      align-items: flex-start !important;
+      flex-direction: column !important;
+    }
+
+    #settingsModalOverlay .settings-directory-row .inline-actions,
+    #settingsModalOverlay .one-service-directory-actions {
+      width: 100% !important;
+    }
+
+    #settingsModalOverlay .settings-directory-row .small-btn,
+    #settingsModalOverlay .one-service-directory-actions .btn {
+      flex: 1 1 120px !important;
+    }
+
+    #masterEditorOverlay.open .modal,
+    .master-editor-overlay.open .modal {
+      width: calc(100vw - 16px) !important;
+      max-height: calc(100dvh - 16px) !important;
+      padding: 12px !important;
+      border-radius: 14px !important;
+    }
+  }
+
+  body[data-ui-theme="dark"] #settingsModalOverlay .settings-nav {
+    background: color-mix(in srgb, #111827 88%, transparent) !important;
+  }
+</style>
 
 </body>
 </html>
