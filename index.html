@@ -7767,6 +7767,7 @@ body[data-ui-theme="dark"] .client-order-row em{
 
           <input type="text" id="clientName" placeholder="ФИО клиента" required>
           <input type="tel" id="clientPhone" placeholder="Номер телефона" required>
+          <input type="text" id="clientAddress" placeholder="Адрес клиента">
 
           <input type="text" id="deviceType" placeholder="Тип техники" required>
           <input type="text" id="deviceName" placeholder="Название техники">
@@ -7829,6 +7830,7 @@ body[data-ui-theme="dark"] .client-order-row em{
 
         <div class="modal-actions" style="justify-content:flex-start;">
           <button class="btn btn-secondary" id="printAcceptanceBtn" type="button">Печать акта приёма</button>
+          <button class="btn btn-secondary" id="printDiagnosticBtn" type="button">Печать акта диагностики</button>
           <button class="btn btn-secondary" id="printCompletedBtn" type="button">Печать акта выполненных работ</button>
           <button class="btn btn-secondary" id="printWarrantyBtn" type="button">Печать гарантии</button>
           <button class="btn btn-secondary" id="printLabelBtn" type="button">Печать наклейки</button>
@@ -8473,6 +8475,9 @@ body[data-ui-theme="dark"] .client-order-row em{
       acceptanceTitle: 'Акт приёма техники в ремонт',
       acceptanceIntro: 'Клиент передал устройство на диагностику и/или ремонт.',
       acceptanceNotice: 'Стоимость работ уточняется после диагностики, если не указано иное. Устройство принимается без ответственности за скрытые дефекты, не заявленные клиентом при приёме.',
+      diagnosticTitle: 'Акт диагностики',
+      diagnosticIntro: 'Исполнитель провел первичную диагностику устройства и зафиксировал выявленные признаки неисправности.',
+      diagnosticNotice: 'Результат диагностики является техническим заключением на момент проверки. Окончательная стоимость и сроки ремонта согласуются с клиентом отдельно до выполнения платных работ.',
       completedTitle: 'Акт выполненных работ',
       completedIntro: 'Работы выполнены согласно заказу.',
       completedNotice: 'Клиент подтверждает, что устройство получено, качество выполненных работ проверено, претензий на момент выдачи не имеет.',
@@ -8534,6 +8539,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       deadlineAt: document.getElementById('deadlineAt'),
       clientName: document.getElementById('clientName'),
       clientPhone: document.getElementById('clientPhone'),
+      clientAddress: document.getElementById('clientAddress'),
       deviceType: document.getElementById('deviceType'),
       deviceName: document.getElementById('deviceName'),
       deviceModel: document.getElementById('deviceModel'),
@@ -8897,6 +8903,7 @@ body[data-ui-theme="dark"] .client-order-row em{
         status,
         clientName: String(item.clientName || ''),
         clientPhone: String(item.clientPhone || ''),
+        clientAddress: String(item.clientAddress || item.address || ''),
         clientSource: String(item.clientSource || ''),
         deviceType: String(item.deviceType || ''),
         deviceName: String(item.deviceName || item.deviceBrand || item.brand || ''),
@@ -9543,6 +9550,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       formFields.deadlineAt.value = order?.deadlineAt || '';
       formFields.clientName.value = order?.clientName || '';
       formFields.clientPhone.value = order?.clientPhone || '';
+      if (formFields.clientAddress) formFields.clientAddress.value = order?.clientAddress || order?.address || '';
       formFields.clientSource.value = order?.clientSource || '';
       formFields.deviceType.value = order?.deviceType || '';
       if (formFields.deviceName) formFields.deviceName.value = order?.deviceName || '';
@@ -9590,6 +9598,7 @@ body[data-ui-theme="dark"] .client-order-row em{
         deadlineAt: formFields.deadlineAt.value,
         clientName: formFields.clientName.value.trim(),
         clientPhone: formFields.clientPhone.value.trim(),
+        clientAddress: formFields.clientAddress?.value.trim() || '',
         clientSource: formFields.clientSource.value.trim(),
         deviceType: formFields.deviceType.value.trim(),
         deviceName: formFields.deviceName?.value.trim() || '',
@@ -9809,7 +9818,7 @@ body[data-ui-theme="dark"] .client-order-row em{
             key,
             clientName: order.clientName,
             clientPhone: order.clientPhone,
-            address: '',
+            address: order.clientAddress || '',
             note: '',
             profileId: '',
             hidden: false,
@@ -9824,6 +9833,7 @@ body[data-ui-theme="dark"] .client-order-row em{
         const client = groups.get(key);
         client.clientName = order.clientName || client.clientName;
         client.clientPhone = order.clientPhone || client.clientPhone;
+        client.address = order.clientAddress || client.address || '';
         client.orders.push(order);
         client.total += parseAmount(order.totalCost);
         client.paid += parseAmount(order.paidAmount);
@@ -9998,6 +10008,7 @@ body[data-ui-theme="dark"] .client-order-row em{
           ...order,
           clientName: clientName || order.clientName,
           clientPhone: clientPhone || order.clientPhone,
+          clientAddress: address || order.clientAddress || '',
           updatedAt: now
         };
       });
@@ -10205,7 +10216,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       if (sectionName === 'documents') renderDocumentPreview();
     }
 
-    const DOC_VARIABLES = ['{serviceName}','{servicePhone}','{serviceAddress}','{legalName}','{taxId}','{email}','{order}','{date}','{client}','{clientPhone}','{device}','{deviceName}','{model}','{master}','{status}','{problem}','{works}','{cost}','{paid}','{debt}','{warrantyDays}','{warrantyUntil}','{services}','{parts}'];
+    const DOC_VARIABLES = ['{serviceName}','{servicePhone}','{serviceAddress}','{legalName}','{taxId}','{email}','{order}','{date}','{client}','{clientPhone}','{clientAddress}','{device}','{deviceName}','{model}','{master}','{status}','{problem}','{works}','{cost}','{paid}','{debt}','{warrantyDays}','{warrantyUntil}','{services}','{parts}'];
     let orderTypeDocBuildersDraft = [];
     let statusDocBuildersDraft = [];
 
@@ -10217,7 +10228,7 @@ body[data-ui-theme="dark"] .client-order-row em{
         serviceName: settings.serviceName || '', servicePhone: servicePhones || settings.servicePhone || '', serviceAddress: serviceAddresses || settings.serviceAddress || '',
         legalName: settings.companyLegalName || '', taxId: settings.companyTaxId || '', email: settings.companyEmail || '',
         order: order.orderNumber || '', date: formatDate(order.createdAt || new Date().toISOString()), client: order.clientName || '',
-        clientPhone: order.clientPhone || '', device: order.deviceType || '', deviceName: order.deviceName || '', model: order.deviceModel || '', master: order.masterName || '',
+        clientPhone: order.clientPhone || '', clientAddress: order.clientAddress || '', device: order.deviceType || '', deviceName: order.deviceName || '', model: order.deviceModel || '', master: order.masterName || '',
         status: getStatusLabel(order.status || ''), problem: order.problemDescription || '', works: order.completedWorks || order.masterNotes || '',
         cost: money(order.totalCost), paid: money(order.paidAmount), debt: money(getDebt(order)), warrantyDays: order.warrantyDays || '',
         warrantyUntil: formatDateOnly(order.warrantyUntil), services: summarizeServices(order.servicesUsed), parts: summarizeParts(order.partsUsed)
@@ -10227,7 +10238,7 @@ body[data-ui-theme="dark"] .client-order-row em{
     function applyTemplate(template, order = {}, fallback = '') {
       const source = String(template || fallback || '');
       const data = templateContext(order);
-      return source.replace(/\{(serviceName|servicePhone|serviceAddress|legalName|taxId|email|order|date|client|clientPhone|device|deviceName|model|master|status|problem|works|cost|paid|debt|warrantyDays|warrantyUntil|services|parts)\}/g, (match, key) => String(data[key] ?? ''));
+      return source.replace(/\{(serviceName|servicePhone|serviceAddress|legalName|taxId|email|order|date|client|clientPhone|clientAddress|device|deviceName|model|master|status|problem|works|cost|paid|debt|warrantyDays|warrantyUntil|services|parts)\}/g, (match, key) => String(data[key] ?? ''));
     }
     function templateToHtml(template, order = {}, fallback = '') { return escapeHtml(applyTemplate(template, order, fallback)).replace(/\n/g, '<br>'); }
 
@@ -10770,7 +10781,7 @@ body[data-ui-theme="dark"] .client-order-row em{
       const headerNote = settings.printHeaderNote ? `<div class="small" style="margin-top:8px">${templateToHtml(settings.printHeaderNote, order)}</div>` : '';
       return `<div class="head"><div><div class="brand">${escapeHtml(settings.serviceName)}</div><div class="sub">${escapeHtml(settings.printBrandText || 'Сервисный центр')}<br>Тел.: ${escapeHtml(settings.servicePhone)}<br>Адрес: ${escapeHtml(settings.serviceAddress)}${showLegal && legalRows ? `<br>${legalRows}` : ''}</div>${headerNote}${renderHeaderStamp(settings, order)}</div><div class="sub" style="text-align:right">Документ № ${escapeHtml(order.orderNumber)}<br>Дата: ${escapeHtml(formatDate(order.createdAt))}</div></div><h1>${escapeHtml(docTitle)}</h1>`;
     }
-    function renderClientBlock(order) { return `<div class="field"><div class="label">ФИО клиента</div><div class="value">${escapeHtml(order.clientName)}</div></div><div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>`; }
+    function renderClientBlock(order) { return `<div class="field"><div class="label">ФИО клиента</div><div class="value">${escapeHtml(order.clientName)}</div></div><div class="field"><div class="label">Телефон</div><div class="value">${escapeHtml(order.clientPhone)}</div></div>${order.clientAddress ? `<div class="field full"><div class="label">Адрес</div><div class="value">${escapeHtml(order.clientAddress)}</div></div>` : ''}`; }
     function renderDeviceBlock(order) { return `<div class="field"><div class="label">Тип техники</div><div class="value">${escapeHtml(order.deviceType)}</div></div><div class="field"><div class="label">Название техники</div><div class="value">${escapeHtml(order.deviceName || '—')}</div></div><div class="field"><div class="label">Модель</div><div class="value">${escapeHtml(order.deviceModel || '—')}</div></div>`; }
     function renderSignatures(settings, reverse = false) { if (settings.printShowSignatures === 'no') return ''; const first = reverse ? escapeHtml(settings.signatureMasterLabel || 'Подпись мастера') : escapeHtml(settings.signatureClientLabel || 'Подпись клиента'); const second = reverse ? escapeHtml(settings.signatureClientLabel || 'Подпись клиента') : escapeHtml(settings.signatureMasterLabel || 'Подпись мастера'); return `<div class="signatures"><div class="sign-line">${first}</div><div class="sign-line">${second}</div></div>`; }
 
@@ -11219,6 +11230,10 @@ body[data-ui-theme="dark"] .client-order-row em{
     });
 
     document.getElementById('printAcceptanceBtn').addEventListener('click', () => printAcceptanceAct(collectFormData(findOrderById(editingId))));
+    document.getElementById('printDiagnosticBtn')?.addEventListener('click', () => {
+      const order = collectFormData(findOrderById(editingId));
+      if (typeof printDiagnosticAct === 'function') printDiagnosticAct(order);
+    });
     document.getElementById('printCompletedBtn').addEventListener('click', () => printCompletedAct(collectFormData(findOrderById(editingId))));
     document.getElementById('printWarrantyBtn').addEventListener('click', () => printWarranty(collectFormData(findOrderById(editingId))));
     document.getElementById('printLabelBtn').addEventListener('click', () => printLabel(collectFormData(findOrderById(editingId))));
@@ -11620,6 +11635,7 @@ body[data-ui-theme="dark"] .client-order-row em{
     deadlineAt: 'Срок выполнения',
     clientName: 'Клиент',
     clientPhone: 'Телефон',
+    clientAddress: 'Адрес',
     clientSource: 'Источник клиента',
     deviceType: 'Техника',
     deviceName: 'Название техники',
@@ -11641,7 +11657,7 @@ body[data-ui-theme="dark"] .client-order-row em{
 
   const sections = [
     { key: 'basic', title: 'Заказ', fields: ['orderNumber', 'orderStatus', 'orderType', 'deadlineAt'] },
-    { key: 'client', title: 'Клиент', fields: ['clientName', 'clientPhone', 'clientSource'] },
+    { key: 'client', title: 'Клиент', fields: ['clientName', 'clientPhone', 'clientAddress', 'clientSource'] },
     { key: 'device', title: 'Устройство', fields: ['deviceType', 'deviceName', 'deviceModel', 'deviceKit', 'masterName', 'warrantyDays', 'warrantyUntil'] },
     { key: 'finance', title: 'Финансы', fields: ['totalCost', 'partsCost', 'paidAmount', 'discountAmount', 'paymentMethod'] },
     { key: 'notes', title: 'Описание', fields: ['problemDescription', 'completedWorks', 'masterNotes', 'taskNote'] }
@@ -11883,12 +11899,12 @@ document.addEventListener('DOMContentLoaded', function(){
   if (columnsList && !columnsList.children.length) {const prefs=getColumnPrefs();columnsList.innerHTML=columns.map(col=>'<label><input type="checkbox" data-column-key="'+col.key+'" '+(prefs[col.key]!==false?'checked':'')+'><span>'+col.label+'</span></label>').join('');columnsList.addEventListener('change', function(event){const input=event.target.closest('input[data-column-key]');if(!input)return;const prefs=getColumnPrefs();prefs[input.dataset.columnKey]=input.checked;localStorage.setItem(columnStorageKey, JSON.stringify(prefs));applyColumnPrefs();});}
   applyColumnPrefs();
   if (menuBtn && toolsMenu) {menuBtn.addEventListener('click', function(event){event.stopPropagation();toolsMenu.classList.toggle('open');});toolsMenu.addEventListener('click', function(event){const btn=event.target.closest('[data-menu-action]');if(!btn)return;document.getElementById(btn.dataset.menuAction)?.click();toolsMenu.classList.remove('open');});document.addEventListener('click', function(event){if(!toolsMenu.classList.contains('open'))return;if(toolsMenu.contains(event.target)||menuBtn.contains(event.target))return;toolsMenu.classList.remove('open');});}
-  if (!document.getElementById('orderActionsModalOverlay')) {const modal=document.createElement('div');modal.className='modal-overlay order-actions-modal';modal.id='orderActionsModalOverlay';modal.innerHTML='<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">×</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для выбранного заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">—</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">—</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-secondary" type="button" data-order-action="acceptance">Печать акта приема</button><button class="btn btn-secondary" type="button" data-order-action="completed">Печать акта выполненных работ</button><button class="btn btn-secondary" type="button" data-order-action="warranty">Печать гарантии</button><button class="btn btn-secondary" type="button" data-order-action="label">Печать наклейки / QR</button><button class="btn btn-secondary" type="button" data-order-action="whatsapp">WhatsApp клиенту</button><button class="btn btn-secondary" type="button" data-order-action="sms">SMS клиенту</button><button class="btn btn-secondary" type="button" data-order-action="telegram">Telegram текст</button><button class="btn btn-danger" type="button" data-order-action="delete">Удалить заказ</button></div></div>';document.body.appendChild(modal);}
+  if (!document.getElementById('orderActionsModalOverlay')) {const modal=document.createElement('div');modal.className='modal-overlay order-actions-modal';modal.id='orderActionsModalOverlay';modal.innerHTML='<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">×</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для выбранного заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">—</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">—</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-secondary" type="button" data-order-action="acceptance">Печать акта приема</button><button class="btn btn-secondary" type="button" data-order-action="diagnostic">Печать акта диагностики</button><button class="btn btn-secondary" type="button" data-order-action="completed">Печать акта выполненных работ</button><button class="btn btn-secondary" type="button" data-order-action="warranty">Печать гарантии</button><button class="btn btn-secondary" type="button" data-order-action="label">Печать наклейки / QR</button><button class="btn btn-secondary" type="button" data-order-action="whatsapp">WhatsApp клиенту</button><button class="btn btn-secondary" type="button" data-order-action="sms">SMS клиенту</button><button class="btn btn-secondary" type="button" data-order-action="telegram">Telegram текст</button><button class="btn btn-danger" type="button" data-order-action="delete">Удалить заказ</button></div></div>';document.body.appendChild(modal);}
   const overlay=document.getElementById('orderActionsModalOverlay'); const titleEl=document.getElementById('orderActionsTitle'); const clientEl=document.getElementById('orderActionsClient'); const deviceEl=document.getElementById('orderActionsDevice'); const statusEl=document.getElementById('orderActionsStatusBadge'); let activeOrderId=null;
   function openOrderActions(order){if(!order)return;activeOrderId=order.id;titleEl.textContent='Действия с заказом № '+(order.orderNumber||'');clientEl.textContent=(order.clientName||'—')+(order.clientPhone?' • '+order.clientPhone:'');deviceEl.textContent=[order.deviceType,order.deviceName,order.deviceModel].filter(Boolean).join(' • ')||'—';statusEl.textContent=typeof getStatusLabel==='function'?getStatusLabel(order.status):(order.status||'Статус');overlay.classList.add('open');}
   function closeOrderActions(){overlay.classList.remove('open');activeOrderId=null;}
   function currentOrder(){return typeof findOrderById==='function'?findOrderById(activeOrderId):null;}
-  function handleOrderAction(action){const order=currentOrder();if(!order)return;closeOrderActions();if(action==='edit'&&typeof openModal==='function')openModal(order);else if(action==='history'&&typeof renderHistory==='function')renderHistory(order);else if(action==='acceptance'&&typeof printAcceptanceAct==='function')printAcceptanceAct(order);else if(action==='completed'&&typeof printCompletedAct==='function')printCompletedAct(order);else if(action==='warranty'&&typeof printWarranty==='function')printWarranty(order);else if(action==='label'&&typeof printLabel==='function')printLabel(order);else if(['whatsapp','sms','telegram'].includes(action)&&typeof openNotification==='function')openNotification(order,action);else if(action==='delete'){if(!window.confirm('Удалить заказ № '+(order.orderNumber||'')+'?'))return;const orders=typeof getOrders==='function'?getOrders().filter(item=>item.id!==order.id):[];const saved=typeof saveOrders==='function'?saveOrders(orders):false;if(saved!==false){if(typeof logActivity==='function')logActivity('Заказ','Удален заказ № '+(order.orderNumber||''));if(typeof renderAll==='function')renderAll();else if(typeof renderOrders==='function')renderOrders();}}}
+  function handleOrderAction(action){const order=currentOrder();if(!order)return;closeOrderActions();if(action==='edit'&&typeof openModal==='function')openModal(order);else if(action==='history'&&typeof renderHistory==='function')renderHistory(order);else if(action==='acceptance'&&typeof printAcceptanceAct==='function')printAcceptanceAct(order);else if(action==='diagnostic'&&typeof printDiagnosticAct==='function')printDiagnosticAct(order);else if(action==='completed'&&typeof printCompletedAct==='function')printCompletedAct(order);else if(action==='warranty'&&typeof printWarranty==='function')printWarranty(order);else if(action==='label'&&typeof printLabel==='function')printLabel(order);else if(['whatsapp','sms','telegram'].includes(action)&&typeof openNotification==='function')openNotification(order,action);else if(action==='delete'){if(!window.confirm('Удалить заказ № '+(order.orderNumber||'')+'?'))return;const orders=typeof getOrders==='function'?getOrders().filter(item=>item.id!==order.id):[];const saved=typeof saveOrders==='function'?saveOrders(orders):false;if(saved!==false){if(typeof logActivity==='function')logActivity('Заказ','Удален заказ № '+(order.orderNumber||''));if(typeof renderAll==='function')renderAll();else if(typeof renderOrders==='function')renderOrders();}}}
   document.getElementById('closeOrderActionsModal')?.addEventListener('click', closeOrderActions);
   overlay?.addEventListener('click', function(event){if(event.target===overlay){closeOrderActions();return;} const btn=event.target.closest('[data-order-action]'); if(!btn)return; handleOrderAction(btn.dataset.orderAction);});
   document.addEventListener('keydown', function(event){if(event.key==='Escape'&&overlay&&overlay.classList.contains('open'))closeOrderActions();});
@@ -14497,6 +14513,12 @@ document.addEventListener('DOMContentLoaded', function(){
     const text = String(value || fallback || '—').trim();
     return esc(text).replace(/\n/g, '<br>');
   }
+  function templateToSafeHtml(template, order = {}) {
+    try {
+      if (typeof applyTemplate === 'function') return txt(applyTemplate(template, order, template));
+    } catch (error) {}
+    return txt(template);
+  }
   function moneySafe(value) {
     try { return typeof money === 'function' ? money(value) : String(value || 0); }
     catch (error) { return String(value || 0); }
@@ -14644,6 +14666,7 @@ document.addEventListener('DOMContentLoaded', function(){
       ${settings.printShowClientBlock === 'no' ? '' : `
         ${field('Клиент', 'კლიენტი', esc(order.clientName || '—'))}
         ${field('Телефон', 'ტელეფონი', esc(order.clientPhone || '—'))}
+        ${order.clientAddress ? field('Адрес', 'მისამართი', esc(order.clientAddress), 'ga4-full') : ''}
       `}
       ${settings.printShowDeviceBlock === 'no' ? '' : `
         ${field('Устройство', 'მოწყობილობა', esc(order.deviceType || '—'))}
@@ -14673,6 +14696,29 @@ document.addEventListener('DOMContentLoaded', function(){
             'მოწყობილობა მიღებულია სერვის ცენტრში. დიაგნოსტიკა, ვადები და შეკეთების ღირებულება კლიენტთან შეთანხმდება ცალკე.'
           )}
           ${acceptanceRules()}
+        </section>
+        ${signatures(settings)}
+      </article>
+    `;
+  }
+  function renderDiagnosticGeorgia(order = {}) {
+    const settings = settingsFor(order);
+    const titleRu = settings.diagnosticTitle || 'Акт диагностики';
+    const intro = settings.diagnosticIntro || 'Исполнитель провел первичную диагностику устройства и зафиксировал выявленные признаки неисправности.';
+    const noticeText = settings.diagnosticNotice || 'Результат диагностики является техническим заключением на момент проверки. Окончательная стоимость и сроки ремонта согласуются с клиентом отдельно до выполнения платных работ.';
+    return `
+      <article class="ga4-doc">
+        ${head(settings, order, titleRu, 'დიაგნოსტიკის აქტი')}
+        <section class="ga4-grid">
+          ${partyFields(settings, order)}
+          ${field('Мастер', 'ოსტატი', esc(order.masterName || '—'))}
+          ${field('Статус', 'სტატუსი', esc(typeof getStatusLabel === 'function' ? getStatusLabel(order.status) : (order.status || '—')))}
+        </section>
+        <section class="ga4-stack">
+          ${field('Заявленная неисправность', 'აღწერილი გაუმართაობა', txt(order.problemDescription), 'ga4-full ga4-clamp-mid')}
+          ${field('Результат диагностики', 'დიაგნოსტიკის შედეგი', txt(order.completedWorks || order.masterNotes || 'Диагностика выполнена, результат требует согласования с клиентом.'), 'ga4-full ga4-clamp-mid')}
+          ${notice('Заключение диагностики', 'დიაგნოსტიკის დასკვნა', templateToSafeHtml(intro, order), 'დიაგნოსტიკის შედეგი აღწერს მოწყობილობის მდგომარეობას შემოწმების მომენტში.')}
+          ${notice('Условия диагностики', 'დიაგნოსტიკის პირობები', templateToSafeHtml(noticeText, order), 'შეკეთების საბოლოო ღირებულება და ვადები შეთანხმდება კლიენტთან ცალკე.')}
         </section>
         ${signatures(settings)}
       </article>
@@ -14796,8 +14842,22 @@ document.addEventListener('DOMContentLoaded', function(){
     `;
   }
   function printA4(title, body) {
-    const printWindow = window.open('', '_blank', 'width=980,height=900');
+    const oldFrame = document.getElementById('oneServicePrintFrame');
+    if (oldFrame) oldFrame.remove();
+    const frame = document.createElement('iframe');
+    frame.id = 'oneServicePrintFrame';
+    frame.setAttribute('title', 'Печать документа');
+    frame.style.position = 'fixed';
+    frame.style.right = '0';
+    frame.style.bottom = '0';
+    frame.style.width = '0';
+    frame.style.height = '0';
+    frame.style.border = '0';
+    frame.style.opacity = '0';
+    document.body.appendChild(frame);
+    const printWindow = frame.contentWindow;
     if (!printWindow) return;
+    printWindow.document.open();
     printWindow.document.write(`
       <html lang="ru">
         <head>
@@ -14820,20 +14880,26 @@ document.addEventListener('DOMContentLoaded', function(){
                 }
               }
               window.addEventListener('load', function(){fit(); setTimeout(function(){window.focus(); window.print();}, 120);});
+              window.addEventListener('afterprint', function(){ setTimeout(function(){ if(frameElement) frameElement.remove(); }, 300); });
             })();
           <\/script>
         </body>
       </html>
     `);
     printWindow.document.close();
+    setTimeout(() => {
+      if (document.body.contains(frame)) frame.remove();
+    }, 30000);
   }
   function install() {
     window.renderAcceptanceAct = renderAcceptanceGeorgia;
+    window.renderDiagnosticAct = renderDiagnosticGeorgia;
     window.renderCompletedAct = renderCompletedGeorgia;
     window.renderWarranty = renderWarrantyGeorgia;
     window.renderLabelHtml = renderLabelGeorgia;
     window.renderLabel = renderLabelGeorgia;
     window.printAcceptanceAct = function(order){ printA4(`Акт приема / მიღების აქტი № ${order?.orderNumber || ''}`, renderAcceptanceGeorgia(order || {})); };
+    window.printDiagnosticAct = function(order){ printA4(`Акт диагностики / დიაგნოსტიკის აქტი № ${order?.orderNumber || ''}`, renderDiagnosticGeorgia(order || {})); };
     window.printCompletedAct = function(order){ printA4(`Акт выполненных работ / შესრულებული სამუშაოები № ${order?.orderNumber || ''}`, renderCompletedGeorgia(order || {})); };
     window.printWarranty = function(order){ printA4(`Гарантия / გარანტია № ${order?.orderNumber || ''}`, renderWarrantyGeorgia(order || {})); };
     window.printLabel = function(order){ printA4(`Сервисная наклейка / სერვისული ეტიკეტი № ${order?.orderNumber || ''}`, renderLabelGeorgia(order || {})); };
@@ -15909,7 +15975,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     settingsBtn: 'settingsModalOverlay'
   };
   const menuSelector = '#ordersBtn,#clientsBtn,#inventoryBtn,#servicesBtn,#tasksBtn,#financeBtn,#reportsBtn,#suppliersBtn,#activityBtn,#settingsBtn';
-  const orderFields = ['orderNumber','orderStatus','orderType','deadlineAt','clientName','clientPhone','clientSource','deviceType','deviceName','deviceModel','deviceKit','masterName','warrantyDays','warrantyUntil','totalCost','partsCost','paidAmount','discountAmount','paymentMethod','problemDescription','completedWorks','masterNotes','taskNote'];
+  const orderFields = ['orderNumber','orderStatus','orderType','deadlineAt','clientName','clientPhone','clientAddress','clientSource','deviceType','deviceName','deviceModel','deviceKit','masterName','warrantyDays','warrantyUntil','totalCost','partsCost','paidAmount','discountAmount','paymentMethod','problemDescription','completedWorks','masterNotes','taskNote'];
 
   function byId(id) {
     return document.getElementById(id);
@@ -16086,7 +16152,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     overlay = document.createElement('div');
     overlay.className = 'modal-overlay order-actions-modal';
     overlay.id = 'orderActionsModalOverlay';
-    overlay.innerHTML = '<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">x</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">-</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">-</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-danger" type="button" data-order-action="delete">Удалить заказ</button></div></div>';
+    overlay.innerHTML = '<div class="modal"><button class="modal-close" id="closeOrderActionsModal" type="button" aria-label="Close">x</button><div class="order-actions-head"><div><h3 id="orderActionsTitle">Действия с заказом</h3><p class="order-row-hint">Выберите действие для заказа.</p></div><span class="badge" id="orderActionsStatusBadge">Статус</span></div><div class="order-actions-meta"><div class="data-card"><h4>Клиент</h4><p id="orderActionsClient">-</p></div><div class="data-card"><h4>Техника</h4><p id="orderActionsDevice">-</p></div></div><div class="order-actions-grid"><button class="btn btn-primary" type="button" data-order-action="edit">Изменить заказ</button><button class="btn btn-secondary" type="button" data-order-action="history">История статусов</button><button class="btn btn-secondary" type="button" data-order-action="diagnostic">Печать акта диагностики</button><button class="btn btn-danger" type="button" data-order-action="delete">Удалить заказ</button></div></div>';
     document.body.appendChild(overlay);
     return overlay;
   }
@@ -16176,6 +16242,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     if (!action) return;
     const order = findOrder(overlay.dataset.orderId);
     if (action === 'edit') openOrderModal(order);
+    if (action === 'diagnostic' && typeof printDiagnosticAct === 'function') printDiagnosticAct(order);
     if (action === 'delete') deleteOrder(order);
     if (action === 'history') {
       const lines = (order?.statusHistory || []).map(item => `${item.at || ''} ${item.status || ''} ${item.note || ''}`).join('\n');
@@ -16231,6 +16298,7 @@ window.CRM_RELEASE_CLOUD_CONFIG = window.CRM_RELEASE_CLOUD_CONFIG || {
     { key: 'deadlineAt', label: 'Срок выполнения', id: 'deadlineAt', group: 'Заказ' },
     { key: 'clientName', label: 'ФИО клиента', id: 'clientName', group: 'Клиент' },
     { key: 'clientPhone', label: 'Телефон клиента', id: 'clientPhone', group: 'Клиент' },
+    { key: 'clientAddress', label: 'Адрес клиента', id: 'clientAddress', group: 'Клиент' },
     { key: 'clientSource', label: 'Источник клиента', id: 'clientSource', group: 'Клиент' },
     { key: 'deviceType', label: 'Техника', id: 'deviceType', group: 'Устройство' },
     { key: 'deviceName', label: 'Название техники', id: 'deviceName', group: 'Устройство' },
